@@ -1,4 +1,5 @@
 "use client"
+
 import { cn } from '@/lib/utils'
 import { cva } from 'class-variance-authority'
 import { Eye, EyeClosed } from 'lucide-react'
@@ -9,18 +10,14 @@ const inputGroup = cva(
   {
     variants: {
       variant: {
-        // outline
-        "outline":cn(
+        outline: cn(
           "group/input-group border-gray-50 relative flex w-full items-center rounded-lg border transition-[color,box-shadow] outline-none",
-        "h-14 min-w-0 has-[>textarea]:h-auto px-3",
-          // Focus state.
-        "has-[[data-slot=input-group-control]:focus-visible]:border-primary-blue",
-        // Error state.
-        "has-[[data-slot][aria-invalid=true]]:border-primary-error",
-        // Error state.
-        "has-[[data-slot][aria-invalid=false]]:border-primary-green"),
-        // No outline - GHOST
-        "ghost":
+          "h-14 min-w-0 has-[>textarea]:h-auto px-3",
+          "has-[[data-slot=input-group-control]:focus-visible]:border-primary-blue",
+          "has-[[data-slot][aria-invalid=true]]:border-primary-error",
+          "has-[[data-slot][aria-invalid=false]]:border-primary-green"
+        ),
+        ghost:
           "order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]",
       },
     },
@@ -30,52 +27,60 @@ const inputGroup = cva(
   }
 )
 
+// Merge custom props with native input/textarea props
 type InputProps = {
-    inputType?: "input" | "password" | "textarea", 
-    icon?: ReactNode
-    className?: string,
-    variant?: "outline" | "ghost",
-    onChange: ()=> void,
-    value: string | number,
-  }
+  inputType?: "input" | "password" | "textarea"
+  icon?: ReactNode
+  variant?: "outline" | "ghost"
+} & (
+  | React.InputHTMLAttributes<HTMLInputElement>
+  | React.TextareaHTMLAttributes<HTMLTextAreaElement>
+)
 
 const Input = ({
-  inputType = "input", 
-  variant,
+  inputType = "input",
   icon,
-  onChange,
-  value,
-  className, ...props}: InputProps) => {
-      const [password, setPassword] = useState(false)
-  return (
-    <div className={cn(
-        inputGroup({variant}),
-        className
-      )}>
-      {
-        inputType === "textarea" &&
-        <textarea 
-        onChange={onChange}
-        data-slot="input-group-control"
-          {...props}
-        ></textarea>
-      }
-      
-      <input
-      data-slot="input-group-control"
-      className='outline-none'
-      onChange={onChange}
-      type={password ? "password" : "text"}
-      {...props}
-    />
-    {
-      inputType === "password" && 
+  variant,
+  className,
+  ...props
+}: InputProps) => {
+  const [showPassword, setShowPassword] = useState(false)
 
-      <button 
-      onClick={()=> setPassword(!password)}>
-        {password ?  <Eye /> : <EyeClosed />} </button>
-    }
-    
+  // Render textarea
+  if (inputType === "textarea") {
+    return (
+      <div className={cn(inputGroup({ variant }), className)}>
+        {icon && <span className="absolute left-2 top-2">{icon}</span>}
+        <textarea
+          data-slot="input-group-control"
+          className="w-full resize-none outline-none"
+          {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+        />
+      </div>
+    )
+  }
+
+  // Render input / password
+  return (
+    <div className={cn(inputGroup({ variant }), className)}>
+      {icon && <span className="absolute left-2 top-2">{icon}</span>}
+
+      <input
+        type={inputType === "password" ? (showPassword ? "text" : "password") : "text"}
+        data-slot="input-group-control"
+        className="w-full outline-none"
+        {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+      />
+
+      {inputType === "password" && (
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="ml-2"
+        >
+          {showPassword ? <EyeClosed /> : <Eye />}
+        </button>
+      )}
     </div>
   )
 }
