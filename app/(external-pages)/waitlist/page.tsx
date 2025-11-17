@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { User, Menu, Building2, ChevronLast } from 'lucide-react';
+import { User, Building2, ChevronLast } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -38,24 +38,25 @@ type FeatureProps = {
 
 export default function WaitlistPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const form = useForm<z.infer<typeof waitlistFormSchema>>({
     resolver: zodResolver(waitlistFormSchema),
     defaultValues: {
       name: '',
       email: '',
+
     },
   });
 
   async function onSubmit(values: z.infer<typeof waitlistFormSchema>) {
     setIsLoading(true);
-
+    console.log(values);
     try {
       const response = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify({full_name:values.name, email:values.email, role:values.role}),
       });
 
       if (!response.ok) throw new Error('Something went wrong');
@@ -72,7 +73,7 @@ export default function WaitlistPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="w-full border-b bg-white">
+      <header className="w-full mx-auto border-b bg-white max-w-[1440px]">
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-[60px] py-6">
           <Image
             src="/images/hng-logo.png"
@@ -80,7 +81,7 @@ export default function WaitlistPage() {
             width={120}
             height={40}
           />
-          <Button className="hidden md:flex px-6 py-7 text-sm">
+          {/* <Button className="hidden md:flex px-6 py-7 text-sm">
             Join the Waitlist
           </Button>
           <Button
@@ -90,22 +91,22 @@ export default function WaitlistPage() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <Menu className="h-6 w-6" />
-          </Button>
+          </Button> */}
         </div>
 
         {/* Mobile Menu Dropdown */}
-        {isMenuOpen && (
+        {/* {isMenuOpen && (
           <div className="md:hidden border-t bg-white px-6 py-4">
             <Button className="w-full px-6 py-7 text-sm">
               Join the Waitlist
             </Button>
           </div>
-        )}
+        )} */}
       </header>
 
-      <section className="relative pt-16 md:pt-24 lg:pt-[120px] pb-20 lg:pb-[120px] bg-[#F5F8FA] overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
-          <div className="text-center lg:text-left px-6 md:px-10 lg:px-[60px]">
+      <section className="relative pt-16 md:pt-24 lg:pt-[120px] pb-12 bg-[#F5F8FA] overflow-hidden">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-12 max-w-[1440px] mx-auto">
+          <div className="text-center lg:text-left px-6 lg:px-[60px]">
             <h1 className="text-3xl lg:text-4xl lg:text-h2 font-bold leading-tight mb-4">
               Join The HNG Portal
               <br />
@@ -118,7 +119,7 @@ export default function WaitlistPage() {
               opportunities.
             </p>
 
-            <div className="bg-white shadow-lg rounded-lg p-6 md:p-8 w-full max-w-[400px] lg:max-w-[608px] mx-auto lg:mx-0">
+            <div className="bg-white shadow-lg rounded-lg p-6 md:p-8 w-full max-w-[500px] lg:max-w-[608px] mx-auto lg:mx-0 shrink-0 flex-1">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
@@ -214,7 +215,7 @@ export default function WaitlistPage() {
           </div>
 
           <div
-            className="flex h-auto md:h-[819px] py-12 md:py-[154px] px-6 md:pr-0 md:pl-[89px] justify-end items-center rounded-2xl md:rounded-l-2xl md:rounded-r-none mx-auto lg:mx-0"
+            className="flex h-auto md:h-[719px] py-12 md:py-[154px] px-6 md:pr-0 md:pl-[39px] justify-start min-[1200px]:justify-end items-center rounded-2xl md:rounded-l-2xl md:rounded-r-none md:w-[45%] mx-auto lg:mx-0 overflow-hidden"
             style={{
               background: 'linear-gradient(180deg, #00AEFF 0%, #E5F7FF 100%)',
             }}
@@ -229,7 +230,7 @@ export default function WaitlistPage() {
           </div>
         </div>
 
-        <div className="flex justify-center mt-16 md:mt-24 lg:mt-[120px]">
+        <div className="flex justify-center mt-4 md:mt-6">
           <div className="w-8 h-8 rounded-full flex items-center justify-center">
             <ChevronLast className="h-8 w-8 rotate-90 text-[#96DEFF]" />
           </div>
@@ -293,10 +294,10 @@ export default function WaitlistPage() {
 
           <div className="flex flex-row flex-wrap items-center gap-4 text-foreground justify-center md:justify-start">
             {' '}
-            <div className="flex gap-4">
+            {/* <div className="flex gap-4">
               <a href="#">Privacy Policy</a>
               <a href="#">Contact</a>
-            </div>
+            </div> */}
             <span>© 2025 HNG Portal</span>
           </div>
         </div>
