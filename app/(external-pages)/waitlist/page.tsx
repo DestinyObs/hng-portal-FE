@@ -15,8 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import Input from '@/components/ui/input';
 import { Toggle } from '@/components/ui/toggle';
+import { Input } from '@/components/ui/input';
 
 const waitlistFormSchema = z.object({
   name: z.string().min(2, {
