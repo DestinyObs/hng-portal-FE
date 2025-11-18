@@ -5,6 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Chrome } from 'lucide-react';
 
+export function generateMetadata() {
+  return {
+    title: "Sign in | HNG Portal",
+  };
+}
+
+
 export default function CompanySignInPage() {
   return (
     <Card className="w-full max-w-md border-0 shadow-none py-0">
