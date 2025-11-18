@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { User, Building2, ChevronLast } from 'lucide-react';
+import { User, Building2, ChevronLast, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -37,9 +37,62 @@ type FeatureProps = {
   desc: string;
 };
 
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function Modal({ isOpen, onClose }: ModalProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div className="relative bg-white rounded-2xl shadow-2xl 
+            w-full 
+            max-w-[402px]      
+            md:max-w-[634px]
+            lg:max-w-[510px]
+            p-6 md:p-12 text-center animate-in fade-in zoom-in duration-200"
+        >        
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 h-6 w-6 rounded-full bg-[#292D32] text-white flex items-center justify-center hover:bg-black/80 transition-colors p-0"                >
+          <X className="h-8 w-8" />
+        </button>
+        <div className="flex justify-center mb-6">
+            <div className="relative w-[106px] h-[106px] bg-(--color-primary-blue)/10 rounded-full flex items-center justify-center">
+                <Image 
+                src="/images/Icon.png"
+                alt="Success"
+                width={106}
+                height={106}
+                className="object-contain"
+                />
+          </div>
+        </div>
+
+        <h2 className="text-h5 font-bold text-gray-20 mb-3 leading-tight">
+          Congratulation you have successful joined our waitlist
+        </h2>
+
+        <p className="text-body-1 text-muted-foreground mb-8 leading-relaxed">
+          We&apos;ll share your access link when we launch. Your data is safe with us.
+        </p>
+        <Button 
+          onClick={onClose}
+          className="w-full py-6 text-body-1 font-semibold bg-(--color-primary-blue) hover:bg-(--color-primary-blue)/90 text-white rounded-lg"
+        >
+          Thanks!
+        </Button>
+
+      </div>
+    </div>
+  );
+}  
 export default function WaitlistPage() {
   const [isLoading, setIsLoading] = useState(false);
   // const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const form = useForm<z.infer<typeof waitlistFormSchema>>({
     resolver: zodResolver(waitlistFormSchema),
@@ -73,6 +126,7 @@ export default function WaitlistPage() {
       if (!response.ok) throw new Error('Something went wrong');
 
       toast.success("You're on the list!");
+      setShowSuccessModal(true)
       form.reset();
     } catch (error) {
       console.error(error);
@@ -91,6 +145,7 @@ export default function WaitlistPage() {
             alt="HNG Portal Logo"
             width={120}
             height={40}
+            className='object-contain'
           />
           {/* <Button className="hidden md:flex px-6 py-7 text-sm">
             Join the Waitlist
@@ -313,6 +368,11 @@ export default function WaitlistPage() {
           </div>
         </div>
       </footer>
+
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+      />
     </div>
   );
 }
