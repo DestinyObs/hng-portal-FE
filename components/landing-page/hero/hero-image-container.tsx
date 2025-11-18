@@ -1,0 +1,78 @@
+import Image from 'next/image';
+import React from 'react';
+export default function HeroImageContainer() {
+  return (
+    <div className="w-[90%] mx-auto max-w-[560px] relative">
+      <Image
+        src={
+          '/assets/images/landing-page/hero-images/desktop/square_bracket.png'
+        }
+        alt="square bracket image"
+        width={560}
+        height={560}
+        className="hidden md:block"
+      />
+      <Image
+        src={
+          '/assets/images/landing-page/hero-images/mobile/square_bracket.png'
+        }
+        alt="square bracket image"
+        width={318}
+        height={259}
+        className="md:hidden"
+      />
+
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/two_users.png'}
+        alt="square bracket image"
+        width={264}
+        height={333}
+        className="hidden md:block absolute -top-[34px] left-[58px]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/mobile/two_users.png'}
+        alt="smiling users looking at tablet"
+        width={153}
+        height={188}
+        className="md:hidden absolute bottom-[108px] left-[35px]"
+      />
+
+      <Image
+        src={'/assets/images/landing-page/hero-images/mobile/smiling_user.png'}
+        alt="smiling user"
+        width={116}
+        height={82}
+        className="md:hidden absolute bottom-[70px] right-[39px]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/smiling_user.png'}
+        alt="smiling user"
+        width={270}
+        height={192}
+        className="hidden md:block absolute bottom-[97px] right-[34px] w-[270px]"
+      />
+
+      {/*      <Image
+        src={'/assets/images/landing-page/hero-images/check.svg'}
+        alt="smiling user"
+        width={230}
+        height={106}
+        className="absolute bottom-[43px] right-[49px]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/hired.svg'}
+        alt="smiling user"
+        width={98}
+        height={74}
+        className="absolute bottom-[97px] right-[34px]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/post.svg'}
+        alt="smiling user"
+        width={188}
+        height={71}
+        className="absolute bottom-[230px] left-2"
+      /> */}
+    </div>
+  );
+}
