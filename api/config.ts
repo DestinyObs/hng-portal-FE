@@ -7,6 +7,7 @@ export type APIResponse<T> = {
   message: string;
   status: number;
   data: T;
+  errors?: Record<string, string[]>;
   //   meta?: {
   //     total: number;
   //     page: number;
@@ -18,7 +19,7 @@ export type APIResponse<T> = {
 };
 
 const apiHandler = createFetchUtil({
-  apiUrl: process.env.NEXT_PUBLIC_API_URL as string,
+  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://13.48.59.27:8000/api/',
 });
 
 /**
@@ -78,17 +79,21 @@ function handleApiError<T>(error: unknown): APIResponse<T | null> {
  * Public (unauthenticated) request wrapper
  * For endpoints that don't require authentication
  */
-async function makePublicRequest<TResponse>(
+async function makePublicRequest<TResponse, TRequestBody = unknown>(
   endpoint: string,
   options: {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    body?: TRequestBody;
     params?: Record<string, string>;
+    headers?: Record<string, string>;
   } = {},
 ): Promise<APIResponse<TResponse | null>> {
   try {
     const res = await apiHandler<APIResponse<TResponse>>(endpoint, {
       method: options.method || 'GET',
+      body: options.body,
       params: options.params,
+      headers: options.headers,
     });
     return res;
   } catch (error) {

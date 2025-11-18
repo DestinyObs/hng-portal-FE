@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -18,6 +17,8 @@ import {
 import Input from '@/components/ui/input';
 import { Toggle } from '@/components/ui/toggle';
 import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
+import { waitlist } from '@/api/actions/waitlist';
 
 const waitlistFormSchema = z.object({
   name: z.string().min(2, {
@@ -38,7 +39,7 @@ type FeatureProps = {
 };
 
 export default function WaitlistPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const form = useForm<z.infer<typeof waitlistFormSchema>>({
@@ -49,38 +50,63 @@ export default function WaitlistPage() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof waitlistFormSchema>) {
-    setIsLoading(true);
-    console.log(values);
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/waitlist`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'true',
-          },
-
-          body: JSON.stringify({
-            full_name: values.name,
-            email: values.email,
-            role: values.role,
-          }),
-        },
-      );
-
-      if (!response.ok) throw new Error('Something went wrong');
-
-      toast.success("You're on the list!");
-      form.reset();
-    } catch (error) {
-      console.error(error);
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationKey: ['waitlist'],
+    mutationFn: waitlist,
+    onSuccess: (data) => {
+      if (data.status === 422) {
+        toast.error(
+          data?.errors?.email[0] || 'You are already on the waitlist!',
+        );
+      } else if (data.success === true) {
+        toast.success("You're on the list!");
+        form.reset();
+      }
+    },
+    onError: () => {
       toast.error('Uh oh! Something went wrong. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof waitlistFormSchema>) {
+    mutate({
+      full_name: values.name,
+      email: values.email,
+      role: values.role,
+    });
   }
+  // async function onSubmit(values: z.infer<typeof waitlistFormSchema>) {
+  //   setIsLoading(true);
+  //   console.log(values);
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/waitlist`,
+  //       {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'ngrok-skip-browser-warning': 'true',
+  //         },
+
+  //         body: JSON.stringify({
+  //           full_name: values.name,
+  //           email: values.email,
+  //           role: values.role,
+  //         }),
+  //       },
+  //     );
+
+  //     if (!response.ok) throw new Error('Something went wrong');
+
+  //     toast.success("You're on the list!");
+  //     form.reset();
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error('Uh oh! Something went wrong. Please try again.');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }
 
   return (
     <div className="bg-background min-h-screen">
