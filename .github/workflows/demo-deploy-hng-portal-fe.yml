@@ -3,11 +3,11 @@ name: Deploy HNG Portal Frontend (Self-Hosted Runner)
 on:
   push:
     branches:
-      - devops
+      - dev
 
 jobs:
   build-deploy:
-    runs-on: [self-hosted, local-runner]  
+    runs-on:  [self-hosted, hng-portal-fe, dev, frontend, linux, aws]
 
     steps:
     - name: Update local code repository
