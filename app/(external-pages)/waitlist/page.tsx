@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import { Toggle } from '@/components/ui/toggle';
+import { toast } from 'sonner';
 
 const waitlistFormSchema = z.object({
   name: z.string().min(2, {
@@ -45,7 +46,6 @@ export default function WaitlistPage() {
     defaultValues: {
       name: '',
       email: '',
-
     },
   });
 
@@ -53,19 +53,30 @@ export default function WaitlistPage() {
     setIsLoading(true);
     console.log(values);
     try {
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({full_name:values.name, email:values.email, role:values.role}),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/waitlist`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+          },
+
+          body: JSON.stringify({
+            full_name: values.name,
+            email: values.email,
+            role: values.role,
+          }),
+        },
+      );
 
       if (!response.ok) throw new Error('Something went wrong');
 
-      alert('You&apos;re on the list!');
+      toast.success("You're on the list!");
       form.reset();
     } catch (error) {
       console.error(error);
-      alert('Uh oh! Something went wrong. Please try again.');
+      toast.error('Uh oh! Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
