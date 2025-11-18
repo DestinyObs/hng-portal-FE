@@ -1,14 +1,16 @@
-"use client"
+'use client';
 
-import React, { useState } from "react"
-import Link from "next/link"
-import { useForm, SubmitHandler, FieldValues, Path } from "react-hook-form" 
-import { zodResolver } from "@hookform/resolvers/zod"
-// FIX: Using the correct, explicit absolute path
-import { companySignInSchema, type CompanySignInFormValues } from "@/app/(auth)/company/sign-in/schema"
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  companySignInSchema,
+  type CompanySignInFormValues,
+} from '@/app/(auth)/company/sign-in/schema';
 
 // Import Shadcn Components
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -16,43 +18,40 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Loader2 } from "lucide-react"
+} from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Loader2 } from 'lucide-react';
 
 // Import the team's Input component directly (default export)
-import Input from "@/components/ui/input"
+import Input from '@/components/ui/input';
 
 export function CompanySignInForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // FIX 1: Replaced 'any' with the compliant 'unknown' type.
-  // FIX 2: Removed the third generic argument.
-  const form = useForm<CompanySignInFormValues, unknown>({ 
+  const form = useForm<CompanySignInFormValues>({
     resolver: zodResolver(companySignInSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       rememberMe: false,
     },
-  })
+  });
 
   const onSubmit: SubmitHandler<CompanySignInFormValues> = async (values) => {
-    setIsLoading(true)
-    setError(null)
-    
+    setIsLoading(true);
+    setError(null);
+
     // REMEMBER TO REMOVE CONSOLE.LOGS BEFORE PUSHING
-    console.log("Company Sign In Form values:", values)
-    
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
-  }
+    console.log('Company Sign In Form values:', values);
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsLoading(false);
+  };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        
         {/* Email Field */}
         <FormField
           control={form.control}
@@ -107,9 +106,7 @@ export function CompanySignInForm() {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>
-                    Remember me
-                  </FormLabel>
+                  <FormLabel>Remember me</FormLabel>
                 </div>
               </FormItem>
             )}
@@ -123,18 +120,23 @@ export function CompanySignInForm() {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full" disabled={isLoading} variant="default">
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isLoading}
+          variant="default"
+        >
           {isLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            "Sign In"
+            'Sign In'
           )}
         </Button>
 
         {error && (
-            <p className="text-sm font-medium text-destructive">{error}</p>
+          <p className="text-sm font-medium text-destructive">{error}</p>
         )}
       </form>
     </Form>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import React, { useState } from "react"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { companySignUpSchema, type CompanySignUpFormValues } from "../schema"
-import { FieldValues } from "react-hook-form"
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { companySignUpSchema, type CompanySignUpFormValues } from '../schema';
+import { FieldValues } from 'react-hook-form';
 
 // Import Shadcn Components
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -16,42 +16,41 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Loader2 } from "lucide-react"
+} from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Loader2 } from 'lucide-react';
 
 // Import the team's Input component directly (default export)
-import Input from "@/components/ui/input"
+import Input from '@/components/ui/input';
 
 export function CompanySignUpForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<CompanySignUpFormValues & FieldValues>({
     resolver: zodResolver(companySignUpSchema),
     defaultValues: {
-      companyName: "",
-      email: "",
-      password: "",
+      companyName: '',
+      email: '',
+      password: '',
       acceptTerms: false,
     },
-  })
+  });
 
   async function onSubmit(values: CompanySignUpFormValues) {
-    setIsLoading(true)
-    setError(null)
-    
+    setIsLoading(true);
+    setError(null);
+
     // REMEMBER TO REMOVE CONSOLE.LOGS BEFORE PUSHING
-    console.log("Company Sign Up Form values:", values)
-    
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
+    console.log('Company Sign Up Form values:', values);
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsLoading(false);
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        
         {/* Company Name Field (New field) */}
         <FormField
           control={form.control}
@@ -81,7 +80,7 @@ export function CompanySignUpForm() {
               <FormControl>
                 <Input
                   placeholder="Enter your email address"
-                  type="email" 
+                  type="email"
                   aria-invalid={!!fieldState.error}
                   {...field}
                 />
@@ -125,8 +124,11 @@ export function CompanySignUpForm() {
               </FormControl>
               <div className="space-y-1 leading-none">
                 <FormLabel>
-                  Accept Terms and{" "}
-                  <Link href="/terms" className="text-primary-blue cursor-pointer hover:underline">
+                  Accept Terms and{' '}
+                  <Link
+                    href="/terms"
+                    className="text-primary-blue cursor-pointer hover:underline"
+                  >
                     Conditions
                   </Link>
                 </FormLabel>
@@ -137,18 +139,23 @@ export function CompanySignUpForm() {
         />
 
         {/* Submit Button (Identical to Talent) */}
-        <Button type="submit" className="w-full" disabled={isLoading} variant="default">
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isLoading}
+          variant="default"
+        >
           {isLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            "Create Account"
+            'Create Account'
           )}
         </Button>
 
         {error && (
-            <p className="text-sm font-medium text-destructive">{error}</p>
+          <p className="text-sm font-medium text-destructive">{error}</p>
         )}
       </form>
     </Form>
-  )
+  );
 }

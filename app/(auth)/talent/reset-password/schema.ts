@@ -1,18 +1,18 @@
-import * as z from "zod"
+import * as z from 'zod';
 
 export const resetPasswordSchema = z
   .object({
     password: z
       .string()
-      .min(8, { message: "Password must contain at least 8 characters" }),
-    
+      .min(8, { message: 'Password must contain at least 8 characters' }),
+
     confirmPassword: z
       .string()
-      .min(1, { message: "Please confirm your new password" }),
+      .min(1, { message: 'Please confirm your new password' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  })
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
-export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
+export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
