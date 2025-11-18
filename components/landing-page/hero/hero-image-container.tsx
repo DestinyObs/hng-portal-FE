@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 export default function HeroImageContainer() {
   return (
-    <div className="w-[85%] mx-auto max-w-[320px] md:max-w-[560px]  relative">
+    <div className="w-[85%] mx-auto max-w-[320px] md:max-w-[560px] not-md:mt-[64px]  relative">
       <Image
         src={
           '/assets/images/landing-page/hero-images/desktop/square_bracket.png'
@@ -52,27 +52,62 @@ export default function HeroImageContainer() {
         className="hidden md:block absolute bottom-[97px] right-[34px] lg:w-[270px] md:max-w-[200px] lg:min-w-[270px]"
       />
 
-      {/*      <Image
-        src={'/assets/images/landing-page/hero-images/check.svg'}
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/check.svg'}
         alt="smiling user"
         width={230}
         height={106}
-        className="absolute bottom-[43px] right-[49px]"
+        className="hidden md:block absolute -top-8 right-[13px] not-lg:w-[150]"
       />
       <Image
-        src={'/assets/images/landing-page/hero-images/hired.svg'}
+        src={'/assets/images/landing-page/hero-images/desktop/check.svg'}
+        alt="smiling user"
+        width={230}
+        height={106}
+        className="hidden md:block absolute bottom-[43px] left-[49px] not-lg:w-[150]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/hired.svg'}
         alt="smiling user"
         width={98}
         height={74}
-        className="absolute bottom-[97px] right-[34px]"
+        className="hidden md:block absolute bottom-[241px] right-4"
       />
       <Image
-        src={'/assets/images/landing-page/hero-images/post.svg'}
+        src={'/assets/images/landing-page/hero-images/desktop/post.svg'}
         alt="smiling user"
         width={188}
         height={71}
-        className="absolute bottom-[230px] left-2"
-      /> */}
+        className="hidden md:block absolute bottom-[230px] left-2"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/check.svg'}
+        alt="smiling user"
+        width={123}
+        height={55}
+        className=" md:hidden absolute -top-6 right-[9px] not-lg:w-[150]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/check.svg'}
+        alt="smiling user"
+        width={123}
+        height={55}
+        className=" md:hidden absolute bottom-[7px] left-[34px] not-lg:w-[150]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/hired.svg'}
+        alt="smiling user"
+        width={53}
+        height={42}
+        className="md:hidden  absolute bottom-[84px] right-[11px]"
+      />
+      <Image
+        src={'/assets/images/landing-page/hero-images/desktop/post.svg'}
+        alt="smiling user"
+        width={92}
+        height={26}
+        className="md:hidden  absolute bottom-[90px] left-1"
+      />
     </div>
   );
 }
