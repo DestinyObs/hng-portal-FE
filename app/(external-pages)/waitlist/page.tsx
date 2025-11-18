@@ -54,13 +54,14 @@ export default function WaitlistPage() {
     console.log(values);
     try {
       const response = await fetch(
-        'http://35.178.85.14:8000/api/waitlist',
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/waitlist`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'ngrok-skip-browser-warning': 'true',
           },
+
           body: JSON.stringify({
             full_name: values.name,
             email: values.email,
