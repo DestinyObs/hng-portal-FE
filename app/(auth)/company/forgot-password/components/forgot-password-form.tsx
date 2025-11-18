@@ -32,7 +32,7 @@ export function ForgotPasswordForm() {
     },
   });
 
-  async function onSubmit(values: CompanyForgotPasswordFormValues) {
+  async function onSubmit() {
     setIsLoading(true);
     setError(null);
 

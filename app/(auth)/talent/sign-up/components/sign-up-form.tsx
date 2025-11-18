@@ -37,7 +37,7 @@ export function TalentSignUpForm() {
     },
   });
 
-  async function onSubmit(values: TalentSignUpFormValues) {
+  async function onSubmit() {
     setIsLoading(true);
     setError(null);
 

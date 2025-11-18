@@ -35,7 +35,7 @@ export function CompanySignUpForm() {
     },
   });
 
-  async function onSubmit(values: CompanySignUpFormValues) {
+  async function onSubmit() {
     setIsLoading(true);
     setError(null);
 

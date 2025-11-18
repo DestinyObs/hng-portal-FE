@@ -36,7 +36,7 @@ export function CompanySignInForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<CompanySignInFormValues> = async (values) => {
+  const onSubmit: SubmitHandler<CompanySignInFormValues> = async () => {
     setIsLoading(true);
     setError(null);
 

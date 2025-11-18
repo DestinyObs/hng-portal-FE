@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { animate } from 'motion';
+import Image from 'next/image';
 
 export function AuthImage() {
   const logoLeftRef = useRef<HTMLImageElement>(null);
@@ -11,10 +12,10 @@ export function AuthImage() {
     if (logoLeftRef.current) {
       animate(
         logoLeftRef.current,
-        { x: [0, -20, 0] },
+        { x: [0, -35, 0] },
         {
-          duration: 5,
-          repeat: Infinity,
+          duration: 7,
+          repeat: 0,
           ease: 'easeInOut',
         },
       );
@@ -23,10 +24,10 @@ export function AuthImage() {
     if (logoRightRef.current) {
       animate(
         logoRightRef.current,
-        { x: [0, 20, 0] },
+        { x: [0, 35, 0] },
         {
-          duration: 5,
-          repeat: Infinity,
+          duration: 7,
+          repeat: 0,
           ease: 'easeInOut',
         },
       );
@@ -38,32 +39,36 @@ export function AuthImage() {
       <div className="relative w-96 h-96 flex items-center justify-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 z-0">
           <div className="absolute left-0 top-0 w-32 h-96">
-            <img
+            <Image
               ref={logoLeftRef}
               src="/images/hng-logo-left.png"
               alt="HNG Logo Left"
               className="w-full h-full object-contain"
+              width={128}
+              height={384}
             />
           </div>
           <div className="absolute right-0 top-0 w-32 h-96">
-            <img
+            <Image
               ref={logoRightRef}
               src="/images/hng-logo-right.png"
               alt="HNG Logo Right"
               className="w-full h-full object-contain"
+              width={128}
+              height={384}
             />
           </div>
         </div>
 
         <div className="relative z-10">
-          <img
+          <Image
             src="/images/logo-people.png"
             alt="HNG Portal Professionals"
             width={336}
             height={336}
             className="rounded-lg"
-            loading="eager"
-          />
+            priority
+/>
         </div>
       </div>
 

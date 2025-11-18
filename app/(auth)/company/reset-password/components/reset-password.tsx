@@ -33,7 +33,7 @@ export function ResetPasswordForm() {
     },
   });
 
-  async function onSubmit(values: CompanyResetPasswordFormValues) {
+  async function onSubmit() {
     setIsLoading(true);
     setError(null);
 

@@ -36,7 +36,7 @@ export function TalentSignInForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<TalentSignInFormValues> = async (values) => {
+  const onSubmit: SubmitHandler<TalentSignInFormValues> = async () => {
     setIsLoading(true);
     setError(null);
 
