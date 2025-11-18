@@ -48,29 +48,72 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* the text sizes according to the ui */
-  --text-fluid-h1: clamp(3.833rem, 3.47rem + 1.13vw, 4rem);
-  --text-fluid-h2: clamp(3.083rem, 3.14rem - 0.13vw, 3rem);
-  --text-fluid-h3: clamp(2.417rem, 2.37rem + 0.13vw, 2.5rem);
-  --text-fluid-h4: clamp(1.917rem, 1.87rem + 0.13vw, 2rem);
-  --text-fluid-h5: clamp(1.583rem, 1.43rem + 0.37vw, 1.75rem);
-  --text-fluid-card-title: clamp(1rem, 0.64rem + 1.2vw, 1.5rem);
-  --text-fluid-subtitle: clamp(1rem, 0.82rem + 0.6vw, 1.25rem);
+  /* minimum | prefered value | maximum */
+  --text-fluid-h1: clamp(
+    3.833rem,
+    calc(3.833rem + (3.812rem - 3.833rem) * ((100vw - 20rem) / 70rem)),
+    3.812rem
+  );
+  --text-fluid-h2: clamp(
+    3.083rem,
+    calc(3.083rem + (3.062rem - 3.083rem) * ((100vw - 20rem) / 70rem)),
+    3.062rem
+  );
+  --text-fluid-h3: clamp(
+    2.417rem,
+    calc(2.417rem + (2.438rem - 2.417rem) * ((100vw - 20rem) / 70rem)),
+    2.438rem
+  );
+  --text-fluid-h4: clamp(
+    1.917rem,
+    calc(1.917rem + (1.938rem - 1.917rem) * ((100vw - 20rem) / 70rem)),
+    1.938rem
+  );
+  --text-fluid-h5: clamp(
+    1.583rem,
+    calc(1.583rem + (1.562rem - 1.583rem) * ((100vw - 20rem) / 70rem)),
+    1.562rem
+  );
+  --text-fluid-card-title: clamp(
+    1rem,
+    calc(1rem + (1.25rem - 1rem) * ((100vw - 20rem) / 70rem)),
+    1.25rem
+  );
+  --text-fluid-subtitle: clamp(
+    1rem,
+    calc(1rem + (1.167rem - 1rem) * ((100vw - 20rem) / 70rem)),
+    1.167rem
+  );
   --text-fluid-body-1: 1rem;
-  --text-fluid-body-2: clamp(1rem, 0.82rem + 0.6vw, 1.25rem);
-  --text-fluid-caption: clamp(0.833rem, 0.76rem + 0.25vw, 0.917rem);
-  --text-fluid-overline: clamp(0.667rem, 0.58rem + 0.28vw, 0.75rem);
+  --text-fluid-body-2: clamp(
+    1rem,
+    calc(1rem + (1.25rem - 1rem) * ((100vw - 20rem) / 70rem)),
+    1.25rem
+  );
+  --text-fluid-caption: clamp(
+    0.833rem,
+    calc(0.833rem + (0.917rem - 0.833rem) * ((100vw - 20rem) / 70rem)),
+    0.917rem
+  );
+  --text-fluid-overline: clamp(
+    0.667rem,
+    calc(0.667rem + (0.75rem - 0.667rem) * ((100vw - 20rem) / 70rem)),
+    0.75rem
+  );
 }
 
 @theme inline {
   /* colors */
+
+  /* tertiary */
   --color-tertiary-50: #e7e7e7;
   --color-tertiary-75: #9c9c9c;
   --color-tertiary-100: #737373;
-  --color-tertiary-20: #363636;
+  --color-tertiary-200: #363636;
   --color-tertiary-300: #0d0d0d;
   --color-tertiary-400: #090909;
   --color-tertiary-500: #080808;
-
+  /* gray */
   --color-gray-50: #e7e7e7;
   --color-gray-75: #9c9c9c;
   --color-gray-100: #737373;
@@ -78,7 +121,7 @@
   --color-gray-300: #0d0d0d;
   --color-gray-400: #090909;
   --color-gray-500: #080808;
-
+  /* white */
   --color-white-50: #fefefe;
   --color-white-75: #fbfbfb;
   --color-white-100: #f9f9f9;
@@ -86,7 +129,7 @@
   --color-white-300: #f5f5f5;
   --color-white-400: #acacac;
   --color-white-500: #959595;
-
+  /* primary */
   --color-primary-50: #e6f7ff;
   --color-primary-75: #96deff;
   --color-primary-100: #6bd0ff;
@@ -124,6 +167,11 @@
   --color-accent-300: #73e9db;
   --color-accent-400: #51a399;
   --color-accent-500: #468e86;
+
+  --color-accent-pink: #f9e0f3;
+  --color-accent-2: #f2fafc;
+  --color-accent-3: #baf4e6;
+  --color-accent-4: #0e2c58;
 
   --color-primary-black: #000d13;
   --color-primary-gold: #d4af37;
