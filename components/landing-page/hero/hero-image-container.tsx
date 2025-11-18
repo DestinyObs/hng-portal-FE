@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 export default function HeroImageContainer() {
   return (
-    <div className="w-[90%] mx-auto max-w-[560px] relative">
+    <div className="w-[85%] mx-auto max-w-[320px] md:max-w-[560px]  relative">
       <Image
         src={
           '/assets/images/landing-page/hero-images/desktop/square_bracket.png'
@@ -10,7 +10,7 @@ export default function HeroImageContainer() {
         alt="square bracket image"
         width={560}
         height={560}
-        className="hidden md:block"
+        className="hidden md:block md:max-w-[400px] lg:min-w-[560px]"
       />
       <Image
         src={
@@ -27,7 +27,7 @@ export default function HeroImageContainer() {
         alt="square bracket image"
         width={264}
         height={333}
-        className="hidden md:block absolute -top-[34px] left-[58px]"
+        className="hidden md:block absolute -top-[34px] left-[58px] md:max-w-[200px] lg:min-w-[264px]"
       />
       <Image
         src={'/assets/images/landing-page/hero-images/mobile/two_users.png'}
@@ -49,7 +49,7 @@ export default function HeroImageContainer() {
         alt="smiling user"
         width={270}
         height={192}
-        className="hidden md:block absolute bottom-[97px] right-[34px] w-[270px]"
+        className="hidden md:block absolute bottom-[97px] right-[34px] lg:w-[270px] md:max-w-[200px] lg:min-w-[270px]"
       />
 
       {/*      <Image

@@ -56,7 +56,7 @@ export default function Features() {
           </p>
         </CardContent>
       </Card>
-      <div className="w-[90%] max-w-[1200] flex  mx-auto md:flex-wrap gap-8 not-sm:overflow-x-scroll mb-[60px]">
+      <div className="w-[90%] max-w-[1200] flex  mx-auto lg:flex-wrap  gap-8 overflow-x-scroll  mb-[60px]">
         {features.map((feature, index) => (
           <FeatureCard feature={feature} key={index} />
         ))}

@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 export default function HeroText() {
   return (
     <div className="not-sm:mt-11 mx-auto max-w-[558px] md:text-left text-center flex flex-col justify-center ">
-      <Badge variant={'outline'} className="border-primary-300">
+      <Badge variant={'outline'} className="border-primary-300 not-md:mx-auto">
         {' '}
         Connecting talent with Opportunity
       </Badge>

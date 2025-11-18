@@ -5,7 +5,7 @@ import HeroImageContainer from './hero-image-container';
 export default function HeroSection() {
   return (
     <section className="flex justify-center items-center">
-      <div className="w-full max-w-[1200] flex flex-col md:flex-row md:gap-[83px] md:justify-center md:mt-[100px] gap-14">
+      <div className="w-full max-w-[1200] flex flex-col md:flex-row lg:gap-[83px] md:justify-center md:mt-[100px] gap-14 md:px-4">
         <HeroText />
         <HeroImageContainer />
       </div>
