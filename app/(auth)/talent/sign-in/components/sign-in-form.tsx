@@ -9,7 +9,6 @@ import {
   type TalentSignInFormValues,
 } from '@/app/(auth)/talent/sign-in/schema';
 
-// Import Shadcn Components
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -22,7 +21,6 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2 } from 'lucide-react';
 
-// Import the team's Input component directly (default export)
 import Input from '@/components/ui/input';
 
 export function TalentSignInForm() {
@@ -42,9 +40,6 @@ export function TalentSignInForm() {
     setIsLoading(true);
     setError(null);
 
-    // REMEMBER TO REMOVE CONSOLE.LOGS BEFORE PUSHING
-    console.log('Talent Sign In Form values:', values);
-
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
   };
@@ -52,7 +47,6 @@ export function TalentSignInForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Email Field */}
         <FormField
           control={form.control}
           name="email"
@@ -72,7 +66,6 @@ export function TalentSignInForm() {
           )}
         />
 
-        {/* Password Field */}
         <FormField
           control={form.control}
           name="password"
@@ -92,7 +85,6 @@ export function TalentSignInForm() {
           )}
         />
 
-        {/* Remember Me & Forgot Password */}
         <div className="flex items-center justify-between">
           <FormField
             control={form.control}
@@ -112,14 +104,13 @@ export function TalentSignInForm() {
             )}
           />
           <Link
-            href="/forgot-password"
+            href="/talent/forgot-password"
             className="text-sm font-semibold text-primary-blue hover:underline"
           >
             Forgot password?
           </Link>
         </div>
 
-        {/* Submit Button */}
         <Button
           type="submit"
           className="w-full"

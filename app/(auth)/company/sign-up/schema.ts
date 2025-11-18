@@ -1,7 +1,6 @@
 import * as z from 'zod';
 
 export const companySignUpSchema = z.object({
-  // FIX: Changed from fullName to companyName based on design
   companyName: z.string().min(1, { message: 'Company name is required' }),
 
   email: z

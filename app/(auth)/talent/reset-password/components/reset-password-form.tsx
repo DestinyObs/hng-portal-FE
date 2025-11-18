@@ -3,13 +3,11 @@
 import React, { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-// FIX: Using absolute path to guarantee resolution
 import {
   resetPasswordSchema,
   type ResetPasswordFormValues,
 } from '@/app/(auth)/talent/reset-password/schema';
 
-// Import Shadcn Components
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -21,10 +19,7 @@ import {
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 
-// Import the team's Input component directly
 import Input from '@/components/ui/input';
-
-// REMOVED: import { FormInput } from "@/app/(auth)/components/form-input"
 
 export function ResetPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,20 +37,14 @@ export function ResetPasswordForm() {
     setIsLoading(true);
     setError(null);
 
-    // REMEMBER TO REMOVE CONSOLE.LOGS BEFORE PUSHING
-    console.log('Reset Password values:', values);
-
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
 
-    // TODO: On success, redirect to sign-in or dashboard
-    // router.push('/sign-in');
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Password Field */}
         <FormField
           control={form.control}
           name="password"
@@ -63,7 +52,6 @@ export function ResetPasswordForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                {/* FIX: Direct use of Input */}
                 <Input
                   placeholder="Enter password"
                   inputType="password"
@@ -76,7 +64,6 @@ export function ResetPasswordForm() {
           )}
         />
 
-        {/* Confirm Password Field */}
         <FormField
           control={form.control}
           name="confirmPassword"
@@ -84,7 +71,6 @@ export function ResetPasswordForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                {/* FIX: Direct use of Input */}
                 <Input
                   placeholder="Re-enter password"
                   inputType="password"
@@ -97,7 +83,6 @@ export function ResetPasswordForm() {
           )}
         />
 
-        {/* Submit Button */}
         <Button
           type="submit"
           className="w-full"

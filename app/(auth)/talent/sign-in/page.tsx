@@ -31,7 +31,6 @@ export default function TalentSignInPage() {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{' '}
           <Link
-            // FIX: URL path now points to the correct new segment
             href="/talent/sign-up"
             className="font-semibold text-primary-blue hover:underline"
           >

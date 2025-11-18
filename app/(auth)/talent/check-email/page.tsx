@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Mail, CheckSquare, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Component for the instructional step cards
 function StepCard({
   icon: Icon,
   title,
@@ -29,7 +28,6 @@ function StepCard({
 }
 
 export default function CheckEmailPage() {
-  // Mock email address for display purposes, as shown in the Figma
   const mockEmail = 'johndoe@gmail.com';
 
   return (

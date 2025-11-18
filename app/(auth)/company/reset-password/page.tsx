@@ -1,5 +1,4 @@
 import React from 'react';
-// NOTE: Reusing the same form component logic as Talent, just need to adjust imports if used
 import { ResetPasswordForm } from '../../talent/reset-password/components/reset-password-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -13,7 +12,6 @@ export default function CompanyResetPasswordPage() {
         </p>
       </CardHeader>
       <CardContent className="px-0">
-        {/* Using the Talent form component as the logic is identical */}
         <ResetPasswordForm />
       </CardContent>
     </Card>

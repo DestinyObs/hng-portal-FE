@@ -3,13 +3,11 @@
 import React, { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-// FIX: Using correct absolute path for schema
 import {
   companyResetPasswordSchema,
   type CompanyResetPasswordFormValues,
 } from '@/app/(auth)/company/reset-password/schema';
 
-// Import Shadcn Components
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -21,14 +19,12 @@ import {
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 
-// Import the team's Input component directly
 import Input from '@/components/ui/input';
 
 export function ResetPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Explicitly casting the form type for compatibility
   const form = useForm<CompanyResetPasswordFormValues & FieldValues>({
     resolver: zodResolver(companyResetPasswordSchema),
     defaultValues: {
@@ -41,20 +37,14 @@ export function ResetPasswordForm() {
     setIsLoading(true);
     setError(null);
 
-    // REMEMBER TO REMOVE CONSOLE.LOGS BEFORE PUSHING
-    console.log('Company Reset Password values:', values);
-
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
 
-    // TODO: On success, redirect to sign-in
-    // router.push('/company/sign-in');
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Password Field */}
         <FormField
           control={form.control}
           name="password"
@@ -74,7 +64,6 @@ export function ResetPasswordForm() {
           )}
         />
 
-        {/* Confirm Password Field */}
         <FormField
           control={form.control}
           name="confirmPassword"
@@ -94,7 +83,6 @@ export function ResetPasswordForm() {
           )}
         />
 
-        {/* Submit Button */}
         <Button
           type="submit"
           className="w-full"

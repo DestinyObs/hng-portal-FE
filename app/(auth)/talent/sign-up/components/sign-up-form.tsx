@@ -4,13 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-// FIX: Using absolute path to guarantee resolution
 import {
   talentSignUpSchema,
   type TalentSignUpFormValues,
 } from '@/app/(auth)/talent/sign-up/schema';
 
-// Import Shadcn Components
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -23,7 +21,6 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2 } from 'lucide-react';
 
-// Import the team's Input component directly (default export)
 import Input from '@/components/ui/input';
 
 export function TalentSignUpForm() {
@@ -44,9 +41,6 @@ export function TalentSignUpForm() {
     setIsLoading(true);
     setError(null);
 
-    // REMEMBER TO REMOVE CONSOLE.LOGS BEFORE PUSHING
-    console.log('Talent Sign Up Form values:', values);
-
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
   }
@@ -54,7 +48,6 @@ export function TalentSignUpForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Full Name Field */}
         <FormField
           control={form.control}
           name="fullName"
@@ -62,7 +55,6 @@ export function TalentSignUpForm() {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                {/* FIX: Direct implementation of Input, passing all required props */}
                 <Input
                   placeholder="Enter your full name"
                   aria-invalid={!!fieldState.error}
@@ -74,7 +66,6 @@ export function TalentSignUpForm() {
           )}
         />
 
-        {/* Email Field */}
         <FormField
           control={form.control}
           name="email"
@@ -94,7 +85,6 @@ export function TalentSignUpForm() {
           )}
         />
 
-        {/* Password Field */}
         <FormField
           control={form.control}
           name="password"
@@ -104,7 +94,7 @@ export function TalentSignUpForm() {
               <FormControl>
                 <Input
                   placeholder="Enter password"
-                  inputType="password" // Custom prop is needed here
+                  inputType="password"
                   aria-invalid={!!fieldState.error}
                   {...field}
                 />
@@ -114,7 +104,6 @@ export function TalentSignUpForm() {
           )}
         />
 
-        {/* Accept Terms Checkbox */}
         <FormField
           control={form.control}
           name="acceptTerms"
@@ -142,7 +131,6 @@ export function TalentSignUpForm() {
           )}
         />
 
-        {/* Submit Button */}
         <Button
           type="submit"
           className="w-full"

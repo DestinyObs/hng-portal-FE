@@ -42,7 +42,7 @@ export default function TalentSignUpPage() {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{' '}
           <Link
-            href="/talent/sign-in" // Directs to the general sign-in path
+            href="/talent/sign-in"
             className="font-semibold text-primary-blue hover:underline"
           >
             Sign in

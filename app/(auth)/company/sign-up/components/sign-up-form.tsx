@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { companySignUpSchema, type CompanySignUpFormValues } from '../schema';
 import { FieldValues } from 'react-hook-form';
 
-// Import Shadcn Components
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,7 +19,6 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2 } from 'lucide-react';
 
-// Import the team's Input component directly (default export)
 import Input from '@/components/ui/input';
 
 export function CompanySignUpForm() {
@@ -41,9 +39,6 @@ export function CompanySignUpForm() {
     setIsLoading(true);
     setError(null);
 
-    // REMEMBER TO REMOVE CONSOLE.LOGS BEFORE PUSHING
-    console.log('Company Sign Up Form values:', values);
-
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
   }
@@ -51,7 +46,6 @@ export function CompanySignUpForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Company Name Field (New field) */}
         <FormField
           control={form.control}
           name="companyName"
@@ -70,7 +64,6 @@ export function CompanySignUpForm() {
           )}
         />
 
-        {/* Email Field (Identical to Talent) */}
         <FormField
           control={form.control}
           name="email"
@@ -90,7 +83,6 @@ export function CompanySignUpForm() {
           )}
         />
 
-        {/* Password Field (Identical to Talent) */}
         <FormField
           control={form.control}
           name="password"
@@ -110,7 +102,6 @@ export function CompanySignUpForm() {
           )}
         />
 
-        {/* Accept Terms Checkbox (Identical to Talent) */}
         <FormField
           control={form.control}
           name="acceptTerms"
@@ -138,7 +129,6 @@ export function CompanySignUpForm() {
           )}
         />
 
-        {/* Submit Button (Identical to Talent) */}
         <Button
           type="submit"
           className="w-full"

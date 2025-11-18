@@ -1,6 +1,5 @@
 import * as z from 'zod';
 
-// Schema is identical to Talent
 export const companyResetPasswordSchema = z
   .object({
     password: z

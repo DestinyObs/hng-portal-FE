@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-// NOTE: Reusing the same form component logic as Talent, just need to adjust imports if used
 import { ForgotPasswordForm } from '../../talent/forgot-password/components/forgot-password-form';
 import {
   Card,
@@ -20,7 +19,6 @@ export default function CompanyForgotPasswordPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="px-0">
-        {/* Using the Talent form component as the logic is identical */}
         <ForgotPasswordForm />
       </CardContent>
 
