@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { Plus } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
@@ -19,7 +19,7 @@ function AccordionItem({
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn('border-b last:border-b-0', className)}
+      className={cn('border-b last:border-b-0 data-[state=open]:border rounded-3xl border-[#E1F6FF]', className)}
       {...props}
     />
   );
@@ -35,14 +35,15 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          ' bg-gray-50 focus-visible:ring-ring/50 flex items-center p-2 px-5 flex-1 justify-between gap-4 rounded-full text-left text-lg font-medium transition-all outline-none hover:bg-primary-75 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180',
+          'group bg-gray-50 flex items-center p-2 flex-1 justify-between gap-4 rounded-full text-left text-lg font-medium transition-all outline-none disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180 data-[state=open]:bg-transparent ',
           className,
         )}
         {...props}
       >
         <span>{children}</span>
-        <span className='bg-white-50 p-2 flex justify-center items-center rounded-full translate-y-0.5 transition-transform'>
-          <Plus className="text-muted-foreground pointer-events-none size-5 shrink-0 duration-200" />
+        <span className='bg-white-50 group-data-[state=open]:bg-gray-50 p-2 flex justify-center items-center rounded-full '>
+          <Plus className="text-muted-foreground pointer-events-none size-5 shrink-0 duration-200 group-data-[state=open]:hidden" />
+          <X className="hidden text-muted-foreground pointer-events-none size-5 shrink-0 duration-200 group-data-[state=open]:inline-block" />
         </span>
         
       </AccordionPrimitive.Trigger>
@@ -58,7 +59,7 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm"
+      className="data-[state=closed]:animate-accordion-up p-5 data-[state=open]:animate-accordion-down overflow-hidden text-sm"
       {...props}
     >
       <div className={cn('pt-0 pb-4', className)}>{children}</div>
