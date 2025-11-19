@@ -10,10 +10,11 @@ jobs:
     runs-on:  [self-hosted, hng-portal-fe, dev, frontend, linux, aws]
 
     steps:
-    - name: Update local code repository
-      run: |
-        cd /home/ubuntu/hng-portal-FE
-        git pull origin dev
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+        path: /home/ubuntu/hng-portal-FE
 
     - name: Install dependencies
       run: |
