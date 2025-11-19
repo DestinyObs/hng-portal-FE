@@ -4,6 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Mail, CheckSquare, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+export function generateMetadata() {
+  return {
+    title: "Check your Email | HNG Portal",
+  };
+}
+
 function StepCard({
   icon: Icon,
   title,

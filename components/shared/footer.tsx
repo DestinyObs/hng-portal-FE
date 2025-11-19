@@ -1,132 +1,182 @@
-const footer = () => {
+import Image from 'next/image';
+import Logo from './logo.png';
+
+const Footer = () => {
   return (
-    <footer className="bg-(--color-white-50)">
-      <div className="max-w-[1258px] mx-auto px-4 sm:px-8 lg:px-10 py-12 ">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 xl:gap-40 mb-8">
-            <div>
-              <h3 className="text-body-2 text-(--color-primary-black) font-bold mb-4 tracking-wide">
-                FOR TALENTS
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="#hng-learn"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    HNG Learn
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#hng-internship"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    HNG Internship
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#hng-network"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    HNG Network
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#find-jobs"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    Find Jobs
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-body-2 text-(--color-primary-black) font-bold mb-4 tracking-wide">
-                FOR COMPANIES
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="#hire-talents"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    Hire Talents
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-body-2 text-(--color-primary-black) font-bold mb-4 tracking-wide">
-                LEGAL
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="#privacy"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#terms"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    Terms of Service
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-body-2 text-(--color-primary-black) font-bold mb-4 tracking-wide">
-                SUPPORT
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="#blog"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#help"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#faqs"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    FAQs
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="mailto:support@hng.portal"
-                    className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
-                  >
-                    support@hng.portal
-                  </a>
-                </li>
-              </ul>
-            </div>
+    <>
+    <footer className=" bg-linear-to-b from-white-50 to-[#DBF3FF]">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-10 xl:px-0 py-12 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 xl:gap-28 mb-8">
+          <div>
+            <h3 className="text-xl leading-[120%] text-(--color-primary-black) font-bold md:font-semibold mb-4">
+              For Talents
+            </h3>
+            <ul className="space-y-4">
+              <li>
+                <a
+                  href="#hng-learn"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  HNG Learn
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#hng-internship"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  HNG Internship
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#hng-network"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  HNG Network
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#find-jobs"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Find Jobs
+                </a>
+              </li>
+            </ul>
           </div>
 
+          <div>
+            <h3 className="text-xl leading-[120%] text-(--color-primary-black) font-bold md:font-semibold mb-4">
+              For Companies
+            </h3>
+            <ul className="space-y-4">
+              <li>
+                <a
+                  href="#hire-talents"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Hire Talents
+                </a>
+              </li>
+            </ul>
+          </div>
+
+           <div>
+            <h3 className="text-xl leading-[120%] text-(--color-primary-black) font-bold md:font-semibold mb-4">
+              About Us
+            </h3>
+            <ul className="space-y-4">
+              <li>
+                <a
+                  href="#hire-talents"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  How it works
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#hire-talents"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Careers
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#hire-talents"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </div>
+
+           <div>
+            <h3 className="text-xl leading-[120%] text-(--color-primary-black) font-bold md:font-semibold mb-4">
+              Support
+            </h3>
+            <ul className="space-y-4">
+              <li>
+                <a
+                  href="#blog"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Blog
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#help"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#faqs"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  FAQs
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@hng.portal"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  support@hng.tech
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl leading-[120%] text-(--color-primary-black) font-bold md:font-semibold mb-4">
+              Legal
+            </h3>
+            <ul className="space-y-4">
+              <li>
+                <a
+                  href="#privacy"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#terms"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Terms of Service
+                </a>
+              </li>
+               <li>
+                <a
+                  href="#cookies"
+                  className="text-(--color-gray-20) hover:text-(--color-primary-blue) transition text-[18px]"
+                >
+                  Cookies
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
         <div className="mt-12 pt-6">
-          <div className="bg-(--color-white-300) rounded-2xl px-4 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-start lg:items-center">
-            <div className="mb-4 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-start lg:items-center">
+            <div className=" flex flex-col gap-4 mb-4 md:mb-0">
+              <Image
+                src={Logo}
+                width={200}
+                height={200}
+                alt="HNG Portal Logo"
+              />
               <p className="text-(--color-primary-black) text-sm">
                 © 2025 HNG Portal. All rights reserved.
               </p>
@@ -135,57 +185,44 @@ const footer = () => {
             <div className="flex items-center justify-center space-x-4">
               <a href="#facebook">
                 <svg
-                  width="7"
-                  height="14"
-                  viewBox="0 0 7 14"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M1.78694 14V7.43079H0V5.06556H1.78694V3.04535C1.78694 1.45785 2.84249 0 5.27471 0C6.25947 0 6.98766 0.09177 6.98766 0.09177L6.93028 2.30049C6.93028 2.30049 6.18765 2.29347 5.37725 2.29347C4.50015 2.29347 4.35963 2.68638 4.35963 3.33851V5.06556H7L6.88512 7.43079H4.35963V14H1.78694Z"
-                    fill="#080808"
+                    d="M29.3332 21.586C29.3332 26.4394 26.4398 29.3327 21.5865 29.3327H19.9998C19.2665 29.3327 18.6665 28.7327 18.6665 27.9993V20.306C18.6665 19.946 18.9598 19.6394 19.3198 19.6394L21.6665 19.5994C21.8532 19.586 22.0132 19.4527 22.0532 19.266L22.5199 16.7194C22.5599 16.4794 22.3732 16.2527 22.1198 16.2527L19.2798 16.2927C18.9065 16.2927 18.6132 15.9994 18.5999 15.6394L18.5465 12.3727C18.5465 12.1593 18.7198 11.9727 18.9465 11.9727L22.1465 11.9194C22.3731 11.9194 22.5465 11.746 22.5465 11.5194L22.4932 8.31934C22.4932 8.09267 22.3198 7.91935 22.0932 7.91935L18.4932 7.9727C16.2798 8.0127 14.5199 9.82601 14.5599 12.0393L14.6265 15.706C14.6398 16.0793 14.3465 16.3727 13.9732 16.386L12.3732 16.4127C12.1465 16.4127 11.9732 16.586 11.9732 16.8127L12.0132 19.346C12.0132 19.5727 12.1865 19.746 12.4132 19.746L14.0132 19.7194C14.3865 19.7194 14.6798 20.0127 14.6932 20.3727L14.8132 27.9727C14.8265 28.7194 14.2265 29.3327 13.4798 29.3327H10.4132C5.55983 29.3327 2.6665 26.4393 2.6665 21.5727V10.4127C2.6665 5.55935 5.55983 2.66602 10.4132 2.66602H21.5865C26.4398 2.66602 29.3332 5.55935 29.3332 10.4127V21.586V21.586Z"
+                    fill="#000D13"
                   />
                 </svg>
               </a>
-              <a href="#twitter">
+
+              <a href="#instagram">
                 <svg
-                  width="14"
-                  height="12"
-                  viewBox="0 0 14 12"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M13.33 1.31357C12.8394 1.54345 12.3105 1.69451 11.7625 1.76675C12.3232 1.41866 12.7565 0.866958 12.9604 0.203604C12.4316 0.531997 11.8453 0.761872 11.2273 0.893229C10.7239 0.328393 10.0166 0 9.21376 0C7.71636 0 6.49296 1.26103 6.49296 2.81761C6.49296 3.04092 6.51845 3.25766 6.56305 3.46126C4.29466 3.34304 2.27477 2.21994 0.930296 0.518861C0.694536 0.932636 0.560727 1.41866 0.560727 1.93095C0.560727 2.90956 1.03862 3.77652 1.77776 4.26911C1.32535 4.26911 0.904809 4.13775 0.535239 3.94072V3.96042C0.535239 5.32654 1.47828 6.46934 2.72717 6.72549C2.3262 6.83859 1.90526 6.85433 1.4974 6.77147C1.67046 7.33136 2.0094 7.82128 2.46657 8.17234C2.92374 8.52341 3.47615 8.71798 4.04615 8.72869C3.07994 9.51712 1.88225 9.94329 0.649933 9.93717C0.433289 9.93717 0.216644 9.92404 0 9.89777C1.21066 10.699 2.65071 11.1654 4.19271 11.1654C9.21376 11.1654 11.9728 6.86998 11.9728 3.14601C11.9728 3.02122 11.9728 2.90299 11.9664 2.77821C12.5017 2.38413 12.9604 1.88498 13.33 1.31357Z"
-                    fill="#080808"
+                    d="M21.5865 2.66602H10.4132C5.55984 2.66602 2.6665 5.55935 2.6665 10.4127V21.5727C2.6665 26.4394 5.55984 29.3327 10.4132 29.3327H21.5732C26.4265 29.3327 29.3198 26.4394 29.3198 21.586V10.4127C29.3332 5.55935 26.4398 2.66602 21.5865 2.66602ZM15.9998 21.1727C13.1465 21.1727 10.8265 18.8527 10.8265 15.9993C10.8265 13.146 13.1465 10.826 15.9998 10.826C18.8532 10.826 21.1732 13.146 21.1732 15.9993C21.1732 18.8527 18.8532 21.1727 15.9998 21.1727ZM23.8932 9.17268C23.8265 9.33268 23.7332 9.47935 23.6132 9.61268C23.4798 9.73268 23.3332 9.82602 23.1732 9.89268C23.0132 9.95935 22.8398 9.99935 22.6665 9.99935C22.3065 9.99935 21.9732 9.86602 21.7198 9.61268C21.5998 9.47935 21.5065 9.33268 21.4398 9.17268C21.3732 9.01268 21.3332 8.83935 21.3332 8.66602C21.3332 8.49268 21.3732 8.31935 21.4398 8.15935C21.5065 7.98602 21.5998 7.85268 21.7198 7.71935C22.0265 7.41268 22.4932 7.26602 22.9198 7.35935C23.0132 7.37268 23.0932 7.39935 23.1732 7.43935C23.2532 7.46602 23.3332 7.50602 23.4132 7.55935C23.4798 7.59935 23.5465 7.66602 23.6132 7.71935C23.7332 7.85268 23.8265 7.98602 23.8932 8.15935C23.9598 8.31935 23.9998 8.49268 23.9998 8.66602C23.9998 8.83935 23.9598 9.01268 23.8932 9.17268Z"
+                    fill="#000D13"
                   />
                 </svg>
               </a>
               <a href="#youtube">
                 <svg
-                  width="14"
-                  height="10"
-                  viewBox="0 0 14 10"
+                  width="38"
+                  height="38"
+                  viewBox="0 0 32 32"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M5.332 6.665L8.79113 4.6655L5.332 2.666V6.665ZM13.0367 1.44631C13.1234 1.75956 13.1834 2.17946 13.2234 2.71266C13.27 3.24586 13.29 3.70574 13.29 4.10564L13.33 4.6655C13.33 6.12514 13.2234 7.1982 13.0367 7.8847C12.8701 8.48455 12.4835 8.87112 11.8837 9.03774C11.5704 9.12439 10.9972 9.18437 10.1175 9.22436C9.25102 9.27102 8.45788 9.29101 7.72473 9.29101L6.665 9.331C3.87236 9.331 2.1328 9.22436 1.44631 9.03774C0.846455 8.87112 0.459885 8.48455 0.29326 7.8847C0.206615 7.57144 0.14663 7.15155 0.10664 6.61835C0.0599851 6.08515 0.03999 5.62526 0.03999 5.22536L0 4.6655C0 3.20587 0.10664 2.1328 0.29326 1.44631C0.459885 0.846455 0.846455 0.459885 1.44631 0.29326C1.75956 0.206615 2.33275 0.14663 3.21253 0.10664C4.07898 0.0599849 4.87211 0.03999 5.60526 0.03999L6.665 0C9.45763 0 11.1972 0.10664 11.8837 0.29326C12.4835 0.459885 12.8701 0.846455 13.0367 1.44631Z"
-                    fill="#080808"
-                  />
-                </svg>
-              </a>
-              <a href="#instagram">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.86667 0H9.46667C11.6 0 13.3333 1.73333 13.3333 3.86667V9.46667C13.3333 10.4922 12.926 11.4757 12.2008 12.2008C11.4757 12.926 10.4922 13.3333 9.46667 13.3333H3.86667C1.73333 13.3333 0 11.6 0 9.46667V3.86667C0 2.84116 0.40738 1.85766 1.13252 1.13252C1.85766 0.40738 2.84116 0 3.86667 0ZM3.73333 1.33333C3.09681 1.33333 2.48636 1.58619 2.03628 2.03628C1.58619 2.48636 1.33333 3.09681 1.33333 3.73333V9.6C1.33333 10.9267 2.40667 12 3.73333 12H9.6C10.2365 12 10.847 11.7471 11.2971 11.2971C11.7471 10.847 12 10.2365 12 9.6V3.73333C12 2.40667 10.9267 1.33333 9.6 1.33333H3.73333ZM10.1667 2.33333C10.3877 2.33333 10.5996 2.42113 10.7559 2.57741C10.9122 2.73369 11 2.94565 11 3.16667C11 3.38768 10.9122 3.59964 10.7559 3.75592C10.5996 3.9122 10.3877 4 10.1667 4C9.94565 4 9.73369 3.9122 9.57741 3.75592C9.42113 3.59964 9.33333 3.38768 9.33333 3.16667C9.33333 2.94565 9.42113 2.73369 9.57741 2.57741C9.73369 2.42113 9.94565 2.33333 10.1667 2.33333ZM6.66667 3.33333C7.55072 3.33333 8.39857 3.68452 9.02369 4.30964C9.64881 4.93476 10 5.78261 10 6.66667C10 7.55072 9.64881 8.39857 9.02369 9.02369C8.39857 9.64881 7.55072 10 6.66667 10C5.78261 10 4.93476 9.64881 4.30964 9.02369C3.68452 8.39857 3.33333 7.55072 3.33333 6.66667C3.33333 5.78261 3.68452 4.93476 4.30964 4.30964C4.93476 3.68452 5.78261 3.33333 6.66667 3.33333ZM6.66667 4.66667C6.13623 4.66667 5.62752 4.87738 5.25245 5.25245C4.87738 5.62752 4.66667 6.13623 4.66667 6.66667C4.66667 7.1971 4.87738 7.70581 5.25245 8.08088C5.62752 8.45595 6.13623 8.66667 6.66667 8.66667C7.1971 8.66667 7.70581 8.45595 8.08088 8.08088C8.45595 7.70581 8.66667 7.1971 8.66667 6.66667C8.66667 6.13623 8.45595 5.62752 8.08088 5.25245C7.70581 4.87738 7.1971 4.66667 6.66667 4.66667Z"
-                    fill="#080808"
+                    d="M22.6665 5.33398H9.33317C5.33317 5.33398 2.6665 8.00065 2.6665 12.0007V20.0007C2.6665 24.0007 5.33317 26.6673 9.33317 26.6673H22.6665C26.6665 26.6673 29.3332 24.0007 29.3332 20.0007V12.0007C29.3332 8.00065 26.6665 5.33398 22.6665 5.33398ZM18.5199 17.374L15.2265 19.3473C13.8931 20.1473 12.7998 19.534 12.7998 17.974V14.014C12.7998 12.454 13.8931 11.8407 15.2265 12.6407L18.5199 14.614C19.7865 15.3873 19.7865 16.614 18.5199 17.374Z"
+                    fill="black"
                   />
                 </svg>
               </a>
@@ -193,8 +230,9 @@ const footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+      </footer>
+      </>
   );
 };
 
-export default footer;
+export default Footer;

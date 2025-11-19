@@ -21,6 +21,12 @@ import { Loader2 } from 'lucide-react';
 
 import Input from '@/components/ui/input';
 
+export function generateMetadata() {
+  return {
+    title: "Forgot Password? | HNG Portal",
+  };
+}
+
 export function ForgotPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -2,6 +2,13 @@ import React from 'react';
 import { ResetPasswordForm } from '../../talent/reset-password/components/reset-password-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+export function generateMetadata() {
+  return {
+    title: "Reset Password | HNG Portal",
+  };
+}
+
+
 export default function CompanyResetPasswordPage() {
   return (
     <Card className="w-full max-w-md border-0 shadow-none py-0">

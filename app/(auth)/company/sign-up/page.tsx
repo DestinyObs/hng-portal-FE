@@ -11,6 +11,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Chrome } from 'lucide-react';
 
+export function generateMetadata() {
+  return {
+    title: "Sign up | HNG Portal",
+  };
+}
+
+
 export default function CompanySignUpPage() {
   return (
     <Card className="w-full max-w-md border-0 shadow-none py-0">

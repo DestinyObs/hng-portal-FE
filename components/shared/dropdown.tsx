@@ -21,7 +21,7 @@ type DropdownProps = {
 }
 
 const dropdownStyles = cva(
-   "text-text-secondary flex h-auto items-center justify-between gap-2 py-1.5 text-sm  select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg]:size-6 cursor-pointer",
+   "text-text-secondary flex h-auto items-center justify-between gap-2 py-1.5 text-sm  select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg]:size-6 cursor-pointer [&[data-state=open]>svg]:rotate-180",
     { variants: 
         { variant:
         { 

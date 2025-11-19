@@ -1,58 +1,143 @@
 'use client';
+
+import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '../ui/button';
 import Image from 'next/image';
 import Logo from './logo.png';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import { useState } from 'react';
+
+const navLinks = [
+  { label: 'Home', href: '/', active: true },
+  { label: 'Features', href: '#about', hasDropdown: true },
+  { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
+];
 
 const Header = () => {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   return (
     <header className="bg-white">
-      <div className="max-w-[1258px] mx-auto px-4 sm:px-8 lg:px-10 py-6">
-        <nav className="flex items-center justify-between">
-          <Image src={Logo} width={100} height={100} alt="HNG Portal Logo" />
+      <div className="max-w-[1200px] mx-auto px-4 xl:px-0 py-6">
+        <nav
+          className="flex items-center justify-between"
+          aria-label="Main navigation"
+        >
+          <Link href="/" aria-label="HNG Portal Home">
+            <Image src={Logo} width={100} height={100} alt="HNG Portal Logo" />
+          </Link>
 
-          <div className="hidden md:block">
-            <Link href="/waitlist">
-              <Button className="w-full px-6 py-7 text-sm">
-                Join the Waitlist
-              </Button>
-            </Link>
+          <ul className="hidden md:flex items-center gap-[22px]">
+            {navLinks.map((item) => (
+              <li key={item.label} className="flex items-center gap-1">
+                <Link
+                  href={item.href}
+                  className={`font-medium text-[16px] transition ${
+                    item.active
+                      ? 'text-primary-blue font-semibold'
+                      : 'text-primary-black hover:text-primary-blue'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+
+                {item.hasDropdown && (
+                  <svg
+                    width="8"
+                    height="5"
+                    viewBox="0 0 8 5"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 0.75L3.875 3.875L0.75 0.75"
+                      stroke="#080808"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <div className="hidden md:flex items-center space-x-4">
+            <Button variant="outline">Sign in</Button>
+            <Button variant="default">Create an Account</Button>
           </div>
 
-          <button onClick={() => setOpen(!open)} className="md:hidden">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M0 3.75C0 3.55109 0.0790176 3.36032 0.21967 3.21967C0.360322 3.07902 0.551088 3 0.75 3H15.25C15.4489 3 15.6397 3.07902 15.7803 3.21967C15.921 3.36032 16 3.55109 16 3.75C16 3.94891 15.921 4.13968 15.7803 4.28033C15.6397 4.42098 15.4489 4.5 15.25 4.5H0.75C0.551088 4.5 0.360322 4.42098 0.21967 4.28033C0.0790176 4.13968 0 3.94891 0 3.75ZM0 8C0 7.80109 0.0790176 7.61032 0.21967 7.46967C0.360322 7.32902 0.551088 7.25 0.75 7.25H15.25C15.4489 7.25 15.6397 7.32902 15.7803 7.46967C15.921 7.61032 16 7.80109 16 8C16 8.19891 15.921 8.38968 15.7803 8.53033C15.6397 8.67098 15.4489 8.75 15.25 8.75H0.75C0.551088 8.75 0.360322 8.67098 0.21967 8.53033C0.0790176 8.38968 0 8.19891 0 8ZM0.75 11.5C0.551088 11.5 0.360322 11.579 0.21967 11.7197C0.0790176 11.8603 0 12.0511 0 12.25C0 12.4489 0.0790176 12.6397 0.21967 12.7803C0.360322 12.921 0.551088 13 0.75 13H15.25C15.4489 13 15.6397 12.921 15.7803 12.7803C15.921 12.6397 16 12.4489 16 12.25C16 12.0511 15.921 11.8603 15.7803 11.7197C15.6397 11.579 15.4489 11.5 15.25 11.5H0.75Z"
-                fill="black"
-              />
-            </svg>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-label="Toggle menu"
+            className="md:hidden p-2 text-gray-900 hover:text-primary-blue transition"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </nav>
 
-        {open && (
-          <div className="md:hidden mt-4 space-y-4">
-            <Link
-              href="/waitlist"
-              className="block w-full"
-              onClick={() => setOpen(false)}
-            >
-              <Button variant="default" className="w-full">
-                Join the waitlist
-              </Button>
-            </Link>
+        <div
+          className={`md:hidden fixed left-0 right-0 top-[88px] bottom-0 z-50 bg-white transition-all duration-300 ease-in-out ${
+            isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+          }`}
+        >
+          <div className="h-full overflow-y-auto px-6 py-6">
+            <ul className="flex flex-col space-y-4">
+              {navLinks.map((item) => (
+                <li key={item.label} className="flex items-center gap-1">
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`font-medium text-[16px] transition ${
+                      item.active
+                        ? 'text-primary-blue font-semibold'
+                        : 'text-primary-black hover:text-primary-blue'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+
+                  {item.hasDropdown && (
+                    <svg
+                      width="8"
+                      height="5"
+                      viewBox="0 0 8 5"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7 0.75L3.875 3.875L0.75 0.75"
+                        stroke="#080808"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
+                </li>
+              ))}
+
+              <div className="flex flex-col space-y-3 pt-4 border-t">
+                <Button variant="outline">Sign in</Button>
+                <Button variant="default">Create an Account</Button>
+              </div>
+            </ul>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
