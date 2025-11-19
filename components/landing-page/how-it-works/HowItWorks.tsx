@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -26,7 +25,7 @@ const ServiceCard = ({ title, description, number }: ServiceCardProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <motion.div whileHover={{ y: -4 }} className="relative h-full w-full">
+      <div className={`relative h-full w-full transition-transform duration-300 ${isHovered ? '-translate-y-1' : ''}`}>
         <div
           className={`absolute top-0 right-0 ${numberWidth} h-full flex items-center justify-end pr-4 text-[160px] font-bold text-[#E3E4E5] opacity-50 leading-none select-none pointer-events-none z-0`}
         >
@@ -137,7 +136,7 @@ const ServiceCard = ({ title, description, number }: ServiceCardProps) => {
             </p>
           </div>
         </CardContent>
-      </motion.div>
+      </div>
     </Card>
   );
 };
@@ -204,18 +203,16 @@ export default function HowItWorks() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={activePage}
-              src={steps[activePage].imagePlaceholder}
-              alt={steps[activePage].title}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="w-full h-full object-contain"
+          {steps.map((step, index) => (
+            <img
+              key={index}
+              src={step.imagePlaceholder}
+              alt={step.title}
+              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
+                index === activePage ? 'opacity-100' : 'opacity-0'
+              }`}
             />
-          </AnimatePresence>
+          ))}
         </div>
 
         <div className="flex justify-center mb-10">

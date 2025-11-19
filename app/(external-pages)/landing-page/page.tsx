@@ -8,7 +8,6 @@ import HowItWorks from '@/components/landing-page/how-it-works/HowItWorks';
 export default function page() {
   return (
     <section className="min-h-screen bg-white">
-      <header className="border border-blue-600 h-[10vh]"></header>
       <HeroSection />
       <LogoCarousel />
       <Features />
