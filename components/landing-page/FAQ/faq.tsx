@@ -1,4 +1,4 @@
-import { AccordionUI } from "../shared/accordion"
+import { Accordion } from "../../shared/accordion"
 
 const faq = [
   {
@@ -39,7 +39,7 @@ export const FAQ = () => {
 
         {/* accordion */}
         <div className="accordion w-full sm:max-w-[75%] mx-auto py-8 px-3 sm:px-0">
-            <AccordionUI content={faq} />
+            <Accordion content={faq} />
         </div>
         
     </div>

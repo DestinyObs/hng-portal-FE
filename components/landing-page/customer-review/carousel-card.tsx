@@ -17,7 +17,7 @@ const CarouselCard = ({
     className="basis-full w-[320px] hover:w-[783px] sm:basis-1/2 lg:basis-1/4 hover:lg:basis-1/2"
     >
     <div className="w-full">
-    <Card className="group p-0 py-0 w-full h-[233px] hover:h-80 flex flex-row gap-0 border-0">
+    <Card className="group p-0 py-0 w-full h-[233px] hover:h-80 flex flex-col sm:flex-row gap-0 border-0 transition-all duration-300 ease-in-out">
         <CardContent className="relative w-full h-full p-0">
             <Image
             src={customer.image}
@@ -30,7 +30,7 @@ const CarouselCard = ({
         {/* visible on hover */}
         <div className='hidden inset-0 bg-[#F7F9FA] bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:flex justify-between flex-col rounded-br-[11px] rounded-tr-[11px] p-4 text-left'>
 
-            <div className="flex justify-between text-card-title leading-tight ">
+            <div className="flex justify-between text-[18px] leading-tight ">
 
                 <div className="name">
                     <p> <span className='font-semibold'>{customer.name.split(' ')[0]}</span> <span className='text-[#757676]'>{customer.name.split(' ')[1]}</span></p>
@@ -39,7 +39,7 @@ const CarouselCard = ({
 
                 <div className="recruiter-part flex gap-2">
                     <span className='h-full border-[.5] border-[#757676]' />
-                    <div className="user type">
+                    <div className="user text-[18px] type">
                         <p className='text-[#757676]'>user type:</p>
                         <p className='text-[#3F4040]'>{customer.userType}</p>
                     </div>
