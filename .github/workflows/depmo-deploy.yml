@@ -1,0 +1,30 @@
+name: Deploy HNG Portal Frontend (Self-Hosted Runner)
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-deploy:
+    runs-on:  [self-hosted, hng-portal-fe, dev, frontend, linux, aws]
+
+    steps:
+    - name: Update local code repository
+      run: |
+        cd /home/ubuntu/hng-portal-FE
+        git pull origin dev
+
+    - name: Install dependencies
+      run: |
+        cd /home/ubuntu/hng-portal-FE
+        pnpm install
+
+    - name: Build the app
+      run: |
+        cd /home/ubuntu/hng-portal-FE
+        pnpm run build
+
+    - name: Restart systemd service
+      run: |
+        sudo systemctl restart hng-portal
