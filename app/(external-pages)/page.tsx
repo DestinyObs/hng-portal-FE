@@ -6,8 +6,6 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/waitlist');
+    router.push('/landing-page');
   }, [router]);
-
-  return null
 }
