@@ -21,9 +21,7 @@ export default function CompanySignUpPage() {
   return (
     <Card className="w-full max-w-md border-0 shadow-none py-0">
       <CardHeader className="text-center px-0">
-        <CardTitle className="text-h4 font-bold">
-          Create Company Account
-        </CardTitle>
+        <CardTitle className="text-h4 font-bold">Create an Account</CardTitle>
         <CardDescription className="text-subtitle">
           Join thousands of users already on our platform
         </CardDescription>
