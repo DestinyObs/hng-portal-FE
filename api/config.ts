@@ -1,6 +1,7 @@
 // import { auth } from 'auth';
 
-import { createFetchUtil, HttpError } from '@/lib/fetch-utils';
+import { createFetchUtil, HttpError, withAuth } from '@/lib/fetch-utils';
+import { cookies } from 'next/headers';
 
 export type APIResponse<T> = {
   success: boolean | 'true' | 'false';
@@ -19,7 +20,7 @@ export type APIResponse<T> = {
 };
 
 const apiHandler = createFetchUtil({
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://13.48.59.27:8000/api/',
+  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://13.48.59.27:8000/api',
 });
 
 /**
@@ -47,33 +48,33 @@ function handleApiError<T>(error: unknown): APIResponse<T | null> {
  * Base authenticated request wrapper
  * Handles session retrieval, authentication, and error handling
  */
-// async function makeAuthenticatedRequest<TResponse, TRequestBody = unknown>(
-//   endpoint: string,
-//   options: {
-//     method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-//     body?: TRequestBody;
-//     params?: Record<string, string>;
-//     headers?: Record<string, string>;
-//   } = {},
-// ): Promise<APIResponse<TResponse | null>> {
-//   try {
-//     const session = await auth();
+async function makeAuthenticatedRequest<TResponse, TRequestBody = unknown>(
+  endpoint: string,
+  options: {
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    body?: TRequestBody;
+    params?: Record<string, string>;
+    headers?: Record<string, string>;
+  } = {},
+): Promise<APIResponse<TResponse | null>> {
+  try {
+    const token = (await cookies()).get('token')?.value;
 
-//     const res = await apiHandler<APIResponse<TResponse>>(endpoint, {
-//       method: options.method || 'GET',
-//       headers: {
-//         ...withAuth(session?.access_token as string),
-//         ...options.headers,
-//       },
-//       body: options.body,
-//       params: options.params,
-//     });
+    const res = await apiHandler<APIResponse<TResponse>>(endpoint, {
+      method: options.method || 'GET',
+      headers: {
+        ...withAuth(token as string),
+        ...options.headers,
+      },
+      body: options.body,
+      params: options.params,
+    });
 
-//     return res;
-//   } catch (error) {
-//     return handleApiError<TResponse>(error);
-//   }
-// }
+    return res;
+  } catch (error) {
+    return handleApiError<TResponse>(error);
+  }
+}
 
 /**
  * Public (unauthenticated) request wrapper
@@ -125,7 +126,7 @@ function buildPaginationParams(
 }
 
 export {
-  //   makeAuthenticatedRequest,
+  makeAuthenticatedRequest,
   makePublicRequest,
   buildPaginationParams,
   handleApiError,

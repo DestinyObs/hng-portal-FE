@@ -13,7 +13,7 @@ export default function AuthLayout({
     >
       <AuthImage />
 
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-white">
+      <div className="w-full absolute right-0 top-0 py-12 lg:w-1/2 flex flex-col justify-center items-center p-8 bg-white">
         <div className="w-full max-w-md">{children}</div>
       </div>
     </main>
