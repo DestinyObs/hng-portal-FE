@@ -1,18 +1,7 @@
-'use client';
 import React from 'react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel';
-import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
 
 export default function LogoCarousel() {
-  const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false }),
-  );
-
   const logos = [
     'ebanqo.svg',
     'figma.svg',
@@ -29,31 +18,41 @@ export default function LogoCarousel() {
       <h2 className="text-center text-[10px] md:text-[24px] font-semibold mb-2 text-[#757575]">
         Trusted by Leading Brands and Startups
       </h2>
-
-      <Carousel
-        plugins={[plugin.current]}
-        opts={{
-          align: 'start',
-          loop: true,
-        }}
-        className="w-full"
-      >
-        <CarouselContent className="-ml-2">
+      <div className="mx-auto w-full max-w-[1440px] flex overflow-x-auto [&::-webkit-scrollbar]:hidden">
+        <div className="flex items-center justify-center gap-[34px] md:gap-[72px] animate-scroll pr-[72px]">
           {logos.map((logo, index) => (
-            <CarouselItem
+            <div
               key={index}
-              className="basis-1/3 sm:basis-1/4 md:basis-1/6 pl-2 justify-center items-center flex"
+              className="shrink-0 w-20 h-10 sm:w-[100px] sm:h-[50px] md:w-[104px] md:h-[52px] relative flex items-center justify-center"
             >
               <Image
                 src={`/assets/images/landing-page/hero-carousel/${logo}`}
-                width={104}
-                height={32}
+                fill
+                className="object-contain"
                 alt={`${logo} logo`}
-              /> 
-            </CarouselItem>
+              />
+            </div>
           ))}
-        </CarouselContent>
-      </Carousel>
+        </div>
+        <div
+          aria-hidden
+          className="flex items-center justify-center gap-[34px] md:gap-[72px] animate-scroll pr-[72px]"
+        >
+          {logos.map((logo, index) => (
+            <div
+              key={index}
+              className="shrink-0 w-20 h-10 sm:w-[100px] sm:h-[50px] md:w-[104px] md:h-[52px] relative flex items-center justify-center"
+            >
+              <Image
+                src={`/assets/images/landing-page/hero-carousel/${logo}`}
+                fill
+                className="object-contain"
+                alt={`${logo} logo`}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
