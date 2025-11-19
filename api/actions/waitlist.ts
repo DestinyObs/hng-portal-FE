@@ -1,5 +1,6 @@
 'use server';
 
+// We use the imports from 'dev' because the project structure changed
 import { makePublicRequest } from '../config.server';
 import { APIResponse } from '../utils';
 
