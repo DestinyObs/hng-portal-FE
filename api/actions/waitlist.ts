@@ -1,4 +1,7 @@
-import { APIResponse, makePublicRequest } from '../config';
+'use server';
+
+import { makePublicRequest } from '../config.server';
+import { APIResponse } from '../utils';
 
 type CreateWaitList = {
   full_name: string;

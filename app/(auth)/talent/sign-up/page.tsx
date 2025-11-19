@@ -10,12 +10,12 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Chrome } from 'lucide-react';
+import { Metadata } from 'next';
 
-export function generateMetadata() {
-  return {
-    title: "Sign up | HNG Portal",
-  };
-}
+export const metadata: Metadata = {
+  title: 'HNG-Portal | Sign In',
+  description: 'Sign in to your account to access your dashboard and manage your business.',
+};
 
 
 export default function TalentSignUpPage() {

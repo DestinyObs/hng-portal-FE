@@ -22,10 +22,12 @@ import { Loader2 } from 'lucide-react';
 import Input from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '@/api/actions/auth';
+import { useRouter } from 'next/navigation';
 
 export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   const [error] = useState<string | null>(null);
-
+  const router = useRouter();
+  
   const form = useForm<CompanySignUpFormValues & FieldValues>({
     resolver: zodResolver(companySignUpSchema),
     defaultValues: {
@@ -41,7 +43,8 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
     mutationKey: ['sign-in'],
     mutationFn: register,
     onSuccess: (data) => {
-      console.log(data);
+      console.log('Registration successful:', data);
+      router.push('/dashboard');
     },
   });
 

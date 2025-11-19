@@ -1,9 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { CompanySignInForm } from './components/sign-in-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import GoogleColoredIcon from '@/components/icons/google-colored-icon';
+
+export const metadata: Metadata = {
+  title: 'HNG-Portal |Sign In',
+  description: 'Sign in to your account to access your dashboard and manage your business.',
+};
 
 export default function CompanySignInPage() {
   return (
