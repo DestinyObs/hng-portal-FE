@@ -76,8 +76,12 @@ const Header = () => {
           </ul>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline">Sign in</Button>
-            <Button variant="default">Create an Account</Button>
+            <Button variant="outline">
+              <Link href={'/sign-in'}>Sign in</Link>
+            </Button>
+            <Button variant="default">
+              <Link href={'/sign-up'}>Create an Account</Link>
+            </Button>
           </div>
 
           <button

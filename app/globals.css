@@ -101,6 +101,14 @@
     0.75rem
   );
 }
+@keyframes scroll {
+  from {
+    translate: 0;
+  }
+  to {
+    translate: -100%;
+  }
+}
 
 @theme inline {
   /* colors */
@@ -233,6 +241,9 @@
   --radius-lg: var(--radius);
 
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* scroll animation*/
+  --animate-scroll: scroll 10s infinite linear;
 }
 
 body {
