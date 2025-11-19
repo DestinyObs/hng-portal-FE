@@ -19,7 +19,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18' # change to the Node version your project requires
+        node-version: '20' # change to the Node version your project requires
 
     - name: Enable Corepack and activate pnpm
       run: |
