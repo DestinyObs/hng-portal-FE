@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 type ServiceCardProps = {
   title: string;
@@ -204,13 +205,15 @@ export default function HowItWorks() {
           onMouseLeave={() => setIsPaused(false)}
         >
           {steps.map((step, index) => (
-            <img
+            <Image
               key={index}
               src={step.imagePlaceholder}
               alt={step.title}
-              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
+              fill
+              className={`object-contain transition-opacity duration-500 ${
                 index === activePage ? 'opacity-100' : 'opacity-0'
               }`}
+              priority={index === 0}
             />
           ))}
         </div>
