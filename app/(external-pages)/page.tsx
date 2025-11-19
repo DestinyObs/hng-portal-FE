@@ -5,10 +5,8 @@ import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const router = useRouter();
-  
-  useEffect(() => {
-    router.push('/waitlist');
-  }, [router]);
 
-  return null;
+  useEffect(() => {
+    router.push('/landing-page');
+  }, [router]);
 }

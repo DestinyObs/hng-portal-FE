@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -18,6 +17,9 @@ import {
 import Input from '@/components/ui/input';
 import { Toggle } from '@/components/ui/toggle';
 import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
+import { waitlist } from '@/api/actions/waitlist';
+import { useState } from 'react';
 
 const waitlistFormSchema = z.object({
   name: z.string().min(2, {
@@ -47,19 +49,20 @@ function Modal({ isOpen, onClose }: ModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-        <div className="relative bg-white rounded-2xl shadow-2xl 
+      <div className="relative bg-white rounded-2xl shadow-2xl 
             w-full 
             max-w-[402px]      
             md:max-w-[634px]
             lg:max-w-[510px]
             p-6 md:p-12 text-center animate-in fade-in zoom-in duration-200"
-        >        
+      >       
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 h-6 w-6 rounded-full bg-[#292D32] text-white flex items-center justify-center hover:bg-black/80 transition-colors p-0"                >
           <X className="h-8 w-8" />
         </button>
         <div className="flex justify-center mb-6">
+            {/* Fixed CSS Variable Syntax */}
             <div className="relative w-[106px] h-[106px] bg-(--color-primary-blue)/10 rounded-full flex items-center justify-center">
                 <Image 
                 src="/images/Icon.png"
@@ -80,6 +83,7 @@ function Modal({ isOpen, onClose }: ModalProps) {
         </p>
         <Button 
           onClick={onClose}
+          // Fixed CSS Variable Syntax
           className="w-full py-6 text-body-1 font-semibold bg-(--color-primary-blue) hover:bg-(--color-primary-blue)/90 text-white rounded-lg"
         >
           Thanks!
@@ -90,7 +94,7 @@ function Modal({ isOpen, onClose }: ModalProps) {
   );
 }  
 export default function WaitlistPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   // const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -99,42 +103,69 @@ export default function WaitlistPage() {
     defaultValues: {
       name: '',
       email: '',
+      role: 'talent', // default value prevents uncontrolled input warning
+    },
+  });
+
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationKey: ['waitlist'],
+    mutationFn: waitlist,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSuccess: (data: any) => {
+      if (data?.status === 422 || data?.response?.status === 422) {
+        toast.error(
+          data?.errors?.email?.[0] || 'You are already on the waitlist!',
+        );
+      } else if (data?.success === true || data?.status === 200 || data?.status === 201) {
+        // toast.success("You're on the list!"); // Optional
+        form.reset();
+        setShowSuccessModal(true); // <--- Fixed: Opens the modal
+      }
+    },
+    onError: () => {
+      toast.error('Uh oh! Something went wrong. Please try again.');
     },
   });
 
   async function onSubmit(values: z.infer<typeof waitlistFormSchema>) {
-    setIsLoading(true);
-    console.log(values);
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/waitlist`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'true',
-          },
-
-          body: JSON.stringify({
-            full_name: values.name,
-            email: values.email,
-            role: values.role,
-          }),
-        },
-      );
-
-      if (!response.ok) throw new Error('Something went wrong');
-
-      toast.success("You're on the list!");
-      setShowSuccessModal(true)
-      form.reset();
-    } catch (error) {
-      console.error(error);
-      toast.error('Uh oh! Something went wrong. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    mutate({
+      full_name: values.name,
+      email: values.email,
+      role: values.role,
+    });
   }
+  // async function onSubmit(values: z.infer<typeof waitlistFormSchema>) {
+  //   setIsLoading(true);
+  //   console.log(values);
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/waitlist`,
+  //       {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'ngrok-skip-browser-warning': 'true',
+  //         },
+
+  //         body: JSON.stringify({
+  //           full_name: values.name,
+  //           email: values.email,
+  //           role: values.role,
+  //         }),
+  //       },
+  //     );
+
+  //     if (!response.ok) throw new Error('Something went wrong');
+
+    //   toast.success("You're on the list!");
+    //   form.reset();
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error('Uh oh! Something went wrong. Please try again.');
+    // } finally {
+    //   setIsLoading(false);
+    // }
+  // }
 
   return (
     <div className="bg-background min-h-screen">
@@ -231,6 +262,7 @@ export default function WaitlistPage() {
                         <FormControl>
                           <div className="grid grid-cols-2 gap-4 w-full">
                             <Toggle
+                              type="button" // Added to prevent submitting form
                               pressed={field.value === 'talent'}
                               onPressedChange={() => field.onChange('talent')}
                               className={`flex flex-row justify-center items-center h-auto py-3 px-6 ${
@@ -245,6 +277,7 @@ export default function WaitlistPage() {
                             </Toggle>
 
                             <Toggle
+                              type="button" // Added to prevent submitting form
                               pressed={field.value === 'company'}
                               onPressedChange={() => field.onChange('company')}
                               className={`flex flex-row justify-center items-center h-auto py-3 px-6 ${
