@@ -26,7 +26,7 @@ export function AccordionUI({
      {
         content && content.map(({title, content}, index)=> 
 
-        <AccordionItem key={index} value={title}>
+        <AccordionItem key={index} value={title} className="py-3 border-0">
         <AccordionTrigger className={triggerClassname}>{title}</AccordionTrigger>
         <AccordionContent className={contentClassname}>
          {content}
