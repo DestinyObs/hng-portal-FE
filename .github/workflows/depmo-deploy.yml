@@ -7,14 +7,13 @@ on:
 
 jobs:
   build-deploy:
-    # Use your defined runner labels
     runs-on: [self-hosted, hng-portal-fe, dev, frontend, linux, aws]
 
     steps:
     - name: Update local code repository
       run: |
         cd /home/ubuntu/hng-portal-FE
-        # This git pull will now use the SSH key configured on your server
+        # This git pull command now uses the SSH URL you set manually above
         git pull origin dev 
 
     - name: Install dependencies
@@ -29,5 +28,4 @@ jobs:
 
     - name: Restart systemd service
       run: |
-        # Make sure the user running the runner has sudo privileges for this command
         sudo systemctl restart hng-portal
