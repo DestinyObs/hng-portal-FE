@@ -19,13 +19,13 @@ import Input from '@/components/ui/input';
 import { Toggle } from '@/components/ui/toggle';
 import { toast } from 'sonner';
 
-export function generateMetadata() {
-  return {
-    title: "Join Waitlist | HNG Portal",
-    description:
-      "Join the HNG Portal waitlist to gain early access to new features, updates, and internship opportunities designed to support your tech career growth.",
-  };
-}
+// export function generateMetadata() {
+//   return {
+//     title: "Join Waitlist | HNG Portal",
+//     description:
+//       "Join the HNG Portal waitlist to gain early access to new features, updates, and internship opportunities designed to support your tech career growth.",
+//   };
+// }
 
 const waitlistFormSchema = z.object({
   name: z.string().min(2, {

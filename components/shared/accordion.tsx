@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { 
+  Accordion as AccordionUI, 
+  AccordionContent, 
+  AccordionItem, 
+  AccordionTrigger } from "../ui/accordion";
 
-export function AccordionUI({
+export function Accordion({
     classname, 
     triggerClassname, 
     contentClassname,
@@ -17,7 +21,7 @@ export function AccordionUI({
 
     }) {
   return (
-    <Accordion type="single" className={cn(
+    <AccordionUI type="single" className={cn(
         "",
         classname
         )} 
@@ -37,6 +41,6 @@ export function AccordionUI({
       
 
 
-    </Accordion>
+    </AccordionUI>
   )
 }
