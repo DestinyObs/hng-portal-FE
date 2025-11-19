@@ -6,21 +6,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cva } from 'class-variance-authority'
+import { ReactNode, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 
 type DropdownProps = {
-    title: string,
+    title: string | ReactNode,
     values: {
         name: string,
         action?: ()=> void,
     }[],
-    triggerVariant?: 'outline' | 'ghost' 
+    triggerVariant?: 'outline' | 'ghost' | "data-menu"
     triggerClassName?: string
+    dropdownMenuContent?: "start" | "center" | "end" | undefined
     contentClassName?: string
 }
 
 const dropdownStyles = cva(
-   "text-text-secondary flex h-auto items-center justify-between gap-2 py-1.5 text-sm  select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg]:size-6 cursor-pointer [&[data-state=open]>svg]:rotate-180",
+   "text-text-secondary w-full flex h-auto items-center justify-between gap-2 py-1.5 text-sm active:outline-0 active:border-none active:border-0 active:focus-ring-0  select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg]:size-6 cursor-pointer [&[data-state=open]>svg]:rotate-180 outline-none focus:outline-none focus-visible:outline-none active:outline-none active:ring-0 touch-manipulation focus:ring-0 focus-visible:ring-0",
     { variants: 
         { variant:
         { 
@@ -33,7 +35,8 @@ const dropdownStyles = cva(
               // Success state. 
                 "has-[[data-slot][aria-invalid=false]]:border-primary-green"), 
             // No outline - GHOST 
-            "ghost": "outline:none focus-ring-0 justify-start active:border-none text-black active:border-none border-none order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]", "block-start": "order-first w-full justify-start px-3 pt-3 [.border-b]:pb-3 group-has-[>input]/input-group:pt-2.5",
+            "ghost": "outline-none focus-ring-0 justify-start active:border-none text-black active:border-none border-none order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]", 
+            "data-menu": "outline:none focus-ring-0 justify-start active:border-none text-black active:border-none border-none order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]", 
            }, 
         }, 
            defaultVariants: { variant: "outline", }, 
@@ -43,6 +46,7 @@ const dropdownStyles = cva(
     const Dropdown =({
         title, 
         values, 
+        dropdownMenuContent = 'start',
         triggerVariant = "outline", 
         triggerClassName,
         contentClassName}: DropdownProps)=> {
@@ -59,7 +63,7 @@ const dropdownStyles = cva(
             }
         </DropdownMenuTrigger>
         <DropdownMenuContent 
-        align="start"
+        align={dropdownMenuContent}
     sideOffset={0}
     className={cn(
         `${triggerVariant === "outline" && " rounded-none rounded-b-md border border-t shadow-none border-red px-0 w-(--radix-dropdown-menu-trigger-width) data-[state=open]:border-primary-blue data-[state=open]:border-t-black max-h-[184px]"}`,

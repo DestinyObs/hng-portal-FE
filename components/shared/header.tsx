@@ -76,8 +76,17 @@ const Header = () => {
           </ul>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline">Sign in</Button>
-            <Button variant="default">Create an Account</Button>
+            <Link href="/sign-in" passHref>
+              <Button asChild variant="outline">
+                <span>Sign in</span>
+              </Button>
+            </Link>
+
+            <Link href="/sign-up" passHref>
+              <Button asChild variant="default">
+                <span>Create an Account</span>
+              </Button>
+            </Link>
           </div>
 
           <button
@@ -132,8 +141,17 @@ const Header = () => {
               ))}
 
               <div className="flex flex-col space-y-3 pt-4 border-t">
-                <Button variant="outline">Sign in</Button>
-                <Button variant="default">Create an Account</Button>
+                <Link href="/sign-in" passHref>
+                  <Button asChild variant="outline">
+                    <span>Sign in</span>
+                  </Button>
+                </Link>
+
+                <Link href="/sign-up" passHref>
+                  <Button asChild variant="default">
+                    <span>Create an Account</span>
+                  </Button>
+                </Link>
               </div>
             </ul>
           </div>

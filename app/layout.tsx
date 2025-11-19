@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { Toaster } from '@/components/ui/sonner';
+import "quill/dist/quill.core.css";
 
 const brics = Bricolage_Grotesque({
   variable: '--font-Bricolage',

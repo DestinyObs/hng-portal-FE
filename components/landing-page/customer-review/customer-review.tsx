@@ -84,9 +84,9 @@ const CustomerReview = () => {
         <Carousel className="w-full sm:w-[92%]">
 
           {/*  buttons */}
-          <div className=" absolute -bottom-20  sm:-top-15 right-2 sm:right-30 -translate-y-1/2 flex gap-3">
-            <CarouselPrevious icon={<ChevronLeft />} className="bg-[#E3F6FE] text-black p-2 sm:p-1 border-0 static translate-y-0" />
-            <CarouselNext icon={<ChevronRight />} className="bg-[#E3F6FE] text-black p-2 sm:p-1  border-0 static translate-y-0" />
+          <div className="absolute -bottom-20 sm:bottom-0 sm:-top-20 right-2 sm:right-20 -translate-y-1/2 flex gap-3">
+            <CarouselPrevious icon={<ChevronLeft />} className="bg-[#E3F6FE] text-black p-2 sm:p-1 border-0 " />
+            <CarouselNext icon={<ChevronRight />} className="bg-[#E3F6FE] text-black p-2 sm:p-1  border-0 " />
           </div>
 
           <CarouselContent>

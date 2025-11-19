@@ -1,6 +1,8 @@
 'use server';
 
-import { APIResponse, makePublicRequest } from '../config';
+// We use the imports from 'dev' because the project structure changed
+import { makePublicRequest } from '../config.server';
+import { APIResponse } from '../utils';
 
 type CreateWaitList = {
   full_name: string;

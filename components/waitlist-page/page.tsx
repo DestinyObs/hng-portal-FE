@@ -20,13 +20,6 @@ import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { waitlist } from '@/api/actions/waitlist';
 import { useState } from 'react';
-// export function generateMetadata() {
-//   return {
-//     title: "Join Waitlist | HNG Portal",
-//     description:
-//       "Join the HNG Portal waitlist to gain early access to new features, updates, and internship opportunities designed to support your tech career growth.",
-//   };
-// }
 
 const waitlistFormSchema = z.object({
   name: z.string().min(2, {
@@ -45,6 +38,7 @@ type FeatureProps = {
   title: string;
   desc: string;
 };
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -109,7 +103,7 @@ export default function WaitlistPage() {
     defaultValues: {
       name: '',
       email: '',
-      role: 'talent', // Added default value
+      role: 'talent', // default value prevents uncontrolled input warning
     },
   });
 
@@ -123,9 +117,9 @@ export default function WaitlistPage() {
           data?.errors?.email?.[0] || 'You are already on the waitlist!',
         );
       } else if (data?.success === true || data?.status === 200 || data?.status === 201) {
-        // toast.success("You're on the list!");
+        // toast.success("You're on the list!"); // Optional
         form.reset();
-        setShowSuccessModal(true);
+        setShowSuccessModal(true); // <--- Fixed: Opens the modal
       }
     },
     onError: () => {
@@ -163,14 +157,14 @@ export default function WaitlistPage() {
 
   //     if (!response.ok) throw new Error('Something went wrong');
 
-  //     toast.success("You're on the list!");
-  //     form.reset();
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error('Uh oh! Something went wrong. Please try again.');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
+    //   toast.success("You're on the list!");
+    //   form.reset();
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error('Uh oh! Something went wrong. Please try again.');
+    // } finally {
+    //   setIsLoading(false);
+    // }
   // }
 
   return (
@@ -268,7 +262,7 @@ export default function WaitlistPage() {
                         <FormControl>
                           <div className="grid grid-cols-2 gap-4 w-full">
                             <Toggle
-                              type="button" // Added type button
+                              type="button" // Added to prevent submitting form
                               pressed={field.value === 'talent'}
                               onPressedChange={() => field.onChange('talent')}
                               className={`flex flex-row justify-center items-center h-auto py-3 px-6 ${
@@ -283,7 +277,7 @@ export default function WaitlistPage() {
                             </Toggle>
 
                             <Toggle
-                              type="button" // Added type button
+                              type="button" // Added to prevent submitting form
                               pressed={field.value === 'company'}
                               onPressedChange={() => field.onChange('company')}
                               className={`flex flex-row justify-center items-center h-auto py-3 px-6 ${
@@ -344,7 +338,6 @@ export default function WaitlistPage() {
 
       <section className="h-auto py-8 md:h-[124px] flex items-center justify-center bg-white-50">
         <p className="text-sm md:text-base font-normal text-foreground px-6 text-center">
-          {/* Fixed CSS Variable Syntax */}
           Join <span className="text-(--color-primary-blue)">1,000+</span>{' '}
           professionals on the waitlist
         </p>
@@ -407,10 +400,11 @@ export default function WaitlistPage() {
             <span>© 2025 HNG Portal</span>
           </div>
         </div>
-      </footer> 
+      </footer>
+
       <Modal
-            isOpen={showSuccessModal}
-            onClose={() => setShowSuccessModal(false)}
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
       />
     </div>
   );
