@@ -1,0 +1,47 @@
+import React from 'react';
+import Link from 'next/link';
+import { CompanySignInForm } from './components/sign-in-form';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import GoogleColoredIcon from '@/components/icons/google-colored-icon';
+
+export default function CompanySignInPage() {
+  return (
+    <Card className="w-full max-w-md border-0 shadow-none py-0">
+      <CardHeader className="text-center px-0">
+        <CardTitle className="text-h4 font-bold">Welcome back!</CardTitle>
+      </CardHeader>
+      <CardContent className="px-0">
+        <CompanySignInForm />
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-muted-foreground">or</span>
+          </div>
+        </div>
+
+        <Button
+          variant="outline"
+          className="w-full border-gray-100/30 text-black"
+          size={'lg'}
+        >
+          <GoogleColoredIcon className="mr-2 h-4 w-4" />
+          Sign up with Google
+        </Button>
+
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Don&apos;t have an account?{' '}
+          <Link
+            href="/sign-up"
+            className="font-semibold text-primary-blue hover:underline"
+          >
+            Sign Up
+          </Link>
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
