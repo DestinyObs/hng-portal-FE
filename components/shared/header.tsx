@@ -136,8 +136,12 @@ const Header = () => {
               ))}
 
               <div className="flex flex-col space-y-3 pt-4 border-t">
-                <Button variant="outline">Sign in</Button>
-                <Button variant="default">Create an Account</Button>
+                <Button variant="outline">
+                  <Link href={'/sign-in'}>Sign in</Link>
+                </Button>
+                <Button variant="default">
+                  <Link href={'/sign-up'}>Create an Account</Link>
+                </Button>
               </div>
             </ul>
           </div>
