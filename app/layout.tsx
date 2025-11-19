@@ -4,14 +4,11 @@ import './globals.css';
 import { Providers } from './providers';
 import { Toaster } from '@/components/ui/sonner';
 
-const geistSans = Bricolage_Grotesque({
-  variable: '--font-geist-sans',
+const brics = Bricolage_Grotesque({
+  variable: '--font-Bricolage',
   subsets: ['latin'],
 });
-const geistMono = Bricolage_Grotesque({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+
 export const metadata: Metadata = {
   title: 'HNG Portal',
   description:
@@ -25,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={` ${brics.variable} antialiased`}
       >
         <Providers>
           <Toaster position='top-right' richColors theme='light'/>
