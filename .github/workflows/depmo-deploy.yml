@@ -10,16 +10,18 @@ jobs:
     runs-on: [self-hosted, hng-portal-fe, dev, frontend, linux, aws]
 
     steps:
-      - name: Checkout code
+      # Step 1: Checkout using SSH for deploy key authentication
+      - name: Checkout code via SSH
         uses: actions/checkout@v4
         with:
-          repository: hngprojects/hng-portal-FE
+          # Use the SSH URL format for the repository
+          repository: git@github.com:hngprojects/hng-portal-FE.git
           ref: dev
-          token: ${{ secrets.DEPLOY_KEY }}          
-          persist-credentials: true                   # allow future git commands to authenticate
-          clean: true
-          fetch-depth: 0
+          # The key value is supplied from the GitHub secret you created
+          ssh-key: ${{ secrets.DEPLOY_PRIVATE_KEY }} 
+          # You might not need 'persist-credentials: true' when using the ssh-key parameter
 
+      # Step 2: Install dependencies (rest of your steps remain the same)
       - name: Install dependencies
         run: pnpm install
 
