@@ -21,9 +21,11 @@ import Input from '@/components/ui/input';
 import { SignInFormValues, signInSchema } from '../schema';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/api/actions/auth';
+import { useRouter } from 'next/navigation';
 
 export function CompanySignInForm() {
   const [error] = useState<string | null>(null);
+  const router = useRouter();
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -38,7 +40,8 @@ export function CompanySignInForm() {
     mutationKey: ['sign-in'],
     mutationFn: login,
     onSuccess: (data) => {
-      console.log(data);
+      console.log('Registration successful:', data);
+      router.push('/dashboard');
     },
   });
 
