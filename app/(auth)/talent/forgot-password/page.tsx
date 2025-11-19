@@ -9,6 +9,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+export function generateMetadata() {
+  return {
+    title: "Forgot Password? | HNG Portal",
+  };
+}
+
+
 export default function ForgotPasswordPage() {
   return (
     <Card className="w-full max-w-md border-0 shadow-none py-0">
