@@ -1,7 +1,7 @@
 'use server';
 
 import { LoginType, RegisterType, UserData } from '@/lib/types';
-import { makePublicRequest } from '../config';
+import { makePublicRequest } from '../config.server';
 import { cookies } from 'next/headers';
 
 export const login = async (formData: LoginType) => {
@@ -21,8 +21,6 @@ export const login = async (formData: LoginType) => {
 };
 
 export const register = async (formData: RegisterType) => {
-  console.log(formData);
-
   const res = await makePublicRequest<UserData, RegisterType>(
     '/auth/register',
     {

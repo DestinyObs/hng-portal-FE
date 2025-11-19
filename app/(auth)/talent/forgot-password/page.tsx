@@ -8,12 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Metadata } from 'next';
 
-export function generateMetadata() {
-  return {
-    title: "Forgot Password? | HNG Portal",
-  };
-}
+export const metadata: Metadata = {
+  title: 'HNG-Portal | Sign In',
+  description: 'Sign in to your account to access your dashboard and manage your business.',
+};
 
 
 export default function ForgotPasswordPage() {
@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
 
       <p className="text-sm text-center mt-4">
         <Link
-          href="/talent/sign-in"
+          href="/sign-in"
           className="text-primary-blue hover:underline"
         >
           &larr; Back to Sign In

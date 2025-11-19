@@ -4,13 +4,12 @@ import { TalentSignInForm } from './components/sign-in-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Chrome } from 'lucide-react';
+import { Metadata } from 'next';
 
-export function generateMetadata() {
-  return {
-    title: "Sign in | HNG Portal",
-  };
-}
-
+export const metadata: Metadata = {
+  title: 'Sign In | Talent',
+  description: 'Sign in to your account to access your dashboard and manage your business.',
+};
 
 export default function TalentSignInPage() {
   return (

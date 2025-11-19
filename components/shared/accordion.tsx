@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { 
+  Accordion as AccordionUI, 
+  AccordionContent, 
+  AccordionItem, 
+  AccordionTrigger } from "../ui/accordion";
 
-export function AccordionUI({
+export function Accordion({
     classname, 
     triggerClassname, 
     contentClassname,
@@ -17,7 +21,7 @@ export function AccordionUI({
 
     }) {
   return (
-    <Accordion type="single" className={cn(
+    <AccordionUI type="single" className={cn(
         "",
         classname
         )} 
@@ -26,7 +30,7 @@ export function AccordionUI({
      {
         content && content.map(({title, content}, index)=> 
 
-        <AccordionItem key={index} value={title}>
+        <AccordionItem key={index} value={title} className="py-3 border-0">
         <AccordionTrigger className={triggerClassname}>{title}</AccordionTrigger>
         <AccordionContent className={contentClassname}>
          {content}
@@ -37,6 +41,6 @@ export function AccordionUI({
       
 
 
-    </Accordion>
+    </AccordionUI>
   )
 }

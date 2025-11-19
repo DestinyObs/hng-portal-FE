@@ -20,6 +20,14 @@ import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { waitlist } from '@/api/actions/waitlist';
 
+// export function generateMetadata() {
+//   return {
+//     title: "Join Waitlist | HNG Portal",
+//     description:
+//       "Join the HNG Portal waitlist to gain early access to new features, updates, and internship opportunities designed to support your tech career growth.",
+//   };
+// }
+
 const waitlistFormSchema = z.object({
   name: z.string().min(2, {
     message: 'Please enter your full name.',

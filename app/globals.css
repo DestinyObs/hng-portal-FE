@@ -60,8 +60,8 @@
     3.062rem
   );
   --text-fluid-h3: clamp(
-    2.417rem,
-    calc(2.417rem + (2.438rem - 2.417rem) * ((100vw - 20rem) / 70rem)),
+    2.163rem,
+    calc(2.163rem + (2.438rem - 2.163rem) * ((100vw - 375px) / (1024 - 375px))),
     2.438rem
   );
   --text-fluid-h4: clamp(
@@ -76,7 +76,7 @@
   );
   --text-fluid-card-title: clamp(
     1rem,
-    calc(1rem + (1.25rem - 1rem) * ((100vw - 20rem) / 70rem)),
+    calc(1rem + (1.25rem - 1rem) * ((100vw - 375px) / (1024 -375px))),
     1.25rem
   );
   --text-fluid-subtitle: clamp(
@@ -125,7 +125,7 @@
   --color-gray-50: #e7e7e7;
   --color-gray-75: #9c9c9c;
   --color-gray-100: #737373;
-  --color-gray-20: #363636;
+  --color-gray-200: #363636;
   --color-gray-300: #0d0d0d;
   --color-gray-400: #090909;
   --color-gray-500: #080808;
@@ -201,6 +201,15 @@
 
   /* typography */
   --font-ag: 'Bricolage Grotesque';
+
+  /* typography */
+  --text-h1: var(--text-fluid-h1);
+  --text-h2: var(--text-fluid-h2);
+  --text-h3: var(--text-fluid-h3);
+  --text-h4: var(--text-fluid-h4);
+  --text-h5: var(--text-fluid-h5);
+  --text-card-title: var(--text-fluid-card-title);
+  --text-subtitle: var(--text-fluid-subtitle);
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

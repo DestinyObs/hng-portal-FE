@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link"
 import {
-  Breadcrumb,
+  Breadcrumb as BreadcrumbUI,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -9,7 +9,7 @@ import {
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils";
 
-export function BreadcrumbUI({items}:{
+export function Breadcrumb({items}:{
     items: {
         name: string,
         link: string,
@@ -17,13 +17,13 @@ export function BreadcrumbUI({items}:{
     const pathname = usePathname();
     
   return (
-    <Breadcrumb>
+    <BreadcrumbUI>
       <BreadcrumbList>
 
       { items && items.map(({link, name}, index)=> 
-    <>
+    <div key={index}>
     
-      <BreadcrumbItem>
+      <BreadcrumbItem key={index}>
           <BreadcrumbLink className="font-roboto" asChild>
             <Link className={cn("text-primary-blue", `${pathname === link && "text-gray-500"}`)} href={link}>{name}</Link>
           </BreadcrumbLink>
@@ -34,12 +34,12 @@ export function BreadcrumbUI({items}:{
              <span className="text-gray-200">/</span>
         }
        
-        </>
+        </div>
     )
         
       }
 
       </BreadcrumbList>
-    </Breadcrumb>
+    </BreadcrumbUI>
   )
 }

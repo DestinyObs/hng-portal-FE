@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ForgotPasswordForm } from '../../talent/forgot-password/components/forgot-password-form';
+import { ForgotPasswordForm } from './components/forgot-password-form';
 import {
   Card,
   CardContent,
@@ -8,6 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'HNG-Portal | Sign In',
+  description: 'Sign in to your account to access your dashboard and manage your business.',
+};
 
 export default function CompanyForgotPasswordPage() {
   return (
@@ -24,7 +30,7 @@ export default function CompanyForgotPasswordPage() {
 
       <p className="text-sm text-center mt-4">
         <Link
-          href="/company/sign-in"
+          href="/sign-in"
           className="text-primary-blue hover:underline"
         >
           &larr; Back to Sign In
