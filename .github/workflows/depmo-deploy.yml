@@ -7,26 +7,27 @@ on:
 
 jobs:
   build-deploy:
+    # Use your defined runner labels
     runs-on: [self-hosted, hng-portal-fe, dev, frontend, linux, aws]
 
     steps:
-      # Step 1: Checkout using SSH for deploy key authentication
-      - name: Checkout code via SSH
-        uses: actions/checkout@v4
-        with:
-          # Use the SSH URL format for the repository
-          repository: git@github.com:hngprojects/hng-portal-FE.git
-          ref: dev
-          # The key value is supplied from the GitHub secret you created
-          ssh-key: ${{ secrets.DEPLOY_PRIVATE_KEY }} 
-          # You might not need 'persist-credentials: true' when using the ssh-key parameter
+    - name: Update local code repository
+      run: |
+        cd /home/ubuntu/hng-portal-FE
+        # This git pull will now use the SSH key configured on your server
+        git pull origin dev 
 
-      # Step 2: Install dependencies (rest of your steps remain the same)
-      - name: Install dependencies
-        run: pnpm install
+    - name: Install dependencies
+      run: |
+        cd /home/ubuntu/hng-portal-FE
+        pnpm install
 
-      - name: Build the app
-        run: pnpm run build
+    - name: Build the app
+      run: |
+        cd /home/ubuntu/hng-portal-FE
+        pnpm run build
 
-      - name: Restart systemd service
-        run: sudo systemctl restart hng-portal
+    - name: Restart systemd service
+      run: |
+        # Make sure the user running the runner has sudo privileges for this command
+        sudo systemctl restart hng-portal
