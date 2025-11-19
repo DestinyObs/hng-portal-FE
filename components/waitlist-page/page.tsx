@@ -69,7 +69,7 @@ function Modal({ isOpen, onClose }: ModalProps) {
         </button>
         <div className="flex justify-center mb-6">
             {/* Fixed CSS Variable Syntax */}
-            <div className="relative w-[106px] h-[106px] bg-[var(--color-primary-blue)]/10 rounded-full flex items-center justify-center">
+            <div className="relative w-[106px] h-[106px] bg-(--color-primary-blue)/10 rounded-full flex items-center justify-center">
                 <Image 
                 src="/images/Icon.png"
                 alt="Success"
@@ -90,7 +90,7 @@ function Modal({ isOpen, onClose }: ModalProps) {
         <Button 
           onClick={onClose}
           // Fixed CSS Variable Syntax
-          className="w-full py-6 text-body-1 font-semibold bg-[var(--color-primary-blue)] hover:bg-[var(--color-primary-blue)]/90 text-white rounded-lg"
+          className="w-full py-6 text-body-1 font-semibold bg-(--color-primary-blue) hover:bg-(--color-primary-blue)/90 text-white rounded-lg"
         >
           Thanks!
         </Button>
