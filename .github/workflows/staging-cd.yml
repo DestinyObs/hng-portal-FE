@@ -1,0 +1,31 @@
+name: Deploy HNG Portal Frontend (Self-Hosted Runner)
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-deploy:
+    runs-on: [self-hosted]
+
+    steps:
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Sync code to remote server and deploy
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
+            cd ~/staging/frontend/hng-portal-FE
+            git reset --hard origin/dev
+            git pull origin dev
+            pnpm install --frozen-lockfile
+            pnpm run build
+            pm2 restart 0 --update-env
+          EOF

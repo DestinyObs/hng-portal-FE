@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResetPasswordForm } from '../../talent/reset-password/components/reset-password-form';
+import { ResetPasswordForm } from './components/reset-password';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function CompanyResetPasswordPage() {

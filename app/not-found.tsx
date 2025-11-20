@@ -1,42 +1,36 @@
-"use client"
-
-import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Search } from 'lucide-react';
+import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="max-w-md w-full text-center">
+    <div className="h-screen flex items-center flex-col justify-center bg-white px-5 relative">
         {/* 404 Text */}
-        <div className="mb-8">
-          <h1 className="text-9xl font-bold text-[#00AEFF] mb-4">404</h1>
-          <div className="flex justify-center mb-6">
-            <Search className="h-16 w-16 text-[#00AEFF]/30" />
+          <div>
+            <h1 className="text-[200px] md:text-[400px] font-bold text-[#D9F3FF] ">404</h1>
           </div>
-        </div>
-
+        
         {/* Error Message */}
-        <div className="space-y-3 mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#00AEFF]">
+        <div className="sm:absolute w-full sm:max-w-72 md:max-w-[18rem] sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 text-center flex flex-col gap-3">
+
+          {/* page cannot be found */}
+          <h2 className="text-h4 tracking-wide md:text-3xl font-bold">
             Page Not Found
           </h2>
-          <p className="text-base text-[#00AEFF]/70">
-            Oops! The page you&apos;re looking for doesn&apos;t exist.
+
+          {/* paragraph text */}
+          <p className="text-card-title leading-loose">
+            Sorry, we cannot find the page you are looking for.
           </p>
+
+          {/* button */}
+        <Button asChild className=' p-7 mt-2'>
+          <Link href="/dashboard">
+            Back to Dashboard
+          </Link>
+        </Button>
+
         </div>
 
-        {/* Go Back Button */}
-        <Button
-          variant="outline"
-          size="lg"
-          className="min-w-[200px] border-[#00AEFF] text-[#00AEFF] hover:bg-[#00AEFF] hover:text-white"
-          onClick={() => window.history.back()}
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Go Back
-        </Button>
-      </div>
     </div>
   );
 }
