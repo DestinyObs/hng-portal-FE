@@ -5,6 +5,7 @@ const PortfolioProjects = () => {
     <div>
       <OnboardLayout>
         <h1>Portfolio Projects</h1>
+        {/* <AddPortfolioProjects /> */}
       </OnboardLayout>
     </div>
   );
