@@ -12,7 +12,7 @@ export default function AuthLayout({
         <AuthImage />
       </div>
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8">
-        <div className="w-full max-w-md">{children}</div>
+        <div className="w-full">{children}</div>
       </div>
     </main>
   );
