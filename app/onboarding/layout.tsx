@@ -23,7 +23,7 @@ export default function AuthLayout({
             alt="Square bracket logo"
           />
         </aside>
-        <aside className="absolute -right-3.5 md:right-0 bottom-0">
+        <aside className="absolute not-md:-right-[50%] not-md:-bottom-[150px] -right-3.5 md:right-0 bottom-0">
           <Image
             src={bracketLogo2}
             height={350}
