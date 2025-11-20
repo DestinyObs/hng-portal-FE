@@ -14,7 +14,7 @@ export default function SignInPage() {
   const [role, setRole] = useState<Role>('talent');
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md mx-auto py-12 px-6">
       <div className="text-center mb-8">
         <div className="flex items-center justify-center">
           <Image src="/images/hng-logo.png" alt="HNG Portal" width={180} height={40} />
