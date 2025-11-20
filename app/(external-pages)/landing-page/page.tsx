@@ -5,6 +5,7 @@ import WhyChooseUs from '@/components/landing-page/why-choose-us/WhyChooseUs';
 import HowItWorks from '@/components/landing-page/how-it-works/HowItWorks';
 import CustomerReview from '@/components/landing-page/customer-review/customer-review';
 import { FAQ } from '@/components/landing-page/FAQ/faq';
+import Subscribe from '@/components/landing-page/subscribe/subscribe'
 export default function page() {
   return (
     <section className="min-h-screen bg-white">
@@ -16,6 +17,7 @@ export default function page() {
       {/* LANDING PAGE CONT */}
       <CustomerReview />
       <FAQ />
+      <Subscribe/>
     </section>
   );
 }

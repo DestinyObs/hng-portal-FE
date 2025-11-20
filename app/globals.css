@@ -252,7 +252,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* scroll animation*/
-  --animate-scroll: scroll 10s infinite linear;
+  --animate-scroll: scroll 40s infinite linear;
 }
 
 body {
