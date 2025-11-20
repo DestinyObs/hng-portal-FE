@@ -50,14 +50,14 @@
   /* the text sizes according to the ui */
   /* minimum | prefered value | maximum */
   --text-fluid-h1: clamp(
-    3.833rem,
-    calc(3.833rem + (3.812rem - 3.833rem) * ((100vw - 20rem) / 70rem)),
-    3.812rem
+    3.812rem,
+    calc(3.812rem + (3.833rem - 3.812rem) * ((100vw - 375px) / (1024 - 375px))),
+    3.833rem
   );
   --text-fluid-h2: clamp(
-    3.083rem,
-    calc(3.083rem + (3.062rem - 3.083rem) * ((100vw - 20rem) / 70rem)),
-    3.062rem
+    3.062rem,
+    calc(3.062rem + (3.083rem - 3.062rem) * ((100vw - 375px) / (1024 - 375px))),
+    3.083rem
   );
   --text-fluid-h3: clamp(
     2.163rem,
@@ -66,13 +66,13 @@
   );
   --text-fluid-h4: clamp(
     1.917rem,
-    calc(1.917rem + (1.938rem - 1.917rem) * ((100vw - 20rem) / 70rem)),
+    calc(1.917rem + (1.938rem - 1.917rem) * ((100vw - 375px) / (1024 - 375px))),
     1.938rem
   );
   --text-fluid-h5: clamp(
-    1.583rem,
-    calc(1.583rem + (1.562rem - 1.583rem) * ((100vw - 20rem) / 70rem)),
-    1.562rem
+    1.562rem,
+    calc(1.583rem + (1.583rem - 1.562rem) * ((100vw - 375px) / (1024 - 375px))),
+    1.583rem
   );
   --text-fluid-card-title: clamp(
     1rem,
@@ -81,23 +81,23 @@
   );
   --text-fluid-subtitle: clamp(
     1rem,
-    calc(1rem + (1.167rem - 1rem) * ((100vw - 20rem) / 70rem)),
+    calc(1rem + (1.167rem - 1rem) * ((100vw - 375px) / (1024 - 375px))),
     1.167rem
   );
   --text-fluid-body-1: 1rem;
   --text-fluid-body-2: clamp(
     1rem,
-    calc(1rem + (1.25rem - 1rem) * ((100vw - 20rem) / 70rem)),
+    calc(1rem + (1.25rem - 1rem) * ((100vw - 375px) / (1024 - 375px))),
     1.25rem
   );
   --text-fluid-caption: clamp(
     0.833rem,
-    calc(0.833rem + (0.917rem - 0.833rem) * ((100vw - 20rem) / 70rem)),
+    calc(0.833rem + (0.917rem - 0.833rem) * ((100vw - 375px) / (1024 - 375px))),
     0.917rem
   );
   --text-fluid-overline: clamp(
     0.667rem,
-    calc(0.667rem + (0.75rem - 0.667rem) * ((100vw - 20rem) / 70rem)),
+    calc(0.667rem + (0.75rem - 0.667rem) * ((100vw - 375px) / (1024 - 375px))),
     0.75rem
   );
 }
@@ -252,7 +252,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* scroll animation*/
-  --animate-scroll: scroll 10s infinite linear;
+  --animate-scroll: scroll 40s infinite linear;
 }
 
 body {
