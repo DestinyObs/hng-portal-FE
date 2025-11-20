@@ -71,11 +71,9 @@ export default function AddPortfolioProjects() {
     name: 'projects',
   });
 
-  const onSubmit = (data: PortfolioFormData) => {
-    console.log('Form submitted:', data);
-    // Handle form submission - you can process the data here
-    // Example: send to API, show success message, etc.
-  };
+  // const onSubmit = (data: PortfolioFormData) => {
+  //   console.log('Form submitted:', data);
+  // };
 
   const handleFileChange = (index: number, files: FileList | null) => {
     if (files && files.length > 0) {

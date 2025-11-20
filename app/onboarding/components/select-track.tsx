@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Palette,
   Database,
@@ -99,21 +99,12 @@ export default function TrackSelection() {
       return;
     }
 
-    // const selected = tracks.find((t) => t.id === selectedTrack);
     navigate.push('/onboarding/talent?page=portfolio');
     setTabs('portfolio');
-    // alert(`You selected: ${selected?.title}`);
   };
 
   return (
     <div className="w-[90%] max-w-6xl mx-auto py-24">
-      {/* <Button
-        className="absolute left-6 top-6 md:left-40 md:top-26"
-        onClick={() => navigate.back()}
-      >
-        Back
-      </Button> */}
-
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 lg:text-4xl">
           Select Your Track
@@ -123,7 +114,7 @@ export default function TrackSelection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:gap-5 md:gap-y-8">
         {tracks.map((track) => {
           const Icon = track.icon;
           const isSelected = selectedTrack === track.id;

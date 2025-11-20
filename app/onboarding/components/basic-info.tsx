@@ -65,29 +65,15 @@ export default function BasicInformation() {
     },
   });
 
-  const onSubmit = (data: BasicInfoFormData) => {
-    console.log('Form submitted:');
-    console.log('Role:', data.role);
-    console.log('Bio:', data.bio);
-
+  const onSubmit = () => {
     // Log the actual file to be sent to backend
     if (selectedFile) {
-      //   console.log('Profile Image File:', selectedFile);
-      //   console.log('File name:', selectedFile.name);
-      //   console.log('File size:', selectedFile.size, 'bytes');
-      //   console.log('File type:', selectedFile.type);
+      // const formData = new FormData();
 
-      // Example: Creating FormData to send to backend
-      const formData = new FormData();
-      //   formData.append('profileImage', selectedFile);
-      //   formData.append('role', data.role);
-      //   formData.append('bio', data.bio);
-
-      console.log('FormData ready to send to backend:', formData);
       navigate.push('/onboarding/talent?page=track');
       setTabs('track');
     } else {
-      console.log('No profile image selected');
+      throw new Error('No profile image selected');
     }
   };
 
@@ -96,21 +82,13 @@ export default function BasicInformation() {
       const file = files[0];
       setSelectedFile(file);
 
-      // Create preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfilePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
 
-      // Set form value
       setValue('profileImage', files);
-
-      // Log immediately when file is selected
-      //   console.log('File selected:', file);
-      //   console.log('File name:', file.name);
-      //   console.log('File size:', file.size, 'bytes');
-      //   console.log('File type:', file.type);
     }
   };
 
