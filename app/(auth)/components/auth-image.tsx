@@ -35,7 +35,7 @@ export function AuthImage() {
   }, []);
 
   return (
-    <div className="relative hidden h-full flex-col justify-center items-center bg-primary-blue text-white p-8 overflow-hidden rounded-2xl lg:flex">
+    <div className="relative hidden w-full h-full flex-col justify-center items-center bg-primary-blue text-white p-8 overflow-hidden rounded-2xl lg:flex">
       <Image
         src="/images/line-pattern-top-right.png"
         alt="Line Pattern Top Right"

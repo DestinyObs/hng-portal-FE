@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { CompanySignUpForm } from './components/company-sign-up-form';
 import {
   Card,
@@ -25,6 +26,9 @@ export default function SignUpPage() {
       {!selectedRole ? (
         <>
           <CardHeader className="text-center px-0">
+            <div className="flex items-center justify-center mb-4">
+              <Image src="/images/hng-logo.png" alt="HNG Portal" width={180} height={40} />
+            </div>
             <CardTitle className="text-h4 font-bold">
               Join as a Talent or Company
             </CardTitle>
@@ -73,16 +77,21 @@ export default function SignUpPage() {
       ) : (
         <>
           <CardHeader className="text-center px-0 relative">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute left-0 top-1/2 -translate-y-1/2"
-              onClick={() => setSelectedRole(null)}
-            >
-              <ArrowLeft />
-            </Button>
+            <div className="flex items-center mb-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="mr-2"
+                onClick={() => setSelectedRole(null)}
+              >
+                <ArrowLeft />
+              </Button>
+              <div className="flex flex-grow justify-center">
+                <Image src="/images/hng-logo.png" alt="HNG Portal" width={180} height={40} />
+              </div>
+            </div>
             <CardTitle className="text-h4 font-bold">
-              Profile Setup - {selectedRole === 'talent' ? 'Talent' : 'Company'}
+              Profile Setup: {selectedRole === 'talent' ? 'Talent' : 'Company'}
             </CardTitle>
             <CardDescription className="text-subtitle">
               Join thousands of users already on our platform

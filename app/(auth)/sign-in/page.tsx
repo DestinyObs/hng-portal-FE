@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { SignInForm } from './components/form';
+import { SignInForm } from './components/sign-in-form';
 import { Button } from '@/components/ui/button';
 import GoogleColoredIcon from '@/components/icons/google-colored-icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
