@@ -25,7 +25,7 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const basicInfoSchema = z.object({
   profileImage: z
-    .instanceof(FileList)
+    .custom<FileList>()
     .optional()
     .refine((files) => {
       if (!files || files.length === 0) return true;

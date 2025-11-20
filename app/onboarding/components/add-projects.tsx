@@ -30,7 +30,7 @@ const projectSchema = z.object({
     .url('Please enter a valid URL')
     .min(1, 'Project URL is required'),
   file: z
-    .instanceof(FileList)
+    .custom<FileList>()
     .optional()
     .refine((files) => {
       if (!files || files.length === 0) return true;
