@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -20,6 +20,10 @@ import {
 import { Loader2 } from 'lucide-react';
 
 import Input from '@/components/ui/input';
+import {
+  CompanyForgotPasswordFormValues,
+  companyForgotPasswordSchema,
+} from '../schema';
 
 export function ForgotPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +42,6 @@ export function ForgotPasswordForm() {
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
-
   }
 
   return (

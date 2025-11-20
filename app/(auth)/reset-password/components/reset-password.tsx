@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -20,6 +20,10 @@ import {
 import { Loader2 } from 'lucide-react';
 
 import Input from '@/components/ui/input';
+import {
+  CompanyResetPasswordFormValues,
+  companyResetPasswordSchema,
+} from '../schema';
 
 export function ResetPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +43,6 @@ export function ResetPasswordForm() {
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
-
   }
 
   return (
