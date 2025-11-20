@@ -101,7 +101,7 @@ export default function TrackSelection() {
 
     // const selected = tracks.find((t) => t.id === selectedTrack);
     console.log('Selected track:', selectedTrack);
-    navigate.push('/onboarding/talent/portfolio-project');
+    navigate.push('/onboarding/talent/portfolio-projects');
     setTabs('portfolio');
     // alert(`You selected: ${selected?.title}`);
   };
@@ -195,14 +195,16 @@ export default function TrackSelection() {
       )}
 
       <div className="mt-12 flex flex-col items-center gap-3">
-        <Button
-          variant={'default'}
-          onClick={handleSubmit}
-          size={'lg'}
-          className="w-full md:w-82 py-4"
-        >
-          Continue
-        </Button>
+        {selectedTrack && (
+          <Button
+            variant={'default'}
+            onClick={handleSubmit}
+            size={'lg'}
+            className="w-full md:w-82 py-4"
+          >
+            Continue
+          </Button>
+        )}
 
         <Link
           href={'/dashboard'}

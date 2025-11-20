@@ -1,10 +1,11 @@
+import BasicInformation from '../../components/basic-info';
 import OnboardLayout from '../../components/onboard-layout';
 
 const ProfileSetup = () => {
   return (
     <div>
       <OnboardLayout>
-        <h1>Profile Setup</h1>
+        <BasicInformation />
       </OnboardLayout>
     </div>
   );
