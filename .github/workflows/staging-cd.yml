@@ -22,7 +22,7 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
-            cd /var/www/staging/frontend
+            cd ~/staging/frontend/hng-portal-FE
             git reset --hard origin/dev
             git pull origin dev
             pnpm install --frozen-lockfile
