@@ -8,7 +8,7 @@ const Welcome = () => {
   return (
     <div className="w-[90%] mx-auto md:w-3/5 lg:w-1/2 min-h-screen h-full flex justify-center items-center">
       <section className="text-center flex flex-col items-center justify-center w-full">
-        <h1 className="text-h1 text-primary-blue mb-5">[ ]</h1>
+        <h1 className="text-5xl text-primary-blue mb-5">[ ]</h1>
         <h1 className="text-4xl font-bold">
           Welcome to <br className="md:hidden" />{' '}
           <span className="text-primary-blue">HNG Portal</span>
