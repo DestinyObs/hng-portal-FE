@@ -14,7 +14,7 @@ export default function AuthLayout({
     max-w-[1440px] mx-auto"
     >
       <div className="w-full h-full min-h-full">
-        <aside className="absolute -left-44 md:left-0 top-0">
+        <aside className="fixed -left-44 md:left-0 top-0">
           <Image
             src={bracketLogo1}
             height={300}
@@ -23,7 +23,7 @@ export default function AuthLayout({
             alt="Square bracket logo"
           />
         </aside>
-        <aside className="absolute not-md:-right-[50%] not-md:-bottom-[150px] -right-3.5 md:right-0 bottom-0">
+        <aside className="fixed -right-3.5 md:right-0 bottom-0">
           <Image
             src={bracketLogo2}
             height={350}

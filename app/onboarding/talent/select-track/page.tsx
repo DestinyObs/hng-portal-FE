@@ -1,11 +1,11 @@
-import OnboardLayout from '../../components/onboard-layout';
+import TrackSelection from '../../components/select-track';
 
 const SelectTrack = () => {
   return (
     <div>
-      <OnboardLayout>
-        <h1>Select Track</h1>
-      </OnboardLayout>
+      {/* <OnboardLayout> */}
+      <TrackSelection />
+      {/* </OnboardLayout> */}
     </div>
   );
 };
