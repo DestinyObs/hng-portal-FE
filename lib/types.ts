@@ -38,6 +38,7 @@ export interface UserData {
 export interface LoginType {
   email: string;
   password: string;
+  role: string;
 }
 
 export interface RegisterType {
