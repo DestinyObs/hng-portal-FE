@@ -68,7 +68,7 @@ const tracks = [
     icon: Server,
     title: 'DevOps Engineering',
     description:
-      'I automate development and deployment for scalable infrastructure',
+      'I streamline development and deployment with automation and scalable infrastructure.',
     color: 'bg-purple-100 text-purple-600',
   },
   {
@@ -101,7 +101,7 @@ export default function TrackSelection() {
 
     // const selected = tracks.find((t) => t.id === selectedTrack);
     console.log('Selected track:', selectedTrack);
-    navigate.push('/onboarding/talent/portfolio-projects');
+    navigate.push('/onboarding/talent?page=portfolio');
     setTabs('portfolio');
     // alert(`You selected: ${selected?.title}`);
   };
@@ -176,11 +176,11 @@ export default function TrackSelection() {
                 <Icon className="w-5 h-5" />
               </div>
 
-              <h3 className="font-semibold text-gray-900 mb-2 text-lg md:text-xl">
+              <h3 className="font-semibold text-[#343330] mb-2 text-lg md:text-2xl">
                 {track.title}
               </h3>
 
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#343330] leading-relaxed font-light">
                 {track.description}
               </p>
             </button>
@@ -200,7 +200,7 @@ export default function TrackSelection() {
             variant={'default'}
             onClick={handleSubmit}
             size={'lg'}
-            className="w-full md:w-82 py-4"
+            className="w-full md:w-88 py-6"
           >
             Continue
           </Button>
@@ -208,7 +208,7 @@ export default function TrackSelection() {
 
         <Link
           href={'/dashboard'}
-          className="mt-5 text-primary-blue hover:text-primary-blue/60 transition-colors"
+          className="mt-5 text-primary-blue font-medium text-lg hover:text-primary-blue/60 transition-colors"
         >
           Complete Set Up Later
         </Link>

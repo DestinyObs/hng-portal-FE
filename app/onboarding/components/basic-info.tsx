@@ -5,13 +5,11 @@ import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/input';
-import Image from 'next/image';
 import { useTalentOnboardTab } from '@/store/onboarding';
 import UserProfileIcon from '@/components/icons/user-profile';
 import DocumentUploadIcon from '@/components/icons/document-upload';
@@ -86,7 +84,7 @@ export default function BasicInformation() {
       //   formData.append('bio', data.bio);
 
       console.log('FormData ready to send to backend:', formData);
-      navigate.push('/onboarding/talent/select-track');
+      navigate.push('/onboarding/talent?page=track');
       setTabs('track');
     } else {
       console.log('No profile image selected');
@@ -138,7 +136,7 @@ export default function BasicInformation() {
         <div className="flex flex-col items-center">
           <div
             onClick={handleImageClick}
-            className="relative w-32 h-32 rounded-full overflow-hidden cursor-pointer hover:border-primary-blue transition-colors"
+            className="relative w-36 h-36 rounded-full overflow-hidden cursor-pointer hover:border-primary-blue transition-colors"
           >
             {profilePreview ? (
               <img
@@ -158,7 +156,7 @@ export default function BasicInformation() {
           <button
             type="button"
             onClick={handleImageClick}
-            className="mt-3 inline-flex items-center gap-1 hover:text-primary-blue transition-colors px-3 py-2 rounded-md border border-gray-100/50"
+            className="mt-3 inline-flex items-center gap-1 px-3 py-2 text-[#181818] rounded-md border border-[#E8E8E8] text-sm cursor-pointer"
           >
             <DocumentUploadIcon className="size-4 mr-1" />
             Upload Image
@@ -183,7 +181,7 @@ export default function BasicInformation() {
         <div>
           <Label
             htmlFor="role"
-            className="text-base lg:text-lg font-medium text-gray-700"
+            className="text-base lg:text-lg font-normal text-[#181818]"
           >
             Role
           </Label>
@@ -202,7 +200,7 @@ export default function BasicInformation() {
         <div>
           <Label
             htmlFor="bio"
-            className="text-base lg:text-lg font-medium text-gray-700"
+            className="text-base lg:text-lg font-normal text-[#181818]"
           >
             Short Bio
           </Label>
@@ -224,16 +222,16 @@ export default function BasicInformation() {
           variant={'default'}
           onClick={handleContinue}
           size={'lg'}
-          className="w-full md:w-82 py-6 text-lg"
+          className="w-full md:w-88 py-6 text-lg"
         >
           Continue
         </Button>
 
         <Link
           href={'/dashboard'}
-          className="mt-5 text-primary-blue hover:text-primary-blue/60 transition-colors"
+          className="mt-5 text-primary-blue font-medium text-lg hover:text-primary-blue/60 transition-colors"
         >
-          Complete Later
+          Complete Set Up Later
         </Link>
       </div>
     </div>

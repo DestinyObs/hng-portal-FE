@@ -2,6 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import bracketLogo1 from '@/public/images/biglogo.png';
 import bracketLogo2 from '@/public/images/biglogo2.png';
+import OnboardingPages from './talent/onboarding-pages';
 
 export default function AuthLayout({
   children,
@@ -33,7 +34,9 @@ export default function AuthLayout({
           />
         </aside>
 
-        <div className="w-full relative">{children}</div>
+        <div className="w-full relative">
+          <OnboardingPages />
+        </div>
       </div>
     </main>
   );

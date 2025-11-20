@@ -6,32 +6,32 @@ import UserProfileIcon from '@/components/icons/user-profile';
 import { useTalentOnboardTab } from '@/store/onboarding';
 import clsx from 'clsx';
 
-const tabsList = [
-  {
-    title: 'Profile Setup',
-    subtitle: 'Tell Us About Yourself',
-    icon: <UserProfileIcon className="size-5" />,
-    type: 'profile',
-    link: '/onboarding/talent/profile-setup',
-  },
-  {
-    title: 'Select Your Track',
-    subtitle: 'Select Your Track',
-    icon: <OpenMailIcon className="size-5" />,
-    type: 'track',
-    link: '/onboarding/talent/select-track',
-  },
-  {
-    title: 'Portfolio Projects',
-    subtitle: 'Portfolio Projects',
-    icon: <FileDocIcon className="size-5" />,
-    type: 'portfolio',
-    link: '/onboarding/talent/portfolio-projects',
-  },
-];
-
 const SideTab = () => {
   const tabs = useTalentOnboardTab((state) => state?.tabs);
+
+  const tabsList = [
+    {
+      title: 'Profile Setup',
+      subtitle: 'Tell Us About Yourself',
+      icon: <UserProfileIcon className="size-6" />,
+      type: 'profile',
+      link: `/onboarding/talent?page=${tabs}`,
+    },
+    {
+      title: 'Select Your Track',
+      subtitle: 'Select Your Track',
+      icon: <OpenMailIcon className="size-6" />,
+      type: 'track',
+      link: `/onboarding/talent?page=${tabs}`,
+    },
+    {
+      title: 'Portfolio Projects',
+      subtitle: 'Portfolio Projects',
+      icon: <FileDocIcon className="size-6" />,
+      type: 'portfolio',
+      link: `/onboarding/talent?page=${tabs}`,
+    },
+  ];
 
   return (
     <>
@@ -69,27 +69,24 @@ const SideTab = () => {
                     className={clsx(
                       'rounded-md shadow border p-3 transition-colors',
                       tabs === t.type
-                        ? 'text-primary-blue bg-primary-50 border-primary-blue'
-                        : 'text-gray-75/65 border-gray-50',
+                        ? 'text-[#4E92E1] bg-primary-50 border-[#4E92E1]'
+                        : 'text-[#E7E8E9] border-gray-50',
                     )}
                   >
                     {t.icon}
                   </div>
                   <hr
-                    className={clsx(
-                      'group-last:hidden h-6 w-0.5',
-                      tabs === t.type ? 'bg-primary-blue' : 'bg-gray-75/65',
-                    )}
+                    className={clsx('group-last:hidden h-8 w-0.5 bg-[#E7ECE8]')}
                   />
                 </div>
                 <div
                   className={clsx(
                     '',
-                    tabs === t.type ? 'text-black/75' : 'text-gray-75/65',
+                    tabs === t.type ? 'text-[#111827]' : 'text-gray-75/65',
                   )}
                 >
-                  <p className="font-semibold">{t.title}</p>
-                  <p className="text-sm">{t.subtitle}</p>
+                  <p className="text-lg">{t.title}</p>
+                  <p className="font-extralight">{t.subtitle}</p>
                 </div>
               </aside>
             );
