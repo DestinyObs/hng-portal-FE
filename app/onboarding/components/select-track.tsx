@@ -3,18 +3,18 @@
 import React, { useState } from 'react';
 import {
   Palette,
-  Code,
   Database,
   Smartphone,
-  Package,
   BarChart3,
   Server,
-  Shield,
+  ShieldCheck,
+  Lightbulb,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTalentOnboardTab } from '@/store/onboarding';
+import clsx from 'clsx';
 
 const tracks = [
   {
@@ -26,7 +26,7 @@ const tracks = [
   },
   {
     id: 'frontend',
-    icon: Code,
+    icon: Palette,
     title: 'Frontend Development',
     description:
       'I build responsive, interactive interfaces using modern web technologies',
@@ -34,7 +34,7 @@ const tracks = [
   },
   {
     id: 'backend',
-    icon: Database,
+    icon: Server,
     title: 'Backend Development',
     description:
       'I develop secure, scalable server logic and APIs that power applications',
@@ -49,7 +49,7 @@ const tracks = [
   },
   {
     id: 'product',
-    icon: Package,
+    icon: Lightbulb,
     title: 'Product Management',
     description:
       'I define product strategy and guide teams to build solutions users love',
@@ -65,7 +65,7 @@ const tracks = [
   },
   {
     id: 'devops',
-    icon: Server,
+    icon: Database,
     title: 'DevOps Engineering',
     description:
       'I streamline development and deployment with automation and scalable infrastructure.',
@@ -73,7 +73,7 @@ const tracks = [
   },
   {
     id: 'cybersecurity',
-    icon: Shield,
+    icon: ShieldCheck,
     title: 'Cybersecurity',
     description:
       'I protect systems, data, and networks from security risks and strengthening defenses',
@@ -100,7 +100,6 @@ export default function TrackSelection() {
     }
 
     // const selected = tracks.find((t) => t.id === selectedTrack);
-    console.log('Selected track:', selectedTrack);
     navigate.push('/onboarding/talent?page=portfolio');
     setTabs('portfolio');
     // alert(`You selected: ${selected?.title}`);
@@ -134,7 +133,7 @@ export default function TrackSelection() {
               key={track.id}
               type="button"
               onClick={() => handleTrackChange(track.id)}
-              className={`cursor-pointer relative text-left rounded-xl border-2 p-6 transition-all hover:shadow bg-white ${
+              className={`cursor-pointer relative text-left rounded-xl border-2 p-6 flex flex-col justify-start transition-all hover:shadow bg-white ${
                 isSelected
                   ? 'border-primary-blue bg-blue-50 shadow'
                   : 'border-gray-50 hover:border-primary-blue'
@@ -173,14 +172,19 @@ export default function TrackSelection() {
               <div
                 className={`w-11 h-11 rounded-lg ${track.color} flex items-center justify-center mb-4`}
               >
-                <Icon className="w-5 h-5" />
+                <Icon
+                  className={clsx(
+                    'w-5 h-5',
+                    track.id === 'mobile' ? 'rotate-180' : '',
+                  )}
+                />
               </div>
 
               <h3 className="font-semibold text-[#343330] mb-2 text-lg md:text-2xl">
                 {track.title}
               </h3>
 
-              <p className="text-[#343330] leading-relaxed font-light">
+              <p className="text-[#343330] leading-relaxed font-dm_sans">
                 {track.description}
               </p>
             </button>
