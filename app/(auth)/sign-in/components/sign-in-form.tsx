@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -14,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2 } from 'lucide-react';
 
 import Input from '@/components/ui/input';
@@ -23,7 +23,9 @@ import { useMutation } from '@tanstack/react-query';
 import { login } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
 
-export function CompanySignInForm() {
+type Role = 'talent' | 'company';
+
+export function SignInForm({ role }: { role: Role }) {
   const [error] = useState<string | null>(null);
   const router = useRouter();
 
@@ -37,19 +39,16 @@ export function CompanySignInForm() {
   });
 
   const { mutate: loginAccount, isPending: isLoading } = useMutation({
-    mutationKey: ['sign-in'],
+    mutationKey: ['sign-in', role],
     mutationFn: login,
     onSuccess: (data) => {
-      console.log('Registration successful:', data);
+      console.log('Login successful for', role, data);
       router.push('/dashboard');
     },
   });
 
-  const onSubmit: SubmitHandler<SignInFormValues> = async () => {
-    loginAccount({
-      email: form.getValues('email'),
-      password: form.getValues('password'),
-    });
+  const onSubmit: SubmitHandler<SignInFormValues> = async (data) => {
+    loginAccount({ email: data.email, password: data.password, role });
   };
 
   return (
@@ -60,10 +59,14 @@ export function CompanySignInForm() {
           name="email"
           render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>
+                {role === 'company' ? 'Work Email Address' : 'Email Address'}
+              </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter your email address"
+                  placeholder={
+                    role === 'company' ? 'you@company.com' : 'you@email.com'
+                  }
                   type="email"
                   aria-invalid={!!fieldState.error}
                   {...field}
@@ -82,7 +85,7 @@ export function CompanySignInForm() {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter password"
+                  placeholder="Enter your password"
                   inputType="password"
                   aria-invalid={!!fieldState.error}
                   {...field}
@@ -112,10 +115,10 @@ export function CompanySignInForm() {
             )}
           />
           <Link
-            href="/company/forgot-password"
+            href="/forgot-password"
             className="text-sm font-semibold text-primary-blue hover:underline"
           >
-            Forgot password?
+            Forgot Password?
           </Link>
         </div>
 
@@ -128,8 +131,10 @@ export function CompanySignInForm() {
         >
           {isLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : role === 'talent' ? (
+            'Sign in as Talent'
           ) : (
-            'Sign In'
+            'Sign in as Company'
           )}
         </Button>
 

@@ -2,6 +2,8 @@ import * as z from 'zod';
 
 export const companySignUpSchema = z.object({
   company_name: z.string().min(1, { message: 'Company name is required' }),
+  company_website: z.string().url({ message: 'Please enter a valid URL' }),
+  industry: z.string().min(1, { message: 'Industry is required' }),
 
   email: z
     .string()
@@ -22,7 +24,10 @@ export const companySignUpSchema = z.object({
 });
 
 export const talentSignUpSchema = z.object({
-  full_name: z.string().min(1, { message: 'Company name is required' }),
+  first_name: z.string().min(1, { message: 'First name is required' }),
+  last_name: z.string().min(1, { message: 'Last name is required' }),
+  phone_number: z.string().min(1, { message: 'Phone number is required' }),
+  country: z.string().min(1, { message: 'Country is required' }),
 
   email: z
     .string()
