@@ -10,11 +10,22 @@ jobs:
     runs-on: [self-hosted]
 
     steps:
-      - name: Update local code repository and restart service
+      - name: Install sshpass
         run: |
-          cd /var/www/staging/frontend
-          git reset --hard origin/dev
-          git pull origin dev
-          pnpm install --frozen-lockfile
-          pnpm run build
-          pm2 restart 0 --update-env
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Sync code to remote server and deploy
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
+            cd /var/www/staging/frontend
+            git reset --hard origin/dev
+            git pull origin dev
+            pnpm install --frozen-lockfile
+            pnpm run build
+            pm2 restart 0 --update-env
+          EOF
