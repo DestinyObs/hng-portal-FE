@@ -35,7 +35,32 @@ export function AuthImage() {
   }, []);
 
   return (
-    <div className="fixed left-0 top-0 h-full w-1/2 flex-1 hidden lg:flex flex-col justify-center items-center bg-primary-blue text-white p-8 overflow-hidden">
+    <div className="relative hidden w-full h-full flex-col justify-center items-center bg-primary-blue text-white p-8 overflow-hidden rounded-2xl lg:flex">
+      <Image
+        src="/images/line-pattern-top-right.png"
+        alt="Line Pattern Top Right"
+        width={298}
+        height={408}
+        style={{
+          position: 'absolute',
+          top: '0',
+          left: '422px',
+          opacity: 1,
+        }}
+      />
+      <Image
+        src="/images/line-pattern-bottom-left.png"
+        alt="Line Pattern Bottom Left"
+        width={298}
+        height={408}
+        style={{
+          position: 'absolute',
+          top: '840px',
+          left: '-40px',
+          opacity: 1,
+        }}
+      />
+
       <div className="relative w-96 h-96 flex items-center justify-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-115 h-150 z-10">
           <div className="absolute left-0 top-0 w-44 h-130">
@@ -73,9 +98,9 @@ export function AuthImage() {
       </div>
 
       <div className="text-center z-10 mt-8">
-        <h1 className="text-h3 font-bold">WELCOME TO HNG PORTAL!</h1>
+        <h3 className="text-h3 font-bold">WELCOME TO HNG PORTAL!</h3>
         <p className="text-subtitle">
-          Connect with professionals and discover opportunities
+          Connect with top talent and discover your next hire
         </p>
       </div>
     </div>
