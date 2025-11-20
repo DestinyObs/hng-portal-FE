@@ -1,13 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  companyResetPasswordSchema,
-  type CompanyResetPasswordFormValues,
-} from '@/app/(auth)/reset-password/schema';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
