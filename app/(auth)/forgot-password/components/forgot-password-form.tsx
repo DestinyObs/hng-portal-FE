@@ -3,6 +3,11 @@
 import { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  companyForgotPasswordSchema,
+  type CompanyForgotPasswordFormValues,
+} from '@/app/(auth)/forgot-password/schema';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,

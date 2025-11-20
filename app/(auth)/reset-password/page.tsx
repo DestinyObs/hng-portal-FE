@@ -1,3 +1,4 @@
+import React from 'react';
 import { ResetPasswordForm } from './components/reset-password';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
