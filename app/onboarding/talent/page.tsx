@@ -18,7 +18,11 @@ const Welcome = () => {
           you.
         </p>
         <div className="w-full flex flex-col gap-3 mt-4 lg:w-1/2">
-          <Button variant={'default'} size={'lg'}>
+          <Button
+            variant={'default'}
+            size={'lg'}
+            onClick={() => navigate.push('/onboarding/talent/profile-setup')}
+          >
             Set Up Profile
           </Button>
           <Button
