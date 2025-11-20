@@ -334,6 +334,10 @@ body {
   }
 }
 
+.onboarding-label {
+  @apply text-base lg:text-lg font-normal text-[#181818];
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

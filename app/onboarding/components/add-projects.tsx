@@ -95,7 +95,7 @@ export default function AddPortfolioProjects() {
   };
 
   return (
-    <div className="max-w-xl mx-auto py-24 bg-white rounded-lg md:w-[90%] lg:w-3/5">
+    <div className="max-w-xl w-full mx-auto py-24 bg-white rounded-lg md:w-[90%] lg:w-3/5">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 lg:text-4xl text-center">
           Add Portfolio Projects
@@ -134,7 +134,7 @@ export default function AddPortfolioProjects() {
             <div>
               <Label
                 htmlFor={`projects.${index}.name`}
-                className="text-base lg:text-lg font-medium text-gray-700"
+                className="onboarding-label"
               >
                 Project Name
               </Label>
@@ -154,7 +154,7 @@ export default function AddPortfolioProjects() {
             <div>
               <Label
                 htmlFor={`projects.${index}.url`}
-                className="text-base lg:text-lg font-medium text-gray-700"
+                className="onboarding-label"
               >
                 Project URL
               </Label>
@@ -174,7 +174,7 @@ export default function AddPortfolioProjects() {
             <div>
               <Label
                 htmlFor={`projects.${index}.file`}
-                className="ext-base lg:text-lg font-medium text-gray-700"
+                className="onboarding-label"
               >
                 Upload file{' '}
                 <span className="text-gray-100/60 font-normal">(optional)</span>
@@ -194,11 +194,11 @@ export default function AddPortfolioProjects() {
                   className="hidden"
                   accept=".jpg,.jpeg,.png,.webp,.pdf"
                 />
-                <span className="text-sm text-gray-100/70">
+                <span className="text-sm text-[#969696]">
                   {fileNames[index] || 'No file'}
                 </span>
               </div>
-              <p className="text-sm text-[#969696] mt-1 md:text-base">
+              <p className="text-sm text-[#969696] mt-3 font-light md:text-base">
                 Please upload files, size less than 100KB
               </p>
               {errors.projects?.[index]?.file && (
@@ -233,7 +233,7 @@ export default function AddPortfolioProjects() {
 
         <Link
           href={'/dashboard'}
-          className="mt-5 text-primary-blue hover:text-primary-blue/60 transition-colors"
+          className="mt-5 text-primary-blue font-medium text-lg hover:text-primary-blue/60 transition-colors"
         >
           Complete Set Up Later
         </Link>

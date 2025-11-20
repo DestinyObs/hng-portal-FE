@@ -79,14 +79,23 @@ const SideTab = () => {
                     className={clsx('group-last:hidden h-8 w-0.5 bg-[#E7ECE8]')}
                   />
                 </div>
-                <div
-                  className={clsx(
-                    '',
-                    tabs === t.type ? 'text-[#111827]' : 'text-gray-75/65',
-                  )}
-                >
-                  <p className="text-lg">{t.title}</p>
-                  <p className="font-extralight">{t.subtitle}</p>
+                <div className={clsx('')}>
+                  <p
+                    className={clsx(
+                      'text-lg',
+                      tabs === t.type ? 'text-[#111827]' : 'text-[#92959C]',
+                    )}
+                  >
+                    {t.title}
+                  </p>
+                  <p
+                    className={clsx(
+                      'font-extralight',
+                      tabs === t.type ? 'text-[#111827]' : 'text-[#B5B7BC]',
+                    )}
+                  >
+                    {t.subtitle}
+                  </p>
                 </div>
               </aside>
             );
