@@ -4,15 +4,16 @@ import React, { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Plus, Upload, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Input from '@/components/ui/input';
 
 // Zod validation schema
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+const MAX_FILE_SIZE = 100 * 1024; // 100KB
 const ACCEPTED_FILE_TYPES = [
   'image/jpeg',
   'image/jpg',
@@ -90,17 +91,17 @@ export default function AddPortfolioProjects() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg">
+    <div className="max-w-xl mx-auto py-24 bg-white rounded-lg md:w-[90%] lg:w-3/5">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 lg:text-4xl text-center">
           Add Portfolio Projects
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-100 md:text-lg text-center">
           Showcase your best work and achievements.
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 mt-10 border border-gray-50 pt-5 px-4 rounded-xl shadow-xs">
         {fields.map((field, index) => (
           <div
             key={field.id}
@@ -129,7 +130,7 @@ export default function AddPortfolioProjects() {
             <div>
               <Label
                 htmlFor={`projects.${index}.name`}
-                className="text-sm font-medium text-gray-700"
+                className="text-base lg:text-lg font-medium text-gray-700"
               >
                 Project Name
               </Label>
@@ -137,7 +138,7 @@ export default function AddPortfolioProjects() {
                 id={`projects.${index}.name`}
                 {...register(`projects.${index}.name`)}
                 placeholder="e.g., E-commerce project"
-                className="mt-1"
+                className="mt-1 text-base"
               />
               {errors.projects?.[index]?.name && (
                 <p className="text-red-500 text-xs mt-1">
@@ -149,7 +150,7 @@ export default function AddPortfolioProjects() {
             <div>
               <Label
                 htmlFor={`projects.${index}.url`}
-                className="text-sm font-medium text-gray-700"
+                className="text-base lg:text-lg font-medium text-gray-700"
               >
                 Project URL
               </Label>
@@ -157,7 +158,7 @@ export default function AddPortfolioProjects() {
                 id={`projects.${index}.url`}
                 {...register(`projects.${index}.url`)}
                 placeholder="https://"
-                className="mt-1"
+                className="mt-1 text-base"
               />
               {errors.projects?.[index]?.url && (
                 <p className="text-red-500 text-xs mt-1">
@@ -169,17 +170,16 @@ export default function AddPortfolioProjects() {
             <div>
               <Label
                 htmlFor={`projects.${index}.file`}
-                className="text-sm font-medium text-gray-700"
+                className="ext-base lg:text-lg font-medium text-gray-700"
               >
                 Upload file{' '}
-                <span className="text-gray-400 font-normal">(optional)</span>
+                <span className="text-gray-100/60 font-normal">(optional)</span>
               </Label>
-              <div className="mt-1 flex items-center gap-3">
+              <div className="mt-2 flex items-center gap-3 py-2 px-3.5 rounded-md border border-gray-50">
                 <label
                   htmlFor={`projects.${index}.file`}
-                  className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+                  className="cursor-pointer inline-flex items-center px-4 py-2 border border-primary-blue rounded-sm shadow-sm text-sm font-medium text-primary-blue bg-white hover:bg-gray-50 focus:outline-none"
                 >
-                  <Upload className="w-4 h-4 mr-2" />
                   Choose file
                 </label>
                 <input
@@ -190,12 +190,12 @@ export default function AddPortfolioProjects() {
                   className="hidden"
                   accept=".jpg,.jpeg,.png,.webp,.pdf"
                 />
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-100/70">
                   {fileNames[index] || 'No file'}
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mt-1">
-                Please upload files, size less than 100MB
+              <p className="text-sm text-[#969696] mt-1 md:text-base">
+                Please upload files, size less than 100KB
               </p>
               {errors.projects?.[index]?.file && (
                 <p className="text-red-500 text-xs mt-1">
@@ -205,34 +205,34 @@ export default function AddPortfolioProjects() {
             </div>
           </div>
         ))}
+      </div>
 
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => append({ name: '', url: '', file: undefined })}
+        className="mt-9 w-full border shadow-xs border-gray-50 hover:bg-gray-50 py-6 text-black text-lg font-normal"
+      >
+        <Plus className="w-4 h-4 mr-2" />
+        Add Another Project
+      </Button>
+
+      <div className="mt-6 flex flex-col items-center gap-3">
         <Button
-          type="button"
-          variant="outline"
-          onClick={() => append({ name: '', url: '', file: undefined })}
-          className="w-full border-dashed border-2 hover:bg-gray-50"
+          variant={'default'}
+          onClick={handleContinue}
+          size={'lg'}
+          className="w-full md:w-82 py-6 text-lg"
         >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Another Project
+          Continue
         </Button>
 
-        <div className="mt-12 flex flex-col items-center gap-3">
-          <Button
-            variant={'default'}
-            onClick={handleContinue}
-            size={'lg'}
-            className="w-full md:w-82 py-4"
-          >
-            Continue
-          </Button>
-
-          <Link
-            href={'/dashboard'}
-            className="mt-5 text-primary-blue hover:text-primary-blue/60 transition-colors"
-          >
-            Complete Set Up Later
-          </Link>
-        </div>
+        <Link
+          href={'/dashboard'}
+          className="mt-5 text-primary-blue hover:text-primary-blue/60 transition-colors"
+        >
+          Complete Set Up Later
+        </Link>
       </div>
     </div>
   );
