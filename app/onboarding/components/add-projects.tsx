@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/input';
+import { useTalentOnboardTab } from '@/store/onboarding';
 
 // Zod validation schema
 const MAX_FILE_SIZE = 100 * 1024; // 100KB
@@ -51,6 +52,8 @@ export default function AddPortfolioProjects() {
   const [fileNames, setFileNames] = useState<Record<number, string>>({});
   const navigate = useRouter();
 
+  const setTabs = useTalentOnboardTab((state) => state?.setTabs);
+
   const {
     register,
     control,
@@ -87,6 +90,7 @@ export default function AddPortfolioProjects() {
   const handleContinue = () => {
     // const selected = tracks.find((t) => t.id === selectedTrack);
     navigate.push('/dashboard');
+    setTabs('profile');
     // alert(`You selected: ${selected?.title}`);
   };
 
