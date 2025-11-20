@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   companyForgotPasswordSchema,
   type CompanyForgotPasswordFormValues,
-} from '@/app/(auth)/company/forgot-password/schema';
+} from '@/app/(auth)/forgot-password/schema';
 
 import { Button } from '@/components/ui/button';
 import {
