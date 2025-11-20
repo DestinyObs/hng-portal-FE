@@ -201,9 +201,7 @@
 
   /* typography */
   --font-ag: 'Bricolage Grotesque';
-
-  /* typography */
-  --text-h1: var(--text-fluid-h1);
+  --font-dm_sans: 'DM Sans' /* typography */ --text-h1: var(--text-fluid-h1);
   --text-h2: var(--text-fluid-h2);
   --text-h3: var(--text-fluid-h3);
   --text-h4: var(--text-fluid-h4);
@@ -332,6 +330,13 @@ body {
   .text-overline {
     font-size: var(--text-fluid-overline);
   }
+  .font-dm_sans {
+    font-family: var(--font-dm_sans);
+  }
+}
+
+.onboarding-label {
+  @apply text-base lg:text-lg font-normal text-[#181818];
 }
 
 @layer base {
