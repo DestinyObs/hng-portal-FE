@@ -1,41 +1,32 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
 
-const Welcome = () => {
-  const navigate = useRouter();
+import { useSearchParams } from 'next/navigation';
+import OnboardLayout from '../components/onboard-layout';
+import Welcome from '../components/welcome';
+import BasicInformation from '../components/basic-info';
+import TrackSelection from '../components/select-track';
+import AddPortfolioProjects from '../components/add-projects';
+
+const Page = () => {
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page');
 
   return (
-    <div className="w-[90%] mx-auto md:w-3/5 lg:w-1/2 min-h-screen h-full flex justify-center items-center">
-      <section className="text-center flex flex-col items-center justify-center w-full">
-        <h1 className="text-h1 text-primary-blue mb-5">[ ]</h1>
-        <h1 className="text-4xl font-bold">
-          Welcome to <br className="md:hidden" />{' '}
-          <span className="text-primary-blue">HNG Portal</span>
-        </h1>
-        <p className="text-[#60646E] my-4">
-          Let&apos;s set up your professional profile so companies can discover
-          you.
-        </p>
-        <div className="w-full flex flex-col gap-3 mt-4 lg:w-1/2">
-          <Button
-            variant={'default'}
-            size={'lg'}
-            onClick={() => navigate.push('/onboarding/talent?page=profile')}
-          >
-            Set Up Profile
-          </Button>
-          <Button
-            variant={'outline'}
-            size={'lg'}
-            onClick={() => navigate.push('/dashboard')}
-            className="bg-primary-50 text-primary-blue hover:bg-primary-50"
-          >
-            Skip to Dashboard
-          </Button>
-        </div>
-      </section>
-    </div>
+    <>
+      {page === 'profile' ? (
+        <OnboardLayout>
+          <BasicInformation />
+        </OnboardLayout>
+      ) : page === 'track' ? (
+        <TrackSelection />
+      ) : page === 'portfolio' ? (
+        <OnboardLayout>
+          <AddPortfolioProjects />
+        </OnboardLayout>
+      ) : (
+        <Welcome />
+      )}
+    </>
   );
 };
-export default Welcome;
+export default Page;
