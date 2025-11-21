@@ -1,12 +1,17 @@
 import type { Metadata } from 'next';
-import { Bricolage_Grotesque } from 'next/font/google';
+import { Bricolage_Grotesque, DM_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { Toaster } from '@/components/ui/sonner';
-import "quill/dist/quill.core.css";
+import 'quill/dist/quill.core.css';
 
 const brics = Bricolage_Grotesque({
   variable: '--font-Bricolage',
+  subsets: ['latin'],
+});
+
+const dm_sans = DM_Sans({
+  variable: '--font-dm_sans',
   subsets: ['latin'],
 });
 
@@ -22,11 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={` ${brics.variable} antialiased`}
-      >
+      <body className={` ${brics.variable} ${dm_sans.variable} antialiased`}>
         <Providers>
-          <Toaster position='top-right' richColors theme='light'/>
+          <Toaster position="top-right" richColors theme="light" />
           {children}
         </Providers>
       </body>

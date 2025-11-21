@@ -341,6 +341,13 @@ body {
   .typo-overline {
     font-size: var(--text-fluid-overline);
   }
+  .font-dm_sans {
+    font-family: var(--font-dm_sans);
+  }
+}
+
+.onboarding-label {
+  @apply text-base lg:text-lg font-normal text-[#181818];
 }
 
 @layer base {
