@@ -3,7 +3,7 @@ name: Deploy HNG Portal Frontend (Self-Hosted Runner)
 on:
   push:
     branches:
-      - dev
+      - staging
 
 jobs:
   build-deploy:
