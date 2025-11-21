@@ -5,23 +5,7 @@ import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import Image from 'next/image';
-import Logo from './logo.png';
-import {
-  HNGPortalIcon,
-  HNGInternshipIcon,
-  LearnIcon,
-  PremiumIcon,
-} from './svgs';
-
-const navLinks = [
-  { label: 'HNG Portal', href: '/', active: true, icon: <HNGPortalIcon /> },
-  { label: 'HNG Internship', href: '#', icon: <HNGInternshipIcon /> },
-  { label: 'Learn', href: '#', icon: <LearnIcon /> },
-  { label: 'Premium', href: '#', icon: <PremiumIcon /> },
-];
-
-const linkClasses =
-  'font-medium text-xl text-gray-200 font-dm_sans hover:text-primary-blue transition';
+import { LinkClasses, NavLinks } from '@/public/assets/images/landing-page/shared/constants';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,14 +27,14 @@ const Header = () => {
           <div className="flex justify-between items-center w-full lg:w-auto">
             <Link href="/" aria-label="HNG Portal Home">
               <Image
-                src={Logo}
+                src="/assets/images/landing-page/header/logo.png"
                 alt="HNG Portal Logo"
                 width={140}
                 height={450}
                 className="hidden md:block"
               />
               <Image
-                src={Logo}
+                src="/assets/images/landing-page/header/logo.png"
                 alt="HNG Portal Logo"
                 width={95}
                 height={37}
@@ -69,7 +53,7 @@ const Header = () => {
           </div>
 
           <ul className="items-center gap-10 hidden lg:flex">
-            {navLinks.map((item) => (
+            {NavLinks.map((item) => (
               <li
                 key={item.label}
                 className="flex items-center gap-2 hover:text-primary-blue"
@@ -77,7 +61,7 @@ const Header = () => {
                 {item.icon}
                 <Link
                   href={item.href}
-                  className={`${linkClasses} ${
+                  className={`${LinkClasses} ${
                     item.active ? 'border-b-2 border-black' : ''
                   }`}
                 >
@@ -107,7 +91,7 @@ const Header = () => {
         >
           <nav className="h-full overflow-y-auto px-6 py-6">
             <ul className="flex flex-col space-y-10">
-              {navLinks.map((item) => (
+              {NavLinks.map((item) => (
                 <li
                   key={item.label}
                   className="flex items-center gap-2 hover:text-primary-blue cursor-pointer"
@@ -115,7 +99,7 @@ const Header = () => {
                   {item.icon}
                   <Link
                     href={item.href}
-                    className={`${linkClasses} ${
+                    className={`${LinkClasses} ${
                       item.active ? 'border-b-2 border-black' : ''
                     }`}
                     onClick={() => setIsOpen(false)}
