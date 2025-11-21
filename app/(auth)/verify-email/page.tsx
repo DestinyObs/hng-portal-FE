@@ -24,7 +24,7 @@ import Image from 'next/image';
 const FormSchema = z.object({
   pin: z
     .string()
-    .min(4, 'Code must be 4 digits')
+    .min(6, 'Code must be 6 digits')
     .regex(/^[0-9]*$/, 'Only numbers allowed'),
 });
 
@@ -58,7 +58,7 @@ const VerifyEmailPage = () => {
   };
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    if (data.pin !== '1234') {
+    if (data.pin !== '123456') {
       setError('Incorrect code');
       setCanResendOTP(true);
       setTimeLeft(0);
@@ -78,8 +78,10 @@ const VerifyEmailPage = () => {
     setTimeLeft(180);
   };
 
+  const otp = [...Array(6).keys()];
+
   const otpSlotClasses = `
-    w-20 h-20 md:w-[100px] md:h-[100px]
+    w-[60px] h-[60px] md:w-[100px] md:h-[100px]
     rounded-xl border-2 text-center text-5xl text-[#969696] font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
   `;
 
@@ -105,7 +107,7 @@ const VerifyEmailPage = () => {
               <FormItem className="flex flex-col items-center">
                 <FormControl>
                   <InputOTP
-                    maxLength={4}
+                    maxLength={6}
                     value={field.value}
                     onChange={(value) => {
                       if (/^[0-9]*$/.test(value)) {
@@ -116,7 +118,7 @@ const VerifyEmailPage = () => {
                     className="gap-2"
                   >
                     <InputOTPGroup className="gap-2">
-                      {[0, 1, 2, 3].map((i) => (
+                      {otp.map((i) => (
                         <InputOTPSlot
                           key={i}
                           index={i}
@@ -157,8 +159,8 @@ const VerifyEmailPage = () => {
           <div className="flex justify-center">
             <Button
               type="submit"
-              disabled={form.watch('pin').length < 4}
-              className="w-full md:max-w-xs py-6 rounded-sm bg-primary-blue text-white font-medium text-lg disabled:bg-primary-blue-light"
+              disabled={form.watch('pin').length < 6}
+              className="w-full md:max-w-[342px] py-6 rounded-sm bg-primary-blue text-white font-medium text-lg disabled:bg-primary-blue-light"
             >
               Continue
             </Button>
