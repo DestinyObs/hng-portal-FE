@@ -1,6 +1,6 @@
-import React from 'react';
-import DesktopLayout from './DesktopLayout';
+import { Card, CardContent } from '@/components/ui/card';
 import MobileLayout from './MobileLayout';
+import DesktopLayout from './DesktopLayout';
 
 const WhyChooseUs = () => {
   return (
@@ -13,7 +13,9 @@ const WhyChooseUs = () => {
       }}
     >
       <div className="text-center lg:hidden mb-8">
-        <h2 className="text-primary-black font-medium text-4xl">Why Choose Us?</h2>
+        <h2 className="text-primary-black font-medium text-4xl">
+          Why Choose Us?
+        </h2>
       </div>
 
       <MobileLayout />
