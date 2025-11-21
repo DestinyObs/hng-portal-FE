@@ -23,8 +23,10 @@ import { JOB_CATEGORIES } from '@/data/job-categories';
 import { SUGGESTED_SKILLS } from '@/data/suggested-skills';
 import TextEditor from '@/components/shared/text-editor';
 import Input from '@/components/ui/input';
-import { JobDetailsFormData, jobDetailsSchema } from '@/schemas/create-post.schema';
-
+import {
+  JobDetailsFormData,
+  jobDetailsSchema,
+} from '@/schemas/create-post.schema';
 
 export default function JobDetails({
   initialData,
@@ -114,7 +116,9 @@ export default function JobDetails({
         <CardContent className="space-y-8">
           {/* Category Select */}
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-gray-200">Select Job Category</label>
+            <label className="text-sm font-semibold text-gray-200">
+              Select Job Category
+            </label>
             <Controller
               name="category"
               control={control}
@@ -140,7 +144,10 @@ export default function JobDetails({
 
           {/* Job Title Input */}
           <div className="space-y-3">
-            <label htmlFor="title" className="text-sm font-semibold text-gray-200">
+            <label
+              htmlFor="title"
+              className="text-sm font-semibold text-gray-200"
+            >
               Job Title
             </label>
             <Controller
@@ -233,16 +240,18 @@ export default function JobDetails({
                     key={skill}
                     onClick={() => handleAddSkill(skill)}
                     disabled={skills.includes(skill) || skills.length >= 5}
-                    className="p-3 rounded-full text-sm text-gray-200 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-white border border-input"
+                    className="px-3 py-2 rounded-full text-xs md:text-sm bg-white border border-input text-gray-700 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {skill}
                   </button>
                 ))}
               </div>
+              {errors.skills && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.skills.message}
+                </p>
+              )}
             </div>
-            {errors.skills && (
-              <p className="text-xs text-red-500">{errors.skills.message}</p>
-            )}
           </div>
 
           <div className="space-y-3">
@@ -276,14 +285,24 @@ export default function JobDetails({
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row justify-between gap-4">
-        <Button variant="outline" className="border-[#E7E7E7] text-[#344054]">
-          Cancel
-        </Button>
+        <div className="flex justify-between">
+          <Button variant="outline" className="border-[#E7E7E7] text-[#344054]">
+            Cancel
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleSaveDraft}
+            className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
+          >
+            Save As Draft
+          </Button>
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Button
             variant="outline"
             onClick={handleSaveDraft}
-            className="text-tertiary-500 font-semibold border-0"
+            className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
           >
             Save As Draft
           </Button>
