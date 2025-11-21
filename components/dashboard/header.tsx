@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logo from '../shared/logo.png';
+import Logo from '../../public/assets/images/landing-page/shared/logo.png';
 
 const dashboardLinks = [
   { label: 'HOME', href: '/dashboard', active: true },
