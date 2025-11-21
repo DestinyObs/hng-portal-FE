@@ -5,7 +5,10 @@ import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import Image from 'next/image';
-import { LinkClasses, NavLinks } from '@/public/assets/images/landing-page/shared/constants';
+import {
+  LinkClasses,
+  NavLinks,
+} from '@/public/assets/images/landing-page/shared/constants';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,8 +64,10 @@ const Header = () => {
                 {item.icon}
                 <Link
                   href={item.href}
-                  className={`${LinkClasses} ${
-                    item.active ? 'border-b-2 border-black' : ''
+                  className={`font-medium text-base transition ${
+                    item.active
+                      ? 'text-primary-blue font-semibold'
+                      : 'text-primary-black hover:text-primary-blue'
                   }`}
                 >
                   {item.label}

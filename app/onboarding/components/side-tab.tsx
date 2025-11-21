@@ -3,106 +3,128 @@
 import FileDocIcon from '@/components/icons/file-doc';
 import OpenMailIcon from '@/components/icons/open-mail';
 import UserProfileIcon from '@/components/icons/user-profile';
-import { useTalentOnboardTab } from '@/store/onboarding';
+import FolderIcon from '@/components/icons/folder-icon';
+import UserProfileIcon2 from '@/components/icons/user-profile2';
+import {
+  useUserType,
+  useTalentOnboardTab,
+  useCompanyOnboardTab,
+} from '@/store/onboarding';
 import clsx from 'clsx';
-
+const SideTabSkeleton = () => (
+  <section className="mt-6 hidden fixed left-12 top-1/2 -translate-y-1/2 lg:block">
+    <div className="flex flex-col gap-4">
+      {[1, 2, 3].map((i) => (
+        <aside key={i} className="flex items-start gap-5">
+          <div className="flex flex-col items-center">
+            <div className="rounded-md shadow border border-gray-50 p-3 bg-gray-50 animate-pulse">
+              <div className="size-6" />
+            </div>
+            {i !== 3 && <hr className="h-8 w-0.5 bg-[#E7ECE8]" />}
+          </div>
+          <div className="space-y-2">
+            <div className="h-5 w-32 bg-gray-50 rounded animate-pulse" />
+            <div className="h-4 w-24 bg-gray-50/70 rounded animate-pulse" />
+          </div>
+        </aside>
+      ))}
+    </div>
+  </section>
+);
 const SideTab = () => {
-  const tabs = useTalentOnboardTab((state) => state?.tabs);
+  const { userType, hydrated: userTypeHydrated } = useUserType();
+  const { tabs: talentTab, hydrated: talentHydrated } = useTalentOnboardTab();
+  const { tabs: companyTab, hydrated: companyHydrated } =
+    useCompanyOnboardTab();
+  if (!userTypeHydrated || !talentHydrated || !companyHydrated) {
+    return <SideTabSkeleton />;
+  }
+  const currentTab = userType === 'talent' ? talentTab : companyTab;
 
-  const tabsList = [
-    {
-      title: 'Profile Setup',
-      subtitle: 'Tell Us About Yourself',
-      icon: <UserProfileIcon className="size-6" />,
-      type: 'profile',
-      link: `/onboarding/talent?page=${tabs}`,
-    },
-    {
-      title: 'Select Your Track',
-      subtitle: 'Select Your Track',
-      icon: <OpenMailIcon className="size-6" />,
-      type: 'track',
-      link: `/onboarding/talent?page=${tabs}`,
-    },
-    {
-      title: 'Portfolio Projects',
-      subtitle: 'Portfolio Projects',
-      icon: <FileDocIcon className="size-6" />,
-      type: 'portfolio',
-      link: `/onboarding/talent?page=${tabs}`,
-    },
-  ];
+  const tabConfigurations = {
+    talent: [
+      {
+        title: 'Profile Setup',
+        subtitle: 'Tell Us About Yourself',
+        icon: UserProfileIcon,
+        type: 'profile',
+      },
+      {
+        title: 'Select Your Track',
+        subtitle: 'Choose Your Specialty',
+        icon: OpenMailIcon,
+        type: 'track',
+      },
+      {
+        title: 'Portfolio Projects',
+        subtitle: 'Showcase Your Work',
+        icon: FileDocIcon,
+        type: 'portfolio',
+      },
+    ],
+    company: [
+      {
+        title: 'Company Identity',
+        subtitle: 'Set Up Your Company',
+        icon: UserProfileIcon2,
+        type: 'profile-setup',
+      },
+      {
+        title: 'Company Details',
+        subtitle: 'Add Company Details',
+        icon: FolderIcon,
+        type: 'company-detail',
+      },
+    ],
+  };
+
+  const tabsList = tabConfigurations[userType];
 
   return (
-    <>
-      {/* For Mobile and tablet */}
-      {/* <div className="lg:hidden flex justify-between items-center w-full mt-5">
-        {tabsList.map((t, i) => {
-          return (
-            <div key={i} className="group flex items-center w-full">
-              <aside className="">{t.icon}</aside>
-              <hr
+    <section className="mt-6 hidden fixed left-12 top-1/2 -translate-y-1/2 lg:block font-dm_sans">
+      <div className="flex flex-col">
+        {tabsList.map((t, i) => (
+          <aside key={i} className="flex items-start gap-5 group">
+            <div className="flex flex-col items-center">
+              <div
                 className={clsx(
-                  'group-last:w-0 w-30',
-                  tabs === t.type ? 'bg-primary-blue' : 'bg-black/50',
+                  'rounded-md shadow border p-3 transition-colors',
+                  currentTab === t.type
+                    ? 'text-[#040609] bg-primary-50 border-[#4E92E1]'
+                    : 'text-[#E7E8E9] border-gray-50',
                 )}
+              >
+                <t.icon
+                  className={`size-6 ${currentTab === t.type ? 'text-[#4E92E1]' : 'text-[#E7E8E9]'}`}
+                />
+              </div>
+              <hr
+                className={clsx('group-last:hidden h-8 w-0.5 bg-[#E7ECE8]')}
               />
             </div>
-          );
-        })}
-      </div> */}
-      {/* For Desktop */}
-      <section className="mt-6 hidden fixed left-12 top-1/2 -translate-y-1/2 lg:block">
-        <div className="flex flex-col">
-          {tabsList.map((t, i) => {
-            return (
-              <aside
-                key={i}
-                className="flex items-start gap-5 group"
-                // onClick={() => {
-                //   navigate.push(t.link);
-                //   setTabs(t.type as TalentOnboardTab);
-                // }}
+            <div>
+              <p
+                className={clsx(
+                  'text-base font-semibold',
+                  currentTab === t.type ? 'text-[#111827]' : 'text-[#92959C]',
+                )}
               >
-                <div className="flex flex-col items-center">
-                  <div
-                    className={clsx(
-                      'rounded-md shadow border p-3 transition-colors',
-                      tabs === t.type
-                        ? 'text-[#4E92E1] bg-primary-50 border-[#4E92E1]'
-                        : 'text-[#E7E8E9] border-gray-50',
-                    )}
-                  >
-                    {t.icon}
-                  </div>
-                  <hr
-                    className={clsx('group-last:hidden h-8 w-0.5 bg-[#E7ECE8]')}
-                  />
-                </div>
-                <div className={clsx('')}>
-                  <p
-                    className={clsx(
-                      'text-lg',
-                      tabs === t.type ? 'text-[#111827]' : 'text-[#92959C]',
-                    )}
-                  >
-                    {t.title}
-                  </p>
-                  <p
-                    className={clsx(
-                      'font-extralight',
-                      tabs === t.type ? 'text-[#111827]' : 'text-[#B5B7BC]',
-                    )}
-                  >
-                    {t.subtitle}
-                  </p>
-                </div>
-              </aside>
-            );
-          })}
-        </div>
-      </section>
-    </>
+                {t.title}
+              </p>
+              <p
+                className={clsx(
+                  'font-light text-sm',
+                  currentTab === t.type ? 'text-[#111827]' : 'text-[#B5B7BC]',
+                )}
+              >
+                {t.subtitle}
+              </p>
+            </div>
+          </aside>
+        ))}
+      </div>
+    </section>
   );
 };
+
 export default SideTab;
