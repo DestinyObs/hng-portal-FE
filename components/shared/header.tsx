@@ -30,7 +30,7 @@ const Header = () => {
           <div className="flex justify-between items-center w-full lg:w-auto">
             <Link href="/" aria-label="HNG Portal Home">
               <Image
-                src="/assets/images/landing-page/header/logo.png"
+                src="../../public/assets/images/landing-page/shared/logo.png"
                 alt="HNG Portal Logo"
                 width={140}
                 height={450}
