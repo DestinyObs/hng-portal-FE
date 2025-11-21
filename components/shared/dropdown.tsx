@@ -34,6 +34,13 @@ const dropdownStyles = cva(
                 "has-[[data-slot][aria-invalid=true]]:border-primary-error", 
               // Success state. 
                 "has-[[data-slot][aria-invalid=false]]:border-primary-green"), 
+            "outline_gray":cn( "group/input-group border-gray-50 relative flex items-center rounded-md border transition-[color,box-shadow] outline-none", "h-[40px] min-w-0 px-3", 
+              // Focus state. 
+                "data-[state=open]:border-primary-blue data-[state=open]:border-b-0 rounded-none rounded-t-md",
+              // Error state. 
+                "has-[[data-slot][aria-invalid=true]]:border-primary-error", 
+              // Success state. 
+                "has-[[data-slot][aria-invalid=false]]:border-primary-green"), 
             // No outline - GHOST 
             "ghost": "outline-none focus-ring-0 justify-start active:border-none text-black active:border-none border-none order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]", 
             "data-menu": "outline:none focus-ring-0 justify-start active:border-none text-black active:border-none border-none order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]", 

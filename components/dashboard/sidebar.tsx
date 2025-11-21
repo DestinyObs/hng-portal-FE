@@ -23,7 +23,7 @@ const Sidebar = () => {
             </div>
 
                 {/* name */}
-                    <h1 className="text-[20px] font-bold text-gray-900">Nexo Labs</h1>
+                    <h1 className="text-h5 font-bold text-gray-900">Nexo Labs</h1>
                     <p className="text-body-1 text-gray-500">Creative Design</p>
 
                 {/* Actions */}
@@ -46,7 +46,7 @@ const Sidebar = () => {
 
         {/* complete profile card */}
         <div className="border border-tertiary-50 profilecard flex justify-center items-start gap-4 bg-white rounded-md flex-col py-5 px-3">
-            <h3 className="font-semibold text-[20px]">Complete your profile</h3>
+            <h3 className="font-semibold text-h5">Complete your profile</h3>
 
             {/* progress bar */}
             <div className="progress-bar w-full">

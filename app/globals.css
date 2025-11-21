@@ -101,6 +101,9 @@
   --color-success-dark-active: #22511e;
   --color-success-darker: #1a3f17;
 
+  --color-black-500: #2d2d2d;
+  --color-gray-50: #fafafb;
+
   --color-error-light: #fbe6e6;
   --color-error-light-hover: #f8d9d9;
   --color-error-light-active: #f1b0b0;
@@ -176,16 +179,6 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* border-radius */
-
-  --radius-sm: calc(var(--radius) - 4px);
-
-  --radius-md: calc(var(--radius) - 2px);
-
-  --radius-lg: var(--radius);
-
-  --radius-xl: calc(var(--radius) + 4px);
-
   /* scroll animation*/
   --animate-scroll: scroll 40s infinite linear;
 
@@ -223,28 +216,15 @@
     20px
   );
   /* TITLE1 */
-  --text-title1: clamp(
+  --text-title: clamp(
     14px,
     calc(14px + (16 - 14) * ((100vw - 375px) / 649)),
     16px
-  );
-  /* TITLE2 */
-  --text-title2: 14px;
-  --text-card-title: clamp(
-    1rem,
-    calc(1rem + (1.25 - 1) * ((100vw - 375px) / 649)),
-    1.25rem
   );
   --text-subtitle: clamp(
     1rem,
     calc(1rem + (1.167 - 1) * ((100vw - 375px) / 649)),
     1.167rem
-  );
-  --text-body-1: 1rem;
-  --text-body-2: clamp(
-    1rem,
-    calc(1rem + (1.25 - 1) * ((100vw - 375px) / 649)),
-    1.25rem
   );
   --text-caption: clamp(
     0.833rem,
@@ -266,7 +246,6 @@ body {
   overflow-x: hidden;
   background-color: white;
 }
-
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -300,64 +279,6 @@ body {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-/* according to the UI */
-/* @layer utilities {
-  .typo-h1 {
-    font-size: var(--text-fluid-h1);
-  }
-  .typo-h2 {
-    font-size: var(--text-fluid-h2);
-  }
-  .typo-h3 {
-    font-size: var(--text-fluid-h3);
-  }
-  .typo-h4 {
-    font-size: var(--text-fluid-h4);
-  }
-  .typo-h5 {
-    font-size: var(--text-fluid-h5);
-  }
-  .typo-card-title {
-    font-size: var(--text-fluid-card-title);
-  }
-  .typo-title1 {
-    font-size: var(--text-fluid-title1);
-  }
-  .typo-title2 {
-    font-size: var(--text-fluid-title2);
-  }
-  .typo-subtitle {
-    font-size: var(--text-fluid-subtitle);
-  }
-  .typo-body-1 {
-    font-size: var(--text-fluid-body-1);
-  }
-  .typo-body-2 {
-    font-size: var(--text-fluid-body-2);
-  }
-  .typo-caption {
-    font-size: var(--text-fluid-caption);
-  }
-  .typo-overline {
-    font-size: var(--text-fluid-overline);
-  }
-  .font-dm_sans {
-    font-family: var(--font-dm_sans);
-  }
-}
-
-.onboarding-label {
-  @apply text-base lg:text-lg font-normal text-[#181818];
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-} */
 
 @layer base {
 }

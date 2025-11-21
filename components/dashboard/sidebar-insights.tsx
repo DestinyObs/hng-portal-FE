@@ -4,9 +4,9 @@ import { Bookmark } from 'lucide-react'
 
 export const SidebarInsights = ({role}: {role: string}) => {
 return (
-    // {/* insights */}
+    // insights 
         <div className="border border-tertiary-50 profilecard flex justify-center gap-2 bg-white rounded-md flex-col py-4 px-3">
-            <h3 className="text-[20px] font-semibold">
+            <h3 className="text-h5 font-semibold">
                 {
                 role === 'company' ?
                 'Insights' :

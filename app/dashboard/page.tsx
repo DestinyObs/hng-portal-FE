@@ -24,6 +24,9 @@ export default function HireTalentPage() {
           This feature is coming soon. Stay tuned for updates!
         </p>
       </div>
+
+      
+
       <footer className="border-t py-10 md:py-5 lg:py-[50px]">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-foreground px-6 md:px-10 lg:px-[60px]">
           <Image
