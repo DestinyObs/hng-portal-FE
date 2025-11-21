@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
-import MDEditor from '@uiw/react-md-editor';
+import { cn } from '@/lib/utils';
+import MDEditor, { commands } from '@uiw/react-md-editor';
 import { CSSProperties } from 'react';
 
 const TextEditor = ({
@@ -23,11 +23,21 @@ const TextEditor = ({
         onChange={onChange}
         height={200}
         preview="edit"
+        commands={[
+          commands.bold,
+          commands.italic,
+          commands.hr,
+          commands.unorderedListCommand,
+          commands.orderedListCommand,
+          commands.link,
+          commands.code,
+          commands.checkedListCommand,
+        ]}
         textareaProps={{
-          placeholder: placeholder || "Write here...",
+          placeholder: placeholder || 'Write here...',
         }}
-        className={cn("w-full bg-white text-black rounded-lg", className)}
-        style={Object.assign({color:"#363636"}, ...styles)}
+        className={cn('w-full bg-white text-black rounded-lg', className)}
+        style={Object.assign({ color: '#363636' }, ...styles)}
         {...props}
       />
     </div>

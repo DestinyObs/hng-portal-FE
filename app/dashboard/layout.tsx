@@ -1,6 +1,6 @@
-import Sidebar from '@/components/dashboard/sidebar'
-import Header from '@/components/dashboard/header'
-import { ReactNode } from 'react'
+import Sidebar from '@/components/dashboard/sidebar';
+import Header from '@/components/dashboard/header';
+import { ReactNode } from 'react';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -14,12 +14,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <Sidebar />
 
         {/* Main content */}
-        <main className="flex-1 h-full overflow-y-scroll">
-          {children}
-        </main>
+        <main className="flex-1 h-full overflow-y-scroll">{children}</main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
