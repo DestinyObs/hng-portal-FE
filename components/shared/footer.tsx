@@ -1,5 +1,8 @@
-import { FooterSections, SocialLinks } from '@/public/assets/images/landing-page/shared/constants';
-import FooterImage from './footer.png';
+import {
+  FooterSections,
+  SocialLinks,
+} from '@/public/assets/images/landing-page/shared/constants';
+import FooterImage from '@/public/assets/images/landing-page/shared/footerImage.png';
 import Image from 'next/image';
 
 const Footer = () => {
@@ -44,7 +47,11 @@ const Footer = () => {
                 © 2025 HNG Portal. All rights reserved.
               </p>
 
-              <div className="flex items-center justify-center space-x-4" role="navigation" aria-label="Social media links">
+              <div
+                className="flex items-center justify-center space-x-4"
+                role="navigation"
+                aria-label="Social media links"
+              >
                 {SocialLinks.map((social) => {
                   const IconComponent = social.icon;
                   return (
