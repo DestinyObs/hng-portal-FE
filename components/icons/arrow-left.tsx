@@ -19,4 +19,4 @@ const ArrowLeft = ({ className }: { className?: string }) => {
     </svg>
   );
 };
-export default ArrowLeft
+export default ArrowLeft;

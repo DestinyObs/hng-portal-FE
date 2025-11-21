@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cva } from 'class-variance-authority'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 
 type DropdownProps = {
@@ -28,6 +28,13 @@ const dropdownStyles = cva(
         { 
           // outline 
             "outline":cn( "group/input-group border-gray-50 relative flex items-center rounded-md border transition-[color,box-shadow] outline-none", "h-[40px] min-w-0 px-3", 
+              // Focus state. 
+                "data-[state=open]:border-primary-blue data-[state=open]:border-b-0 rounded-none rounded-t-md",
+              // Error state. 
+                "has-[[data-slot][aria-invalid=true]]:border-primary-error", 
+              // Success state. 
+                "has-[[data-slot][aria-invalid=false]]:border-primary-green"), 
+            "outline_gray":cn( "group/input-group border-gray-50 relative flex items-center rounded-md border transition-[color,box-shadow] outline-none", "h-[40px] min-w-0 px-3", 
               // Focus state. 
                 "data-[state=open]:border-primary-blue data-[state=open]:border-b-0 rounded-none rounded-t-md",
               // Error state. 

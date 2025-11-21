@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import ArrowLeft from '@/components/icons/arrow-left';
 import ArrowRight from '@/components/icons/arrow-right';
 import { Button } from '@/components/ui/button';

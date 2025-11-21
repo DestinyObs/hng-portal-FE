@@ -1,6 +1,17 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+export const stats = [
+    {
+        title: "10 Views",
+        description: "On your last posted job",
+    },
+    {
+        title: "200 Applications",
+        description: "Received this month",
+    },
+]
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

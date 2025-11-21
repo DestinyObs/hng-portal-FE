@@ -6,7 +6,11 @@ import Welcome from '../components/welcome';
 import BasicInformation from '../components/basic-info';
 import TrackSelection from '../components/select-track';
 import AddPortfolioProjects from '../components/add-projects';
-import { TalentOnboardTab, useTalentOnboardTab, useUserType } from '@/store/onboarding';
+import {
+  TalentOnboardTab,
+  useTalentOnboardTab,
+  useUserType,
+} from '@/store/onboarding';
 import { useEffect } from 'react';
 
 const TalentOnboardingContent = () => {
@@ -16,7 +20,7 @@ const TalentOnboardingContent = () => {
   const setTabs = useTalentOnboardTab((state) => state.setTabs);
 
   useEffect(() => {
-    setUserType('talent'); 
+    setUserType('talent');
     if (page) {
       setTabs(page as TalentOnboardTab);
     }

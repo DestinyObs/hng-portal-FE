@@ -20,7 +20,9 @@ const Welcome = () => {
           <Button
             variant={'default'}
             size={'lg'}
-            onClick={() => navigate.push('/onboarding/company?page=profile-setup')}
+            onClick={() =>
+              navigate.push('/onboarding/company?page=profile-setup')
+            }
           >
             Set Up Profile
           </Button>

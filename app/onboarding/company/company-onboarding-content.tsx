@@ -5,19 +5,23 @@ import Welcome from './welcome';
 import UserIdentityForm from './profile-setup/user-identity-form';
 import FormContainer from './components/form-container';
 import CompanyDetailsForm from './profile-detail/company-details-form';
-import { useUserType,useCompanyOnboardTab, CompanyOnboardTab } from '@/store/onboarding';
+import {
+  useUserType,
+  useCompanyOnboardTab,
+  CompanyOnboardTab,
+} from '@/store/onboarding';
 import Navigation from '../components/navigation';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 const CompanyOnboardingContent = () => {
   const searchParams = useSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   const page = searchParams.get('page');
   const setUserType = useUserType((state) => state.setUserType);
   const setTabs = useCompanyOnboardTab((state) => state.setTabs);
 
   useEffect(() => {
-    setUserType('company'); 
+    setUserType('company');
     if (page) {
       setTabs(page as CompanyOnboardTab);
     }

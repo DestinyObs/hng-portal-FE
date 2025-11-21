@@ -35,9 +35,6 @@ export const useTalentOnboardTab = create(
   ),
 );
 
-
-
-
 // === COMPANY ONBOARDING ===
 export type CompanyOnboardTab = 'profile-setup' | 'company-detail';
 
@@ -66,7 +63,6 @@ export const useCompanyOnboardTab = create(
     },
   ),
 );
-
 
 // === SHARED USER TYPE ===
 export type UserType = 'talent' | 'company';
