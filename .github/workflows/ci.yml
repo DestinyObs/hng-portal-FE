@@ -1,0 +1,26 @@
+name: CI for PRs with Preview Deployment
+
+on:
+    pull_request:
+
+permissions:
+    contents: read
+    pull-requests: write
+
+jobs:
+    ci:
+        runs-on: self-hosted
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v5
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Build app
+              run: pnpm build
