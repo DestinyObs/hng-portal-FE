@@ -3,23 +3,11 @@ import Image from "next/image"
 import { Button } from "../ui/button"
 import { AlertCircle } from "lucide-react"
 import { Progress } from "../ui/progress"
-import { InsightCard } from "./insight-card"
-import { Fragment } from "react/jsx-runtime"
 import { useState } from "react"
-
-const stats = [
-    {
-        title: "10 Views",
-        description: "On your last posted job",
-    },
-    {
-        title: "200 Applications",
-        description: "Received this month",
-    },
-]
+import { SidebarInsights } from "./sidebar-insights"
 
 const Sidebar = () => {
-    const [role] = useState('user');
+    const [role] = useState('company');
     return (
         <aside className="w-72 hidden md:flex flex-col gap-5 overflow-y-scroll">
         {/* profile-card */}
@@ -27,7 +15,7 @@ const Sidebar = () => {
             {/* user profile image */}
             <div className="relative w-40 h-40 mx-auto">
                 <Image 
-                    src="/images/portraitPlaceholder.png"
+                    src={role === "company" ? "/images/company-profile.png" : "/images/talent-profile.jpg"}
                     alt="profile"
                     fill
                     className="rounded-full object-cover"
@@ -36,18 +24,20 @@ const Sidebar = () => {
 
                 {/* name */}
                     <h1 className="text-[20px] font-bold text-gray-900">Nexo Labs</h1>
-                    <p className="text-[16px] text-gray-500">Creative Design</p>
+                    <p className="text-body-1 text-gray-500">Creative Design</p>
 
                 {/* Actions */}
-                <div className="flex flex-col gap-3 mt-auto w-full">
+                <div className="flex flex-col gap-5 mt-auto w-full">
                     {role === 'company' && 
-                    <Button className="p-5 text-base">
+                    <Button 
+                    size={'md'} >
                     Post a Job
                     </Button>
                     }
                     <Button
-                    className="text-base border-tertiary-50 text-black p-5" 
-                    variant={"outline"}>
+                    size={'sm'}
+                    className="text-base" 
+                    variant={"outlineGray"}>
                     Request Verification
                     </Button>
                 </div>
@@ -71,7 +61,8 @@ const Sidebar = () => {
             <div className="flex flex-col mt-2 w-full">
                 <Button 
                 variant={'outline'}
-                className="p-5 Foundation bg-primary-50 text-base">
+                size={'sm'}
+                className="text-body-1 text-primary-blue bg-primary-50">
                 Finish your profile
                 </Button>
             </div>
@@ -85,29 +76,8 @@ const Sidebar = () => {
             </div>
         </div>
 
-        {/* insights */}
-        <div className="border border-tertiary-50 profilecard flex justify-center gap-2 bg-white rounded-md flex-col py-4 px-3">
-            <h3 className="text-[20px] font-semibold">
-                {
-                role === 'company' ?
-                'Insights' :
-                'Job Statistics'
-                }
-            </h3>
-
-            <div className="insight">
-
-                {
-                    stats && stats.map((item, index)=> 
-                    <Fragment key={index}>
-                        <InsightCard stat={item} />
-                        {index !== stats.length -1 && <span className=" w-full h-px bg-tertiary-50 inline-block" />}
-                    </Fragment>
-                    )
-                }
-
-            </div>
-        </div>
+         {/* sidebar - insight */}
+            <SidebarInsights role={role} />
 
         </aside>
     )

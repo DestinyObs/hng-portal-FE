@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cva } from 'class-variance-authority'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 
 type DropdownProps = {

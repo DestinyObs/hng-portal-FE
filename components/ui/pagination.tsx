@@ -35,7 +35,7 @@ export function DataTablePagination<TData>({
           } else {
             table.setPageIndex(0)
           }      
-         },[])
+         },[defaultPage, table])
          
 
 //  get the params on refresh and set number value to that

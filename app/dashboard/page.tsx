@@ -19,7 +19,7 @@ export default function HireTalentPage() {
         </div>
       </header>
       <div className="flex flex-col items-center justify-center min-h-screen bg-[#ffffff] text-center px-6">
-        <h1 className="text-4xl font-bold mb-4">Welcome to the dashboard</h1>
+        <h1 className="text-h1 font-bold mb-4">Welcome to the dashboard</h1>
         <p className="text-lg text-gray-600 mb-6">
           This feature is coming soon. Stay tuned for updates!
         </p>
