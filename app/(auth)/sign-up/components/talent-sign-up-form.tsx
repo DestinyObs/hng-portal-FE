@@ -1,31 +1,29 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { talentSignUpSchema, type TalentSignUpFormValues } from '../schema';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Form } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 
-import Input from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
+import { HttpError } from '@/lib/fetch-utils';
+import { TalentSignUpFormStep1 } from './talent-sign-up-form-step1';
+import { TalentSignUpFormStep2 } from './talent-sign-up-form-step2';
+
+interface BackendErrorResponse {
+  message?: string;
+  errors?: { [key: string]: string[] };
+}
 
 export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
   const [step, setStep] = useState(1);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const form = useForm<TalentSignUpFormValues>({
@@ -42,17 +40,23 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
     },
   });
 
-  const { mutate: registerTalent, isPending: isLoading } = useMutation({
+  const { mutate: registerTalent, isPending } = useMutation({
     mutationKey: ['sign-up-talent'],
     mutationFn: register,
-    onSuccess: (data) => {
-      console.log('Registration successful:', data);
-      // We are not redirecting to profile setup as per user's new instructions
-      // integrating the form here itself.
+    onSuccess: () => {
+      toast.success('Registration successful!');
       router.push('/dashboard');
     },
-    onError: (error: Error) => {
-      setError(error.message || 'An error occurred during registration.');
+    onError: (error: HttpError<BackendErrorResponse>) => {
+      let errorMessage = 'An unexpected error occurred.';
+      if (error instanceof HttpError && error.responseBody) {
+        if (error.responseBody.message) {
+          errorMessage = error.responseBody.message;
+        } else if (error.responseBody.errors) {
+          errorMessage = Object.values(error.responseBody.errors).flat().join(', ');
+        }
+      }
+      toast.error(errorMessage);
     }
   });
 
@@ -77,171 +81,10 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {step === 1 && (
-          <>
-            <div className="flex gap-4">
-              <FormField
-                control={form.control}
-                name="first_name"
-                render={({ field, fieldState }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your first name"
-                        aria-invalid={!!fieldState.error}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="last_name"
-                render={({ field, fieldState }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your last name"
-                        aria-invalid={!!fieldState.error}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+        {step === 1 && <TalentSignUpFormStep1 form={form} />}
+        {step === 2 && <TalentSignUpFormStep2 form={form} />}
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Email Address</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your email address"
-                      type="email"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter password"
-                      inputType="password"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password_confirmation"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Confirm password"
-                      inputType="password"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="acceptTerms"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Accept Terms and{' '}
-                      <Link
-                        href="/terms"
-                        className="text-primary-blue cursor-pointer hover:underline"
-                      >
-                        Conditions
-                      </Link>
-                    </FormLabel>
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-
-        {step === 2 && (
-          <>
-            <FormField
-              control={form.control}
-              name="phone_number"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your phone number"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your country"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col space-y-4">
           {step === 2 && (
             <Button
               type="button"
@@ -257,11 +100,11 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
             type={step === 1 ? 'button' : 'submit'}
             onClick={step === 1 ? handleNext : undefined}
             className="w-full"
-            disabled={isLoading}
+            disabled={isPending}
             variant="default"
             size={'lg'}
           >
-            {isLoading ? (
+            {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : step === 1 ? (
               'Continue'
@@ -270,10 +113,6 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
             )}
           </Button>
         </div>
-
-        {error && (
-          <p className="text-sm font-medium text-destructive">{error}</p>
-        )}
       </form>
     </Form>
   );

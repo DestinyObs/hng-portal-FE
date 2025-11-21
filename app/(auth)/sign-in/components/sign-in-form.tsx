@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner'; // Import toast
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,11 +23,14 @@ import { SignInFormValues, signInSchema } from '../schema';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
+import { HttpError } from '@/lib/fetch-utils'; // Import HttpError
 
-type Role = 'talent' | 'company';
+interface BackendErrorResponse {
+  message?: string;
+  errors?: { [key: string]: string[] };
+}
 
-export function SignInForm({ role }: { role: Role }) {
-  const [error] = useState<string | null>(null);
+export function SignInForm() {
   const router = useRouter();
 
   const form = useForm<SignInFormValues>({
@@ -38,17 +42,28 @@ export function SignInForm({ role }: { role: Role }) {
     },
   });
 
-  const { mutate: loginAccount, isPending: isLoading } = useMutation({
-    mutationKey: ['sign-in', role],
+  const { mutate: loginAccount, isPending } = useMutation({
+    mutationKey: ['sign-in'],
     mutationFn: login,
-    onSuccess: (data) => {
-      console.log('Login successful for', role, data);
+    onSuccess: () => {
+      toast.success('Login successful!');
       router.push('/dashboard');
+    },
+    onError: (error: HttpError<BackendErrorResponse>) => {
+      let errorMessage = 'An unexpected error occurred.';
+      if (error instanceof HttpError && error.responseBody) {
+        if (error.responseBody.message) {
+          errorMessage = error.responseBody.message;
+        } else if (error.responseBody.errors) {
+          errorMessage = Object.values(error.responseBody.errors).flat().join(', ');
+        }
+      }
+      toast.error(errorMessage);
     },
   });
 
   const onSubmit: SubmitHandler<SignInFormValues> = async (data) => {
-    loginAccount({ email: data.email, password: data.password, role });
+    loginAccount({ email: data.email, password: data.password });
   };
 
   return (
@@ -59,14 +74,10 @@ export function SignInForm({ role }: { role: Role }) {
           name="email"
           render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel>
-                {role === 'company' ? 'Work Email Address' : 'Email Address'}
-              </FormLabel>
+              <FormLabel>Email Address</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={
-                    role === 'company' ? 'you@company.com' : 'you@email.com'
-                  }
+                  placeholder="you@email.com"
                   type="email"
                   aria-invalid={!!fieldState.error}
                   {...field}
@@ -125,22 +136,16 @@ export function SignInForm({ role }: { role: Role }) {
         <Button
           type="submit"
           className="w-full"
-          disabled={isLoading}
+          disabled={isPending}
           variant="default"
           size={'lg'}
         >
-          {isLoading ? (
+          {isPending ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : role === 'talent' ? (
-            'Sign in as Talent'
           ) : (
-            'Sign in as Company'
+            'Sign In'
           )}
         </Button>
-
-        {error && (
-          <p className="text-sm font-medium text-destructive">{error}</p>
-        )}
       </form>
     </Form>
   );
