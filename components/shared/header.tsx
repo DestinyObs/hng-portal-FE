@@ -64,10 +64,8 @@ const Header = () => {
                 {item.icon}
                 <Link
                   href={item.href}
-                  className={`font-medium text-base transition ${
-                    item.active
-                      ? 'text-primary-blue font-semibold'
-                      : 'text-primary-black hover:text-primary-blue'
+                  className={`${LinkClasses} ${
+                    item.active ? 'border-b-2 border-black' : ''
                   }`}
                 >
                   {item.label}
