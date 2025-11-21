@@ -6,155 +6,136 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import Image from 'next/image';
 import Logo from './logo.png';
+import {
+  HNGPortalIcon,
+  HNGInternshipIcon,
+  LearnIcon,
+  PremiumIcon,
+} from './svgs';
 
 const navLinks = [
-  { label: 'Home', href: '/', active: true },
-  { label: 'Features', href: '#about', hasDropdown: true },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'HNG Portal', href: '/', active: true, icon: <HNGPortalIcon /> },
+  { label: 'HNG Internship', href: '#', icon: <HNGInternshipIcon /> },
+  { label: 'Learn', href: '#', icon: <LearnIcon /> },
+  { label: 'Premium', href: '#', icon: <PremiumIcon /> },
 ];
+
+const linkClasses =
+  'font-medium text-xl text-gray-200 font-dm_sans hover:text-primary-blue transition';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
 
   return (
-    <header className="bg-white">
+    <header className="bg-primary-300 lg:bg-white">
       <div className="max-w-[1200px] mx-auto px-4 xl:px-0 py-6">
         <nav
-          className="flex items-center justify-between"
+          className="flex items-center justify-between bg-white rounded-full lg:rounded-none px-4 py-2.5 lg:px-0 lg:py-0"
           aria-label="Main navigation"
         >
-          <Link href="/" aria-label="HNG Portal Home">
-            <Image src={Logo} width={100} height={100} alt="HNG Portal Logo" />
-          </Link>
+          <div className="flex justify-between items-center w-full lg:w-auto">
+            <Link href="/" aria-label="HNG Portal Home">
+              <Image
+                src={Logo}
+                alt="HNG Portal Logo"
+                width={140}
+                height={450}
+                className="hidden md:block"
+              />
+              <Image
+                src={Logo}
+                alt="HNG Portal Logo"
+                width={95}
+                height={37}
+                className="md:hidden"
+              />
+            </Link>
 
-          <ul className="hidden md:flex items-center gap-[22px]">
+            <button
+              onClick={() => setIsOpen((prev) => !prev)}
+              aria-expanded={isOpen}
+              aria-label="Toggle menu"
+              className="lg:hidden p-2 text-gray-900 hover:text-primary-blue transition"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          <ul className="items-center gap-10 hidden lg:flex">
             {navLinks.map((item) => (
-              <li key={item.label} className="flex items-center gap-1">
+              <li
+                key={item.label}
+                className="flex items-center gap-2 hover:text-primary-blue"
+              >
+                {item.icon}
                 <Link
                   href={item.href}
-                  className={`font-medium text-[16px] transition ${
-                    item.active
-                      ? 'text-primary-blue font-semibold'
-                      : 'text-primary-black hover:text-primary-blue'
+                  className={`${linkClasses} ${
+                    item.active ? 'border-b-2 border-black' : ''
                   }`}
                 >
                   {item.label}
                 </Link>
-
-                {item.hasDropdown && (
-                  <svg
-                    width="8"
-                    height="5"
-                    viewBox="0 0 8 5"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M7 0.75L3.875 3.875L0.75 0.75"
-                      stroke="#080808"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
               </li>
             ))}
           </ul>
 
-          <div className="hidden md:flex items-center space-x-4">
-            <Link href="/sign-in" passHref>
-              <Button asChild variant="outline">
-                <span>Sign in</span>
-              </Button>
-            </Link>
-
-            <Link href="/sign-up" passHref>
-              <Button asChild variant="default">
-                <span>Create an Account</span>
-              </Button>
-            </Link>
-          </div>
-
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            aria-expanded={isOpen}
-            aria-label="Toggle menu"
-            className="md:hidden p-2 text-gray-900 hover:text-primary-blue transition"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <Link href="/sign-up" passHref>
+            <Button
+              asChild
+              variant="outline"
+              className="bg-[#D9ECFE] border-[#8CC6FC] border-2 rounded-full w-[138px] h-14 hidden lg:flex"
+            >
+              <span>Get Started</span>
+            </Button>
+          </Link>
         </nav>
 
         <div
-          className={`md:hidden fixed left-0 right-0 top-[88px] bottom-0 z-50 bg-white transition-all duration-300 ease-in-out ${
+          className={`lg:hidden fixed left-0 right-0 top-[88px] bottom-0 z-50 bg-primary-300 transition-all duration-300 ease-in-out ${
             isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
           }`}
+          role="dialog"
+          aria-modal="true"
         >
-          <div className="h-full overflow-y-auto px-6 py-6">
-            <ul className="flex flex-col space-y-4">
+          <nav className="h-full overflow-y-auto px-6 py-6">
+            <ul className="flex flex-col space-y-10">
               {navLinks.map((item) => (
-                <li key={item.label} className="flex items-center gap-1">
+                <li
+                  key={item.label}
+                  className="flex items-center gap-2 hover:text-primary-blue cursor-pointer"
+                >
+                  {item.icon}
                   <Link
                     href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`font-medium text-[16px] transition ${
-                      item.active
-                        ? 'text-primary-blue font-semibold'
-                        : 'text-primary-black hover:text-primary-blue'
+                    className={`${linkClasses} ${
+                      item.active ? 'border-b-2 border-black' : ''
                     }`}
+                    onClick={() => setIsOpen(false)}
                   >
                     {item.label}
                   </Link>
-
-                  {item.hasDropdown && (
-                    <svg
-                      width="8"
-                      height="5"
-                      viewBox="0 0 8 5"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M7 0.75L3.875 3.875L0.75 0.75"
-                        stroke="#080808"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
                 </li>
               ))}
 
-              <div className="flex flex-col space-y-3 pt-4 border-t">
-                <Link href="/sign-in" passHref>
-                  <Button asChild variant="outline">
-                    <span>Sign in</span>
-                  </Button>
-                </Link>
-
-                <Link href="/sign-up" passHref>
-                  <Button asChild variant="default">
-                    <span>Create an Account</span>
-                  </Button>
-                </Link>
-              </div>
+              <Link href="/sign-up" passHref>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                >
+                  <span>Get Started</span>
+                </Button>
+              </Link>
             </ul>
-          </div>
+          </nav>
         </div>
       </div>
     </header>
