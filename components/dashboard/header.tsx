@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logo from '../shared/logo.png'; 
+import Logo from '../shared/logo.png';
 
 const dashboardLinks = [
   { label: 'HOME', href: '/dashboard', active: true },
@@ -19,10 +19,19 @@ const DashboardHeader = () => {
   return (
     <header className="bg-white shadow-md ">
       <div className="max-w-[1200px] mx-auto px-4 xl:px-0 py-6">
-        <nav className="flex items-center justify-between" aria-label="Dashboard navigation">
+        <nav
+          className="flex items-center justify-between"
+          aria-label="Dashboard navigation"
+        >
           <Link href="/dashboard" aria-label="HNG Portal Home">
             <div className="flex items-center gap-2">
-              <Image src={Logo} width={100} height={30} alt="HNG Portal" className="object-contain" />
+              <Image
+                src={Logo}
+                width={100}
+                height={30}
+                alt="HNG Portal"
+                className="object-contain"
+              />
             </div>
           </Link>
 
@@ -32,7 +41,9 @@ const DashboardHeader = () => {
                 <Link
                   href={item.href}
                   className={`flex items-center h-full text-sm uppercase tracking-wide transition-colors duration-200 ${
-                    item.active ? 'font-bold text-black' : 'font-medium text-[#08080866] hover:text-black uppercase'
+                    item.active
+                      ? 'font-bold text-black'
+                      : 'font-medium text-[#08080866] hover:text-black uppercase'
                   }`}
                 >
                   {item.label}
@@ -44,10 +55,20 @@ const DashboardHeader = () => {
           <div className="hidden md:flex items-center gap-6">
             <div className="flex items-center gap-5 text-gray-100">
               <button className="hover:text-primary-blue transition">
-                <Image src="/images/message-icon.png" alt="Messages" width={20} height={20} />
+                <Image
+                  src="/images/message-icon.png"
+                  alt="Messages"
+                  width={20}
+                  height={20}
+                />
               </button>
               <button className="hover:text-primary-blue transition">
-                <Image src="/images/bell-icon.png" alt="Notifications" width={20} height={20} />
+                <Image
+                  src="/images/bell-icon.png"
+                  alt="Notifications"
+                  width={20}
+                  height={20}
+                />
               </button>
             </div>
 
@@ -77,13 +98,24 @@ const DashboardHeader = () => {
               {isProfileOpen && (
                 <div
                   className="absolute right-0 z-50 bg-white rounded-lg shadow-xl border border-gray flex flex-col justify-center"
-                  style={{ width: '200px', height: '102px', top: '100%', marginTop: '8px' }}
+                  style={{
+                    width: '200px',
+                    height: '102px',
+                    top: '100%',
+                    marginTop: '8px',
+                  }}
                 >
                   <div className="flex flex-col gap-4 pl-6">
-                    <Link href="/settings" className="text-sm font-medium text-black transition-colors text-left">
+                    <Link
+                      href="/settings"
+                      className="text-sm font-medium text-black transition-colors text-left"
+                    >
                       Settings
                     </Link>
-                    <Link href="/logout" className="text-sm font-medium text-primary-error transition-colors text-left">
+                    <Link
+                      href="/logout"
+                      className="text-sm font-medium text-primary-error transition-colors text-left"
+                    >
                       Log out
                     </Link>
                   </div>
@@ -92,7 +124,10 @@ const DashboardHeader = () => {
             </div>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-gray-900">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 text-gray-900"
+          >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </nav>
@@ -114,8 +149,18 @@ const DashboardHeader = () => {
               <hr />
 
               <div className="flex gap-4 py-2">
-                <Image src="/images/message-icon.png" width={20} height={20} alt="Messages" />
-                <Image src="/images/bell-icon.png" width={20} height={20} alt="Notifications" />
+                <Image
+                  src="/images/message-icon.png"
+                  width={20}
+                  height={20}
+                  alt="Messages"
+                />
+                <Image
+                  src="/images/bell-icon.png"
+                  width={20}
+                  height={20}
+                  alt="Notifications"
+                />
               </div>
             </ul>
           </div>
