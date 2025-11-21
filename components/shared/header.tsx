@@ -45,7 +45,7 @@ const Header = () => {
               <li key={item.label} className="flex items-center gap-1">
                 <Link
                   href={item.href}
-                  className={`font-medium text-[16px] transition ${
+                  className={`font-medium text-base transition ${
                     item.active
                       ? 'text-primary-blue font-semibold'
                       : 'text-primary-black hover:text-primary-blue'
@@ -111,7 +111,7 @@ const Header = () => {
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`font-medium text-[16px] transition ${
+                    className={`font-medium text-base transition ${
                       item.active
                         ? 'text-primary-blue font-semibold'
                         : 'text-primary-black hover:text-primary-blue'
