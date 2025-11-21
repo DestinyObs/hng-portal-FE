@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import { UserIdentitySchema, userIdentitySchema } from './schema';
+import { UserIdentitySchema, userIdentitySchema } from '../schema';
 import {
   Form,
   FormControl,
@@ -14,9 +14,12 @@ import {
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { File, Upload } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import DocumentUploadIcon from '@/components/icons/document-upload';
 
 export default function UserIdentityForm() {
+  const route = useRouter();
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
   const form = useForm<UserIdentitySchema>({
@@ -27,8 +30,7 @@ export default function UserIdentityForm() {
       description: '',
     },
   });
-  const {isValid} = form.formState;
-  console.log(isValid)
+  const { isValid } = form.formState;
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -42,24 +44,33 @@ export default function UserIdentityForm() {
   };
 
   const onSubmit = (data: UserIdentitySchema) => {
-    console.log('Form submitted:', data);
-    // Handle form submission
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    route.push('/onboarding/company?page=company-detail');
   };
-
-  const handleCompleteLater = () => {
-    console.log('Complete later clicked');
-    // Handle skip action
-  };
-
   return (
     <div>
       <div className="text-center">
         <div className="flex justify-center items-center mb-4">
-          <div className="border border-primary-300 w-32 h-32 rounded-full overflow-hidden flex justify-center items-center">
+          <div className="w-32 h-32 rounded-full overflow-hidden flex justify-center items-center">
             {logoPreview ? (
-              <img src={logoPreview} alt="Company logo" />
+              <Image
+                src={logoPreview}
+                alt="company logo"
+                width={100}
+                height={100}
+              />
             ) : (
-              <div className="text-sm text-black/40">No image yet</div>
+              <div>
+                <Image
+                  src={'/assets/images/company-onboarding/user-avatar.png'}
+                  alt="user avatar"
+                  width={128}
+                  height={128}
+                />
+              </div>
             )}
           </div>
         </div>
@@ -67,9 +78,9 @@ export default function UserIdentityForm() {
         <div>
           <label
             htmlFor="logo-upload"
-            className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 font-medium"
+            className="inline-flex items-center gap-1 pl-3 pr-4 py-2 border border-tertiary-50 rounded-[8px] cursor-pointer hover:bg-gray-50 font-medium text-xs transition-all duration-300 ease-in"
           >
-            <File className="w-4 h-4" />
+            <DocumentUploadIcon className="w-3 h-3" />
             <span>Upload Logo</span>
           </label>
           <input
@@ -83,12 +94,12 @@ export default function UserIdentityForm() {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-2">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="companyName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="my-2">
                 <FormLabel className="font-medium text-sm">
                   Company Name
                 </FormLabel>
@@ -96,7 +107,7 @@ export default function UserIdentityForm() {
                   <Input
                     placeholder="HNG Portal"
                     {...field}
-                    className="h-10 mb-2"
+                    className="h-10 border-tertiary-50 rounded-[8px]"
                   />
                 </FormControl>
                 <FormMessage />
@@ -115,7 +126,7 @@ export default function UserIdentityForm() {
                 <FormControl>
                   <Textarea
                     placeholder="e.g., Main House, Beach Condo"
-                    className="resize-none h-[130px]"
+                    className="resize-none h-[130px] border-tertiary-50 rounded-[8px]"
                     {...field}
                   />
                 </FormControl>
@@ -124,21 +135,12 @@ export default function UserIdentityForm() {
             )}
           />
 
-          <div className="flex flex-col gap-4 my-10">
+          <div className="flex flex-col gap-4 mt-10 md:w-[80%] mx-auto">
             <Button
               type="submit"
-              className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12`}
+              className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
             >
               Continue
-            </Button>
-
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={handleCompleteLater}
-              className="text-primary-300"
-            >
-              Complete Later
             </Button>
           </div>
         </form>
