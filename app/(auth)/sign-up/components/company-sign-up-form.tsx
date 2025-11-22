@@ -17,7 +17,7 @@ import { CompanySignUpFormStep1 } from './company-sign-up-form-step1';
 import { CompanySignUpFormStep2 } from './company-sign-up-form-step2';
 import { useAuthStore } from '@/store/auth';
 import { APIResponse } from '@/api/config.server';
-import { RegisterResponseData } from '@/lib/types';
+import { UserData } from '@/lib/types';
 
 export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   const [step, setStep] = useState(1);
@@ -41,10 +41,10 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   const { mutate: registerCompany, isPending } = useMutation({
     mutationKey: ['sign-up-company'],
     mutationFn: register,
-    onSuccess: (response: APIResponse<RegisterResponseData | null>) => {
+    onSuccess: (response: APIResponse<UserData | null>) => {
       if (response.success) {
-        if (response.data?.email) {
-          setEmail(response.data.email);
+        if (response.data?.user?.email) {
+          setEmail(response.data.user.email);
         }
         toast.success(
           'Registration successful! Please check your email to verify your account.',

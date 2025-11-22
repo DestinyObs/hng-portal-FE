@@ -1,4 +1,3 @@
-import { Card, CardContent } from '@/components/ui/card';
 import MobileLayout from './MobileLayout';
 import DesktopLayout from './DesktopLayout';
 
