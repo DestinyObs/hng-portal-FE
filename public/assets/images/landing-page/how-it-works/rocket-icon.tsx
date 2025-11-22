@@ -10,8 +10,6 @@ const RocketIcon = () => {
       xmlns="http://www.w3.org/2000/svg"
       className="w-full h-full" // enables dynamic stroke color from ServiceCard
     >
-      <rect width="60" height="60" rx="8" fill="#EEEEEE" />
-
       <path
         d="M25 29.2947C30.284 19.4466 36.8635 19.333 39.4928 20.5072C40.667 23.1365 40.5534 29.716 30.7053 35C30.6031 34.4129 30.0352 32.8749 28.5801 31.4199C27.1251 29.9648 25.5871 29.3969 25 29.2947Z"
         stroke="currentColor"
