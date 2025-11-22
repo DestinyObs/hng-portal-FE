@@ -1,9 +1,8 @@
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const WhyChooseUs = () => {
   return (
-    <section 
+    <section
       className="lg:flex item-center justify-center w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 relative"
       style={{
         backgroundImage: "url('/images/why-choose-us-bgd_.png')",
@@ -11,9 +10,7 @@ const WhyChooseUs = () => {
     >
       {/* Mobile Title - Centered */}
       <div className="text-center md:hidden mb-6">
-        <h2 className="text-h1 text-primary-black">
-          Why Choose Us?
-        </h2>
+        <h2 className="text-h1 text-primary-black">Why Choose Us?</h2>
       </div>
 
       {/* Desktop Layout */}
@@ -23,16 +20,15 @@ const WhyChooseUs = () => {
           {/* Title */}
           <div className="w-[285px] shrink-0 flex items-start h-28">
             <h2 className="text-h2 text-primary-black font-normal leading-[150%]">
-              Why<br/> Choose Us?
+              Why
+              <br /> Choose Us?
             </h2>
           </div>
-          
+
           {/* 50K+ Card */}
           <Card className="shrink-0 w-[266px] rounded-[30px] border-none shadow-none bg-linear-to-b from-[rgba(143,218,253,0.15)] to-[rgba(0,174,255,0.15)]">
             <CardContent className="p-5 flex flex-col justify-center items-start gap-16">
-              <div className="text-h2 text-primary-black font-normal">
-                50K+
-              </div>
+              <div className="text-h2 text-primary-black font-normal">50K+</div>
               <p className="text-caption text-primary-black leading-[150%]">
                 Talents trained through the HNG ecosystem
               </p>
@@ -57,7 +53,9 @@ const WhyChooseUs = () => {
           {/* Supporting Text */}
           <div className="shrink-0 w-[590px]">
             <p className="text-card-title text-primary-black font-normal leading-[150%] p-5">
-              Empowering talents and recruiters with verified profiles, structured data, and a hiring experience built for real-world work.
+              Empowering talents and recruiters with verified profiles,
+              structured data, and a hiring experience built for real-world
+              work.
             </p>
           </div>
 
@@ -149,7 +147,8 @@ const WhyChooseUs = () => {
         {/* Supporting Text - Bottom on mobile */}
         <div className="mt-4">
           <p className="text-subtitle text-primary-black font-normal leading-[150%] text-center">
-            Empowering talents and recruiters with verified profiles, structured data, and a hiring experience built for real-world work.
+            Empowering talents and recruiters with verified profiles, structured
+            data, and a hiring experience built for real-world work.
           </p>
         </div>
       </div>

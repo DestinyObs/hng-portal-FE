@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   ColumnDef,
@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -15,27 +15,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table"
-import { DataTablePagination } from "../ui/pagination"
-
+} from '../ui/table';
+import { DataTablePagination } from '../ui/pagination';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: Readonly<DataTableProps<TData, TValue>>) {
+  // eslint-disable-next-line
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-  })
-//   table.getState().pagination.
+  });
+  //   table.getState().pagination.
   return (
     <>
       <Table>
@@ -49,10 +48,10 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
-                )
+                );
               })}
             </TableRow>
           ))}
@@ -62,7 +61,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() && 'selected'}
               >
                 {/* <TableCell >01</TableCell> */}
                 {row.getVisibleCells().map((cell) => (
@@ -75,7 +74,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results 
+                No results
               </TableCell>
             </TableRow>
           )}
@@ -84,6 +83,6 @@ export function DataTable<TData, TValue>({
 
       {/* pagination */}
       <DataTablePagination manualPagination={true} table={table} />
-      </>
-  )
+    </>
+  );
 }
