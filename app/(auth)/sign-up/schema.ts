@@ -24,8 +24,8 @@ export const companySignUpSchema = z.object({
 });
 
 export const talentSignUpSchema = z.object({
-  first_name: z.string().min(1, { message: 'First name is required' }),
-  last_name: z.string().min(1, { message: 'Last name is required' }),
+  firstname: z.string().min(1, { message: 'First name is required' }),
+  lastname: z.string().min(1, { message: 'Last name is required' }),
   phone_number: z.string().min(1, { message: 'Phone number is required' }),
   country: z.string().min(1, { message: 'Country is required' }),
 

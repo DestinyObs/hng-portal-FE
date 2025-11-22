@@ -7,7 +7,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex min-h-screen w-full max-w-[2000px] mx-auto">
+    <main className="flex min-h-screen w-full mx-auto">
       <div className="hidden lg:w-1/2 p-4 lg:flex">
         <AuthImage />
       </div>
