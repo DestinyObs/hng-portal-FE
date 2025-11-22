@@ -19,12 +19,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          
       - name: Install dependencies
-        run: CI=true pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: CI=true pnpm lint
-
+        run: pnpm lint
+        
       - name: Build app
-        run: CI=true pnpm build
+        run: pnpm build

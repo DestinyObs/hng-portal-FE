@@ -29,10 +29,10 @@ jobs:
                     pnpm-store-
 
             - name: Install dependencies
-              run: CI=true pnpm install --frozen-lockfile
+              run: pnpm install
 
             - name: Lint
-              run: CI=true pnpm lint
+              run: pnpm lint
 
             - name: Build app
-              run: CI=true pnpm build
+              run: pnpm build
