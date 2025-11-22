@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -13,36 +12,78 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
-
+import { useEffect } from 'react';
 import Input from '@/components/ui/input';
 import {
   CompanyResetPasswordFormValues,
   companyResetPasswordSchema,
 } from '../schema';
+import { useMutation } from '@tanstack/react-query';
+import { resetPassword } from '@/api/actions/auth';
+import { toast } from 'sonner';
+import { SuccessResponse } from '@/app/(auth)/components/types';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { APIResponse } from '@/api/config.server';
 
 export function ResetPasswordForm() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email') || '';
+  const token = searchParams.get('token') || '';
 
   const form = useForm<CompanyResetPasswordFormValues & FieldValues>({
     resolver: zodResolver(companyResetPasswordSchema),
     defaultValues: {
+      email: email,
+      token: token,
       password: '',
       confirmPassword: '',
     },
   });
 
-  async function onSubmit() {
-    setIsLoading(true);
-    setError(null);
+  useEffect(() => {
+    if (!email || !token) {
+      toast.error('Invalid password reset link.');
+      router.push('/forgot-password');
+    }
+  }, [email, token, router]);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+  const { mutate: a_resetPassword, isPending } = useMutation({
+    mutationKey: ['reset-password'],
+    mutationFn: resetPassword,
+    onSuccess: (response: APIResponse<SuccessResponse | null>) => {
+      if (response.success) {
+        toast.success(
+          response.message || 'Password has been reset successfully!',
+        );
+        router.push('/sign-in');
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
+  });
+
+  async function onSubmit(data: CompanyResetPasswordFormValues) {
+    a_resetPassword({
+      email: data.email,
+      token: data.token,
+      password: data.password,
+      password_confirmation: data.confirmPassword,
+    });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <input type="hidden" {...form.register('email')} />
+        <input type="hidden" {...form.register('token')} />
         <FormField
           control={form.control}
           name="password"
@@ -84,19 +125,15 @@ export function ResetPasswordForm() {
         <Button
           type="submit"
           className="w-full"
-          disabled={isLoading}
+          disabled={isPending}
           variant="default"
         >
-          {isLoading ? (
+          {isPending ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             'Reset Password'
           )}
         </Button>
-
-        {error && (
-          <p className="text-sm font-medium text-destructive">{error}</p>
-        )}
       </form>
     </Form>
   );

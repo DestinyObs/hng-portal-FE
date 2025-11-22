@@ -13,24 +13,23 @@ import { Loader2 } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
-import { HttpError } from '@/lib/fetch-utils';
 import { TalentSignUpFormStep1 } from './talent-sign-up-form-step1';
 import { TalentSignUpFormStep2 } from './talent-sign-up-form-step2';
-
-interface BackendErrorResponse {
-  message?: string;
-  errors?: { [key: string]: string[] };
-}
+import { useAuthStore } from '@/store/auth';
+import { APIResponse } from '@/api/config.server';
+import { RegisterResponseData } from '@/lib/types';
 
 export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
   const [step, setStep] = useState(1);
   const router = useRouter();
+  const setEmail = useAuthStore((state) => state.setEmail);
 
   const form = useForm<TalentSignUpFormValues>({
     resolver: zodResolver(talentSignUpSchema),
+    shouldUnregister: false, // Keep unmounted fields in form state
     defaultValues: {
-      first_name: '',
-      last_name: '',
+      firstname: '',
+      lastname: '',
       email: '',
       password: '',
       password_confirmation: '',
@@ -43,21 +42,26 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
   const { mutate: registerTalent, isPending } = useMutation({
     mutationKey: ['sign-up-talent'],
     mutationFn: register,
-    onSuccess: () => {
-      toast.success('Registration successful!');
-      router.push('/dashboard');
-    },
-    onError: (error: HttpError<BackendErrorResponse>) => {
-      let errorMessage = 'An unexpected error occurred.';
-      if (error instanceof HttpError && error.responseBody) {
-        if (error.responseBody.message) {
-          errorMessage = error.responseBody.message;
-        } else if (error.responseBody.errors) {
-          errorMessage = Object.values(error.responseBody.errors).flat().join(', ');
+    onSuccess: (response: APIResponse<RegisterResponseData | null>) => {
+      if (response.success) {
+        if (response.data?.email) {
+          setEmail(response.data.email);
         }
+        toast.success(
+          'Registration successful! Please check your email to verify your account.',
+        );
+        router.push('/verify-email');
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
       }
-      toast.error(errorMessage);
-    }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
   });
 
   const onSubmit = (data: TalentSignUpFormValues) => {
@@ -66,8 +70,8 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
 
   const handleNext = async () => {
     const isValid = await form.trigger([
-      'first_name',
-      'last_name',
+      'firstname',
+      'lastname',
       'email',
       'password',
       'password_confirmation',
@@ -95,7 +99,7 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
               Back
             </Button>
           )}
-          
+
           <Button
             type={step === 1 ? 'button' : 'submit'}
             onClick={step === 1 ? handleNext : undefined}

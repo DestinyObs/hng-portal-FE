@@ -13,21 +13,20 @@ import { Loader2 } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
-import { HttpError } from '@/lib/fetch-utils';
 import { CompanySignUpFormStep1 } from './company-sign-up-form-step1';
 import { CompanySignUpFormStep2 } from './company-sign-up-form-step2';
-
-interface BackendErrorResponse {
-  message?: string;
-  errors?: { [key: string]: string[] };
-}
+import { useAuthStore } from '@/store/auth';
+import { APIResponse } from '@/api/config.server';
+import { RegisterResponseData } from '@/lib/types';
 
 export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   const [step, setStep] = useState(1);
   const router = useRouter();
+  const setEmail = useAuthStore((state) => state.setEmail);
 
   const form = useForm<CompanySignUpFormValues>({
     resolver: zodResolver(companySignUpSchema),
+    shouldUnregister: false, // Keep unmounted fields in form state
     defaultValues: {
       company_name: '',
       email: '',
@@ -42,27 +41,32 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   const { mutate: registerCompany, isPending } = useMutation({
     mutationKey: ['sign-up-company'],
     mutationFn: register,
-    onSuccess: () => {
-      toast.success('Registration successful!');
-      router.push('/dashboard');
-    },
-    onError: (error: HttpError<BackendErrorResponse>) => {
-      let errorMessage = 'An unexpected error occurred.';
-      if (error instanceof HttpError && error.responseBody) {
-        if (error.responseBody.message) {
-          errorMessage = error.responseBody.message;
-        } else if (error.responseBody.errors) {
-          errorMessage = Object.values(error.responseBody.errors).flat().join(', ');
+    onSuccess: (response: APIResponse<RegisterResponseData | null>) => {
+      if (response.success) {
+        if (response.data?.email) {
+          setEmail(response.data.email);
         }
+        toast.success(
+          'Registration successful! Please check your email to verify your account.',
+        );
+        router.push('/verify-email');
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
       }
-      toast.error(errorMessage);
-    }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
   });
 
   const onSubmit = (data: CompanySignUpFormValues) => {
     registerCompany({ ...data, role });
   };
-  
+
   const handleNext = async () => {
     const isValid = await form.trigger([
       'company_name',

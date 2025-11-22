@@ -23,7 +23,7 @@ export function TalentSignUpFormStep1({ form }: TalentSignUpFormStep1Props) {
       <div className="flex gap-4">
         <FormField
           control={form.control}
-          name="first_name"
+          name="firstname"
           render={({ field, fieldState }) => (
             <FormItem className="flex-1">
               <FormLabel>First Name</FormLabel>
@@ -40,7 +40,7 @@ export function TalentSignUpFormStep1({ form }: TalentSignUpFormStep1Props) {
         />
         <FormField
           control={form.control}
-          name="last_name"
+          name="lastname"
           render={({ field, fieldState }) => (
             <FormItem className="flex-1">
               <FormLabel>Last Name</FormLabel>

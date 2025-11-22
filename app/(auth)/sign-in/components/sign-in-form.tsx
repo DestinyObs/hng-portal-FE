@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner'; // Import toast
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -23,12 +23,8 @@ import { SignInFormValues, signInSchema } from '../schema';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
-import { HttpError } from '@/lib/fetch-utils'; // Import HttpError
-
-interface BackendErrorResponse {
-  message?: string;
-  errors?: { [key: string]: string[] };
-}
+import { APIResponse } from '@/api/config.server';
+import { UserData } from '@/lib/types';
 
 export function SignInForm() {
   const router = useRouter();
@@ -45,22 +41,20 @@ export function SignInForm() {
   const { mutate: loginAccount, isPending } = useMutation({
     mutationKey: ['sign-in'],
     mutationFn: login,
-    onSuccess: () => {
-      toast.success('Login successful!');
-      router.push('/dashboard');
-    },
-    onError: (error: HttpError<BackendErrorResponse>) => {
-      let errorMessage = 'An unexpected error occurred.';
-      if (error instanceof HttpError && error.responseBody) {
-        if (error.responseBody.message) {
-          errorMessage = error.responseBody.message;
-        } else if (error.responseBody.errors) {
-          errorMessage = Object.values(error.responseBody.errors)
-            .flat()
-            .join(', ');
+    onSuccess: (response: APIResponse<UserData | null>) => {
+      if (response.success) {
+        toast.success('Login successful!');
+        router.push('/dashboard');
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
         }
+        toast.error(errorMessage);
       }
-      toast.error(errorMessage);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
     },
   });
 
