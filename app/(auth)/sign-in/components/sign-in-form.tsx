@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,11 +23,10 @@ import { SignInFormValues, signInSchema } from '../schema';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
+import { APIResponse } from '@/api/config.server';
+import { UserData } from '@/lib/types';
 
-type Role = 'talent' | 'company';
-
-export function SignInForm({ role }: { role: Role }) {
-  const [error] = useState<string | null>(null);
+export function SignInForm() {
   const router = useRouter();
 
   const form = useForm<SignInFormValues>({
@@ -38,17 +38,28 @@ export function SignInForm({ role }: { role: Role }) {
     },
   });
 
-  const { mutate: loginAccount, isPending: isLoading } = useMutation({
-    mutationKey: ['sign-in', role],
+  const { mutate: loginAccount, isPending } = useMutation({
+    mutationKey: ['sign-in'],
     mutationFn: login,
-    onSuccess: (data) => {
-      console.log('Login successful for', role, data);
-      router.push('/dashboard');
+    onSuccess: (response: APIResponse<UserData | null>) => {
+      if (response.success) {
+        toast.success('Login successful!');
+        router.push('/dashboard');
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
     },
   });
 
   const onSubmit: SubmitHandler<SignInFormValues> = async (data) => {
-    loginAccount({ email: data.email, password: data.password, role });
+    loginAccount({ email: data.email, password: data.password });
   };
 
   return (
@@ -59,14 +70,10 @@ export function SignInForm({ role }: { role: Role }) {
           name="email"
           render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel>
-                {role === 'company' ? 'Work Email Address' : 'Email Address'}
-              </FormLabel>
+              <FormLabel>Email Address</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={
-                    role === 'company' ? 'you@company.com' : 'you@email.com'
-                  }
+                  placeholder="you@email.com"
                   type="email"
                   aria-invalid={!!fieldState.error}
                   {...field}
@@ -101,7 +108,7 @@ export function SignInForm({ role }: { role: Role }) {
             control={form.control}
             name="rememberMe"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormItem className="flex flex-row items-center space-y-0">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -125,22 +132,16 @@ export function SignInForm({ role }: { role: Role }) {
         <Button
           type="submit"
           className="w-full"
-          disabled={isLoading}
+          disabled={isPending}
           variant="default"
           size={'lg'}
         >
-          {isLoading ? (
+          {isPending ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : role === 'talent' ? (
-            'Sign in as Talent'
           ) : (
-            'Sign in as Company'
+            'Sign In'
           )}
         </Button>
-
-        {error && (
-          <p className="text-sm font-medium text-destructive">{error}</p>
-        )}
       </form>
     </Form>
   );

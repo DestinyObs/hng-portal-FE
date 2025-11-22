@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -19,11 +18,13 @@ import {
   CompanyForgotPasswordFormValues,
   companyForgotPasswordSchema,
 } from '../schema';
+import { useMutation } from '@tanstack/react-query';
+import { forgotPassword } from '@/api/actions/auth';
+import { toast } from 'sonner';
+import { SuccessResponse } from '@/app/(auth)/components/types';
+import { APIResponse } from '@/api/config.server';
 
 export function ForgotPasswordForm() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
   const form = useForm<CompanyForgotPasswordFormValues & FieldValues>({
     resolver: zodResolver(companyForgotPasswordSchema),
     defaultValues: {
@@ -31,12 +32,30 @@ export function ForgotPasswordForm() {
     },
   });
 
-  async function onSubmit() {
-    setIsLoading(true);
-    setError(null);
+  const { mutate: a_forgotPassword, isPending } = useMutation({
+    mutationKey: ['forgot-password'],
+    mutationFn: forgotPassword,
+    onSuccess: (response: APIResponse<SuccessResponse | null>) => {
+      if (response.success) {
+        toast.success(
+          response.message || 'Password reset link sent successfully!',
+        );
+        form.reset();
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
+  });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+  async function onSubmit(data: CompanyForgotPasswordFormValues) {
+    a_forgotPassword({ email: data.email });
   }
 
   return (
@@ -64,19 +83,15 @@ export function ForgotPasswordForm() {
         <Button
           type="submit"
           className="w-full"
-          disabled={isLoading}
+          disabled={isPending}
           variant="default"
         >
-          {isLoading ? (
+          {isPending ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             'Request Reset Link'
           )}
         </Button>
-
-        {error && (
-          <p className="text-sm font-medium text-destructive">{error}</p>
-        )}
       </form>
     </Form>
   );

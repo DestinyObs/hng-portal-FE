@@ -15,30 +15,31 @@ export interface Permissions {
   guard_name: string;
 }
 
+export interface User {
+  id: string;
+  firstname: string;
+  lastname: string;
+  othername: string;
+  email: string;
+  phone: string;
+  dob: string;
+  status: string;
+  photo_url: string;
+  email_verified_at: string;
+  created_at: string;
+  updated_at: string;
+  roles: Roles[];
+  permissions: Permissions[];
+}
+
 export interface UserData {
-  user: {
-    id: string;
-    firstname: string;
-    lastname: string;
-    othername: string;
-    email: string;
-    phone: string;
-    dob: string;
-    status: string;
-    photo_url: string;
-    email_verified_at: string;
-    created_at: string;
-    updated_at: string;
-    roles: Roles[];
-    permissions: Permissions[];
-  };
+  user: User;
   token: '1|abc123def456ghi789jkl012mno345pqr678';
 }
 
 export interface LoginType {
   email: string;
   password: string;
-  role: string;
 }
 
 export interface RegisterType {
@@ -49,4 +50,12 @@ export interface RegisterType {
   password: string;
   password_confirmation: string;
   role: string;
+}
+
+export interface RegisterResponseData {
+  id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  token: string;
 }

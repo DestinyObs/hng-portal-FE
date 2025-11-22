@@ -19,10 +19,16 @@ import {
 } from '@/components/ui/select';
 import { ChevronLeft } from 'lucide-react';
 import Input from '@/components/ui/input';
-import { CANDIDATE_LOCATIONS, HNG_TRACKS, JOB_TYPES } from '@/types/create-new-job';
-import { JobDetailsStep2FormData, jobDetailsStep2Schema } from '@/schemas/create-post.schema';
-
-
+import {
+  CANDIDATE_LOCATIONS,
+  HNG_TRACKS,
+  JOB_TYPES,
+  JobFormData,
+} from '@/types/create-new-job';
+import {
+  JobDetailsStep2FormData,
+  jobDetailsStep2Schema,
+} from '@/schemas/create-post.schema';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobDetailsStep2FormData>;
@@ -30,8 +36,17 @@ interface JobDetailsStep2Props {
   onPrev: () => void;
 }
 
-export default function JobDetailsStep2({ initialData, onUpdate, onPrev }: JobDetailsStep2Props) {
-  const { control, handleSubmit, formState: { errors } } = useForm<JobDetailsStep2FormData>({
+export default function JobDetailsStep2({
+  initialData,
+  onUpdate,
+  onPrev,
+}: JobDetailsStep2Props) {
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<JobDetailsStep2FormData>({
     resolver: zodResolver(jobDetailsStep2Schema),
     defaultValues: {
       hngTrack: initialData.hngTrack || '',
@@ -46,6 +61,19 @@ export default function JobDetailsStep2({ initialData, onUpdate, onPrev }: JobDe
 
   const onSubmit = (data: JobDetailsStep2FormData) => {
     onUpdate(data);
+  };
+
+  const handleSaveDraft = (): void => {
+    const formData = getValues();
+    const formDataUpdate: Partial<JobFormData> = {
+      hngTrack: formData.hngTrack,
+      jobType: formData.jobType,
+      candidateLocation: formData.candidateLocation,
+      jobPrice: formData.jobPrice,
+      state: formData.state,
+      country: formData.country,
+    };
+    onUpdate(formDataUpdate);
   };
 
   return (
@@ -96,7 +124,9 @@ export default function JobDetailsStep2({ initialData, onUpdate, onPrev }: JobDe
 
           {/* Job Type Select */}
           <div className="space-y-3">
-            <label className="text-sm font-semibold">Select Employment Type</label>
+            <label className="text-sm font-semibold">
+              Select Employment Type
+            </label>
             <Controller
               name="jobType"
               control={control}
@@ -145,7 +175,9 @@ export default function JobDetailsStep2({ initialData, onUpdate, onPrev }: JobDe
               Work from home or coming to the office or both
             </p>
             {errors.candidateLocation && (
-              <p className="text-xs text-red-500">{errors.candidateLocation.message}</p>
+              <p className="text-xs text-red-500">
+                {errors.candidateLocation.message}
+              </p>
             )}
           </div>
 
@@ -157,22 +189,14 @@ export default function JobDetailsStep2({ initialData, onUpdate, onPrev }: JobDe
                 name="state"
                 control={control}
                 render={({ field }) => (
-                  <Input
-                    type="text"
-                    placeholder="State"
-                    {...field}
-                  />
+                  <Input type="text" placeholder="State" {...field} />
                 )}
               />
               <Controller
                 name="country"
                 control={control}
                 render={({ field }) => (
-                  <Input
-                    type="text"
-                    placeholder="Country"
-                    {...field}
-                  />
+                  <Input type="text" placeholder="Country" {...field} />
                 )}
               />
             </div>
@@ -201,20 +225,37 @@ export default function JobDetailsStep2({ initialData, onUpdate, onPrev }: JobDe
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row justify-between gap-4">
-        <Button 
-          variant="outline" 
-          onClick={onPrev}
-          className="border-[#E7E7E7] text-[#344054] flex items-center gap-2"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Prev
-        </Button>
+        <div className="flex justify-between">
+          <Button
+            variant="outline"
+            onClick={onPrev}
+            className="border-[#E7E7E7] text-[#344054] flex items-center gap-2"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Prev
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleSaveDraft}
+            className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
+          >
+            Save As Draft
+          </Button>
+        </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={handleSaveDraft}
+            className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
+          >
+            Save As Draft
+          </Button>
+
           <Button
             onClick={handleSubmit(onSubmit)}
             className="bg-[#00AEFF] hover:bg-[#0088cc] text-white"
           >
-            Save Edit
+            Publish Job
           </Button>
         </div>
       </div>
