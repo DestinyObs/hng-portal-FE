@@ -9,6 +9,7 @@ import {
   LinkClasses,
   NavLinks,
 } from '@/public/assets/images/landing-page/shared/constants';
+import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,14 +31,14 @@ const Header = () => {
           <div className="flex justify-between items-center w-full lg:w-auto">
             <Link href="/" aria-label="HNG Portal Home">
               <Image
-                src="../../public/assets/images/landing-page/shared/logo.png"
+                src={Logo}
                 alt="HNG Portal Logo"
                 width={140}
                 height={450}
                 className="hidden md:block"
               />
               <Image
-                src="/assets/images/landing-page/header/logo.png"
+                src={Logo}
                 alt="HNG Portal Logo"
                 width={95}
                 height={37}
