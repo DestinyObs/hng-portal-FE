@@ -20,6 +20,13 @@ import {
 } from '@/components/ui/input-otp';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { verifyOtp, resendOtp } from '@/api/actions/auth';
+import { SuccessResponse } from '@/app/(auth)/components/types';
+import { Loader2 } from 'lucide-react';
+import { useAuthStore } from '@/store/auth';
+import { APIResponse } from '@/api/config.server';
 
 const FormSchema = z.object({
   pin: z
@@ -29,13 +36,55 @@ const FormSchema = z.object({
 });
 
 const VerifyEmailPage = () => {
-  const [error, setError] = useState('');
+  const router = useRouter();
   const [timeLeft, setTimeLeft] = useState(180);
   const [canResendOTP, setCanResendOTP] = useState(false);
+  const { email, hydrated } = useAuthStore();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: { pin: '' },
+  });
+
+  const { mutate: a_verifyOtp, isPending: isVerifying } = useMutation({
+    mutationKey: ['verify-otp'],
+    mutationFn: verifyOtp,
+    onSuccess: (response: APIResponse<SuccessResponse | null>) => {
+      if (response.success) {
+        toast.success('Email verified successfully! Redirecting...');
+        router.push('/dashboard');
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
+  });
+
+  const { mutate: a_resendOtp, isPending: isResending } = useMutation({
+    mutationKey: ['resend-otp'],
+    mutationFn: resendOtp,
+    onSuccess: (response: APIResponse<SuccessResponse | null>) => {
+      if (response.success) {
+        toast.success('Code resent to your email');
+        setCanResendOTP(false);
+        setTimeLeft(180);
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
   });
 
   useEffect(() => {
@@ -43,11 +92,9 @@ const VerifyEmailPage = () => {
       setCanResendOTP(true);
       return;
     }
-
     const timer = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
     }, 1000);
-
     return () => clearInterval(timer);
   }, [timeLeft, canResendOTP]);
 
@@ -58,27 +105,12 @@ const VerifyEmailPage = () => {
   };
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    if (data.pin !== '123456') {
-      setError('Incorrect code');
-      setCanResendOTP(true);
-      setTimeLeft(0);
-      return;
-    }
-
-    toast.success('Email verified successfully! Redirecting...');
-    setError('');
-    form.reset();
+    a_verifyOtp({ otp: data.pin });
   };
 
   const handleResend = () => {
-    toast.success('Code resent to your email');
-    setError('');
-    form.reset();
-    setCanResendOTP(false);
-    setTimeLeft(180);
+    a_resendOtp();
   };
-
-  const otp = [...Array(6).keys()];
 
   const otpSlotClasses = `
     w-[60px] h-[60px] md:w-[100px] md:h-[100px]
@@ -105,7 +137,7 @@ const VerifyEmailPage = () => {
         <p className="text-[#969696] font-medium text-sm md:text-lg">
           We sent a code to{' '}
           <span className="md:font-bold md:text-[#1A1A1A]">
-            johndoe@gmail.com
+            {hydrated ? email : 'your email'}
           </span>
         </p>
       </div>
@@ -124,33 +156,22 @@ const VerifyEmailPage = () => {
                     onChange={(value) => {
                       if (/^[0-9]*$/.test(value)) {
                         field.onChange(value);
-                        setError('');
                       }
                     }}
                     className="gap-2"
                   >
                     <InputOTPGroup className="gap-2">
-                      {otp.map((i) => (
+                      {[...Array(6).keys()].map((i) => (
                         <InputOTPSlot
                           key={i}
                           index={i}
-                          className={`${otpSlotClasses} ${
-                            error
-                              ? 'border-[#E8362C] border-2'
-                              : 'border-[#E8E8E8]'
-                          }`}
+                          className={`${otpSlotClasses} border-[#E8E8E8]`}
                         />
                       ))}
                     </InputOTPGroup>
                   </InputOTP>
                 </FormControl>
-
-                {error && (
-                  <p className="text-[#E8362C] font-medium text-sm">{error}</p>
-                )}
-
                 <FormMessage />
-
                 <FormDescription className="text-[#969696] text-sm mt-2">
                   {!canResendOTP ? (
                     <>Resend code in {formatTime(timeLeft)}</>
@@ -160,9 +181,10 @@ const VerifyEmailPage = () => {
                       <button
                         type="button"
                         onClick={handleResend}
-                        className="text-primary-blue hover:text-blue-300 font-semibold underline cursor-pointer"
+                        disabled={isResending}
+                        className="text-primary-blue hover:text-blue-300 font-semibold underline cursor-pointer disabled:opacity-50"
                       >
-                        Click to resend
+                        {isResending ? 'Sending...' : 'Click to resend'}
                       </button>
                     </>
                   )}
@@ -174,10 +196,15 @@ const VerifyEmailPage = () => {
           <div className="flex justify-center">
             <Button
               type="submit"
-              disabled={form.watch('pin').length < 6}
+              // eslint-disable-next-line react-hooks/incompatible-library
+              disabled={form.watch('pin').length < 6 || isVerifying}
               className="w-full md:max-w-[342px] py-6 rounded-sm bg-primary-blue text-white font-medium text-lg disabled:bg-primary-blue-light"
             >
-              Continue
+              {isVerifying ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                'Continue'
+              )}
             </Button>
           </div>
         </form>

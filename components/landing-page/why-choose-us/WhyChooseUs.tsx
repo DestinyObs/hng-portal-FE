@@ -1,13 +1,22 @@
 import { Card, CardContent } from '@/components/ui/card';
+import MobileLayout from './MobileLayout';
+import DesktopLayout from './DesktopLayout';
 
 const WhyChooseUs = () => {
   return (
     <section
+<<<<<<< HEAD
       className="lg:flex item-center justify-center w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 relative"
+=======
+      className="w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16 relative overflow-hidden"
+>>>>>>> origin/dev
       style={{
         backgroundImage: "url('/images/why-choose-us-bgd_.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
+<<<<<<< HEAD
       {/* Mobile Title - Centered */}
       <div className="text-center md:hidden mb-6">
         <h2 className="text-h1 text-primary-black">Why Choose Us?</h2>
@@ -152,6 +161,16 @@ const WhyChooseUs = () => {
           </p>
         </div>
       </div>
+=======
+      <div className="text-center lg:hidden mb-8">
+        <h2 className="text-primary-black font-medium text-4xl">
+          Why Choose Us?
+        </h2>
+      </div>
+
+      <MobileLayout />
+      <DesktopLayout />
+>>>>>>> origin/dev
     </section>
   );
 };
