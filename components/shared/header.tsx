@@ -63,11 +63,11 @@ const Header = () => {
                   href={item.href}
                   className={`${LinkClasses} flex items-center gap-2 group`}
                 >
-                  <span className="group-hover:text-primary-blue cursor-pointer">
+                  <span className="group-hover:text-primary-blue cursor-pointer transition-colors duration-300">
                     {item.icon}
                   </span>
                   <p
-                    className={`group-hover:text-primary-blue ${
+                    className={`group-hover:text-primary-blue transition-all duration-300 ${
                       item.active
                         ? 'border-b-2 border-black group-hover:border-primary-blue'
                         : ''
