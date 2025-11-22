@@ -3,7 +3,7 @@ name: Deploy HNG Portal Frontend (Self-Hosted Runner)
 on:
   push:
     branches:
-      - dev
+      - staging
 
 jobs:
   build-deploy:
@@ -23,8 +23,8 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
             cd ~/staging/frontend/hng-portal-FE
-            git reset --hard origin/dev
-            git pull origin dev
+            git reset --hard origin/staging
+            git pull origin staging
             pnpm install --frozen-lockfile
             pnpm run build
             pm2 restart 0 --update-env
