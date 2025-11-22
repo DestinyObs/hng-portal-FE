@@ -103,8 +103,8 @@ const Header = () => {
                   {item.icon}
                   <Link
                     href={item.href}
-                    className={`${LinkClasses} ${
-                      item.active ? 'border-b-2 border-black' : ''
+                    className={`${LinkClasses} text-white ${
+                      item.active ? 'border-b-2 border-white' : ''
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
