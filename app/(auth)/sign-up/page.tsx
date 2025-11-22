@@ -13,14 +13,34 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import GoogleColoredIcon from '@/components/icons/google-colored-icon';
-import { useState } from 'react';
+import { useState, useEffect, startTransition } from 'react';
 import { TalentSignUpForm } from './components/talent-sign-up-form';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader } from 'lucide-react';
 import { HngLogo } from '../components/hng-logo';
+import { useSearchParams } from 'next/navigation';
 
 export default function SignUpPage() {
   const [step, setStep] = useState<'selection' | 'form'>('selection');
   const [userType, setUserType] = useState<'talent' | 'company' | null>(null);
+  const searchParams = useSearchParams();
+  const type = searchParams.get('type');
+  const [loading, setLoading] = useState(
+    !(type === 'talent' || type === 'company'),
+  );
+
+  useEffect(() => {
+    if (type === 'talent' || type === 'company') {
+      startTransition(() => {
+        setUserType(type as 'talent' | 'company');
+        setStep('form');
+        setLoading(false);
+      });
+    }
+  }, [type]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   const handleContinue = () => {
     if (userType) {
