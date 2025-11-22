@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 import {
   Select as SelectUI,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "../ui/select";
-import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
+} from '../ui/select';
+import { cn } from '@/lib/utils';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-const selectVariants = cva("w-full", {
+const selectVariants = cva('w-full', {
   variants: {
     size: {
-      sm: "h-8 text-sm",
-      md: "h-10 text-base",
-      lg: "h-14 text-lg",
+      sm: 'h-8 text-sm',
+      md: 'h-10 text-base',
+      lg: 'h-14 text-lg',
     },
     intent: {
-      default: "",
-      outline_grayHover: "",
+      default: '',
+      outline_grayHover: '',
     },
   },
   defaultVariants: {
-    size: "md",
-    intent: "default",
+    size: 'md',
+    intent: 'default',
   },
 });
 
@@ -39,7 +39,7 @@ export interface ReusableSelectProps
 }
 
 export const Select: React.FC<ReusableSelectProps> = ({
-  placeholder = "Select an option",
+  placeholder = 'Select an option',
   options,
   size,
   intent,
@@ -47,11 +47,13 @@ export const Select: React.FC<ReusableSelectProps> = ({
   disabledOption,
   ...props
 }) => {
-  const isGrayHover = intent === "outline_grayHover";
+  const isGrayHover = intent === 'outline_grayHover';
 
   return (
     <SelectUI {...props}>
-      <SelectTrigger className={cn(selectVariants({ size, intent }), className)}>
+      <SelectTrigger
+        className={cn(selectVariants({ size, intent }), className)}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
@@ -72,8 +74,9 @@ export const Select: React.FC<ReusableSelectProps> = ({
             key={opt.value}
             value={opt.value}
             className={cn(
-              "w-full p-2 rounded-md transition-colors duration-150",
-              isGrayHover && "hover:bg-gray-50 focus:bg-gray-50 hover:text-black-500 focus:text-text-black-500"
+              'w-full p-2 rounded-md transition-colors duration-150',
+              isGrayHover &&
+                'hover:bg-gray-50 focus:bg-gray-50 hover:text-black-500 focus:text-text-black-500',
             )}
           >
             {opt.label}
