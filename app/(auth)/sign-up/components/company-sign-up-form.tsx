@@ -1,35 +1,32 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { companySignUpSchema, type CompanySignUpFormValues } from '../schema';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Form } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 
-import Input from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
+import { CompanySignUpFormStep1 } from './company-sign-up-form-step1';
+import { CompanySignUpFormStep2 } from './company-sign-up-form-step2';
+import { useAuthStore } from '@/store/auth';
+import { APIResponse } from '@/api/config.server';
+import { UserData } from '@/lib/types';
 
 export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   const [step, setStep] = useState(1);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const setEmail = useAuthStore((state) => state.setEmail);
 
   const form = useForm<CompanySignUpFormValues>({
     resolver: zodResolver(companySignUpSchema),
+    shouldUnregister: false, // Keep unmounted fields in form state
     defaultValues: {
       company_name: '',
       email: '',
@@ -41,22 +38,35 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
     },
   });
 
-  const { mutate: registerCompany, isPending: isLoading } = useMutation({
+  const { mutate: registerCompany, isPending } = useMutation({
     mutationKey: ['sign-up-company'],
     mutationFn: register,
-    onSuccess: (data) => {
-      console.log('Registration successful:', data);
-      router.push('/dashboard');
+    onSuccess: (response: APIResponse<UserData | null>) => {
+      if (response.success) {
+        if (response.data?.user?.email) {
+          setEmail(response.data.user.email);
+        }
+        toast.success(
+          'Registration successful! Please check your email to verify your account.',
+        );
+        router.push('/verify-email');
+      } else {
+        let errorMessage = response.message || 'An unknown error occurred.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
+      }
     },
     onError: (error: Error) => {
-      setError(error.message || 'An error occurred during registration.');
-    }
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
   });
 
   const onSubmit = (data: CompanySignUpFormValues) => {
     registerCompany({ ...data, role });
   };
-  
+
   const handleNext = async () => {
     const isValid = await form.trigger([
       'company_name',
@@ -73,152 +83,10 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {step === 1 && (
-          <>
-            <FormField
-              control={form.control}
-              name="company_name"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Company Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your company name"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        {step === 1 && <CompanySignUpFormStep1 form={form} />}
+        {step === 2 && <CompanySignUpFormStep2 form={form} />}
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Company Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your company email"
-                      type="email"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter password"
-                      inputType="password"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password_confirmation"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Confirm password"
-                      inputType="password"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="acceptTerms"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Accept Terms and{' '}
-                      <Link
-                        href="/terms"
-                        className="text-primary-blue cursor-pointer hover:underline"
-                      >
-                        Conditions
-                      </Link>
-                    </FormLabel>
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-        
-        {step === 2 && (
-          <>
-            <FormField
-              control={form.control}
-              name="company_website"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Company Website</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your company's website"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="industry"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Industry</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your company's industry"
-                      aria-invalid={!!fieldState.error}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col space-y-4">
           {step === 2 && (
             <Button
               type="button"
@@ -234,11 +102,11 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
             type={step === 1 ? 'button' : 'submit'}
             onClick={step === 1 ? handleNext : undefined}
             className="w-full"
-            disabled={isLoading}
+            disabled={isPending}
             variant="default"
             size={'lg'}
           >
-            {isLoading ? (
+            {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : step === 1 ? (
               'Continue'
@@ -247,10 +115,6 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
             )}
           </Button>
         </div>
-
-        {error && (
-          <p className="text-sm font-medium text-destructive">{error}</p>
-        )}
       </form>
     </Form>
   );

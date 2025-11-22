@@ -12,7 +12,7 @@ export function AuthImage() {
     if (logoLeftRef.current) {
       animate(
         logoLeftRef.current,
-        { x: [0, -35, 0] },
+        { x: [0, -10, 0] },
         {
           duration: 7,
           repeat: 0,
@@ -24,7 +24,7 @@ export function AuthImage() {
     if (logoRightRef.current) {
       animate(
         logoRightRef.current,
-        { x: [0, 35, 0] },
+        { x: [0, 10, 0] },
         {
           duration: 7,
           repeat: 0,
@@ -44,8 +44,7 @@ export function AuthImage() {
         style={{
           position: 'absolute',
           top: '0',
-          left: '422px',
-          opacity: 1,
+          right: '0',
         }}
       />
       <Image
@@ -55,9 +54,8 @@ export function AuthImage() {
         height={408}
         style={{
           position: 'absolute',
-          top: '840px',
-          left: '-40px',
-          opacity: 1,
+          bottom: '0',
+          left: '0',
         }}
       />
 

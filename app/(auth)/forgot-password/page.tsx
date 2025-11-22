@@ -12,12 +12,13 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'HNG-Portal | Sign In',
-  description: 'Sign in to your account to access your dashboard and manage your business.',
+  description:
+    'Sign in to your account to access your dashboard and manage your business.',
 };
 
 export default function CompanyForgotPasswordPage() {
   return (
-    <Card className="w-full max-w-md border-0 shadow-none py-0">
+    <Card className="w-full max-w-md mx-auto border-0 shadow-none py-0">
       <CardHeader className="text-center px-0">
         <CardTitle className="text-h2 font-bold">Forgot password</CardTitle>
         <CardDescription className="text-subtitle">
@@ -29,10 +30,7 @@ export default function CompanyForgotPasswordPage() {
       </CardContent>
 
       <p className="text-sm text-center mt-4">
-        <Link
-          href="/sign-in"
-          className="text-primary-blue hover:underline"
-        >
+        <Link href="/sign-in" className="text-primary-blue hover:underline">
           &larr; Back to Sign In
         </Link>
       </p>

@@ -1,16 +1,16 @@
-import * as z from "zod";
+import * as z from 'zod';
 
 export const jobDetailsSchema = z.object({
-  category: z.string().min(1, "Category is required"),
-  title: z.string().min(1, "Job title is required"),
-  description: z.string().min(50, "Description must be at least 50 characters"),
+  category: z.string().min(1, 'Category is required'),
+  title: z.string().min(1, 'Job title is required'),
+  description: z.string().min(50, 'Description must be at least 50 characters'),
   skills: z
     .array(z.string())
-    .min(1, "At least one skill is required")
-    .max(5, "Maximum 5 skills allowed"),
+    .min(1, 'At least one skill is required')
+    .max(5, 'Maximum 5 skills allowed'),
   acceptanceCriteria: z
     .string()
-    .min(50, "Acceptance criteria must be at least 50 characters"),
+    .min(50, 'Acceptance criteria must be at least 50 characters'),
 });
 
 export type JobDetailsFormData = z.infer<typeof jobDetailsSchema>;
