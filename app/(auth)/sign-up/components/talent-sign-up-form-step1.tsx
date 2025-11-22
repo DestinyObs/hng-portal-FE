@@ -113,12 +113,12 @@ export function TalentSignUpFormStep1({ form }: TalentSignUpFormStep1Props) {
           </FormItem>
         )}
       />
-      
+
       <FormField
         control={form.control}
         name="acceptTerms"
         render={({ field }) => (
-          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+          <FormItem className="flex flex-row items-start space-y-0">
             <FormControl>
               <Checkbox
                 checked={field.value}
@@ -127,12 +127,12 @@ export function TalentSignUpFormStep1({ form }: TalentSignUpFormStep1Props) {
             </FormControl>
             <div className="space-y-1 leading-none">
               <FormLabel>
-                Accept Terms and{' '}
+                Accept{' '}
                 <Link
                   href="/terms"
                   className="text-primary-blue cursor-pointer hover:underline"
                 >
-                  Conditions
+                  Terms and Conditions
                 </Link>
               </FormLabel>
               <FormMessage />

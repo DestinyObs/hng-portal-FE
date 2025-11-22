@@ -12,7 +12,7 @@ export function AuthImage() {
     if (logoLeftRef.current) {
       animate(
         logoLeftRef.current,
-        { x: [0, -35, 0] },
+        { x: [0, -10, 0] },
         {
           duration: 7,
           repeat: 0,
@@ -24,7 +24,7 @@ export function AuthImage() {
     if (logoRightRef.current) {
       animate(
         logoRightRef.current,
-        { x: [0, 35, 0] },
+        { x: [0, 10, 0] },
         {
           duration: 7,
           repeat: 0,

@@ -55,7 +55,9 @@ export function SignInForm() {
         if (error.responseBody.message) {
           errorMessage = error.responseBody.message;
         } else if (error.responseBody.errors) {
-          errorMessage = Object.values(error.responseBody.errors).flat().join(', ');
+          errorMessage = Object.values(error.responseBody.errors)
+            .flat()
+            .join(', ');
         }
       }
       toast.error(errorMessage);
@@ -112,7 +114,7 @@ export function SignInForm() {
             control={form.control}
             name="rememberMe"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormItem className="flex flex-row items-center space-y-0">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
