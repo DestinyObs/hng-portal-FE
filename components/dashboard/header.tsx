@@ -5,16 +5,18 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '../../public/assets/images/landing-page/shared/logo.png';
+import { usePathname } from 'next/navigation';
 
 const dashboardLinks = [
-  { label: 'HOME', href: '/dashboard', active: true },
-  { label: 'JOBS', href: '/dashboard/jobs', active: false },
-  { label: 'APPLICANTS', href: '/dashboard/applicants', active: false },
+  { label: 'HOME', href: '/dashboard' },
+  { label: 'JOBS', href: '/dashboard/jobs' },
+  { label: 'APPLICANTS', href: '/dashboard/applicants' },
 ];
 
 const DashboardHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="bg-white shadow-md ">
@@ -41,7 +43,7 @@ const DashboardHeader = () => {
                 <Link
                   href={item.href}
                   className={`flex items-center h-full text-sm uppercase tracking-wide transition-colors duration-200 ${
-                    item.active
+                    pathname === item.href
                       ? 'font-bold text-black'
                       : 'font-medium text-[#08080866] hover:text-black uppercase'
                   }`}

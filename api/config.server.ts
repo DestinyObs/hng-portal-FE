@@ -12,7 +12,7 @@ export type APIResponse<T> = {
 };
 
 const apiHandler = createFetchUtil({
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://13.48.59.27:8000/api',
+  apiUrl: process.env.NEXT_PUBLIC_API_URL!,
 });
 
 function handleApiError<T>(error: unknown): APIResponse<T | null> {
@@ -32,7 +32,10 @@ function handleApiError<T>(error: unknown): APIResponse<T | null> {
   };
 }
 
-export async function makeAuthenticatedRequest<TResponse, TRequestBody = unknown>(
+export async function makeAuthenticatedRequest<
+  TResponse,
+  TRequestBody = unknown,
+>(
   endpoint: string,
   options: {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
