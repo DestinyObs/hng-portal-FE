@@ -58,18 +58,23 @@ const Header = () => {
 
           <ul className="items-center gap-10 hidden lg:flex">
             {NavLinks.map((item) => (
-              <li
-                key={item.label}
-                className="flex items-center gap-2 hover:text-primary-blue"
-              >
-                {item.icon}
+              <li key={item.label}>
                 <Link
                   href={item.href}
-                  className={`${LinkClasses} ${
-                    item.active ? 'border-b-2 border-black' : ''
-                  }`}
+                  className={`${LinkClasses} flex items-center gap-2 group`}
                 >
-                  {item.label}
+                  <span className="group-hover:text-primary-blue cursor-pointer">
+                    {item.icon}
+                  </span>
+                  <p
+                    className={`group-hover:text-primary-blue ${
+                      item.active
+                        ? 'border-b-2 border-black group-hover:border-primary-blue'
+                        : ''
+                    }`}
+                  >
+                    {item.label}
+                  </p>
                 </Link>
               </li>
             ))}
@@ -98,13 +103,15 @@ const Header = () => {
               {NavLinks.map((item) => (
                 <li
                   key={item.label}
-                  className="flex items-center gap-2 hover:text-primary-blue cursor-pointer"
+                  className="flex items-center gap-2 text-white hover:text-primary-blue cursor-pointer"
                 >
                   {item.icon}
                   <Link
                     href={item.href}
                     className={`${LinkClasses} text-white ${
-                      item.active ? 'border-b-2 border-white' : ''
+                      item.active
+                        ? 'border-b-2 border-white hover:border-primary-blue'
+                        : ''
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
