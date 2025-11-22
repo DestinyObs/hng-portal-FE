@@ -1,0 +1,40 @@
+name: Deploy HNG Portal Frontend to Production
+
+on:
+  push:
+    branches:
+      - prod
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build-deploy:
+    runs-on: [self-hosted]
+    steps:
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Sync code to remote server and deploy
+        env:
+          SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+          SSH_USER: ${{ secrets.PROD_SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.PROD_SSH_PASSWORD }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
+            set -e
+            cd ~/prod/frontend/
+            git reset --hard origin/prod
+            git pull origin prod
+            export PNPM_HOME="$HOME/.pnpm-store"
+            export PATH="$PNPM_HOME:$PATH"
+            pnpm install --frozen-lockfile
+            pnpm run build
+            pm2 restart 1 --update-env
+          EOF
+      - name: Notify Deployment Status
+        if: always()
+        run: echo "Production deployment finished."
