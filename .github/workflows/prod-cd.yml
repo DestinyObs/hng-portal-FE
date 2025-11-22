@@ -31,6 +31,7 @@ jobs:
             git pull origin prod
             export PNPM_HOME="$HOME/.pnpm-store"
             export PATH="$PNPM_HOME:$PATH"
+            export CI=true
             pnpm install --frozen-lockfile
             pnpm run build
             pm2 restart 1 --update-env
