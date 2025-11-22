@@ -20,9 +20,9 @@ jobs:
 
       - name: Sync code to remote server and deploy
         env:
-          SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
-          SSH_USER: ${{ secrets.PROD_SSH_USER }}
-          SSH_PASSWORD: ${{ secrets.PROD_SSH_PASSWORD }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
             set -e
@@ -38,4 +38,5 @@ jobs:
           EOF
       - name: Notify Deployment Status
         if: always()
+
         run: echo "Production deployment finished."
