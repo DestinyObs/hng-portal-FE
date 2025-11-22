@@ -69,7 +69,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="border-t mt-2 sm:mt-8">
+          <div className="border-t border-white mt-2 sm:mt-8">
             <h2 className="text-white-300 font-bold text-3xl md:text-6xl lg:text-8xl pt-4 pb-4 md:pr-5 lg:pr-0">
               HNG: Empowering Tech
             </h2>
