@@ -9,6 +9,7 @@ import {
   LinkClasses,
   NavLinks,
 } from '@/public/assets/images/landing-page/shared/constants';
+import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,14 +31,14 @@ const Header = () => {
           <div className="flex justify-between items-center w-full lg:w-auto">
             <Link href="/" aria-label="HNG Portal Home">
               <Image
-                src="/assets/images/landing-page/header/logo.png"
+                src={Logo}
                 alt="HNG Portal Logo"
                 width={140}
                 height={450}
                 className="hidden md:block"
               />
               <Image
-                src="/assets/images/landing-page/header/logo.png"
+                src={Logo}
                 alt="HNG Portal Logo"
                 width={95}
                 height={37}
@@ -57,26 +58,29 @@ const Header = () => {
 
           <ul className="items-center gap-10 hidden lg:flex">
             {NavLinks.map((item) => (
-              <li
-                key={item.label}
-                className="flex items-center gap-2 hover:text-primary-blue"
-              >
-                {item.icon}
+              <li key={item.label}>
                 <Link
                   href={item.href}
-                  className={`font-medium text-base transition ${
-                    item.active
-                      ? 'text-primary-blue font-semibold'
-                      : 'text-primary-black hover:text-primary-blue'
-                  }`}
+                  className={`${LinkClasses} flex items-center gap-2 group`}
                 >
-                  {item.label}
+                  <span className="group-hover:text-primary-blue cursor-pointer transition-colors duration-300">
+                    {item.icon}
+                  </span>
+                  <p
+                    className={`group-hover:text-primary-blue transition-all duration-300 ${
+                      item.active
+                        ? 'border-b-2 border-black group-hover:border-primary-blue'
+                        : ''
+                    }`}
+                  >
+                    {item.label}
+                  </p>
                 </Link>
               </li>
             ))}
           </ul>
 
-          <Link href="/sign-up" passHref>
+          <Link href="/sign-up/select" passHref>
             <Button
               asChild
               variant="outline"
@@ -99,13 +103,15 @@ const Header = () => {
               {NavLinks.map((item) => (
                 <li
                   key={item.label}
-                  className="flex items-center gap-2 hover:text-primary-blue cursor-pointer"
+                  className="flex items-center gap-2 text-white hover:text-primary-blue cursor-pointer"
                 >
                   {item.icon}
                   <Link
                     href={item.href}
-                    className={`${LinkClasses} ${
-                      item.active ? 'border-b-2 border-black' : ''
+                    className={`${LinkClasses} text-white ${
+                      item.active
+                        ? 'border-b-2 border-white hover:border-primary-blue'
+                        : ''
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
@@ -114,7 +120,7 @@ const Header = () => {
                 </li>
               ))}
 
-              <Link href="/sign-up" passHref>
+              <Link href="/sign-up/select" passHref>
                 <Button
                   asChild
                   variant="outline"

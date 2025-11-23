@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CompanySignUpForm } from './components/company-sign-up-form';
+import { CompanySignUpForm } from '../components/company-sign-up-form';
 import {
   Card,
   CardContent,
@@ -14,13 +14,25 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import GoogleColoredIcon from '@/components/icons/google-colored-icon';
 import { useState } from 'react';
-import { TalentSignUpForm } from './components/talent-sign-up-form';
+import { TalentSignUpForm } from '../components/talent-sign-up-form';
 import { ArrowLeft } from 'lucide-react';
-import { HngLogo } from '../components/hng-logo';
+import { HngLogo } from '../../components/hng-logo';
+import { useParams, useRouter } from 'next/navigation';
 
 export default function SignUpPage() {
-  const [step, setStep] = useState<'selection' | 'form'>('selection');
-  const [userType, setUserType] = useState<'talent' | 'company' | null>(null);
+  const params = useParams();
+  const router = useRouter();
+  const typeParam = params.type as string;
+
+  // Determine initial state based on URL param
+  const initialUserType =
+    typeParam === 'talent' || typeParam === 'company' ? typeParam : null;
+  const initialStep = initialUserType ? 'form' : 'selection';
+
+  const [step, setStep] = useState<'selection' | 'form'>(initialStep);
+  const [userType, setUserType] = useState<'talent' | 'company' | null>(
+    initialUserType,
+  );
 
   const handleContinue = () => {
     if (userType) {
@@ -30,6 +42,8 @@ export default function SignUpPage() {
 
   const handleBackToSelection = () => {
     setStep('selection');
+    setUserType(null);
+    router.push('/sign-up/select');
   };
 
   return (
@@ -58,7 +72,7 @@ export default function SignUpPage() {
                     className={`w-full cursor-pointer hover:bg-primary-50 transition-colors h-full ${userType === 'talent' ? 'border-primary-blue bg-primary-blue/5' : ''}`}
                   >
                     <CardContent className=" flex items-center justify-between">
-                      <div className="flex-grow">
+                      <div className="grow">
                         <h3
                           className={`font-bold text-lg ${userType === 'talent' ? 'text-primary-blue' : ''}`}
                         >
@@ -88,7 +102,7 @@ export default function SignUpPage() {
                     className={`w-full cursor-pointer hover:bg-primary-50 transition-colors h-full ${userType === 'company' ? 'border-primary-blue bg-primary-blue/5' : ''}`}
                   >
                     <CardContent className=" flex items-center justify-between">
-                      <div className="flex-grow">
+                      <div className="grow">
                         <h3
                           className={`font-bold text-lg ${userType === 'company' ? 'text-primary-blue' : ''}`}
                         >
@@ -143,7 +157,7 @@ export default function SignUpPage() {
               >
                 <ArrowLeft />
               </Button>
-              <div className="flex flex-grow justify-center">
+              <div className="flex grow justify-center">
                 <HngLogo />
               </div>
             </div>
