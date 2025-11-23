@@ -7,7 +7,18 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export default function DashboardCard({ card }) {
+export default function DashboardCard({
+  card,
+}: {
+  card: {
+    title: string;
+    description: string;
+    icon: string;
+    iconBg: string;
+    count: string;
+    color: string;
+  };
+}) {
   return (
     <Card
       className={`col-span-1 gap-3 px-4 sm:px-6 py-4 rounded-[15px] bg-white border-[0.5px] border-${card.color}`}

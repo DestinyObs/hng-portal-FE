@@ -8,7 +8,21 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-export default function JobCard({ job }) {
+export default function JobCard({
+  job,
+}: {
+  job: {
+    title: string;
+    status: boolean;
+    applicants: number;
+    description: string;
+    date: string;
+    location: string;
+    workType: string;
+    entryLevel: boolean;
+    updatedAt: string;
+  };
+}) {
   return (
     <Card
       className={`col-span-1 gap-4 h-fit px-4 sm:px-6 py-4 rounded-xl bg-white-50 border-[0.5px] border-[#E8E8E8]`}
