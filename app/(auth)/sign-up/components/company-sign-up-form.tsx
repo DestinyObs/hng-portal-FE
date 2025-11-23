@@ -23,6 +23,7 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   const [step, setStep] = useState(1);
   const router = useRouter();
   const setEmail = useAuthStore((state) => state.setEmail);
+  const setId = useAuthStore((state) => state.setId);
 
   const form = useForm<CompanySignUpFormValues>({
     resolver: zodResolver(companySignUpSchema),
@@ -45,6 +46,7 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
       if (response.success) {
         if (response.data?.user?.email) {
           setEmail(response.data.user.email);
+          setId(response.data.user.id);
         }
         toast.success(
           'Registration successful! Please check your email to verify your account.',

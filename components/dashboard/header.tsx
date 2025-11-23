@@ -5,6 +5,7 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '../../public/assets/images/landing-page/shared/logo.png';
+import { usePathname } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { logout } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
@@ -19,6 +20,7 @@ const dashboardLinks = [
 ];
 
 const DashboardHeader = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const router = useRouter();
@@ -72,7 +74,7 @@ const DashboardHeader = () => {
                 <Link
                   href={item.href}
                   className={`flex items-center h-full text-sm uppercase tracking-wide transition-colors duration-200 ${
-                    item.active
+                    pathname === item.href
                       ? 'font-bold text-black'
                       : 'font-medium text-[#08080866] hover:text-black uppercase'
                   }`}
