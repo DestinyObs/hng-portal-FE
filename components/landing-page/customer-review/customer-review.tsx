@@ -81,7 +81,7 @@ const CustomerReview = () => {
       <div className="w-full relative flex justify-end px-5 sm:px-0">
         <Carousel className="w-full sm:w-[92%]">
           {/*  buttons */}
-          <div className="absolute -bottom-20 sm:bottom-0 sm:-top-20 right-10 sm:right-20 -translate-y-1/2 flex gap-3">
+          <div className="absolute -bottom-10 sm:bottom-0 sm:-top-20 right-10 sm:right-20 -translate-y-1/2 flex gap-3">
             <CarouselPrevious
               icon={<ChevronLeft />}
               className="bg-[#E3F6FE] text-black p-2 sm:p-1 border-0 "

@@ -1,6 +1,8 @@
+'use client';
 import { Card, CardContent } from '@/components/ui/card';
 import { CarouselItem } from '@/components/ui/carousel';
 import Image from 'next/image';
+import { motion } from 'motion/react';
 
 const CarouselCard = ({
   customer,
@@ -14,7 +16,7 @@ const CarouselCard = ({
   };
 }) => {
   return (
-    <CarouselItem className="basis-full w-[320px] hover:w-[783px] sm:basis-1/2 lg:basis-1/4 hover:lg:basis-1/2">
+    <CarouselItem className="cursor-pointer basis-full w-[320px] hover:w-[783px] sm:basis-1/2 lg:basis-1/4 hover:lg:basis-1/2">
       <div className="w-full">
         <Card className="group p-0 py-0 w-full md:h-[233px] h-[433px] hover:h-80 flex flex-col sm:flex-row gap-0 border-0 transition-all duration-300 ease-in-out">
           <CardContent className="relative w-full h-full p-0">
@@ -51,22 +53,32 @@ const CarouselCard = ({
               </div>
             </div>
 
-            <div className="flex items-start gap-2 w-full">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex items-start gap-2 w-full"
+            >
               {/* Quote Icon */}
-              <div className="shrink-0">
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+                className="shrink-0"
+              >
                 <Image
                   width={24}
                   height={24}
                   src="/images/quote-up.png"
                   alt="quote-up"
                 />
-              </div>
+              </motion.div>
 
               {/* Testimonial Text */}
               <p className="text-[#3F4040] text-[18px] sm:text-base leading-snug">
                 {customer.testimonial}
               </p>
-            </div>
+            </motion.div>
           </div>
         </Card>
       </div>
