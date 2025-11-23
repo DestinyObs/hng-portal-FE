@@ -62,6 +62,7 @@ export default function JobDetailsStep2({
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<JobDetailsStep2FormData>({
     resolver: zodResolver(jobDetailsStep2Schema),
@@ -102,6 +103,7 @@ export default function JobDetailsStep2({
       }
 
       toast.success('Your job has been posted successfully');
+      reset();
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
