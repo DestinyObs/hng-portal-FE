@@ -48,12 +48,12 @@ export default function JobDetails({
   } = useForm<JobDetailsFormData>({
     resolver: zodResolver(jobDetailsSchema),
     defaultValues: {
-      category: initialData.category,
+      category_id: initialData.category_id,
       title: initialData.title,
       description: initialData.description || '',
       skills: initialData.skills,
       price: initialData.price,
-      acceptanceCriteria: initialData.acceptanceCriteria || '',
+      acceptance_criteria: initialData.acceptance_criteria || '',
     },
     mode: 'onChange',
   });
@@ -85,13 +85,14 @@ export default function JobDetails({
 
   const onSubmit = (data: JobDetailsFormData) => {
     const formDataUpdate: Partial<JobFormData> = {
-      category: data.category,
+      category_id: data.category_id,
       title: data.title,
       description: data.description,
       skills: data.skills,
       price: data.price,
-      acceptanceCriteria: data.acceptanceCriteria,
+      acceptance_criteria: data.acceptance_criteria,
     };
+
     onUpdate(formDataUpdate);
     onNext?.();
   };
@@ -99,11 +100,11 @@ export default function JobDetails({
   const handleSaveDraft = (): void => {
     const formData = getValues();
     const formDataUpdate: Partial<JobFormData> = {
-      category: formData.category,
+      category_id: formData.category_id,
       title: formData.title,
       description: formData.description,
       skills: formData.skills,
-      acceptanceCriteria: formData.acceptanceCriteria,
+      acceptance_criteria: formData.acceptance_criteria,
     };
     onUpdate(formDataUpdate);
   };
@@ -134,7 +135,7 @@ export default function JobDetails({
               Select Job Category
             </label>
             <Controller
-              name="category"
+              name="category_id"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
@@ -143,7 +144,7 @@ export default function JobDetails({
                   </SelectTrigger>
                   <SelectContent>
                     {categories &&
-                      categories.map((cat, index) => (
+                      categories.map((cat: { id: string; name: string }) => (
                         <SelectItem key={cat.id} value={cat.id}>
                           {cat.name}
                         </SelectItem>
@@ -152,8 +153,10 @@ export default function JobDetails({
                 </Select>
               )}
             />
-            {errors.category && (
-              <p className="text-xs text-red-500">{errors.category.message}</p>
+            {errors.category_id && (
+              <p className="text-xs text-red-500">
+                {errors.category_id.message}
+              </p>
             )}
           </div>
 
@@ -275,7 +278,7 @@ export default function JobDetails({
             <div className="mt-4">
               <div className="flex flex-wrap gap-2 pt-2">
                 {skillsRes &&
-                  skillsRes.map((skill) => (
+                  skillsRes.map((skill: { id: string; name: string }) => (
                     <button
                       key={skill.id}
                       onClick={() => handleAddSkill(skill)}
@@ -301,7 +304,7 @@ export default function JobDetails({
             <div className="border border-input rounded-lg overflow-hidden">
               <div className="border border-input rounded-lg overflow-hidden">
                 <Controller
-                  name="acceptanceCriteria"
+                  name="acceptance_criteria"
                   control={control}
                   render={({ field }) => (
                     <TextEditor
@@ -314,9 +317,9 @@ export default function JobDetails({
               </div>
             </div>
             <p className="text-xs text-muted-foreground">Min. 50 characters</p>
-            {errors.acceptanceCriteria && (
+            {errors.acceptance_criteria && (
               <p className="text-xs text-red-500">
-                {errors.acceptanceCriteria.message}
+                {errors.acceptance_criteria.message}
               </p>
             )}
           </div>

@@ -1,11 +1,11 @@
 export interface JobFormData {
   // Step 1
 
-  category: string;
+  category_id: string;
   title: string;
   description: string;
   skills: string[];
-  acceptanceCriteria: string;
+  acceptance_criteria: string;
 
   // Step 2
   track_id?: string;

@@ -32,6 +32,7 @@ import {
 import { createPost } from '@/api/actions/create-post';
 import { toast } from 'sonner';
 import Loading from '@/app/loading';
+import { useAuthStore } from '@/store/auth';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
@@ -49,6 +50,7 @@ export default function JobDetailsStep2({
   const { data: countries, isLoading: countriesLoading } = useCountries();
   const { data: states, isLoading: statesLoading } = useStates();
   const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
+  const { user } = useAuthStore();
 
   const isLoading =
     tracksLoading ||
@@ -60,7 +62,6 @@ export default function JobDetailsStep2({
   const {
     control,
     handleSubmit,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm<JobDetailsStep2FormData>({
     resolver: zodResolver(jobDetailsStep2Schema),
@@ -76,13 +77,14 @@ export default function JobDetailsStep2({
   const onSubmit = async (data: JobDetailsStep2FormData) => {
     onUpdate(data);
     const formData = {
+      company_id: user?.company?.id || '',
       title: initialData.title || ' ',
       description: initialData.description || ' ',
       acceptance_criteria: initialData.acceptance_criteria || ' ',
-      state_id: initialData.state_id || ' ',
-      country_id: initialData.country_id || ' ',
+      state_id: data.state_id || ' ',
+      country_id: data.country_id || ' ',
       price: initialData.price || ' ',
-      track_id: initialData.track_id || ' ',
+      track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
       job_type_id: data.job_type_id || ' ',
       work_mode_id: data.work_mode_id || ' ',
@@ -108,7 +110,7 @@ export default function JobDetailsStep2({
   };
 
   const handleSaveDraft = (): void => {
-    const formData = getValues();
+    // const formData = getValues();
   };
 
   if (isLoading) return <Loading />;
@@ -146,7 +148,7 @@ export default function JobDetailsStep2({
                   </SelectTrigger>
                   <SelectContent>
                     {tracks &&
-                      tracks.map((track) => (
+                      tracks.map((track: { id: string; name: string }) => (
                         <SelectItem key={track.id} value={track.id}>
                           {track.name}
                         </SelectItem>
@@ -175,7 +177,7 @@ export default function JobDetailsStep2({
                   </SelectTrigger>
                   <SelectContent>
                     {JOBTYPES &&
-                      JOBTYPES.map((type) => (
+                      JOBTYPES.map((type: { id: string; name: string }) => (
                         <SelectItem key={type.id} value={type.id}>
                           {type.name}
                         </SelectItem>
@@ -204,11 +206,13 @@ export default function JobDetailsStep2({
                   </SelectTrigger>
                   <SelectContent>
                     {workModes &&
-                      workModes.map((location) => (
-                        <SelectItem key={location.id} value={location.id}>
-                          {location.name}
-                        </SelectItem>
-                      ))}
+                      workModes.map(
+                        (location: { id: string; name: string }) => (
+                          <SelectItem key={location.id} value={location.id}>
+                            {location.name}
+                          </SelectItem>
+                        ),
+                      )}
                   </SelectContent>
                 </Select>
               )}
@@ -237,7 +241,7 @@ export default function JobDetailsStep2({
                     </SelectTrigger>
                     <SelectContent>
                       {states &&
-                        states.map((location) => (
+                        states.map((location: { id: string; name: string }) => (
                           <SelectItem key={location.id} value={location.id}>
                             {location.name}
                           </SelectItem>
@@ -256,11 +260,13 @@ export default function JobDetailsStep2({
                     </SelectTrigger>
                     <SelectContent>
                       {countries &&
-                        countries.map((location) => (
-                          <SelectItem key={location.id} value={location.id}>
-                            {location.name}
-                          </SelectItem>
-                        ))}
+                        countries.map(
+                          (location: { id: string; name: string }) => (
+                            <SelectItem key={location.id} value={location.id}>
+                              {location.name}
+                            </SelectItem>
+                          ),
+                        )}
                     </SelectContent>
                   </Select>
                 )}

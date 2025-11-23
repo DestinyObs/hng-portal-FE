@@ -1,19 +1,19 @@
 import * as z from 'zod';
 
 export const jobDetailsSchema = z.object({
-  category: z.string().optional(),
+  category_id: z.string().optional(),
   title: z.string().min(1, 'Job title is required'),
   description: z.string().min(50, 'Description must be at least 50 characters'),
   price: z.string(),
   skills: z
     .array(z.string())
     .min(1, 'At least one skill is required')
-    .max(5, 'Maximum 5 skills allowed'),
+    .max(5, 'Maximum 5 skills allowed')
     .min(1, 'At least one skill is required')
     .max(5, 'Maximum 5 skills allowed'),
-  acceptanceCriteria: z
+  acceptance_criteria: z
     .string()
-    .min(50, 'Acceptance criteria must be at least 50 characters'),
+    .min(50, 'Acceptance criteria must be at least 50 characters')
     .min(50, 'Acceptance criteria must be at least 50 characters'),
 });
 
@@ -30,7 +30,7 @@ export const jobDetailsStep2Schema = z.object({
 export type JobDetailsStep2FormData = z.infer<typeof jobDetailsStep2Schema>;
 
 export type JobPostPayload = {
-  //   job_id: string;
+  company_id: string;
   title: string;
   description: string;
   acceptance_criteria: string;

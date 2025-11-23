@@ -20,6 +20,7 @@ const dashboardLinks = [
 ];
 
 const DashboardHeader = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const router = useRouter();

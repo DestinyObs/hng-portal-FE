@@ -17,19 +17,51 @@ export interface Permissions {
 
 export interface User {
   id: string;
-  firstname: string;
-  lastname: string;
-  othername: string;
+  firstname: string | null;
+  lastname: string | null;
+  othername: string | null;
   email: string;
-  phone: string;
-  dob: string;
+  email_verified_at: string | null;
+  phone: string | null;
+  dob: string | null;
   status: string;
-  photo_url: string;
-  email_verified_at: string;
+  photo_url: string | null;
   created_at: string;
   updated_at: string;
-  roles: Roles[];
-  permissions: Permissions[];
+  roles: Role[];
+  company: Company | null;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  guard_name: string;
+  created_at: string;
+  updated_at: string;
+  pivot: RolePivot;
+}
+
+export interface RolePivot {
+  model_type: string;
+  model_id: string;
+  role_id: number;
+}
+
+export interface Company {
+  id: string;
+  user_id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  logo_url: string | null;
+  country_id: string | null;
+  website_url: string | null;
+  is_verified: number;
+  official_email: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
 }
 
 export interface UserData {

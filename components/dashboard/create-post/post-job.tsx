@@ -8,11 +8,11 @@ import type { JobFormData } from '@/types/create-new-job';
 import { useRouter } from 'next/navigation';
 
 const initialJobData: JobFormData = {
-  category: '',
+  category_id: '',
   title: '',
   description: '',
   skills: [],
-  acceptanceCriteria: '',
+  acceptance_criteria: '',
 };
 
 const steps = [
