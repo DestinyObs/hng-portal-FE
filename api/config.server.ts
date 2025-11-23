@@ -1,6 +1,6 @@
 'use server';
 
-import { createFetchUtil, HttpError, withAuth } from '@/lib/fetch-utils';
+import { createFetchUtil, withAuth } from '@/lib/fetch-utils';
 import { cookies } from 'next/headers';
 
 export type APIResponse<T> = {
@@ -15,23 +15,16 @@ const apiHandler = createFetchUtil({
   apiUrl: process.env.NEXT_PUBLIC_API_URL!,
 });
 
-function handleApiError<T>(error: unknown): APIResponse<T | null> {
-  if (error instanceof HttpError) {
-    return {
-      success: error.responseBody?.success || false,
-      message: error.responseBody?.message || `Server error: ${error.message}`,
-      status: error.statusCode,
-      data: null,
-    };
-  }
-  return {
-    success: false,
-    message: 'An unexpected error occurred',
-    status: 500,
-    data: null,
-  };
-}
+const otpApiHandler = createFetchUtil({
+  apiUrl:
+    process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
+    'http://13.48.59.27:8000/',
+});
 
+export async function makeAuthenticatedRequest<
+  TResponse,
+  TRequestBody = unknown,
+>(
 export async function makeAuthenticatedRequest<
   TResponse,
   TRequestBody = unknown,
@@ -43,24 +36,20 @@ export async function makeAuthenticatedRequest<
     params?: Record<string, string>;
     headers?: Record<string, string>;
   } = {},
-): Promise<APIResponse<TResponse | null>> {
-  try {
-    const token = (await cookies()).get('token')?.value;
+): Promise<APIResponse<TResponse>> {
+  const token = (await cookies()).get('token')?.value;
 
-    const res = await apiHandler<APIResponse<TResponse>>(endpoint, {
-      method: options.method || 'GET',
-      headers: {
-        ...withAuth(token as string),
-        ...options.headers,
-      },
-      body: options.body,
-      params: options.params,
-    });
+  const res = await apiHandler<APIResponse<TResponse>>(endpoint, {
+    method: options.method || 'GET',
+    headers: {
+      ...withAuth(token as string),
+      ...options.headers,
+    },
+    body: options.body,
+    params: options.params,
+  });
 
-    return res;
-  } catch (error) {
-    return handleApiError<TResponse>(error);
-  }
+  return res;
 }
 
 export async function makePublicRequest<TResponse, TRequestBody = unknown>(

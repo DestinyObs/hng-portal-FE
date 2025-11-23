@@ -9,8 +9,11 @@ export const jobDetailsSchema = z.object({
     .array(z.string())
     .min(1, 'At least one skill is required')
     .max(5, 'Maximum 5 skills allowed'),
+    .min(1, 'At least one skill is required')
+    .max(5, 'Maximum 5 skills allowed'),
   acceptanceCriteria: z
     .string()
+    .min(50, 'Acceptance criteria must be at least 50 characters'),
     .min(50, 'Acceptance criteria must be at least 50 characters'),
 });
 

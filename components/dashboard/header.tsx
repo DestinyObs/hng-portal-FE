@@ -6,17 +6,47 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '../../public/assets/images/landing-page/shared/logo.png';
 import { usePathname } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { logout } from '@/api/actions/auth';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { APIResponse } from '@/api/config.server';
+import { SuccessResponse } from '@/app/(auth)/components/types';
 
 const dashboardLinks = [
-  { label: 'HOME', href: '/dashboard' },
-  { label: 'JOBS', href: '/dashboard/jobs' },
-  { label: 'APPLICANTS', href: '/dashboard/applicants' },
+  { label: 'HOME', href: '/dashboard', active: true },
+  { label: 'JOBS', href: '/dashboard/jobs', active: false },
+  { label: 'APPLICANTS', href: '/dashboard/applicants', active: false },
 ];
 
 const DashboardHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const pathname = usePathname();
+  const router = useRouter();
+
+  const { mutate: a_logout, isPending: isLoggingOut } = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: logout,
+    onSuccess: (response: APIResponse<SuccessResponse | null>) => {
+      if (response.success) {
+        toast.success('Logged out successfully!');
+        router.push('/sign-in');
+      } else {
+        let errorMessage = response.message || 'Failed to log out.';
+        if (response.errors) {
+          errorMessage = Object.values(response.errors).flat().join(' ');
+        }
+        toast.error(errorMessage);
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network or unexpected error occurred.');
+    },
+  });
+
+  const handleLogout = () => {
+    a_logout();
+  };
 
   return (
     <header className="bg-white shadow-md ">
@@ -114,12 +144,13 @@ const DashboardHeader = () => {
                     >
                       Settings
                     </Link>
-                    <Link
-                      href="/logout"
-                      className="text-sm font-medium text-primary-error transition-colors text-left"
+                    <button
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                      className="text-sm font-medium text-primary-error transition-colors text-left disabled:opacity-50"
                     >
-                      Log out
-                    </Link>
+                      {isLoggingOut ? 'Logging out...' : 'Log out'}
+                    </button>
                   </div>
                 </div>
               )}
