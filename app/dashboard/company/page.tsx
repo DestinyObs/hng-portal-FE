@@ -1,8 +1,9 @@
 import Link from 'next/link';
 
+import JobCard from '../_components/job-card';
 import EmptyState from '../_components/empty-state';
-import JobCard, { JOB_CARDS } from '../_components/job-card';
-import DashboardCard, { DASHBOARD_CARD } from '../_components/dashboard-card';
+import DashboardCard from '../_components/dashboard-card';
+import { DASHBOARD_CARD, JOB_CARDS } from '@/constants/dashboard';
 
 export default function CompanyDashboardPage() {
   const job = true;

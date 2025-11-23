@@ -8,45 +8,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-export const JOB_CARDS = [
-  {
-    title: 'Visual Designer',
-    status: true,
-    applicants: '24',
-    location: 'Lagos, Nigeria',
-    workType: 'remote',
-    entryLevel: true,
-    updatedAt: '2 hours ago',
-  },
-  {
-    title: 'Software Engineer',
-    status: true,
-    applicants: '30',
-    location: 'New York, USA',
-    workType: 'remote',
-    entryLevel: false,
-    updatedAt: '1 day ago',
-  },
-  {
-    title: 'Marketing Manager',
-    status: false,
-    applicants: '15',
-    location: 'London, UK',
-    workType: 'hybrid',
-    entryLevel: false,
-    updatedAt: '3 days ago',
-  },
-  {
-    title: 'Data Analyst',
-    status: true,
-    applicants: '10',
-    location: 'Paris, France',
-    workType: 'full time',
-    entryLevel: true,
-    updatedAt: '1 week ago',
-  },
-];
-
 export default function JobCard({ job }) {
   return (
     <Card
@@ -93,7 +54,7 @@ export default function JobCard({ job }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex sm:justify-end gap-4 sm:gap-2 px-0 font-dm_sans">
-        <Button variant="outline" className="px-4 py-2 text-sm sm:text-xs">
+        <Button size={'sm'} className="text-base" variant={'outlineGray'}>
           View Job Posting
         </Button>
         <Button variant="default" className="px-4 py-2 text-sm sm:text-xs">

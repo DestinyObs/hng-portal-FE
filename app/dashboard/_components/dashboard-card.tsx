@@ -7,33 +7,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export const DASHBOARD_CARD = [
-  {
-    title: 'Active Job Posting',
-    icon: '/assets/dashboard/icons/briefcase.svg',
-    description: 'Active Jobs',
-    color: '[#14BA6D]',
-    iconBg: 'accent-3',
-    count: 10,
-  },
-  {
-    title: 'Total Applicants',
-    icon: '/assets/dashboard/icons/people.svg',
-    description: 'New Applicants',
-    color: '[#E0E7FF]',
-    iconBg: '[#E0E7FF]',
-    count: 80,
-  },
-  {
-    title: 'Hires Completed',
-    icon: '/assets/dashboard/icons/profile-tick.svg',
-    description: 'Hires',
-    color: 'accent-pink',
-    iconBg: 'accent-pink',
-    count: 15,
-  },
-];
-
 export default function DashboardCard({ card }) {
   return (
     <Card

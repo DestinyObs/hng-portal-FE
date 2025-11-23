@@ -1,6 +1,6 @@
 'use client';
 
-import { STEPS } from '@/lib/constants/constants';
+import { STEPS } from '@/constants/constants';
 import ServiceCard from './ServiceCard';
 import { motion } from 'motion/react';
 import { useCarousel } from './useCarousel';
