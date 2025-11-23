@@ -15,7 +15,7 @@ export default function DashboardCard({
     description: string;
     icon: string;
     iconBg: string;
-    count: string;
+    count: number;
     color: string;
   };
 }) {
