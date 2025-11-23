@@ -1,3 +1,4 @@
+'use client';
 export async function publicFetch(url: string, options: RequestInit = {}) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${url}`, {
     method: options.method || 'GET',
