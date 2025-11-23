@@ -1,0 +1,36 @@
+import { User } from '@/lib/types';
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+
+interface AuthState {
+  email: string | null;
+  user_id: string | null;
+  user: User | null;
+  setEmail: (email: string) => void;
+  setId: (id: string) => void;
+  setData: (data: User) => void;
+  hydrated: boolean;
+}
+
+export const useAuthStore = create(
+  persist<AuthState>(
+    (set) => ({
+      email: null,
+      user_id: null,
+      hydrated: false,
+      user: null,
+      setEmail: (email) => set({ email }),
+      setId: (id) => set({ user_id: id }),
+      setData: (data) => set({ user: data }),
+    }),
+    {
+      name: 'auth-store',
+      storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.hydrated = true;
+        }
+      },
+    },
+  ),
+);
