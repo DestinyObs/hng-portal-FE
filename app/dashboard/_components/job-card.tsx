@@ -14,7 +14,7 @@ export default function JobCard({
   job: {
     title: string;
     status: boolean;
-    applicants: number;
+    applicants: string;
     location: string;
     workType: string;
     entryLevel: boolean;
