@@ -3,7 +3,6 @@ import StatCard from './StatCard';
 const StatsGridDesktop = () => (
   <div className="hidden lg:flex flex-col gap-6">
     <div className="flex items-start gap-10">
-      
       <StatCard
         value="50K+"
         description="Talents trained through the HNG ecosystem"

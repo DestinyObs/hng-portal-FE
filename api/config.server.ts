@@ -17,9 +17,7 @@ const apiHandler = createFetchUtil({
 });
 
 const otpApiHandler = createFetchUtil({
-  apiUrl:
-    process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
-    'http://13.48.59.27:8000/',
+  apiUrl: process.env.NEXT_PUBLIC_API_URL!,
 });
 
 export async function makeAuthenticatedRequest<

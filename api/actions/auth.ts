@@ -22,7 +22,6 @@ export const login = async (formData: LoginType) => {
       sameSite: 'strict',
       path: '/',
     });
-    console.log(res);
   }
 
   return res;

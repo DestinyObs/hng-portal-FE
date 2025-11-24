@@ -15,7 +15,8 @@ export const useCarousel = create<CarouselStore>((set) => ({
   isPaused: false,
   setActivePage: (page) => set({ activePage: page }),
   setIsPaused: (paused) => set({ isPaused: paused }),
-  nextPage: () => set((state) => ({
-    activePage: (state.activePage + 1) % 3,
-  })),
+  nextPage: () =>
+    set((state) => ({
+      activePage: (state.activePage + 1) % 3,
+    })),
 }));
