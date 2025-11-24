@@ -1,0 +1,65 @@
+export const JOB_CARDS = [
+  {
+    title: 'Visual Designer',
+    status: true,
+    applicants: 24,
+    location: 'Lagos, Nigeria',
+    workType: 'remote',
+    entryLevel: true,
+    updatedAt: '2 hours ago',
+  },
+  {
+    title: 'Software Engineer',
+    status: true,
+    applicants: 30,
+    location: 'New York, USA',
+    workType: 'remote',
+    entryLevel: false,
+    updatedAt: '1 day ago',
+  },
+  {
+    title: 'Marketing Manager',
+    status: false,
+    applicants: 15,
+    location: 'London, UK',
+    workType: 'hybrid',
+    entryLevel: false,
+    updatedAt: '3 days ago',
+  },
+  {
+    title: 'Data Analyst',
+    status: true,
+    applicants: 10,
+    location: 'Paris, France',
+    workType: 'full time',
+    entryLevel: true,
+    updatedAt: '1 week ago',
+  },
+];
+
+export const DASHBOARD_CARD = [
+  {
+    title: 'Active Job Posting',
+    icon: '/assets/dashboard/icons/briefcase.svg',
+    description: 'Active Jobs',
+    color: '[#14BA6D]',
+    iconBg: 'accent-3',
+    count: 10,
+  },
+  {
+    title: 'Total Applicants',
+    icon: '/assets/dashboard/icons/people.svg',
+    description: 'New Applicants',
+    color: '[#E0E7FF]',
+    iconBg: '[#E0E7FF]',
+    count: 80,
+  },
+  {
+    title: 'Hires Completed',
+    icon: '/assets/dashboard/icons/profile-tick.svg',
+    description: 'Hires',
+    color: 'accent-pink',
+    iconBg: 'accent-pink',
+    count: 15,
+  },
+];
