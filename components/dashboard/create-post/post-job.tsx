@@ -1,9 +1,7 @@
 'use client';
 import { useState } from 'react';
-import CreateNewJob from './create-new-job';
 import JobDetails from './job-details';
 import JobDetailsStep2 from './job-details2';
-import { ArrowLeft } from 'lucide-react';
 import type { JobFormData } from '@/types/create-new-job';
 import { useRouter } from 'next/navigation';
 
@@ -22,7 +20,6 @@ const steps = [
 ];
 
 export default function PostJob() {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<JobFormData>(initialJobData);
   const handleFormUpdate = (data: Partial<JobFormData>): void => {

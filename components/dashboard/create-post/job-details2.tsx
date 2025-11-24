@@ -29,7 +29,7 @@ import {
   useTracks,
   useWorkModes,
 } from '@/hooks/lookups';
-import { createPost, draftPost } from '@/api/actions/create-post';
+import { draftPost } from '@/api/actions/create-post';
 import { toast } from 'sonner';
 import Loading from '@/app/loading';
 import { useAuthStore } from '@/store/auth';
