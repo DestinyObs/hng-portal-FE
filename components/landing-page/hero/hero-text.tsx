@@ -19,13 +19,13 @@ export default function HeroText() {
         }
       </p>
       <div className="flex gap-4 justify-center md:justify-start items-center">
-        <Link href="/join-talent" passHref>
+        <Link href="/sign-up/talent" passHref>
           <Button asChild className="px-4 py-5 md:py-6 text-[14px]">
             <span>Join as Talent</span>
           </Button>
         </Link>
 
-        <Link href="/hire-talent" passHref>
+        <Link href="/sign-up/company" passHref>
           <Button
             asChild
             variant="outline"

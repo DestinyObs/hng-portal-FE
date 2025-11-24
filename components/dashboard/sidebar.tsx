@@ -6,10 +6,10 @@ import { Progress } from '../ui/progress';
 import { useState } from 'react';
 import { SidebarInsights } from './sidebar-insights';
 
-const Sidebar = () => {
+const DashboardSidebar = () => {
   const [role] = useState('company');
   return (
-    <aside className="w-72 hidden md:flex flex-col gap-5 overflow-y-scroll">
+    <aside className="w-72 hidden lg:flex flex-col gap-5">
       {/* profile-card */}
       <div className="border border-tertiary-50 profilecard flex justify-center items-center gap-2 bg-white rounded-md flex-col py-6 px-3">
         {/* user profile image */}
@@ -86,4 +86,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default DashboardSidebar;

@@ -89,6 +89,13 @@
   --color-primary-300: #00aeff;
   --color-primary-400: #007ab3;
   --color-primary-500: #006a9c;
+  /* color primary was the same thing as color accent 3 */
+  --color-secondary: #6366f1;
+  --color-accent-3: #14ba6d;
+  /* color tertiary was the same thing as color accent pink */
+  --color-accent-pink: #7100fb;
+  /* this did not initially have a name */
+  --color-light-blue: #e0e7ff;
 
   --color-success-light: #edf8ec;
   --color-success-light-hover: #e4f4e3;
@@ -103,6 +110,10 @@
 
   --color-black-500: #2d2d2d;
   --color-gray-50: #fafafb;
+  --color-black-50: #e8e8e8;
+  --color-black-200: #969696;
+
+  --color-sec-dark-gray: #6d717f;
 
   --color-error-light: #fbe6e6;
   --color-error-light-hover: #f8d9d9;

@@ -1,16 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logo from '../../public/assets/images/landing-page/shared/logo.png';
-import { useMutation } from '@tanstack/react-query';
-import { logout } from '@/api/actions/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+
 import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
+
+import { logout } from '@/api/actions/auth';
 import { APIResponse } from '@/api/config.server';
-import { SuccessResponse } from '@/app/(auth)/components/types';
+import { SuccessResponse } from '@/types/api-response';
+
+import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 
 const dashboardLinks = [
   { label: 'HOME', href: '/dashboard', active: true },
@@ -19,9 +22,11 @@ const dashboardLinks = [
 ];
 
 const DashboardHeader = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const router = useRouter();
 
   const { mutate: a_logout, isPending: isLoggingOut } = useMutation({
     mutationKey: ['logout'],
@@ -49,7 +54,7 @@ const DashboardHeader = () => {
 
   return (
     <header className="bg-white shadow-md ">
-      <div className="max-w-[1200px] mx-auto px-4 xl:px-0 py-6">
+      <div className=" px-4 xl:px-24 py-6">
         <nav
           className="flex items-center justify-between"
           aria-label="Dashboard navigation"
@@ -72,7 +77,7 @@ const DashboardHeader = () => {
                 <Link
                   href={item.href}
                   className={`flex items-center h-full text-sm uppercase tracking-wide transition-colors duration-200 ${
-                    item.active
+                    pathname === item.href
                       ? 'font-bold text-black'
                       : 'font-medium text-[#08080866] hover:text-black uppercase'
                   }`}

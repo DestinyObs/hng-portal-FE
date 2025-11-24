@@ -1,32 +1,12 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Mail, CheckSquare, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Mail, CheckSquare, Settings } from 'lucide-react';
 
-function StepCard({
-  icon: Icon,
-  title,
-  description,
-}: {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="flex items-start space-x-4 border-b pb-4 last:border-b-0">
-      <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary-blue text-white">
-        <Icon className="h-4 w-4" />
-      </div>
-      <div>
-        <h3 className="font-semibold text-base">{title}</h3>
-        <p className="text-muted-foreground text-sm">{description}</p>
-      </div>
-    </div>
-  );
-}
+import { EmailCheckStepCard } from './_components/email-check-step';
 
-export default function CompanyCheckEmailPage() {
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+export default function EmailConfirmationPage() {
   const mockEmail = 'johndoe@gmail.com';
 
   return (
@@ -39,19 +19,19 @@ export default function CompanyCheckEmailPage() {
         </p>
       </CardHeader>
       <CardContent className="px-0 pt-8 space-y-6">
-        <StepCard
+        <EmailCheckStepCard
           icon={Mail}
           title="Open the email from us"
           description="Check your inbox for an email from our team."
         />
 
-        <StepCard
+        <EmailCheckStepCard
           icon={CheckSquare}
           title="Click the reset link"
           description="Click the big blue button in the email."
         />
 
-        <StepCard
+        <EmailCheckStepCard
           icon={Settings}
           title="You'll be redirected to your dashboard"
           description="Start using your account immediately."

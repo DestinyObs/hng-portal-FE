@@ -9,15 +9,22 @@ type StatCardProps = {
   className?: string;
 };
 
-const StatCard = ({ value, suffix, description, variant, className }: StatCardProps) => {
+const StatCard = ({
+  value,
+  suffix,
+  description,
+  variant,
+  className,
+}: StatCardProps) => {
   const isGradient = variant === 'gradient';
 
   return (
     <Card
       className={`
-        ${isGradient 
-          ? 'bg-linear-to-b from-[rgba(143,218,253,0.15)] to-[rgba(0,174,255,0.15)] border-none shadow-none' 
-          : 'bg-transparent border-2 border-[#ECF0F3] shadow-none'
+        ${
+          isGradient
+            ? 'bg-linear-to-b from-[rgba(143,218,253,0.15)] to-[rgba(0,174,255,0.15)] border-none shadow-none'
+            : 'bg-transparent border-2 border-[#ECF0F3] shadow-none'
         }
         rounded-[20px] lg:rounded-[30px] ${className || ''}
       `}
@@ -27,7 +34,7 @@ const StatCard = ({ value, suffix, description, variant, className }: StatCardPr
           {value}
           {suffix && <span className="text-gray-75">{suffix}</span>}
         </div>
-        <p className="text-lg text-primary-black">{description}</p>
+        <p className="text-sm md:text-lg text-primary-black">{description}</p>
       </CardContent>
     </Card>
   );

@@ -11,7 +11,7 @@ const inputGroup = cva(
     variants: {
       variant: {
         outline: cn(
-          'group/input-group border-gray-50 relative flex w-full items-center rounded-lg border transition-[color,box-shadow] outline-none',
+          'group/input-group border-[#E7E8E9] relative flex w-full items-center rounded-lg border transition-[color,box-shadow] outline-none',
           'h-14 min-w-0 has-[>textarea]:h-auto px-3',
           'has-[[data-slot=input-group-control]:focus-visible]:border-primary-blue',
           'has-[[data-slot][aria-invalid=true]]:border-primary-error',
