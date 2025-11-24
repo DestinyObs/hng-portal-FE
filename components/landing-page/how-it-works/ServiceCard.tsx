@@ -18,7 +18,7 @@ const ServiceCard = ({
   icon,
   forceHover = false,
 }: ServiceCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered] = useState(false);
   const isActive = forceHover || isHovered;
 
   // PER-STEP ACTIVE STYLING — EXACTLY AS IN YOUR DESIGN
@@ -86,8 +86,6 @@ const ServiceCard = ({
           ? `${containerBg} ${containerBorder} shadow-xl`
           : 'border-2 border-transparent bg-[#F3F4F4B2]'
       }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div
         className={`relative h-full w-full transition-transform duration-300 ${isActive ? 'md:-translate-y-1 ' : ''}`}

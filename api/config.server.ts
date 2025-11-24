@@ -12,7 +12,8 @@ export type APIResponse<T> = {
 };
 
 const apiHandler = createFetchUtil({
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://13.48.59.27:8000/api',
+  apiUrl: process.env.NEXT_PUBLIC_API_URL!,
+  // apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://13.48.59.27:8000/',
 });
 
 const otpApiHandler = createFetchUtil({

@@ -1,17 +1,17 @@
 export interface JobFormData {
   // Step 1
 
-  category: string;
+  category_id: string;
   title: string;
   description: string;
   skills: string[];
-  acceptanceCriteria: string;
+  acceptance_criteria: string;
 
   // Step 2
-  hngTrack?: string;
-  jobType?: string;
-  candidateLocation?: string;
-  jobPrice?: string;
+  track_id?: string;
+  job_type_id?: string;
+  work_mode_id?: string;
+  price?: string;
   state?: string;
   country?: string;
 }
@@ -32,22 +32,3 @@ export interface RichTextToolbarProps {
   onCode?: () => void;
   onImage?: () => void;
 }
-
-export const HNG_TRACKS = [
-  'Front-end Development',
-  'Back-end Development',
-  'Mobile Development',
-  'UI/UX Design',
-  'DevOps',
-  'Data Science',
-];
-
-export const JOB_TYPES = [
-  'Full-time',
-  'Part-time',
-  'Contract',
-  'Freelance',
-  'Internship',
-];
-
-export const CANDIDATE_LOCATIONS = ['Remote', 'On-site', 'Hybrid'];
