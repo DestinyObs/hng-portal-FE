@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 export default function ProfilePage() {
-  const [avatar, setAvatar] = useState<string>('/images/user-profile.png');
+  const [, setAvatar] = useState<string>('/images/user-profile.png');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

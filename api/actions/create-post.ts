@@ -7,12 +7,7 @@ export const createPost = async (formData: JobPostPayload) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${formData.company_id}/jobs/store`;
 
   const token = (await cookies()).get('token')?.value;
-  if (!token) {
-    console.log('Token not found in cookies');
-    return false;
-  }
-
-  console.log('Token found:', token);
+  if (!token) return false;
 
   const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
     method: 'POST',

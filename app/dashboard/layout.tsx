@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <Header />
       {/* SIDEBAR & MAIN CONTENT */}
       <div
-        className={`flex flex-1 min-h-0 gap-6 ${isSettingsPage ? 'p-0' : 'p-6'}`}
+        className={`flex flex-1 min-h-0 gap-6 ${isSettingsPage ? 'p-0' : 'p-8'}`}
       >
         {/* Sidebar */}
         {!isSettingsPage && <Sidebar />}
