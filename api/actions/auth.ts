@@ -3,6 +3,7 @@
 import { LoginType, RegisterType, UserData } from '@/lib/types';
 import { makePublicRequest } from '../config.server';
 import { cookies } from 'next/headers';
+import { signIn } from '@/auth';
 
 export const login = async (formData: LoginType) => {
   const res = await makePublicRequest<UserData, LoginType>('/auth/login', {
@@ -28,5 +29,11 @@ export const register = async (formData: RegisterType) => {
       body: formData,
     },
   );
+  return res;
+};
+
+export const siginWithGoogle = async () => {
+  const res = await signIn('google', { redirectTo: '/dashboard' });
+  console.log(res);
   return res;
 };
