@@ -7,7 +7,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const isSettingsPage = pathname?.startsWith('/dashboard/settings');
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-white-100">
+    <div className=" flex flex-col bg-white-100">
       {/* HEADER */}
       <Header />
       {/* SIDEBAR & MAIN CONTENT */}
@@ -17,7 +17,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         {/* Sidebar */}
         {!isSettingsPage && <Sidebar />}
         {/* Main content */}
-        <main className="flex-1 h-full overflow-y-scroll">{children}</main>
+        <main className="flex-1 h-full">{children}</main>
       </div>
     </div>
   );

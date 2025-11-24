@@ -28,11 +28,14 @@ import {
   useStates,
   useTracks,
   useWorkModes,
-} from '@/app/hooks/lookups';
-import { createPost } from '@/api/actions/create-post';
+} from '@/hooks/lookups';
+import { draftPost } from '@/api/actions/create-post';
 import { toast } from 'sonner';
 import Loading from '@/app/loading';
 import { useAuthStore } from '@/store/auth';
+import { useRouter } from 'next/navigation';
+import { usePostStore } from '@/store/create-post';
+import { useState } from 'react';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
@@ -45,12 +48,15 @@ export default function JobDetailsStep2({
   onUpdate,
   onPrev,
 }: JobDetailsStep2Props) {
+  const router = useRouter();
+  const [isDrafting, setIsDrafting] = useState(false);
   const { data: tracks, isLoading: tracksLoading } = useTracks();
   const { data: workModes, isLoading: workModesLoading } = useWorkModes();
   const { data: countries, isLoading: countriesLoading } = useCountries();
   const { data: states, isLoading: statesLoading } = useStates();
   const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
   const { user } = useAuthStore();
+  const { setNewPost } = usePostStore();
 
   const isLoading =
     tracksLoading ||
@@ -63,6 +69,7 @@ export default function JobDetailsStep2({
     control,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<JobDetailsStep2FormData>({
     resolver: zodResolver(jobDetailsStep2Schema),
@@ -93,8 +100,31 @@ export default function JobDetailsStep2({
     };
 
     console.log(formData);
+    // save using zustand
+    setNewPost(formData);
+    router.push('/dashboard/create-post/preview');
+  };
+
+  const handleSaveDraft = async () => {
+    setIsDrafting(true);
+    const data = getValues();
+    const formData = {
+      company_id: user?.company?.id || '',
+      title: initialData.title || ' ',
+      description: initialData.description || ' ',
+      acceptance_criteria: initialData.acceptance_criteria || ' ',
+      state_id: data.state_id || ' ',
+      country_id: data.country_id || ' ',
+      price: initialData.price || ' ',
+      track_id: data.track_id || ' ',
+      category_id: initialData.category_id || ' ',
+      job_type_id: data.job_type_id || ' ',
+      work_mode_id: data.work_mode_id || ' ',
+      skills: initialData.skills || [],
+    };
+
     try {
-      const response = await createPost(formData);
+      const response = await draftPost(formData);
       console.log(response);
 
       if (response && !response?.success) {
@@ -102,17 +132,15 @@ export default function JobDetailsStep2({
         return;
       }
 
-      toast.success('Your job has been posted successfully');
+      toast.success('Your job has been saved to draft successfully');
       reset();
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setIsDrafting(false);
     }
-  };
-
-  const handleSaveDraft = (): void => {
-    // const formData = getValues();
   };
 
   if (isLoading) return <Loading />;
@@ -284,6 +312,7 @@ export default function JobDetailsStep2({
           <Button
             variant="outline"
             onClick={onPrev}
+            disabled={isDrafting || isSubmitting}
             className="border-[#E7E7E7] text-[#344054] flex items-center gap-2"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -292,18 +321,21 @@ export default function JobDetailsStep2({
           <Button
             variant="outline"
             onClick={handleSaveDraft}
+            disabled={isDrafting || isSubmitting}
             className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
           >
-            Save As Draft
+            {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
           </Button>
         </div>
+
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Button
             variant="outline"
             onClick={handleSaveDraft}
+            disabled={isDrafting || isSubmitting}
             className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
           >
-            Save As Draft
+            {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
           </Button>
 
           <Button
@@ -311,7 +343,7 @@ export default function JobDetailsStep2({
             disabled={isSubmitting}
             className="bg-[#00AEFF] hover:bg-[#0088cc] text-white"
           >
-            {isSubmitting ? 'Publishing...' : 'Publish Job'}
+            {isSubmitting ? 'Loading...' : 'Finish'}
           </Button>
         </div>
       </div>

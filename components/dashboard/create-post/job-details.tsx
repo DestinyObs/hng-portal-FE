@@ -25,14 +25,18 @@ import {
   JobDetailsFormData,
   jobDetailsSchema,
 } from '@/schemas/create-post.schema';
-import { useCategories, useSkills } from '@/app/hooks/lookups';
+import { useCategories, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import { draftPost } from '@/api/actions/create-post';
 
 export default function JobDetails({
   initialData,
   onUpdate,
   onNext,
 }: JobDetailsProps) {
+  const [isDrafting, setIsDrafting] = useState(false);
+
   const { data: categories } = useCategories();
   const { data: skillsRes } = useSkills();
   const [selectedSkills, setSelectedSkills] = useState<
@@ -97,7 +101,8 @@ export default function JobDetails({
     onNext?.();
   };
 
-  const handleSaveDraft = (): void => {
+  const handleSaveDraft = async () => {
+    setIsDrafting(true);
     const formData = getValues();
     const formDataUpdate: Partial<JobFormData> = {
       category_id: formData.category_id,
@@ -106,7 +111,25 @@ export default function JobDetails({
       skills: formData.skills,
       acceptance_criteria: formData.acceptance_criteria,
     };
-    onUpdate(formDataUpdate);
+    // onUpdate(formDataUpdate);
+    try {
+      const response = await draftPost(formDataUpdate);
+      console.log(response);
+
+      if (response && !response?.success) {
+        toast.error(response.message);
+        return;
+      }
+
+      toast.success('Your job has been saved to draft successfully');
+      // reset();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    } finally {
+      setIsDrafting(false);
+    }
   };
 
   return (
@@ -329,6 +352,7 @@ export default function JobDetails({
             <div className="flex justify-between">
               <Button
                 variant="outline"
+                disabled={isDrafting}
                 className="border-[#E7E7E7] text-[#344054]"
               >
                 Cancel
@@ -336,9 +360,10 @@ export default function JobDetails({
               <Button
                 variant="outline"
                 onClick={handleSaveDraft}
+                disabled={isDrafting}
                 className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
               >
-                Save As Draft
+                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
               </Button>
             </div>
 
@@ -346,13 +371,15 @@ export default function JobDetails({
               <Button
                 variant="outlineGray"
                 onClick={handleSaveDraft}
+                disabled={isDrafting}
                 className="border-[#E7E7E7]"
               >
-                Save As Draft
+                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
               </Button>
               <Button
                 onClick={handleSubmit(onSubmit)}
                 variant={'ghost'}
+                disabled={isDrafting}
                 className="text-primary-blue"
               >
                 Next

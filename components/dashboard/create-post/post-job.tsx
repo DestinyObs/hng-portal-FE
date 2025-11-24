@@ -1,11 +1,8 @@
 'use client';
 import { useState } from 'react';
-import CreateNewJob from './create-new-job';
 import JobDetails from './job-details';
 import JobDetailsStep2 from './job-details2';
-import { ArrowLeft } from 'lucide-react';
 import type { JobFormData } from '@/types/create-new-job';
-import { useRouter } from 'next/navigation';
 
 const initialJobData: JobFormData = {
   category_id: '',
@@ -22,7 +19,6 @@ const steps = [
 ];
 
 export default function PostJob() {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<JobFormData>(initialJobData);
   const handleFormUpdate = (data: Partial<JobFormData>): void => {
@@ -38,23 +34,10 @@ export default function PostJob() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header with Back Button */}
-      <div className="">
-        <CreateNewJob />
-      </div>
-
-      <div className="w-full py-6 space-y-8">
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-2 font-medium hover:opacity-80 transition-opacity"
-        >
-          <ArrowLeft className="w-4 h-4  " />
-          Back to Jobs
-        </button>
-
+    <div>
+      <div className="w-full space-y-8">
         <div className="flex gap-5">
-          <div className="w-[788px]">
+          <div className="lg:w-3/4">
             {currentStep === 1 && (
               <JobDetails
                 initialData={formData}
@@ -72,7 +55,7 @@ export default function PostJob() {
             )}
           </div>
 
-          <div className="space-y-6 hidden md:block">
+          <div className="space-y-6 hidden lg:block">
             {steps.map((step) => {
               const isActive = step.id === currentStep;
 
