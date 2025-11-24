@@ -34,6 +34,7 @@ const DashboardHeader = () => {
     onSuccess: (response: APIResponse<SuccessResponse | null>) => {
       if (response.success) {
         toast.success('Logged out successfully!');
+        localStorage.removeItem('auth-store');
         router.push('/sign-in');
       } else {
         let errorMessage = response.message || 'Failed to log out.';

@@ -47,9 +47,16 @@ export function SignInForm() {
     onSuccess: (response: APIResponse<UserData | null>) => {
       if (response.success && response.data?.user) {
         setData(response.data?.user);
+        const userRole = response.data.user.roles[0].name;
 
         toast.success('Login successful!');
-        router.push('/company/dashboard');
+        router.push(
+          userRole === 'employer'
+            ? '/company/dashboard'
+            : userRole === 'talent'
+              ? '/talent/dashboard'
+              : '',
+        );
       } else {
         let errorMessage = response.message || 'An unknown error occurred.';
         if (response.errors) {
