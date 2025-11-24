@@ -51,7 +51,7 @@ const DashboardHeader = () => {
 
   return (
     <header className="bg-white shadow-md ">
-      <div className="max-w-[1200px] mx-auto px-4 xl:px-0 py-6">
+      <div className=" px-4 xl:px-24 py-6">
         <nav
           className="flex items-center justify-between"
           aria-label="Dashboard navigation"

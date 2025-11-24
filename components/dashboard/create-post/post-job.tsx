@@ -3,7 +3,6 @@ import { useState } from 'react';
 import JobDetails from './job-details';
 import JobDetailsStep2 from './job-details2';
 import type { JobFormData } from '@/types/create-new-job';
-import { useRouter } from 'next/navigation';
 
 const initialJobData: JobFormData = {
   category_id: '',
