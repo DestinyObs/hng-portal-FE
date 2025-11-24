@@ -1,4 +1,4 @@
-import { Accordion } from '../../shared/accordion';
+import { Accordion } from '../../shared/ui/accordion';
 
 const faq = [
   {

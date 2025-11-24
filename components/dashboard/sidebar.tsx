@@ -6,7 +6,7 @@ import { Progress } from '../ui/progress';
 import { useState } from 'react';
 import { SidebarInsights } from './sidebar-insights';
 
-const Sidebar = () => {
+const DashboardSidebar = () => {
   const [role] = useState('company');
   return (
     <aside className="w-72 hidden lg:flex flex-col gap-5">
@@ -86,4 +86,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default DashboardSidebar;

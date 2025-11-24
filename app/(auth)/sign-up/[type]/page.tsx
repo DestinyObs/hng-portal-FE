@@ -1,7 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { CompanySignUpForm } from '../components/company-sign-up-form';
+import { ArrowLeft } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+
+import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
+import GoogleColoredIcon from '@/public/assets/auth/icons/google-colored-icon';
+
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -9,15 +17,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import GoogleColoredIcon from '@/components/icons/google-colored-icon';
-import { useState } from 'react';
-import { TalentSignUpForm } from '../components/talent-sign-up-form';
-import { ArrowLeft } from 'lucide-react';
-import { HngLogo } from '../../components/hng-logo';
-import { useParams, useRouter } from 'next/navigation';
+
+import { TalentSignUpForm } from '../_components/(talent)/talent-form';
+import { CompanySignUpForm } from '../_components/(company)/company-form';
 
 export default function SignUpPage() {
   const params = useParams();

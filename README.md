@@ -1,10 +1,10 @@
-# HNG Portal
+# HNG Connect
 
 A digital platform that simplifies the entire HNG internship experience, connecting talents with companies through a comprehensive job discovery and application system.
 
 ## Overview
 
-HNG Portal serves as the central hub for communication, assessment, and growth during the HNG internship program. The platform enables users to build professional profiles, discover opportunities, and access essential tools that support collaboration, skill development, and task execution.
+HNG Connect serves as the central hub for communication, assessment, and growth during the HNG internship program. The platform enables users to build professional profiles, discover opportunities, and access essential tools that support collaboration, skill development, and task execution.
 
 ## Tech Stack
 

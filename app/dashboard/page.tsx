@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 export const metadata = {
-  title: 'HNG Portal | Dashboard',
-  description: 'Hire talent on the HNG Portal. Coming soon!',
+  title: 'HNG Connect | Dashboard',
+  description: 'Hire talent on the HNG Connect. Coming soon!',
 };
 
 export default function HireTalentPage() {
@@ -19,14 +19,14 @@ export default function HireTalentPage() {
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-foreground px-6 md:px-10 lg:px-[60px]">
           <Image
             src="/images/hng-logo.png"
-            alt="HNG Portal Logo"
+            alt="HNG Connect Logo"
             width={120}
             height={40}
           />
 
           <div className="flex flex-row flex-wrap items-center gap-4 text-foreground justify-center md:justify-start">
             {' '}
-            <span>© 2025 HNG Portal</span>
+            <span>© 2025 HNG Connect</span>
           </div>
         </div>
       </footer>
