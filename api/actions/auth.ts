@@ -7,7 +7,7 @@ import {
   makeOtpRequest,
 } from '../config.server';
 import { cookies } from 'next/headers';
-import { SuccessResponse } from '@/app/(auth)/components/types';
+import { SuccessResponse } from '@/types/api-response';
 
 export const login = async (formData: LoginType) => {
   const res = await makePublicRequest<UserData, LoginType>('/auth/login', {

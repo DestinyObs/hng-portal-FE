@@ -1,9 +1,16 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
 import { z } from 'zod';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,15 +25,12 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { verifyOtp, resendOtp } from '@/api/actions/auth';
-import { SuccessResponse } from '@/app/(auth)/components/types';
-import { Loader2 } from 'lucide-react';
+
 import { useAuthStore } from '@/store/auth';
 import { APIResponse } from '@/api/config.server';
+import { verifyOtp, resendOtp } from '@/api/actions/auth';
+
+import { SuccessResponse } from '@/types/api-response';
 
 const FormSchema = z.object({
   pin: z
@@ -37,9 +41,10 @@ const FormSchema = z.object({
 
 const VerifyEmailPage = () => {
   const router = useRouter();
+  const { email, hydrated } = useAuthStore();
+
   const [timeLeft, setTimeLeft] = useState(180);
   const [canResendOTP, setCanResendOTP] = useState(false);
-  const { email, hydrated } = useAuthStore();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -121,7 +126,7 @@ const VerifyEmailPage = () => {
     <div className="flex flex-col items-center gap-7">
       <Image
         src="/images/hng-logo.png"
-        alt="HNG Portal"
+        alt="HNG Connect"
         width={180}
         height={40}
       />

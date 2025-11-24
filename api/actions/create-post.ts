@@ -1,7 +1,10 @@
 'use server';
 import { cookies } from 'next/headers';
 import { makeAuthenticatedRequest } from '../config.server';
-import { JobDraftPayload, JobPostPayload } from '@/schemas/create-post.schema';
+import {
+  JobDraftPayload,
+  JobPostPayload,
+} from '@/validations/create-post.schema';
 
 export const createPost = async (formData: JobPostPayload) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${formData.company_id}/jobs/store`;

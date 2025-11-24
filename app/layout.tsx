@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Bricolage_Grotesque, DM_Sans } from 'next/font/google';
 import './globals.css';
-import { Providers } from './providers';
+
 import { Toaster } from '@/components/ui/sonner';
 import 'quill/dist/quill.core.css';
+import { QueryProviders } from '@/providers/query-providers';
 
 const brics = Bricolage_Grotesque({
   variable: '--font-Bricolage',
@@ -16,9 +17,9 @@ const dm_sans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'HNG Portal',
+  title: 'HNG Connect',
   description:
-    'HNG Portal connects HNG interns both past and present, and companies in one dynamic ecosystem turning job seeking into real opportunities.',
+    'HNG Connect connects HNG interns both past and present, and companies in one dynamic ecosystem turning job seeking into real opportunities.',
 };
 export default function RootLayout({
   children,
@@ -28,10 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={` ${brics.variable} ${dm_sans.variable} antialiased`}>
-        <Providers>
+        <QueryProviders>
           <Toaster position="top-right" richColors theme="light" />
           {children}
-        </Providers>
+        </QueryProviders>
       </body>
     </html>
   );
