@@ -1,11 +1,12 @@
 'use client';
-import React from 'react';
+
 import Link from 'next/link';
 
-import { SignInForm } from './components/sign-in-form';
 import { Button } from '@/components/ui/button';
-import GoogleColoredIcon from '@/components/icons/google-colored-icon';
-import { HngLogo } from '../components/hng-logo';
+import { SignInForm } from './_components/sign-in-form';
+
+import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
+import GoogleColoredIcon from '@/public/assets/auth/icons/google-colored-icon';
 import { siginWithGoogle } from '@/api/actions/auth';
 
 export default function SignInPage() {

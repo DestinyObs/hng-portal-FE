@@ -1,4 +1,4 @@
-import { homepageIcons } from '@/components/icons';
+import { homepageIcons } from '@/public/assets/auth/icons';
 
 export const STEPS = [
   {

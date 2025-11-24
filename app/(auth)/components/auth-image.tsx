@@ -86,7 +86,7 @@ export function AuthImage() {
         <div className="relative z-10 bottom-8">
           <Image
             src="/images/auth-img.png"
-            alt="HNG Portal Professionals"
+            alt="HNG Connect Professionals"
             width={336}
             height={336}
             className="rounded-lg"

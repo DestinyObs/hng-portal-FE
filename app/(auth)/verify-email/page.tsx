@@ -1,9 +1,16 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
 import { z } from 'zod';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,15 +25,12 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { verifyOtp, resendOtp } from '@/api/actions/auth';
-import { SuccessResponse } from '@/app/(auth)/components/types';
-import { Loader2 } from 'lucide-react';
+
 import { useAuthStore } from '@/store/auth';
 import { APIResponse } from '@/api/config.server';
+import { verifyOtp, resendOtp } from '@/api/actions/auth';
+
+import { SuccessResponse } from '@/types/api-response';
 
 const FormSchema = z.object({
   pin: z
@@ -37,9 +41,10 @@ const FormSchema = z.object({
 
 const VerifyEmailPage = () => {
   const router = useRouter();
+  const { email, hydrated } = useAuthStore();
+
   const [timeLeft, setTimeLeft] = useState(180);
   const [canResendOTP, setCanResendOTP] = useState(false);
-  const { email, hydrated } = useAuthStore();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -114,14 +119,14 @@ const VerifyEmailPage = () => {
 
   const otpSlotClasses = `
     w-[60px] h-[60px] md:w-[100px] md:h-[100px]
-    rounded-xl border-2 text-center text-5xl text-[#969696] font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
+    rounded-xl border-2 text-center text-5xl text-black-200 font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
   `;
 
   return (
     <div className="flex flex-col items-center gap-7">
       <Image
         src="/images/hng-logo.png"
-        alt="HNG Portal"
+        alt="HNG Connect"
         width={180}
         height={40}
       />
@@ -134,7 +139,7 @@ const VerifyEmailPage = () => {
           Verify Email
         </h1>
 
-        <p className="text-[#969696] font-medium text-sm md:text-lg">
+        <p className="text-black-200 font-medium text-sm md:text-lg">
           We sent a code to{' '}
           <span className="md:font-bold md:text-[#1A1A1A]">
             {hydrated ? email : 'your email'}
@@ -172,7 +177,7 @@ const VerifyEmailPage = () => {
                   </InputOTP>
                 </FormControl>
                 <FormMessage />
-                <FormDescription className="text-[#969696] text-sm mt-2">
+                <FormDescription className="text-black-200 text-sm mt-2">
                   {!canResendOTP ? (
                     <>Resend code in {formatTime(timeLeft)}</>
                   ) : (

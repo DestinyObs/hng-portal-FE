@@ -7,12 +7,12 @@ import {
   makeOtpRequest,
 } from '../config.server';
 import { cookies } from 'next/headers';
-import { SuccessResponse } from '@/app/(auth)/components/types';
 import { signIn } from '@/auth';
 
 export const siginWithGoogle = async () => {
   return await signIn('google', { redirectTo: '/dashboard' });
 };
+import { SuccessResponse } from '@/types/api-response';
 
 export const login = async (formData: LoginType) => {
   const res = await makePublicRequest<UserData, LoginType>('/auth/login', {
