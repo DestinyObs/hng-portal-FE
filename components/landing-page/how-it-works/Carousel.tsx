@@ -2,12 +2,13 @@
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
-import { STEPS } from '@/lib/constants/constants';
+import { STEPS } from '@/constants/constants';
 import { useCarousel } from './useCarousel';
 import { useEffect } from 'react';
 
 export default function Carousel() {
-  const { activePage, isPaused, setIsPaused, nextPage, setActivePage } = useCarousel();
+  const { activePage, isPaused, setIsPaused, nextPage, setActivePage } =
+    useCarousel();
 
   useEffect(() => {
     if (isPaused) return;
@@ -45,15 +46,15 @@ export default function Carousel() {
       <div className="flex justify-center mt-6 gap-2">
         {STEPS.map((_, index) => (
           <button
-  key={index}
-  onClick={() => setActivePage(index)}
-  className={`h-1.5 rounded-full transition-all duration-300 ${
-    index === activePage
-      ? 'w-11 bg-primary-blue'
-      : 'w-1.5 bg-[#C4C6C7]'
-  }`}
-  aria-label={`Go to step ${index + 1}`}
-/>
+            key={index}
+            onClick={() => setActivePage(index)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              index === activePage
+                ? 'w-11 bg-primary-blue'
+                : 'w-1.5 bg-[#C4C6C7]'
+            }`}
+            aria-label={`Go to step ${index + 1}`}
+          />
         ))}
       </div>
     </motion.div>

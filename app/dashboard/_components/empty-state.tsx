@@ -1,0 +1,23 @@
+import Image from 'next/image';
+
+export default function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4">
+      <Image
+        src="/assets/dashboard/empty_dashboard.png"
+        alt="dashboard empty state"
+        width={300}
+        height={300}
+        className="w-auto h-auto"
+      />
+      <div>
+        <p className="text-[#232323] text-xl sm:text-2xl font-ag font-bold leading-6 sm:leading-8">
+          You haven’t posted any jobs yet
+        </p>
+        <p className="text-[#5E5C5C] text-xs sm:text-base font-ag sm:font-dm_sans font-normal sm:leading-6">
+          Start your first listing and find the right talent in minutes.
+        </p>
+      </div>
+    </div>
+  );
+}

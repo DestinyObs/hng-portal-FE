@@ -26,4 +26,3 @@ export const STEPS = [
     imagePlaceholder: '/images/external-page-talent-3.png',
   },
 ];
-
