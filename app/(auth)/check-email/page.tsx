@@ -30,7 +30,7 @@ export default function CompanyCheckEmailPage() {
   const mockEmail = 'johndoe@gmail.com';
 
   return (
-    <Card className="w-full max-w-lg border-0 shadow-none py-0">
+    <Card className="w-full max-w-lg mx-auto border-0 shadow-none py-0">
       <CardHeader className="text-center px-0">
         <CardTitle className="text-h2 font-bold mb-4">Reset password</CardTitle>
         <p className={cn('text-subtitle', 'text-muted-foreground')}>
@@ -61,7 +61,9 @@ export default function CompanyCheckEmailPage() {
           <p className="text-muted-foreground text-sm mb-4">
             Didn&apos;t receive the email?
           </p>
-          <Button variant="outline">Resend Reset Email</Button>
+          <Button className="w-full" variant="outline">
+            Resend Reset Email
+          </Button>
         </div>
       </CardContent>
     </Card>

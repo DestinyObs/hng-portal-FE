@@ -34,23 +34,23 @@ function SelectTrigger({
       data-slot="select-trigger"
       className={cn(
         // Base styles matching Input component
-        "border-gray-50 relative flex w-full items-center rounded-lg border transition-[color,box-shadow] outline-none cursor-pointer",
-        "h-14 min-w-0 px-3",
+        'border-gray-50 relative flex w-full items-center rounded-lg border transition-[color,box-shadow] outline-none cursor-pointer',
+        'h-14 min-w-0 px-3',
         // Text styles
-        "text-foreground text-sm font-medium",
-        "data-placeholder:text-text-secondary",
+        'text-foreground text-sm font-medium',
+        'data-placeholder:text-text-secondary',
         // Focus and open styles
-        "focus:border-primary-blue focus-within:border-primary-blue",
-        "data-[state=open]:border-primary-blue",
+        'focus:border-primary-blue focus-within:border-primary-blue',
+        'data-[state=open]:border-primary-blue',
         // Invalid/valid states
-        "aria-invalid:border-primary-error",
+        'aria-invalid:border-primary-error',
         // Disabled state
-        "disabled:cursor-not-allowed disabled:opacity-50",
+        'disabled:cursor-not-allowed disabled:opacity-50',
         // Icon styles
         "[&_svg:not([class*='text-'])]:text-text-secondary",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6",
         // Value styles
-        "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
+        '*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2',
         className,
       )}
       {...props}

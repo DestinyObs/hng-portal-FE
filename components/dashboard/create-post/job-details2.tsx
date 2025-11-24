@@ -1,5 +1,4 @@
 'use client';
-
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -18,20 +17,25 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ChevronLeft } from 'lucide-react';
-import Input from '@/components/ui/input';
-import {
-  CANDIDATE_LOCATIONS,
-  HNG_TRACKS,
-  JOB_TYPES,
-  JobFormData,
-} from '@/types/create-new-job';
 import {
   JobDetailsStep2FormData,
   jobDetailsStep2Schema,
+  JobPostPayload,
 } from '@/schemas/create-post.schema';
+import {
+  useCountries,
+  useJobTypes,
+  useStates,
+  useTracks,
+  useWorkModes,
+} from '@/app/hooks/lookups';
+import { createPost } from '@/api/actions/create-post';
+import { toast } from 'sonner';
+import Loading from '@/app/loading';
+import { useAuthStore } from '@/store/auth';
 
 interface JobDetailsStep2Props {
-  initialData: Partial<JobDetailsStep2FormData>;
+  initialData: Partial<JobPostPayload>;
   onUpdate: (data: Partial<JobDetailsStep2FormData>) => void;
   onPrev: () => void;
 }
@@ -41,45 +45,82 @@ export default function JobDetailsStep2({
   onUpdate,
   onPrev,
 }: JobDetailsStep2Props) {
+  const { data: tracks, isLoading: tracksLoading } = useTracks();
+  const { data: workModes, isLoading: workModesLoading } = useWorkModes();
+  const { data: countries, isLoading: countriesLoading } = useCountries();
+  const { data: states, isLoading: statesLoading } = useStates();
+  const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
+  const { user } = useAuthStore();
+
+  const isLoading =
+    tracksLoading ||
+    workModesLoading ||
+    countriesLoading ||
+    statesLoading ||
+    jobTypesLoading;
+
   const {
     control,
     handleSubmit,
-    getValues,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<JobDetailsStep2FormData>({
     resolver: zodResolver(jobDetailsStep2Schema),
     defaultValues: {
-      hngTrack: initialData.hngTrack || '',
-      jobType: initialData.jobType || '',
-      candidateLocation: initialData.candidateLocation || '',
-      state: initialData.state || '',
-      country: initialData.country || '',
-      jobPrice: initialData.jobPrice || '',
+      track_id: initialData.track_id || '',
+      job_type_id: initialData.job_type_id || '',
+      state_id: initialData.state_id || '',
+      country_id: initialData.country_id || '',
     },
     mode: 'onChange',
   });
 
-  const onSubmit = (data: JobDetailsStep2FormData) => {
+  const onSubmit = async (data: JobDetailsStep2FormData) => {
     onUpdate(data);
+    const formData = {
+      company_id: user?.company?.id || '',
+      title: initialData.title || ' ',
+      description: initialData.description || ' ',
+      acceptance_criteria: initialData.acceptance_criteria || ' ',
+      state_id: data.state_id || ' ',
+      country_id: data.country_id || ' ',
+      price: initialData.price || ' ',
+      track_id: data.track_id || ' ',
+      category_id: initialData.category_id || ' ',
+      job_type_id: data.job_type_id || ' ',
+      work_mode_id: data.work_mode_id || ' ',
+      skills: initialData.skills || [],
+    };
+
+    console.log(formData);
+    try {
+      const response = await createPost(formData);
+      console.log(response);
+
+      if (response && !response?.success) {
+        toast.error(response.message);
+        return;
+      }
+
+      toast.success('Your job has been posted successfully');
+      reset();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   };
 
   const handleSaveDraft = (): void => {
-    const formData = getValues();
-    const formDataUpdate: Partial<JobFormData> = {
-      hngTrack: formData.hngTrack,
-      jobType: formData.jobType,
-      candidateLocation: formData.candidateLocation,
-      jobPrice: formData.jobPrice,
-      state: formData.state,
-      country: formData.country,
-    };
-    onUpdate(formDataUpdate);
+    // const formData = getValues();
   };
 
+  if (isLoading) return <Loading />;
+
   return (
-    <div className="space-y-6">
-      <Card className="border">
-        <div className="p-6 border-b">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <Card className="border border-black-50 shadow-none">
+        <div className="p-6 border-b border-black-50">
           <h2 className="text-2xl text-tertiary-500 font-semibold">
             Create a New Job Post
           </h2>
@@ -100,7 +141,7 @@ export default function JobDetailsStep2({
           <div className="space-y-3">
             <label className="text-sm font-semibold">Select Track</label>
             <Controller
-              name="hngTrack"
+              name="track_id"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
@@ -108,17 +149,18 @@ export default function JobDetailsStep2({
                     <SelectValue placeholder="Select HNG Track" />
                   </SelectTrigger>
                   <SelectContent>
-                    {HNG_TRACKS.map((track) => (
-                      <SelectItem key={track} value={track}>
-                        {track}
-                      </SelectItem>
-                    ))}
+                    {tracks &&
+                      tracks.map((track: { id: string; name: string }) => (
+                        <SelectItem key={track.id} value={track.id}>
+                          {track.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               )}
             />
-            {errors.hngTrack && (
-              <p className="text-xs text-red-500">{errors.hngTrack.message}</p>
+            {errors.track_id && (
+              <p className="text-xs text-red-500">{errors.track_id.message}</p>
             )}
           </div>
 
@@ -128,7 +170,7 @@ export default function JobDetailsStep2({
               Select Employment Type
             </label>
             <Controller
-              name="jobType"
+              name="job_type_id"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
@@ -136,25 +178,28 @@ export default function JobDetailsStep2({
                     <SelectValue placeholder="Select the job Type" />
                   </SelectTrigger>
                   <SelectContent>
-                    {JOB_TYPES.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
+                    {JOBTYPES &&
+                      JOBTYPES.map((type: { id: string; name: string }) => (
+                        <SelectItem key={type.id} value={type.id}>
+                          {type.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               )}
             />
-            {errors.jobType && (
-              <p className="text-xs text-red-500">{errors.jobType.message}</p>
+            {errors.job_type_id && (
+              <p className="text-xs text-red-500">
+                {errors.job_type_id.message}
+              </p>
             )}
           </div>
 
-          {/* Candidate Location Select */}
+          {/* Candidate Location Select - lookup not available for this */}
           <div className="space-y-3">
-            <label className="text-sm font-semibold">Select Word Mode</label>
+            <label className="text-sm font-semibold">Select Work Mode</label>
             <Controller
-              name="candidateLocation"
+              name="work_mode_id"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
@@ -162,11 +207,14 @@ export default function JobDetailsStep2({
                     <SelectValue placeholder="Where is the candidate location?..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {CANDIDATE_LOCATIONS.map((location) => (
-                      <SelectItem key={location} value={location}>
-                        {location}
-                      </SelectItem>
-                    ))}
+                    {workModes &&
+                      workModes.map(
+                        (location: { id: string; name: string }) => (
+                          <SelectItem key={location.id} value={location.id}>
+                            {location.name}
+                          </SelectItem>
+                        ),
+                      )}
                   </SelectContent>
                 </Select>
               )}
@@ -174,9 +222,9 @@ export default function JobDetailsStep2({
             <p className="text-xs text-muted-foreground">
               Work from home or coming to the office or both
             </p>
-            {errors.candidateLocation && (
+            {errors.work_mode_id && (
               <p className="text-xs text-red-500">
-                {errors.candidateLocation.message}
+                {errors.work_mode_id.message}
               </p>
             )}
           </div>
@@ -186,39 +234,46 @@ export default function JobDetailsStep2({
             <label className="text-sm font-semibold">Job Location</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Controller
-                name="state"
+                name="state_id"
                 control={control}
                 render={({ field }) => (
-                  <Input type="text" placeholder="State" {...field} />
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full border-input bg-white">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {states &&
+                        states.map((location: { id: string; name: string }) => (
+                          <SelectItem key={location.id} value={location.id}>
+                            {location.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
                 )}
               />
               <Controller
-                name="country"
+                name="country_id"
                 control={control}
                 render={({ field }) => (
-                  <Input type="text" placeholder="Country" {...field} />
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full border-input bg-white">
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries &&
+                        countries.map(
+                          (location: { id: string; name: string }) => (
+                            <SelectItem key={location.id} value={location.id}>
+                              {location.name}
+                            </SelectItem>
+                          ),
+                        )}
+                    </SelectContent>
+                  </Select>
                 )}
               />
             </div>
-          </div>
-
-          {/* Job Price */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold">Job Price</label>
-            <Controller
-              name="jobPrice"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  type="text"
-                  placeholder="How much are you willing to pay?....."
-                  {...field}
-                />
-              )}
-            />
-            {errors.jobPrice && (
-              <p className="text-xs text-red-500">{errors.jobPrice.message}</p>
-            )}
           </div>
         </CardContent>
       </Card>
@@ -252,13 +307,14 @@ export default function JobDetailsStep2({
           </Button>
 
           <Button
-            onClick={handleSubmit(onSubmit)}
+            // onClick={handleSubmit(onSubmit)}
+            disabled={isSubmitting}
             className="bg-[#00AEFF] hover:bg-[#0088cc] text-white"
           >
-            Publish Job
+            {isSubmitting ? 'Publishing...' : 'Publish Job'}
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
