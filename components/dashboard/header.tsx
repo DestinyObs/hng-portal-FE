@@ -1,17 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logo from '../../public/assets/images/landing-page/shared/logo.png';
-import { usePathname } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { logout } from '@/api/actions/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+
 import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
+
+import { logout } from '@/api/actions/auth';
 import { APIResponse } from '@/api/config.server';
-import { SuccessResponse } from '@/app/(auth)/components/types';
+import { SuccessResponse } from '@/types/api-response';
+
+import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 
 const dashboardLinks = [
   { label: 'HOME', href: '/dashboard', active: true },
@@ -20,10 +22,11 @@ const dashboardLinks = [
 ];
 
 const DashboardHeader = () => {
+  const router = useRouter();
   const pathname = usePathname();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const router = useRouter();
 
   const { mutate: a_logout, isPending: isLoggingOut } = useMutation({
     mutationKey: ['logout'],
