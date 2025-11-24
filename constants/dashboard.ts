@@ -2,7 +2,7 @@ export const JOB_CARDS = [
   {
     title: 'Visual Designer',
     status: true,
-    applicants: '24',
+    applicants: 24,
     location: 'Lagos, Nigeria',
     workType: 'remote',
     entryLevel: true,
@@ -11,7 +11,7 @@ export const JOB_CARDS = [
   {
     title: 'Software Engineer',
     status: true,
-    applicants: '30',
+    applicants: 30,
     location: 'New York, USA',
     workType: 'remote',
     entryLevel: false,
@@ -20,7 +20,7 @@ export const JOB_CARDS = [
   {
     title: 'Marketing Manager',
     status: false,
-    applicants: '15',
+    applicants: 15,
     location: 'London, UK',
     workType: 'hybrid',
     entryLevel: false,
@@ -29,7 +29,7 @@ export const JOB_CARDS = [
   {
     title: 'Data Analyst',
     status: true,
-    applicants: '10',
+    applicants: 10,
     location: 'Paris, France',
     workType: 'full time',
     entryLevel: true,
