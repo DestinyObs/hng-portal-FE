@@ -7,6 +7,7 @@ export const authRoutes = [
   '/reset-password',
   '/verify-email',
   '/check-email',
+  '/onboarding',
 ];
 
 export const publicRoutes = [
