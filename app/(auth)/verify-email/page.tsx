@@ -114,7 +114,7 @@ const VerifyEmailPage = () => {
 
   const otpSlotClasses = `
     w-[60px] h-[60px] md:w-[100px] md:h-[100px]
-    rounded-xl border-2 text-center text-5xl text-[#969696] font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
+    rounded-xl border-2 text-center text-5xl text-black-200 font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
   `;
 
   return (
@@ -134,7 +134,7 @@ const VerifyEmailPage = () => {
           Verify Email
         </h1>
 
-        <p className="text-[#969696] font-medium text-sm md:text-lg">
+        <p className="text-black-200 font-medium text-sm md:text-lg">
           We sent a code to{' '}
           <span className="md:font-bold md:text-[#1A1A1A]">
             {hydrated ? email : 'your email'}
@@ -172,7 +172,7 @@ const VerifyEmailPage = () => {
                   </InputOTP>
                 </FormControl>
                 <FormMessage />
-                <FormDescription className="text-[#969696] text-sm mt-2">
+                <FormDescription className="text-black-200 text-sm mt-2">
                   {!canResendOTP ? (
                     <>Resend code in {formatTime(timeLeft)}</>
                   ) : (

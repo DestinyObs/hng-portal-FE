@@ -43,3 +43,18 @@ export type JobPostPayload = {
   work_mode_id: string;
   skills: string[];
 };
+
+export type JobDraftPayload = {
+  company_id?: string;
+  title?: string;
+  description?: string;
+  acceptance_criteria?: string;
+  state_id?: string;
+  country_id?: string;
+  price?: string;
+  track_id?: string;
+  category_id?: string;
+  job_type_id?: string;
+  work_mode_id?: string;
+  skills?: string[];
+};

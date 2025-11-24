@@ -192,11 +192,11 @@ export default function AddPortfolioProjects() {
                   className="hidden"
                   accept=".jpg,.jpeg,.png,.webp,.pdf"
                 />
-                <span className="text-sm text-[#969696]">
+                <span className="text-sm text-black-200">
                   {fileNames[index] || 'No file'}
                 </span>
               </div>
-              <p className="text-sm text-[#969696] mt-3 font-light md:text-base">
+              <p className="text-sm text-black-200 mt-3 font-light md:text-base">
                 Please upload files, size less than 100KB
               </p>
               {errors.projects?.[index]?.file && (
