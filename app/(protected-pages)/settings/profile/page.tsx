@@ -27,7 +27,7 @@ export default function ProfilePage() {
         <h3 className="text-2xl font-bold text-[#232323]">
           Profile Information
         </h3>
-        <p className="font-normal text-base text-[#969696]">
+        <p className="font-normal text-base text-black-200">
           Tell employers about yourself
         </p>
       </div>
@@ -75,7 +75,7 @@ export default function ProfilePage() {
               <input
                 type="text"
                 placeholder="John Doe"
-                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
               />
             </div>
 
@@ -86,9 +86,9 @@ export default function ProfilePage() {
               <textarea
                 rows={4}
                 placeholder="Brief description..."
-                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
               />
-              <p className="text-xs font-normal text-[#969696]">
+              <p className="text-xs font-normal text-black-200">
                 Brief description for your profile
               </p>
             </div>
@@ -101,7 +101,7 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   placeholder="0-1 year"
-                  className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+                  className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                 />
               </div>
               <div className="space-y-2 flex-1">
@@ -111,7 +111,7 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   placeholder="What is the job title?"
-                  className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+                  className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                 />
               </div>
             </div>

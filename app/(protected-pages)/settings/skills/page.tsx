@@ -56,7 +56,7 @@ export default function SkillsAndExperiencePage() {
         <h3 className="text-2xl font-bold text-[#232323]">
           Skills & Experience
         </h3>
-        <p className="font-normal text-base text-[#969696]">
+        <p className="font-normal text-base text-black-200">
           Showcase your expertise and work history
         </p>
       </div>
@@ -71,7 +71,7 @@ export default function SkillsAndExperiencePage() {
               placeholder="Add skills to help employers find you"
               value={skillInput}
               onChange={(e) => setSkillInput(e.target.value)}
-              className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+              className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && skillInput.trim() !== '') {
                   e.preventDefault();

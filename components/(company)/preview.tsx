@@ -121,7 +121,7 @@ export const PreviewJob = () => {
             {user?.company?.name}
           </p>
           <div
-            className={`text-[14px] capitalize text-[#969696] font-['var(--font-dm_sans)'] flex ${dm_sans.className}`}
+            className={`text-[14px] capitalize text-black-200 font-['var(--font-dm_sans)'] flex ${dm_sans.className}`}
           >
             {/* work-mode */}
             <span>{workMode?.name}</span>

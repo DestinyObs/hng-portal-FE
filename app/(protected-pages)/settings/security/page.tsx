@@ -8,7 +8,7 @@ export default function SecurityPage() {
     <div className="w-full pt-8 lg:pt-30 justify-center pb-10 px-4 lg:px-0">
       <div className="w-full mb-6 space-y-1 text-center md:text-left">
         <h3 className="text-2xl font-bold text-[#232323]">Security</h3>
-        <p className="font-normal text-base text-[#969696]">
+        <p className="font-normal text-base text-black-200">
           Manage your account security
         </p>
       </div>
@@ -23,7 +23,7 @@ export default function SecurityPage() {
               <input
                 type="password"
                 placeholder="Enter current password"
-                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
               />
             </div>
 
@@ -34,7 +34,7 @@ export default function SecurityPage() {
               <input
                 type="password"
                 placeholder="Enter new password"
-                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
               />
             </div>
 
@@ -45,7 +45,7 @@ export default function SecurityPage() {
               <input
                 type="password"
                 placeholder="Confirm new password"
-                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-[#969696]"
+                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
               />
             </div>
 

@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useState } from 'react';
-import { countries, cities } from '@/data/location';
+import { cities, countries } from '@/constants/dashboard';
 
 export default function CompanyDetailsForm() {
   const router = useRouter();
@@ -173,7 +173,7 @@ export default function CompanyDetailsForm() {
                   <Input
                     placeholder="Enter company size"
                     {...field}
-                    className="h-10 rounded-[8px]"
+                    className="h-10 rounded-lg"
                   />
                 </FormControl>
                 <FormMessage className="animate-in slide-in-from-top-1 duration-200" />

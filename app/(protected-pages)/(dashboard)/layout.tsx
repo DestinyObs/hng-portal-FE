@@ -1,18 +1,21 @@
 'use client';
-import Sidebar from '@/components/dashboard/sidebar';
-import Header from '@/components/dashboard/header';
+
 import { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-const Layout = ({ children }: { children: ReactNode }) => {
+import Header from '@/components/dashboard/header';
+import Sidebar from '@/components/dashboard/sidebar';
+
+const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const isSettingsPage = pathname?.startsWith('/dashboard/settings');
+
   return (
     <div className=" flex flex-col bg-white-100">
       {/* HEADER */}
       <Header />
       {/* SIDEBAR & MAIN CONTENT */}
       <div
-        className={`flex flex-1 min-h-0 gap-6 ${isSettingsPage ? 'p-0' : 'p-6'}`}
+        className={`flex flex-1 min-h-0 gap-6 ${isSettingsPage ? 'p-0' : 'p-8'}`}
       >
         {/* Sidebar */}
         {!isSettingsPage && <Sidebar />}
@@ -23,4 +26,4 @@ const Layout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default Layout;
+export default DashboardLayout;

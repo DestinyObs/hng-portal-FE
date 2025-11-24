@@ -47,19 +47,19 @@ export default function JobCard({
           </div>
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
-              <span className="capitalize text-sm sm:text-xs text-[#969696] leading-5">
+              <span className="capitalize text-sm sm:text-xs text-black-200 leading-5">
                 {job.workType}
               </span>
               <div className="rounded-full size-1 bg-[#E8E8E8]" />
-              <span className="capitalize text-sm sm:text-xs text-[#969696] leading-5">
+              <span className="capitalize text-sm sm:text-xs text-black-200 leading-5">
                 Entry Level
               </span>
               <div className="rounded-full size-1 bg-[#E8E8E8]" />
-              <span className="text-sm sm:text-xs text-[#969696] leading-5">
+              <span className="text-sm sm:text-xs text-black-200 leading-5">
                 {job.location}
               </span>
             </div>
-            <span className="w-full text-sm sm:text-xs text-[#969696] leading-5">
+            <span className="w-full text-sm sm:text-xs text-black-200 leading-5">
               {job.updatedAt}
             </span>
           </div>
