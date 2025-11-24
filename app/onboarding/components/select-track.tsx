@@ -1,85 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Palette,
-  Database,
-  Smartphone,
-  BarChart3,
-  Server,
-  ShieldCheck,
-  Lightbulb,
-} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTalentOnboardTab } from '@/store/onboarding';
 import clsx from 'clsx';
-
-const tracks = [
-  {
-    id: 'ui-ux',
-    icon: Palette,
-    title: 'UI/UX Design',
-    description: 'I design clean, intuitive, user-centered digital experiences',
-    color: 'bg-purple-100 text-purple-600',
-  },
-  {
-    id: 'frontend',
-    icon: Palette,
-    title: 'Frontend Development',
-    description:
-      'I build responsive, interactive interfaces using modern web technologies',
-    color: 'bg-orange-100 text-orange-600',
-  },
-  {
-    id: 'backend',
-    icon: Server,
-    title: 'Backend Development',
-    description:
-      'I develop secure, scalable server logic and APIs that power applications',
-    color: 'bg-green-100 text-green-600',
-  },
-  {
-    id: 'mobile',
-    icon: Smartphone,
-    title: 'Mobile Development',
-    description: 'I create fast, user-friendly mobile apps for iOS and Android',
-    color: 'bg-blue-100 text-blue-600',
-  },
-  {
-    id: 'product',
-    icon: Lightbulb,
-    title: 'Product Management',
-    description:
-      'I define product strategy and guide teams to build solutions users love',
-    color: 'bg-teal-100 text-teal-600',
-  },
-  {
-    id: 'data-science',
-    icon: BarChart3,
-    title: 'Data Science',
-    description:
-      'I analyze data and build models to uncover insights and drive decisions',
-    color: 'bg-indigo-100 text-indigo-600',
-  },
-  {
-    id: 'devops',
-    icon: Database,
-    title: 'DevOps Engineering',
-    description:
-      'I streamline development and deployment with automation and scalable infrastructure.',
-    color: 'bg-purple-100 text-purple-600',
-  },
-  {
-    id: 'cybersecurity',
-    icon: ShieldCheck,
-    title: 'Cybersecurity',
-    description:
-      'I protect systems, data, and networks from security risks and strengthening defenses',
-    color: 'bg-amber-100 text-amber-600',
-  },
-];
+import { tracks } from './static-data';
+import BackButton from './back-button';
 
 export default function TrackSelection() {
   const [selectedTrack, setSelectedTrack] = useState<string>('');
@@ -104,7 +32,8 @@ export default function TrackSelection() {
   };
 
   return (
-    <div className="w-[90%] max-w-6xl mx-auto py-24">
+    <div className="w-[90%] max-w-6xl mx-auto py-24 relative">
+      <BackButton />
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 lg:text-4xl">
           Select Your Track
@@ -114,7 +43,7 @@ export default function TrackSelection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 md:gap-5 md:gap-y-8">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4 mb-6 md:gap-5 md:gap-y-8">
         {tracks.map((track) => {
           const Icon = track.icon;
           const isSelected = selectedTrack === track.id;
@@ -124,10 +53,10 @@ export default function TrackSelection() {
               key={track.id}
               type="button"
               onClick={() => handleTrackChange(track.id)}
-              className={`cursor-pointer relative text-left rounded-xl border-2 p-6 flex flex-col justify-start transition-all hover:shadow bg-white ${
+              className={`cursor-pointer relative text-left rounded-xl border-2 p-3 flex flex-col justify-start transition-all hover:shadow bg-white md:p-6 ${
                 isSelected
                   ? 'border-primary-blue bg-blue-50 shadow'
-                  : 'border-gray-50 hover:border-primary-blue'
+                  : 'border-gray-100/25 hover:border-primary-blue'
               }`}
             >
               {isSelected ? (
@@ -145,7 +74,7 @@ export default function TrackSelection() {
                   </svg>
                 </div>
               ) : (
-                <div className="absolute top-7 right-5 w-5 h-5 bg-transparent border rounded-full flex items-center justify-center">
+                <div className="absolute top-7 right-5 w-5 h-5 bg-transparent border border-gray-100/35 rounded-full flex items-center justify-center">
                   <svg
                     className="w-3 h-3 text-white"
                     fill="currentColor"
@@ -171,11 +100,11 @@ export default function TrackSelection() {
                 />
               </div>
 
-              <h3 className="font-semibold text-[#343330] mb-2 text-lg md:text-2xl">
+              <h3 className="font-semibold text-[#343330] md:mb-2 text-base md:text-2xl">
                 {track.title}
               </h3>
 
-              <p className="text-[#343330] leading-relaxed font-dm_sans">
+              <p className="hidden text-[#343330] leading-relaxed font-dm_sans md:block">
                 {track.description}
               </p>
             </button>
@@ -194,8 +123,8 @@ export default function TrackSelection() {
           <Button
             variant={'default'}
             onClick={handleSubmit}
-            size={'lg'}
-            className="w-full md:w-88 py-6"
+            size={'sm'}
+            className="w-full md:w-88"
           >
             Continue
           </Button>
@@ -205,7 +134,7 @@ export default function TrackSelection() {
           href={'/dashboard'}
           className="mt-5 text-primary-blue font-medium text-lg hover:text-primary-blue/60 transition-colors"
         >
-          Complete Set Up Later
+          Complete Later
         </Link>
       </div>
     </div>

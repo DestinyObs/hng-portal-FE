@@ -98,12 +98,12 @@ export default function AddPortfolioProjects() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2 lg:text-4xl text-center">
           Add Portfolio Projects
         </h1>
-        <p className="text-gray-100 md:text-lg text-center">
+        <p className="text-gray-100 md:text-lg text-center font-dm_sans">
           Showcase your best work and achievements.
         </p>
       </div>
 
-      <div className="space-y-6 mt-10 border border-gray-50 pt-5 px-4 rounded-xl shadow-xs">
+      <div className="space-y-6 mt-10 border border-gray-100/25 pt-5 px-4 rounded-xl shadow-xs">
         {fields.map((field, index) => (
           <div
             key={field.id}
@@ -177,7 +177,7 @@ export default function AddPortfolioProjects() {
                 Upload file{' '}
                 <span className="text-gray-100/60 font-normal">(optional)</span>
               </Label>
-              <div className="mt-2 flex items-center gap-3 py-2 px-3.5 rounded-md border border-gray-50">
+              <div className="mt-2 flex items-center gap-3 py-2 px-3.5 rounded-md border border-gray-100/25">
                 <label
                   htmlFor={`projects.${index}.file`}
                   className="cursor-pointer inline-flex items-center px-4 py-2 border border-primary-blue rounded-sm shadow-sm text-sm font-medium text-primary-blue bg-white hover:bg-gray-50 focus:outline-none"
@@ -213,7 +213,7 @@ export default function AddPortfolioProjects() {
         type="button"
         variant="outline"
         onClick={() => append({ name: '', url: '', file: undefined })}
-        className="mt-9 w-full border shadow-xs border-gray-50 hover:bg-gray-50 py-6 text-black text-lg font-normal"
+        className="mt-9 w-full border shadow-xs border-gray-100/25 hover:border-gray-100/25 py-6 text-black text-lg font-normal"
       >
         <Plus className="w-4 h-4 mr-2" />
         Add Another Project
@@ -223,8 +223,8 @@ export default function AddPortfolioProjects() {
         <Button
           variant={'default'}
           onClick={handleContinue}
-          size={'lg'}
-          className="w-full md:w-82 py-6 text-lg"
+          size={'sm'}
+          className="w-full md:w-82"
         >
           Continue
         </Button>
@@ -233,7 +233,7 @@ export default function AddPortfolioProjects() {
           href={'/dashboard'}
           className="mt-5 text-primary-blue font-medium text-lg hover:text-primary-blue/60 transition-colors"
         >
-          Complete Set Up Later
+          Complete Later
         </Link>
       </div>
     </div>

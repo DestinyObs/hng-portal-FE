@@ -66,7 +66,7 @@ export interface Company {
 
 export interface UserData {
   user: User;
-  token: '1|abc123def456ghi789jkl012mno345pqr678';
+  token: string;
 }
 
 export interface LoginType {

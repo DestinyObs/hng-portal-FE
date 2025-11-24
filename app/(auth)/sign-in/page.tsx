@@ -6,6 +6,7 @@ import { SignInForm } from './components/sign-in-form';
 import { Button } from '@/components/ui/button';
 import GoogleColoredIcon from '@/components/icons/google-colored-icon';
 import { HngLogo } from '../components/hng-logo';
+import { siginWithGoogle } from '@/api/actions/auth';
 
 export default function SignInPage() {
   return (
@@ -33,7 +34,12 @@ export default function SignInPage() {
         </div>
       </div>
 
-      <Button variant="outline" className="w-full" size={'lg'}>
+      <Button
+        variant="outline"
+        className="w-full"
+        size={'lg'}
+        onClick={siginWithGoogle}
+      >
         <GoogleColoredIcon className="mr-2 h-4 w-4" />
         Sign in with Google
       </Button>

@@ -81,31 +81,36 @@ const SideTab = () => {
   const tabsList = tabConfigurations[userType];
 
   return (
-    <section className="mt-6 hidden fixed left-12 top-1/2 -translate-y-1/2 lg:block font-dm_sans">
+    <section
+      className="mt-6 hidden fixed left-12 top-1/2 -translate-y-1/2 lg:block"
+      style={{ fontFamily: 'DM Sans' }}
+    >
       <div className="flex flex-col">
         {tabsList.map((t, i) => (
           <aside key={i} className="flex items-start gap-5 group">
             <div className="flex flex-col items-center">
               <div
                 className={clsx(
-                  'rounded-md shadow border p-3 transition-colors',
+                  'rounded-lg shadow border p-2.5 transition-colors',
                   currentTab === t.type
                     ? 'text-[#040609] bg-primary-50 border-[#4E92E1]'
                     : 'text-[#E7E8E9] border-gray-50',
                 )}
               >
                 <t.icon
-                  className={`size-6 ${currentTab === t.type ? 'text-[#4E92E1]' : 'text-[#E7E8E9]'}`}
+                  className={`size-5 font-bold ${currentTab === t.type ? 'text-[#4E92E1]' : 'text-[#E7E8E9]'}`}
                 />
               </div>
               <hr
-                className={clsx('group-last:hidden h-8 w-0.5 bg-[#E7ECE8]')}
+                className={clsx(
+                  'group-last:hidden h-8 border-t-0 w-0.5 bg-[#E7ECE8]',
+                )}
               />
             </div>
-            <div>
+            <div className="mb-2">
               <p
                 className={clsx(
-                  'text-base font-semibold',
+                  'text-base font-medium',
                   currentTab === t.type ? 'text-[#111827]' : 'text-[#92959C]',
                 )}
               >
@@ -113,8 +118,8 @@ const SideTab = () => {
               </p>
               <p
                 className={clsx(
-                  'font-light text-sm',
-                  currentTab === t.type ? 'text-[#111827]' : 'text-[#B5B7BC]',
+                  'font-normal text-sm',
+                  currentTab === t.type ? 'text-[#414652]' : 'text-[#B5B7BC]',
                 )}
               >
                 {t.subtitle}
