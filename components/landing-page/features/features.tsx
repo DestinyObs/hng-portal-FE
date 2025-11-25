@@ -5,7 +5,7 @@ import FeatureCard from './feature-card';
 import { Feature } from '@/lib/types';
 const features: Feature[] = [
   {
-    image: 'features/Layered.png',
+    image: 'features/Layer.png',
     header: 'Verified Talent Pool',
     description:
       'No guesswork. Every talent profile is reviewed and tied to real skill history.',
