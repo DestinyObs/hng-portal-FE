@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default async function NotFound() {
   const { user } = await getServerCookies();
-  const userRole = user.roles[0].name;
+  const userRole = user?.roles[0]?.name;
 
   return (
     <div className="h-screen flex items-center flex-col justify-center bg-white px-5 relative">
@@ -35,10 +35,10 @@ export default async function NotFound() {
                 ? '/company/dashboard'
                 : userRole === 'talent'
                   ? '/talent/dashboard'
-                  : ''
+                  : '/'
             }
           >
-            Back to Dashboard
+            {userRole ? 'Back to Dashboard' : 'Back to Home'}
           </Link>
         </Button>
       </div>
