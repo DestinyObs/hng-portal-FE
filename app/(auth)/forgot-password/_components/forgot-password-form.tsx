@@ -1,16 +1,7 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
-import { useMutation } from '@tanstack/react-query';
-
-import { forgotPassword } from '@/api/actions/auth';
-import { APIResponse } from '@/api/config.server';
-
-import { toast } from 'sonner';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import Input from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,16 +11,22 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Loader2 } from 'lucide-react';
 
-import { SuccessResponse } from '@/types/api-response';
+import Input from '@/components/ui/input';
 import {
-  ForgotPasswordFormValues,
-  ForgotPasswordSchema,
+  CompanyForgotPasswordFormValues,
+  companyForgotPasswordSchema,
 } from '@/validations/forgot-password';
+import { useMutation } from '@tanstack/react-query';
+import { forgotPassword } from '@/api/actions/auth';
+import { toast } from 'sonner';
+import { SuccessResponse } from '@/types/api-response'; // Updated import
+import { APIResponse } from '@/api/config.server';
 
 export function ForgotPasswordForm() {
-  const form = useForm<ForgotPasswordFormValues & FieldValues>({
-    resolver: zodResolver(ForgotPasswordSchema),
+  const form = useForm<CompanyForgotPasswordFormValues & FieldValues>({
+    resolver: zodResolver(companyForgotPasswordSchema),
     defaultValues: {
       email: '',
     },
@@ -57,7 +54,7 @@ export function ForgotPasswordForm() {
     },
   });
 
-  async function onSubmit(data: ForgotPasswordFormValues) {
+  async function onSubmit(data: CompanyForgotPasswordFormValues) {
     a_forgotPassword({ email: data.email });
   }
 

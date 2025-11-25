@@ -1,18 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
-import { useSearchParams, useRouter } from 'next/navigation';
-
-import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
 import { useForm, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { APIResponse } from '@/api/config.server';
-import { resetPassword } from '@/api/actions/auth';
-
-import Input from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -22,12 +11,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
+import { Loader2 } from 'lucide-react';
+import { useEffect } from 'react';
+import Input from '@/components/ui/input';
 import {
-  ResetPasswordFormValues,
-  ResetPasswordSchema,
+  CompanyResetPasswordFormValues,
+  companyResetPasswordSchema,
 } from '@/validations/reset-password';
-import { SuccessResponse } from '@/types/api-response';
+import { useMutation } from '@tanstack/react-query';
+import { resetPassword } from '@/api/actions/auth';
+import { toast } from 'sonner';
+import { SuccessResponse } from '@/types/api-response'; // Updated import
+import { useSearchParams, useRouter } from 'next/navigation';
+import { APIResponse } from '@/api/config.server';
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -35,8 +31,8 @@ export function ResetPasswordForm() {
   const email = searchParams.get('email') || '';
   const token = searchParams.get('token') || '';
 
-  const form = useForm<ResetPasswordFormValues & FieldValues>({
-    resolver: zodResolver(ResetPasswordSchema),
+  const form = useForm<CompanyResetPasswordFormValues & FieldValues>({
+    resolver: zodResolver(companyResetPasswordSchema),
     defaultValues: {
       email: email,
       token: token,
@@ -74,7 +70,7 @@ export function ResetPasswordForm() {
     },
   });
 
-  async function onSubmit(data: ResetPasswordFormValues) {
+  async function onSubmit(data: CompanyResetPasswordFormValues) {
     a_resetPassword({
       email: data.email,
       token: data.token,

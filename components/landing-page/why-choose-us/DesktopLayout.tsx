@@ -4,7 +4,6 @@ import WhyDescription from './WhyDescription';
 const DesktopLayout = () => (
   <div className="hidden lg:block max-w-7xl mx-auto">
     <div className="flex flex-col gap-6">
-      
       <div className="flex items-start gap-10">
         <h2 className="font-medium text-4xl text-primary-black w-[285px] shrink-0 leading-tight">
           Why

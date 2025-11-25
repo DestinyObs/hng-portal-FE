@@ -19,7 +19,10 @@ function AccordionItem({
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn('border-b last:border-b-0 data-[state=open]:border rounded-3xl border-[#E1F6FF]', className)}
+      className={cn(
+        'border-b last:border-b-0 data-[state=open]:border rounded-3xl border-[#E1F6FF]',
+        className,
+      )}
       {...props}
     />
   );
@@ -41,11 +44,10 @@ function AccordionTrigger({
         {...props}
       >
         <span>{children}</span>
-        <span className='bg-white-50 group-data-[state=open]:bg-gray-50 p-2 flex justify-center items-center rounded-full '>
+        <span className="bg-white-50 group-data-[state=open]:bg-gray-50 p-2 flex justify-center items-center rounded-full ">
           <Plus className="text-muted-foreground pointer-events-none size-5 shrink-0 duration-200 group-data-[state=open]:hidden" />
           <X className="hidden text-muted-foreground pointer-events-none size-5 shrink-0 duration-200 group-data-[state=open]:inline-block" />
         </span>
-        
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

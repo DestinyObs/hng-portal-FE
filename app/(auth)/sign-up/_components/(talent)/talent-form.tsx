@@ -1,63 +1,69 @@
 'use client';
 
-import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-
-import { toast } from 'sonner';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { TalentSignUpFormStepTwo } from './form-step-two';
-import { TalentSignUpFormStepOne } from './form-step-one';
-
-import { useAuthStore } from '@/store/auth';
-import { register } from '@/api/actions/auth';
-import { APIResponse } from '@/api/config.server';
-
-import { UserData } from '@/lib/types';
 import {
-  TalentSignUpFormValues,
   talentSignUpSchema,
+  type TalentSignUpFormValues,
 } from '@/validations/sign-up';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import Input from '@/components/ui/input';
+import { Loader2 } from 'lucide-react';
+
+import { useMutation } from '@tanstack/react-query';
+import { register } from '@/api/actions/auth';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/auth';
+import { APIResponse } from '@/api/config.server';
+import { RegisterType, UserData } from '@/lib/types';
 
 export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
-  const [step, setStep] = useState(1);
   const router = useRouter();
   const setEmail = useAuthStore((state) => state.setEmail);
-  const setId = useAuthStore((state) => state.setId);
 
   const form = useForm<TalentSignUpFormValues>({
     resolver: zodResolver(talentSignUpSchema),
-    shouldUnregister: false, // Keep unmounted fields in form state
     defaultValues: {
       firstname: '',
       lastname: '',
       email: '',
       password: '',
-      password_confirmation: '',
-      acceptTerms: false,
-      phone_number: '',
-      country: '',
+      role: 'talent',
     },
   });
 
   const { mutate: registerTalent, isPending } = useMutation({
     mutationKey: ['sign-up-talent'],
     mutationFn: register,
-    onSuccess: (response: APIResponse<UserData | null>) => {
+    onSuccess: (
+      response: APIResponse<UserData | null>,
+      variables: RegisterType,
+    ) => {
       if (response.success) {
-        if (response.data?.user?.email) {
-          setEmail(response.data.user.email);
-          setId(response.data.user.id);
+        const userEmail = response.data?.user?.email || variables.email;
+        if (userEmail) {
+          setEmail(userEmail);
+          toast.success(
+            'Registration successful! Please check your email to verify your account.',
+          );
+          router.push(`/verify-email?email=${encodeURIComponent(userEmail)}`);
+        } else {
+          toast.error(
+            'Registration succeeded, but could not retrieve your email. Please try signing in.',
+          );
+          router.push('/sign-in');
         }
-        toast.success(
-          'Registration successful! Please check your email to verify your account.',
-        );
-        router.push('/verify-email');
       } else {
         let errorMessage = response.message || 'An unknown error occurred.';
         if (response.errors) {
@@ -72,44 +78,92 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
   });
 
   const onSubmit = (data: TalentSignUpFormValues) => {
-    registerTalent({ ...data, role });
-  };
-
-  const handleNext = async () => {
-    const isValid = await form.trigger([
-      'firstname',
-      'lastname',
-      'email',
-      'password',
-      'password_confirmation',
-      'acceptTerms',
-    ]);
-    if (isValid) {
-      setStep(2);
-    }
+    registerTalent({
+      ...data,
+      password_confirmation: data.password,
+    });
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {step === 1 && <TalentSignUpFormStepOne form={form} />}
-        {step === 2 && <TalentSignUpFormStepTwo form={form} />}
+    <div className="mx-auto max-w-md">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="flex gap-4">
+            <FormField
+              control={form.control}
+              name="firstname"
+              render={({ field, fieldState }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your first name"
+                      aria-invalid={!!fieldState.error}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field, fieldState }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your last name"
+                      aria-invalid={!!fieldState.error}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-        <div className="flex flex-col space-y-4">
-          {step === 2 && (
-            <Button
-              type="button"
-              onClick={() => setStep(1)}
-              className="w-full"
-              variant="outline"
-            >
-              Back
-            </Button>
-          )}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Email Address</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your email address"
+                    type="email"
+                    aria-invalid={!!fieldState.error}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter password"
+                    inputType="password"
+                    aria-invalid={!!fieldState.error}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button
-            type={step === 1 ? 'button' : 'submit'}
-            onClick={step === 1 ? handleNext : undefined}
+            type="submit"
             className="w-full"
             disabled={isPending}
             variant="default"
@@ -117,14 +171,12 @@ export function TalentSignUpForm({ role }: { role: 'talent' | 'company' }) {
           >
             {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : step === 1 ? (
-              'Continue'
             ) : (
               'Create Account'
             )}
           </Button>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </div>
   );
 }

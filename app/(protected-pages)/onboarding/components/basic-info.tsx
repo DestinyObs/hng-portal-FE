@@ -13,6 +13,7 @@ import Input from '@/components/ui/input';
 import { useTalentOnboardTab } from '@/store/onboarding';
 import UserProfileIcon from '@/public/assets/auth/icons/user-profile';
 import DocumentUploadIcon from '@/public/assets/auth/icons/document-upload';
+import { Textarea } from '@/components/ui/textarea';
 
 // Zod validation schema
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -104,7 +105,7 @@ export default function BasicInformation() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2 lg:text-4xl text-center">
           Basic Information
         </h1>
-        <p className="text-gray-100 md:text-lg text-center">
+        <p className="text-gray-100 md:text-lg text-center font-dm_sans">
           Tell Us About Yourself
         </p>
       </div>
@@ -159,7 +160,7 @@ export default function BasicInformation() {
         <div>
           <Label
             htmlFor="role"
-            className="text-base lg:text-lg font-normal text-[#181818]"
+            className="text-base font-normal text-[#181818]"
           >
             Role
           </Label>
@@ -176,18 +177,15 @@ export default function BasicInformation() {
 
         {/* Bio Field */}
         <div>
-          <Label
-            htmlFor="bio"
-            className="text-base lg:text-lg font-normal text-[#181818]"
-          >
+          <Label htmlFor="bio" className="text-base font-normal text-[#181818]">
             Short Bio
           </Label>
-          <textarea
+          <Textarea
             id="bio"
             {...register('bio')}
             placeholder="eg. I like designing concepts"
-            rows={4}
-            className="mt-1 w-full px-3 py-2 border border-gray-50 rounded-md shadow-xs text-base focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent resize-none"
+            rows={12}
+            className="mt-1 min-h-32"
           />
           {errors.bio && (
             <p className="text-red-500 text-xs mt-1">{errors.bio.message}</p>
@@ -199,8 +197,8 @@ export default function BasicInformation() {
         <Button
           variant={'default'}
           onClick={handleContinue}
-          size={'lg'}
-          className="w-full md:w-88 py-6 text-lg"
+          size={'sm'}
+          className="w-full md:w-88"
         >
           Continue
         </Button>
@@ -209,7 +207,7 @@ export default function BasicInformation() {
           href={'/dashboard'}
           className="mt-5 text-primary-blue font-medium text-lg hover:text-primary-blue/60 transition-colors"
         >
-          Complete Set Up Later
+          Complete Later
         </Link>
       </div>
     </div>
