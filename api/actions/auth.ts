@@ -38,6 +38,37 @@ export const login = async (formData: LoginType) => {
   return res;
 };
 
+export async function google_signin(accessToken: string, role: string) {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/auth/google`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        access_token: accessToken,
+        role: role,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Authentication failed');
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Backend auth error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Authentication failed',
+    };
+  }
+}
+
 export const register = async (formData: RegisterType) => {
   const res = await makePublicRequest<UserData, RegisterType>(
     '/auth/register',

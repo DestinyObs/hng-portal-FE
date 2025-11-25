@@ -8,8 +8,27 @@ import { Button } from '@/components/ui/button';
 import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
 import GoogleColoredIcon from '@/public/assets/auth/icons/google-colored-icon';
 import { siginWithGoogle } from '@/api/actions/auth';
+import { signIn } from 'next-auth/react';
 
 export default function SignInPage() {
+  const handleGoogleSignIn = async () => {
+    // if (!selectedRole) {
+    //   alert('Please select a role');
+    //   return;
+    // }
+
+    // setIsLoading(true);
+
+    try {
+      await signIn('google', {
+        callbackUrl: `/auth/callback?role=${'talent'}`,
+      });
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      // setIsLoading(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-md mx-auto py-12 px-6">
       <div className="text-center mb-8">
@@ -39,7 +58,7 @@ export default function SignInPage() {
         variant="outline"
         className="w-full"
         size={'lg'}
-        onClick={siginWithGoogle}
+        onClick={handleGoogleSignIn}
       >
         <GoogleColoredIcon className="mr-2 h-4 w-4" />
         Sign in with Google
