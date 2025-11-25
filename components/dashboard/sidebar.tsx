@@ -3,11 +3,13 @@ import Image from 'next/image';
 import { Button } from '../ui/button';
 import { AlertCircle } from 'lucide-react';
 import { Progress } from '../ui/progress';
-import { useState } from 'react';
 import { SidebarInsights } from './sidebar-insights';
+import Link from 'next/link';
+import { useAuthStore } from '@/store/auth';
 
 const DashboardSidebar = () => {
-  const [role] = useState('company');
+  const { user } = useAuthStore();
+  const role = user?.roles[0].name || '';
   return (
     <aside className="w-72 hidden lg:flex flex-col gap-5">
       {/* profile-card */}
@@ -16,7 +18,7 @@ const DashboardSidebar = () => {
         <div className="relative w-40 h-40 mx-auto">
           <Image
             src={
-              role === 'company'
+              role === 'employer'
                 ? '/images/company-profile.png'
                 : '/images/talent-profile.jpg'
             }
@@ -27,12 +29,24 @@ const DashboardSidebar = () => {
         </div>
 
         {/* name */}
-        <h1 className="text-h5 font-bold text-gray-900">Nexo Labs</h1>
-        <p className="text-body-1 text-gray-500">Creative Design</p>
+        <h1 className="text-h5 font-bold text-gray-900 capitalize">
+          {role === 'employer'
+            ? user?.company?.name
+            : `${user?.firstname} ${user?.lastname}`}
+        </h1>
+        <p className="text-body-1 text-gray-500">
+          {role === 'employer'
+            ? user?.status
+            : `${user?.firstname} ${user?.lastname}`}
+        </p>
 
         {/* Actions */}
         <div className="flex flex-col gap-5 mt-auto w-full">
-          {role === 'company' && <Button size={'md'}>Post a Job</Button>}
+          {role === 'employer' && (
+            <Button className="cursor-pointer" size={'md'} asChild>
+              <Link href={'/company/job/create'}>Post a Job</Link>
+            </Button>
+          )}
           <Button size={'sm'} className="text-base" variant={'outlineGray'}>
             Request Verification
           </Button>
@@ -60,10 +74,11 @@ const DashboardSidebar = () => {
         <div className="flex flex-col mt-2 w-full">
           <Button
             variant={'outline'}
+            asChild
             size={'sm'}
             className="text-body-1 text-primary-blue bg-primary-50"
           >
-            Finish your profile
+            <Link href={'/settings/profile'}>Finish your profile</Link>
           </Button>
         </div>
 

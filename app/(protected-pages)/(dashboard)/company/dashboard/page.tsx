@@ -1,19 +1,28 @@
+'use client';
 import Link from 'next/link';
-
 import JobCard from '@/components/dashboard/job-card';
 import EmptyState from '@/components/dashboard/empty-state';
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import { DASHBOARD_CARD, JOB_CARDS } from '@/constants/dashboard';
+import { useAuthStore } from '@/store/auth';
 
 export default function CompanyDashboardPage() {
   const job = true;
+  const { user } = useAuthStore();
+  const role = user?.roles[0].name || '';
 
   return (
     <>
       <div className="flex flex-col gap-8 sm:gap-6">
         <div className="flex flex-col gap-1 items-center sm:items-start">
           <h1 className="text-[#232323] text-2xl font-bold leading-8">
-            Welcome back, Nexo Labs!
+            Welcome back,{' '}
+            <span className="capitalize">
+              {role === 'employer'
+                ? user?.company?.name
+                : `${user?.firstname} ${user?.lastname}`}
+            </span>
+            !
           </h1>
           <p className="text-base font-normal leading-6 text-[#5E5C5C]">
             Your hiring dashboard is ready. Complete your profile to attract

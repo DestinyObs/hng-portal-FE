@@ -53,7 +53,7 @@ const DashboardHeader = () => {
   };
 
   return (
-    <header className="bg-white shadow-md ">
+    <header className="bg-white shadow-md sticky top-0 z-50">
       <div className=" px-4 xl:px-24 py-6">
         <nav
           className="flex items-center justify-between"
