@@ -9,7 +9,10 @@ import { useAuthStore } from '@/store/auth';
 
 const DashboardSidebar = () => {
   const { user } = useAuthStore();
-  const role = user?.roles[0].name || '';
+
+  // Workaround: Infer role based on the presence of the company object
+  const role = user?.company ? 'employer' : 'talent';
+
   return (
     <aside className="w-72 hidden lg:flex flex-col gap-5">
       {/* profile-card */}
