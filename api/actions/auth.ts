@@ -7,6 +7,11 @@ import {
   makeOtpRequest,
 } from '../config.server';
 import { cookies } from 'next/headers';
+import { signIn } from '@/auth';
+
+export const siginWithGoogle = async () => {
+  return await signIn('google', { redirectTo: '/dashboard' });
+};
 import { SuccessResponse } from '@/types/api-response';
 
 export const login = async (formData: LoginType) => {
@@ -19,6 +24,12 @@ export const login = async (formData: LoginType) => {
     (await cookies()).set('token', res.data?.token as string, {
       httpOnly: true,
       secure: true,
+      sameSite: 'strict',
+      path: '/',
+    });
+
+    (await cookies()).set('user', JSON.stringify(res.data.user), {
+      httpOnly: false,
       sameSite: 'strict',
       path: '/',
     });
@@ -100,5 +111,9 @@ export const logout = async () => {
       method: 'POST',
     },
   );
+  if (res.success) {
+    (await cookies()).delete('user');
+    (await cookies()).delete('token');
+  }
   return res;
 };

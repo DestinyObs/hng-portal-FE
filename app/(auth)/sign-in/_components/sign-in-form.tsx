@@ -25,9 +25,11 @@ import { login } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
 import { APIResponse } from '@/api/config.server';
 import { UserData } from '@/lib/types';
+import { useAuthStore } from '@/store/auth';
 
 export function SignInForm() {
   const router = useRouter();
+  const { setData } = useAuthStore();
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -42,9 +44,18 @@ export function SignInForm() {
     mutationKey: ['sign-in'],
     mutationFn: login,
     onSuccess: (response: APIResponse<UserData | null>) => {
-      if (response.success) {
+      if (response.success && response.data?.user) {
+        setData(response.data?.user);
+        const userRole = response.data.user.roles[0].name;
+
         toast.success('Login successful!');
-        router.push('/company/dashboard');
+        router.push(
+          userRole === 'employer'
+            ? '/company/dashboard'
+            : userRole === 'talent'
+              ? '/talent/dashboard'
+              : '',
+        );
       } else {
         let errorMessage = response.message || 'An unknown error occurred.';
         if (response.errors) {
