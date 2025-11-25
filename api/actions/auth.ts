@@ -60,13 +60,29 @@ export const register = async (formData: RegisterType) => {
 };
 
 export const verifyOtp = async (formData: { otp: string }) => {
-  const res = await makeOtpRequest<SuccessResponse, { otp: number }>(
+  const res = await makeOtpRequest<UserData, { otp: number }>(
     '/otp/verify-otp',
     {
       method: 'POST',
       body: { otp: parseInt(formData.otp, 10) },
     },
   );
+
+  if (res.success && res.data?.token) {
+    (await cookies()).set('token', res.data.token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/',
+    });
+
+    (await cookies()).set('user', JSON.stringify(res.data.user), {
+      httpOnly: false,
+      sameSite: 'strict',
+      path: '/',
+    });
+  }
+
   return res;
 };
 
