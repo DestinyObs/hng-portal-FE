@@ -4,6 +4,23 @@ export interface JobFormData {
   category_id: string;
   title: string;
   description: string;
+  skills: { id: string; name: string }[];
+  acceptance_criteria: string;
+
+  // Step 2
+  track_id?: string;
+  job_type_id?: string;
+  work_mode_id?: string;
+  price?: string;
+  state?: string;
+  country?: string;
+}
+export interface JobFormData2 {
+  // Step 1
+
+  category_id: string;
+  title: string;
+  description: string;
   skills: string[];
   acceptance_criteria: string;
 
@@ -18,8 +35,9 @@ export interface JobFormData {
 
 export interface JobDetailsProps {
   initialData: JobFormData;
-  onUpdate: (data: Partial<JobFormData>) => void;
+  onUpdate: (data: Partial<JobFormData2>) => void;
   onNext?: () => void;
+  id?: string;
 }
 
 export interface RichTextToolbarProps {
