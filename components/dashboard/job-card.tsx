@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-export default function JobCard({ job }: JobCardProps) {
+export default function JobCard({ job }: { job: JobCardProps }) {
   const navigate = useRouter();
 
   return (

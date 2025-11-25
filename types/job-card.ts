@@ -1,15 +1,13 @@
 export interface JobCardProps {
-  job: Partial<{
-    id: string;
-    title: string;
-    status: string;
-    applicants?: number;
-    job_type: {
-      name: string;
-    };
-    created_at: string | undefined;
-    countries: {
-      name: string;
-    };
-  }>;
+  id: string;
+  title: string;
+  status: string;
+  applicants?: number;
+  job_type: {
+    name: string;
+  };
+  created_at: string | undefined;
+  countries: {
+    name: string;
+  };
 }

@@ -11,7 +11,7 @@ const layout = ({ children }: { children: ReactNode }) => {
       </div>
 
       <Link
-        href="/dashboard/jobs"
+        href="/company/dashboard"
         className="flex items-center gap-2 font-medium hover:opacity-80 transition-opacity py-6"
       >
         <ArrowLeft className="w-4 h-4  " />
