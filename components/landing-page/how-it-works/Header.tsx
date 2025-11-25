@@ -12,7 +12,8 @@ export default function Header() {
         Simple Steps To Get You Moving Forward
       </h2>
       <p className="text-h5 text-gray-600 max-w-4xl mx-auto">
-        A simple, transparent workflow that helps talents get discovered and recruiters hire with confidence
+        A simple, transparent workflow that helps talents get discovered and
+        recruiters hire with confidence
       </p>
     </div>
   );

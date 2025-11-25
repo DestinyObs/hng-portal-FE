@@ -4,7 +4,9 @@ const WhyTitle = () => (
   <>
     {/* Mobile + Tablet */}
     <div className="text-center lg:hidden mb-8">
-      <h2 className="text-primary-black font-medium text-4xl">Why Choose Us?</h2>
+      <h2 className="text-primary-black font-medium text-4xl">
+        Why Choose Us?
+      </h2>
     </div>
 
     {/* Desktop */}
