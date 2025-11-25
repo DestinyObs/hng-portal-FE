@@ -70,17 +70,15 @@ export default function CompanyDetailsForm() {
       } else {
         if (result.details?.errors) {
           // Show field-specific validation errors
-          Object.entries(result.details.errors).forEach(
-            ([field, messages]: [string, any]) => {
-              const errorMessage = Array.isArray(messages)
-                ? messages.join(', ')
-                : messages;
+          Object.entries(result.details.errors).forEach(([field, messages]) => {
+            const errorMessage = Array.isArray(messages)
+              ? messages.join(', ')
+              : messages;
 
-              toast.error(`${field}`, {
-                description: errorMessage,
-              });
-            },
-          );
+            toast.error(`${field}`, {
+              description: errorMessage,
+            });
+          });
         } else {
           // Show general error message
           toast.error('Failed to save company details', {

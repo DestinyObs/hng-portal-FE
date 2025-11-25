@@ -38,26 +38,21 @@ export async function saveCompanyOnboarding(
     if (state) apiFormData.append('state', state);
     if (country) apiFormData.append('country', country);
 
-    const result = await makeAuthenticatedRequest('/employer/onboarding', {
+    const result = await makeAuthenticatedRequest<
+      CompanyOnboardingResult['data']
+    >('/employer/onboarding', {
       method: 'POST',
-      body: apiFormData as any,
+      body: apiFormData as unknown as Record<string, unknown>,
       headers: {},
     });
-    if (result.success) {
-      return { success: true, data: result.data };
-    } else {
-      return {
-        success: false,
-        error: result.message || 'Failed to save company information',
-        details: result,
-      };
-    }
-  } catch (error: any) {
+
+    return result as CompanyOnboardingResult;
+  } catch (error) {
     return {
       success: false,
       error:
         error instanceof Error ? error.message : 'An unexpected error occurred',
-      details: error,
+      details: error instanceof Error ? { message: error.message } : undefined,
     };
   }
 }
