@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTalentOnboardTab } from '@/store/onboarding';
 import clsx from 'clsx';
-import { tracks } from './static-data';
 import BackButton from './back-button';
+import { TRACKS } from '@/constants/talent-onboarding';
 
 export default function TrackSelection() {
   const [selectedTrack, setSelectedTrack] = useState<string>('');
@@ -44,7 +44,7 @@ export default function TrackSelection() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4 mb-6 md:gap-5 md:gap-y-8">
-        {tracks.map((track) => {
+        {TRACKS.map((track) => {
           const Icon = track.icon;
           const isSelected = selectedTrack === track.id;
 
