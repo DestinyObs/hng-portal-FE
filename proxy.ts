@@ -26,7 +26,11 @@ export default async function middleware(req: NextRequest) {
     : null;
 
   // Handle auth routes FIRST (sign-in, sign-up, etc.)
-  if (authRoutes.includes(pathname) || pathname.startsWith('/onboarding/')) {
+  if (
+    authRoutes.includes(pathname) ||
+    pathname.startsWith('/onboarding/') ||
+    pathname.startsWith('/sign-up/')
+  ) {
     if (isLoggedIn && userData) {
       // Get user role
       const userRole = userData?.roles?.[0]?.name;

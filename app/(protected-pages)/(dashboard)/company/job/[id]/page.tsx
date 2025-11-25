@@ -1,5 +1,5 @@
-const page = () => {
-  return <div>page</div>;
-};
+import { PreviewJob } from '@/components/(company)/preview';
 
-export default page;
+export default function page() {
+  return <PreviewJob />;
+}
