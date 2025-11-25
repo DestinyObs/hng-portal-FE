@@ -38,12 +38,11 @@ export async function saveCompanyOnboarding(
     if (state) apiFormData.append('state', state);
     if (country) apiFormData.append('country', country);
 
-    const result = await makeAuthenticatedRequest<any>('/employer/onboarding', {
+    const result = await makeAuthenticatedRequest('/employer/onboarding', {
       method: 'POST',
       body: apiFormData as any,
       headers: {},
     });
-
     if (result.success) {
       return { success: true, data: result.data };
     } else {
