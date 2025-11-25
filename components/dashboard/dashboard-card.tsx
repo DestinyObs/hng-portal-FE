@@ -19,7 +19,6 @@ export default function DashboardCard({
     color: string;
   };
 }) {
-  const cardColor = 'red';
   return (
     <Card
       className={`col-span-1 gap-3 px-4 sm:px-6 py-4 rounded-[15px] bg-white border-[0.5px]`}

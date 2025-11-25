@@ -88,7 +88,7 @@ const DashboardSidebar = () => {
             <AlertCircle width={16} height={16} />
           </div>
           <div className="text-sm text-tertiary-100">
-            {role === 'company'
+            {role === 'employer'
               ? 'Complete your profile to attract stronger applicants.'
               : 'Complete your profile to attract more employers'}
           </div>
