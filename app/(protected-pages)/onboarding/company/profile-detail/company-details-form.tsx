@@ -22,13 +22,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useState } from 'react';
-import { cities, countries } from '@/constants/dashboard';
+import { countries, cities as states } from '@/constants/dashboard';
+import { saveCompanyOnboarding } from '@/api/actions/onboarding';
+import { toast } from 'sonner';
 
 export default function CompanyDetailsForm() {
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
   const [showIndustryOther, setShowIndustryOther] = useState(false);
   const [showSizeOther, setShowSizeOther] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CompanyDetailsSchema>({
     resolver: zodResolver(companyDetailsSchema),
@@ -39,22 +42,58 @@ export default function CompanyDetailsForm() {
       size: '',
       sizeOther: '',
       website: '',
-      city: '',
+      state: '',
       country: '',
     },
   });
 
   const { isValid } = form.formState;
 
-  const onSubmit = (data: CompanyDetailsSchema) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value) {
-        formData.append(key, value);
+  const onSubmit = async (data: CompanyDetailsSchema) => {
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+          formData.append(key, value);
+        }
+      });
+
+      const result = await saveCompanyOnboarding(formData);
+
+      if (result.success) {
+        setOpenDialog(true);
+        toast.success('Company details saved successfully!', {
+          description: 'Your company profile is now complete.',
+        });
+      } else {
+        if (result.details?.errors) {
+          // Show field-specific validation errors
+          Object.entries(result.details.errors).forEach(([field, messages]) => {
+            const errorMessage = Array.isArray(messages)
+              ? messages.join(', ')
+              : messages;
+
+            toast.error(`${field}`, {
+              description: errorMessage,
+            });
+          });
+        } else {
+          // Show general error message
+          toast.error('Failed to save company details', {
+            description:
+              result.error || 'Please check your information and try again.',
+          });
+        }
       }
-    });
-    // Show success modal after form submission
-    setOpenDialog(true);
+    } catch (error) {
+      toast.error('An unexpected error occurred', {
+        description: 'Please check your connection and try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleGoToDashboard = () => {
@@ -208,37 +247,8 @@ export default function CompanyDetailsForm() {
           )}
         />
 
-        {/* City + Country Grid */}
+        {/* State + Country Grid */}
         <div className="grid grid-cols-2 gap-4">
-          {/* City */}
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem className="space-y-2">
-                <FormLabel>City</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full h-10 rounded-lg">
-                      <SelectValue placeholder="Select city" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="max-h-[200px]">
-                    {cities.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
-              </FormItem>
-            )}
-          />
-
           {/* Country */}
           <FormField
             control={form.control}
@@ -267,30 +277,45 @@ export default function CompanyDetailsForm() {
               </FormItem>
             )}
           />
+
+          {/*   State */}
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel>State</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full h-10 rounded-lg">
+                      <SelectValue placeholder="Select State" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="max-h-[200px]">
+                    {states.map((state) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
+              </FormItem>
+            )}
+          />
         </div>
         <div className="flex flex-col gap-4 mt-10 w-full md:w-[80%] mx-auto">
           {/* Continue Button */}
           <Button
             type="submit"
+            disabled={!isValid || isSubmitting}
             className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
           >
-            Continue
+            {isSubmitting ? 'Saving...' : 'Continue'}
           </Button>
-
-          {/* <Button
-            type="button"
-            onClick={() => setOpenDialog(true)}
-            className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
-          >
-            Continue
-          </Button>
-
-          <Button
-            type="submit"
-            className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
-          >
-            Continue
-          </Button>*/}
         </div>
       </form>
       <ConfirmationModal
