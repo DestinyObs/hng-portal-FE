@@ -14,7 +14,7 @@ type TabsProps = {
     tabsName: string;
     TabView: React.ComponentType;
   }[];
-  variant?: 'pills' | 'tabs' | null | undefined;
+  variant?: 'pills' | 'tabs' | 'ghost' | null | undefined;
 };
 
 const tabStyles = cva(
@@ -33,6 +33,14 @@ const tabStyles = cva(
           'p-0.5 shadow-none  h-11',
           '*:rounded-none *:px-3 *:data-[state=active]:border-b-primary-blue *:hover:text-primary-blue *:data-[state=active]:bg-background',
         ),
+
+        ghost: cn(
+          'bg-transparent p-0.5 shadow-none h-11 rounded-xs',
+          '*:text-gray-100',
+          '*:hover:text-primary-300',
+          '*:data-[state=active]:text-primary-300',
+          '*:data-[state=active]:bg-transparent',
+        ),
       },
     },
     defaultVariants: { variant: 'tabs' },
@@ -41,7 +49,7 @@ const tabStyles = cva(
 
 export function Tabs({ tabs, variant }: TabsProps) {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
+    <div className="flex w-full flex-col gap-6">
       <TabsUI defaultValue={tabs[0]?.value}>
         {/*  Tab Buttons*/}
         <TabsList className={cn(tabStyles({ variant }))}>
@@ -52,9 +60,9 @@ export function Tabs({ tabs, variant }: TabsProps) {
               value={value}
             >
               {tabsName}
-              <span className="px-2 group-hover:bg-primary-blue group-data-[state=active]:bg-primary-blue bg-[#9A9A98] text-white rounded-[3px]">
+              {/* <span className="px-2 group-hover:bg-primary-blue group-data-[state=active]:bg-primary-blue bg-[#9A9A98] text-white rounded-[3px]">
                 {'0' + (index + 1)}
-              </span>
+              </span> */}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -62,7 +70,7 @@ export function Tabs({ tabs, variant }: TabsProps) {
         {/*  Tab Content Panels  */}
         {tabs.map(({ value, TabView }) => (
           <TabsContent key={value} value={value}>
-            <Card>
+            <Card className="bg-transparent border-0 shadow-none">
               <TabView />
             </Card>
           </TabsContent>
