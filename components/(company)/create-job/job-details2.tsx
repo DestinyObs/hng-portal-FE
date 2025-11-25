@@ -102,7 +102,7 @@ export default function JobDetailsStep2({
     console.log(formData);
     // save using zustand
     setNewPost(formData);
-    router.push('/dashboard/create-post/preview');
+    router.push('/company/job/preview');
   };
 
   const handleSaveDraft = async () => {

@@ -1,15 +1,12 @@
 'use client';
-
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
-import { useAuthStore } from '@/store/auth';
-
-import { useGetAllJobs } from '@/hooks/jobs';
-import { DASHBOARD_CARD } from '@/constants/dashboard';
-
 import JobCard from '@/components/dashboard/job-card';
 import EmptyState from '@/components/dashboard/empty-state';
 import DashboardCard from '@/components/dashboard/dashboard-card';
+import { DASHBOARD_CARD } from '@/constants/dashboard';
+import { useAuthStore } from '@/store/auth';
+import { useGetAllJobs } from '@/hooks/jobs';
+import { Loader2 } from 'lucide-react';
 
 export default function CompanyDashboardPage() {
   const { user } = useAuthStore();
