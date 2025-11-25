@@ -8,6 +8,7 @@ import {
 } from '../config.server';
 import { cookies } from 'next/headers';
 import { signIn } from '@/auth';
+import { ChangePasswordFormValues } from '@/validations/change-password';
 
 export const siginWithGoogle = async () => {
   return await signIn('google', { redirectTo: '/dashboard' });
@@ -102,6 +103,16 @@ export const resetPassword = async (formData: {
     },
   );
   return res;
+};
+
+export const changePassword = async (data: ChangePasswordFormValues) => {
+  return await makeAuthenticatedRequest<
+    SuccessResponse,
+    ChangePasswordFormValues
+  >('/talent/profile/change-password', {
+    method: 'PUT',
+    body: data,
+  });
 };
 
 export const logout = async () => {
