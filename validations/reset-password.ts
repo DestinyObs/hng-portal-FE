@@ -1,6 +1,6 @@
-import z from 'zod';
+import * as z from 'zod';
 
-export const ResetPasswordSchema = z
+export const companyResetPasswordSchema = z
   .object({
     email: z.string().email({ message: 'Invalid email address' }),
     token: z.string().min(1, { message: 'Token is required' }),
@@ -17,4 +17,6 @@ export const ResetPasswordSchema = z
     path: ['confirmPassword'],
   });
 
-export type ResetPasswordFormValues = z.infer<typeof ResetPasswordSchema>;
+export type CompanyResetPasswordFormValues = z.infer<
+  typeof companyResetPasswordSchema
+>;

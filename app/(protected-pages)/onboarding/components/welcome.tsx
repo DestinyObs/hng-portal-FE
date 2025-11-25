@@ -17,19 +17,20 @@ const Welcome = () => {
           Let&apos;s set up your professional profile so companies can discover
           you.
         </p>
-        <div className="w-full flex flex-col gap-3 mt-4 lg:w-1/2">
+        <div className="w-full flex flex-col gap-3 mt-4 lg:w-[45%]">
           <Button
             variant={'default'}
-            size={'lg'}
+            size={'sm'}
             onClick={() => navigate.push('/onboarding/talent?page=profile')}
+            className="font-normal"
           >
             Set Up Profile
           </Button>
           <Button
             variant={'outline'}
-            size={'lg'}
+            size={'sm'}
             onClick={() => navigate.push('/dashboard')}
-            className="bg-primary-50 text-primary-blue hover:bg-primary-50"
+            className="font-normal bg-primary-50 text-primary-blue hover:bg-primary-50"
           >
             Skip to Dashboard
           </Button>
