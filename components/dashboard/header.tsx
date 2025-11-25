@@ -34,6 +34,7 @@ const DashboardHeader = () => {
     onSuccess: (response: APIResponse<SuccessResponse | null>) => {
       if (response.success) {
         toast.success('Logged out successfully!');
+        localStorage.removeItem('auth-store');
         router.push('/sign-in');
       } else {
         let errorMessage = response.message || 'Failed to log out.';
@@ -53,7 +54,7 @@ const DashboardHeader = () => {
   };
 
   return (
-    <header className="bg-white shadow-md ">
+    <header className="bg-white shadow-md sticky top-0 z-50">
       <div className=" px-4 xl:px-24 py-6">
         <nav
           className="flex items-center justify-between"

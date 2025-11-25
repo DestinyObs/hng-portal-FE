@@ -80,7 +80,7 @@ const Header = () => {
             ))}
           </ul>
 
-          <Link href="/sign-up/select" passHref>
+          <Link href="/sign-up" passHref>
             <Button
               asChild
               variant="outline"

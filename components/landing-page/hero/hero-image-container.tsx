@@ -2,10 +2,10 @@ import Image from 'next/image';
 import React from 'react';
 export default function HeroImageContainer() {
   return (
-    <div className="w-[85%] mx-auto max-w-[320px] md:max-w-[560px] not-md:mt-16  relative">
+    <div className="w-[85%] mx-auto max-w-[320px] md:max-w-[560px] not-md:mt-16  relative z-1">
       <Image
         src={
-          '/assets/images/landing-page/hero-images/desktop/square_bracket.png'
+          '/assets/images/landing-page/hero-images/desktop/square_brackets.png'
         }
         alt="square bracket image"
         width={560}

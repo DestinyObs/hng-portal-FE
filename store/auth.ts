@@ -9,6 +9,7 @@ interface AuthState {
   setEmail: (email: string) => void;
   setId: (id: string) => void;
   setData: (data: User) => void;
+  clearEmail: () => void;
   hydrated: boolean;
 }
 
@@ -20,6 +21,7 @@ export const useAuthStore = create(
       hydrated: false,
       user: null,
       setEmail: (email) => set({ email }),
+      clearEmail: () => set({ email: null }),
       setId: (id) => set({ user_id: id }),
       setData: (data) => set({ user: data }),
     }),

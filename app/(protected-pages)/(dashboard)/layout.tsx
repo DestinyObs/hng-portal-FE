@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const isSettingsPage = pathname?.startsWith('/dashboard/settings');
 
   return (
-    <div className=" flex flex-col bg-white-100">
+    <div className=" flex flex-col bg-white-100 relative">
       {/* HEADER */}
       <Header />
       {/* SIDEBAR & MAIN CONTENT */}

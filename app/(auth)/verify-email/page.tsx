@@ -1,16 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -25,31 +17,44 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation'; // Import useSearchParams
+import { useMutation } from '@tanstack/react-query';
+import { verifyOtp, resendOtp } from '@/api/actions/auth';
+import { SuccessResponse } from '@/types/api-response'; // Updated import
+import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth';
 import { APIResponse } from '@/api/config.server';
-import { verifyOtp, resendOtp } from '@/api/actions/auth';
-
-import { SuccessResponse } from '@/types/api-response';
-
-const FormSchema = z.object({
-  pin: z
-    .string()
-    .min(6, 'Code must be 6 digits')
-    .regex(/^[0-9]*$/, 'Only numbers allowed'),
-});
+import {
+  verifyEmailSchema,
+  VerifyEmailFormValues,
+} from '@/validations/verify-email'; // New import for schema
 
 const VerifyEmailPage = () => {
   const router = useRouter();
-  const { email, hydrated } = useAuthStore();
-
+  const searchParams = useSearchParams(); // Initialize useSearchParams
   const [timeLeft, setTimeLeft] = useState(180);
   const [canResendOTP, setCanResendOTP] = useState(false);
+  const { email: storedEmail, hydrated, setEmail } = useAuthStore(); // Rename email to storedEmail
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  // Get email from query parameter, fallback to store
+  const emailToDisplay = searchParams.get('email') || storedEmail;
+
+  const form = useForm<VerifyEmailFormValues>({
+    resolver: zodResolver(verifyEmailSchema),
     defaultValues: { pin: '' },
   });
+
+  // Update store email if it came from query params and store is stale
+  useEffect(() => {
+    if (
+      searchParams.get('email') &&
+      searchParams.get('email') !== storedEmail
+    ) {
+      setEmail(searchParams.get('email') as string);
+    }
+  }, [searchParams, storedEmail, setEmail]);
 
   const { mutate: a_verifyOtp, isPending: isVerifying } = useMutation({
     mutationKey: ['verify-otp'],
@@ -57,7 +62,7 @@ const VerifyEmailPage = () => {
     onSuccess: (response: APIResponse<SuccessResponse | null>) => {
       if (response.success) {
         toast.success('Email verified successfully! Redirecting...');
-        router.push('/dashboard');
+        router.push('/company/dashboard');
       } else {
         let errorMessage = response.message || 'An unknown error occurred.';
         if (response.errors) {
@@ -109,7 +114,7 @@ const VerifyEmailPage = () => {
     return `${m}:${s}`;
   };
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = (data: VerifyEmailFormValues) => {
     a_verifyOtp({ otp: data.pin });
   };
 
@@ -119,14 +124,14 @@ const VerifyEmailPage = () => {
 
   const otpSlotClasses = `
     w-[60px] h-[60px] md:w-[100px] md:h-[100px]
-    rounded-xl border-2 text-center text-5xl text-black-200 font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
+    rounded-xl border-2 text-center text-5xl text-[#969696] font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
   `;
 
   return (
     <div className="flex flex-col items-center gap-7">
       <Image
         src="/images/hng-logo.png"
-        alt="HNG Connect"
+        alt="HNG Portal"
         width={180}
         height={40}
       />
@@ -139,10 +144,10 @@ const VerifyEmailPage = () => {
           Verify Email
         </h1>
 
-        <p className="text-black-200 font-medium text-sm md:text-lg">
+        <p className="text-[#969696] font-medium text-sm md:text-lg">
           We sent a code to{' '}
           <span className="md:font-bold md:text-[#1A1A1A]">
-            {hydrated ? email : 'your email'}
+            {emailToDisplay || (hydrated ? 'your email' : 'your email')}
           </span>
         </p>
       </div>
@@ -177,7 +182,7 @@ const VerifyEmailPage = () => {
                   </InputOTP>
                 </FormControl>
                 <FormMessage />
-                <FormDescription className="text-black-200 text-sm mt-2">
+                <FormDescription className="text-[#969696] text-sm mt-2">
                   {!canResendOTP ? (
                     <>Resend code in {formatTime(timeLeft)}</>
                   ) : (
