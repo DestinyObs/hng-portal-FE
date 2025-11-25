@@ -44,6 +44,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --color-accent-pink-light: #f9e0f3;
+  --color-accent-2: #f2fafc;
+  --color-accent-3: #baf4e6;
+  --color-accent-4: #0e2c58;
+  --color-light-blue: #e0e7ff;
+  --color-secondary: #6366f1;
 }
 @keyframes scroll {
   from {
@@ -91,7 +98,7 @@
   --color-primary-500: #006a9c;
   /* color primary was the same thing as color accent 3 */
   --color-secondary: #6366f1;
-  --color-accent-3: #14ba6d;
+  --color-accent-3-dark: #14ba6d;
   /* color tertiary was the same thing as color accent pink */
   --color-accent-pink: #7100fb;
   /* this did not initially have a name */
@@ -134,7 +141,7 @@
   --color-accent-400: #51a399;
   --color-accent-500: #468e86;
 
-  --color-accent-pink: #f9e0f3;
+  --color-accent-pink-light: #f9e0f3;
   --color-accent-2: #f2fafc;
   --color-accent-3: #baf4e6;
   --color-accent-4: #0e2c58;
