@@ -3,7 +3,7 @@ import Link from 'next/link';
 import JobCard from '@/components/dashboard/job-card';
 import EmptyState from '@/components/dashboard/empty-state';
 import DashboardCard from '@/components/dashboard/dashboard-card';
-import { DASHBOARD_CARD, JOB_CARDS } from '@/constants/dashboard';
+import { DASHBOARD_CARD } from '@/constants/dashboard';
 import { useAuthStore } from '@/store/auth';
 import { useGetAllJobs } from '@/hooks/jobs';
 import { Loader2 } from 'lucide-react';
