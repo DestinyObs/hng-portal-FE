@@ -21,7 +21,8 @@ export default function DashboardCard({
 }) {
   return (
     <Card
-      className={`col-span-1 gap-3 px-4 sm:px-6 py-4 rounded-[15px] bg-white border-[0.5px] border-${card.color}`}
+      className={`col-span-1 gap-3 px-4 sm:px-6 py-4 rounded-[15px] bg-white border-[0.5px]`}
+      style={{ border: `1px solid ${card.color}` }}
     >
       <CardHeader className="flex flex-col px-0 gap-[30px]">
         <CardTitle className="flex justify-between w-full gap-0.5">
@@ -29,7 +30,8 @@ export default function DashboardCard({
             {card.title}
           </span>
           <span
-            className={`flex items-center size-7 p-[7.273px] bg-${card.iconBg} rounded-full`}
+            className={`flex items-center size-7 p-[7.273px] rounded-full`}
+            style={{ background: card.iconBg }}
           >
             <Image
               src={card.icon}
@@ -42,7 +44,8 @@ export default function DashboardCard({
         </CardTitle>
         <CardDescription className="flex flex-col w-full gap-1.5">
           <span
-            className={`text-xl sm:text-2xl text-[var(--color-${card.color})] font-ag font-semibold leading-6 sm:leading-7`}
+            className={`text-xl sm:text-2xl font-ag font-semibold leading-6 sm:leading-7`}
+            style={{ color: card.color }}
           >
             {card.count}
           </span>
@@ -52,7 +55,10 @@ export default function DashboardCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="px-0">
-        <div className={`w-full h-[3px] bg-${card.color}`} />
+        <div
+          className={`w-full h-[3px]`}
+          style={{ backgroundColor: card.color }}
+        />
       </CardContent>
     </Card>
   );

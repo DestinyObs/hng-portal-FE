@@ -2,7 +2,9 @@
 import { useState } from 'react';
 import JobDetails from './job-details';
 import JobDetailsStep2 from './job-details2';
-import type { JobFormData } from '@/types/create-new-job';
+import type { JobFormData, JobFormData2 } from '@/types/create-new-job';
+import { usePost } from '@/hooks/posts';
+import Loading from '@/app/loading';
 
 const initialJobData: JobFormData = {
   category_id: '',
@@ -18,13 +20,28 @@ const steps = [
   { id: 3, label: 'Preview', sub: 'Preview job post' },
 ];
 
-export default function PostJob() {
+export default function PostJob({ id }: { id?: string }) {
+  const { data, isPending } = usePost(id!);
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<JobFormData>(initialJobData);
-  const handleFormUpdate = (data: Partial<JobFormData>): void => {
-    setFormData((prev) => ({ ...prev, ...data }));
+
+  const skills = ((data as JobFormData | undefined)?.skills ?? []).map(
+    (skill: string | { id: string }) =>
+      typeof skill === 'string' ? skill : skill?.id,
+  ) as string[];
+  const [formData, setFormData] = useState<JobFormData2 | JobFormData>(
+    id ? ({ ...data, skills } as JobFormData2) : initialJobData,
+  );
+  // console.log(skills)
+  // console.log('FORM DATA:', formData);
+  // console.log("🔍 EDITING JOB - Payload being sent:", JSON.stringify(data, null, 2));
+  // console.log("🔍 Skills type:", typeof formData.skills);
+  // console.log("🔍 Skills value:", formData.skills);
+
+  const handleFormUpdate = (data: Partial<JobFormData2>): void => {
+    setFormData((prev) => ({ ...prev, ...data, skills: skills }));
   };
 
+  // console.log(data);
   const handleNext = (): void => {
     setCurrentStep(2);
   };
@@ -33,6 +50,10 @@ export default function PostJob() {
     setCurrentStep(1);
   };
 
+  if (isPending) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <div className="w-full space-y-8">
@@ -40,17 +61,19 @@ export default function PostJob() {
           <div className="lg:w-3/4">
             {currentStep === 1 && (
               <JobDetails
-                initialData={formData}
+                initialData={data ? (data as JobFormData) : initialJobData}
                 onUpdate={handleFormUpdate}
                 onNext={handleNext}
+                id={id}
               />
             )}
 
             {currentStep === 2 && (
               <JobDetailsStep2
-                initialData={formData}
+                initialData={data ? (data as JobFormData) : initialJobData}
                 onUpdate={handleFormUpdate}
                 onPrev={handlePrev}
+                id={id}
               />
             )}
           </div>

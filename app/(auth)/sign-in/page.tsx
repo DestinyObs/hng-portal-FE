@@ -1,12 +1,13 @@
 'use client';
-
+import React from 'react';
 import Link from 'next/link';
 
+import { SignInForm } from './_components/sign-in-form'; // Updated import for _components
 import { Button } from '@/components/ui/button';
-import { SignInForm } from './_components/sign-in-form';
 
 import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
 import GoogleColoredIcon from '@/public/assets/auth/icons/google-colored-icon';
+import { siginWithGoogle } from '@/api/actions/auth';
 
 export default function SignInPage() {
   return (
@@ -34,7 +35,12 @@ export default function SignInPage() {
         </div>
       </div>
 
-      <Button variant="outline" className="w-full" size={'lg'}>
+      <Button
+        variant="outline"
+        className="w-full"
+        size={'lg'}
+        onClick={siginWithGoogle}
+      >
         <GoogleColoredIcon className="mr-2 h-4 w-4" />
         Sign in with Google
       </Button>

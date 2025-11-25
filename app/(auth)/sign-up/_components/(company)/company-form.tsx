@@ -1,63 +1,70 @@
 'use client';
 
-import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-
-import { toast } from 'sonner';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { UserData } from '@/lib/types';
-import { useAuthStore } from '@/store/auth';
-import { register } from '@/api/actions/auth';
-import { APIResponse } from '@/api/config.server';
-
-import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-
 import {
-  CompanySignUpFormValues,
   companySignUpSchema,
+  type CompanySignUpFormValues,
 } from '@/validations/sign-up';
+import { toast } from 'sonner';
 
-import { CompanySignUpFormStepOne } from './form-step-one';
-import { CompanySignUpFormStepTwo } from './form-step-two';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import Input from '@/components/ui/input';
+import { Loader2 } from 'lucide-react';
+
+import { useMutation } from '@tanstack/react-query';
+import { register } from '@/api/actions/auth';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/auth';
+import { APIResponse } from '@/api/config.server';
+import { RegisterType, UserData } from '@/lib/types';
 
 export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
-  const [step, setStep] = useState(1);
   const router = useRouter();
   const setEmail = useAuthStore((state) => state.setEmail);
-  const setId = useAuthStore((state) => state.setId);
 
   const form = useForm<CompanySignUpFormValues>({
     resolver: zodResolver(companySignUpSchema),
-    shouldUnregister: false, // Keep unmounted fields in form state
     defaultValues: {
       company_name: '',
       email: '',
       password: '',
-      password_confirmation: '',
-      acceptTerms: false,
-      company_website: '',
-      industry: '',
+      firstname: '',
+      lastname: '',
+      role: 'company',
     },
   });
 
   const { mutate: registerCompany, isPending } = useMutation({
     mutationKey: ['sign-up-company'],
     mutationFn: register,
-    onSuccess: (response: APIResponse<UserData | null>) => {
+    onSuccess: (
+      response: APIResponse<UserData | null>,
+      variables: RegisterType,
+    ) => {
       if (response.success) {
-        if (response.data?.user?.email) {
-          setEmail(response.data.user.email);
-          setId(response.data.user.id);
+        const userEmail = response.data?.user?.email || variables.email;
+        if (userEmail) {
+          setEmail(userEmail);
+          toast.success(
+            'Registration successful! Please check your email to verify your account.',
+          );
+          router.push(`/verify-email?email=${encodeURIComponent(userEmail)}`);
+        } else {
+          toast.error(
+            'Registration succeeded, but could not retrieve your email. Please try signing in.',
+          );
+          router.push('/sign-in');
         }
-        toast.success(
-          'Registration successful! Please check your email to verify your account.',
-        );
-        router.push('/verify-email');
       } else {
         let errorMessage = response.message || 'An unknown error occurred.';
         if (response.errors) {
@@ -72,57 +79,86 @@ export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
   });
 
   const onSubmit = (data: CompanySignUpFormValues) => {
-    registerCompany({ ...data, role });
-  };
-
-  const handleNext = async () => {
-    const isValid = await form.trigger([
-      'company_name',
-      'email',
-      'password',
-      'password_confirmation',
-      'acceptTerms',
-    ]);
-    if (isValid) {
-      setStep(2);
-    }
+    registerCompany({
+      ...data,
+      firstname: data.company_name, // Using company name as dummy first name
+      lastname: 'Admin', // Dummy last name
+      password_confirmation: data.password,
+      role: 'company',
+    });
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {step === 1 && <CompanySignUpFormStepOne form={form} />}
-        {step === 2 && <CompanySignUpFormStepTwo form={form} />}
-
-        <div className="flex flex-col space-y-4">
-          {step === 2 && (
-            <Button
-              type="button"
-              onClick={() => setStep(1)}
-              className="w-full"
-              variant="outline"
-            >
-              Back
-            </Button>
+        <FormField
+          control={form.control}
+          name="company_name"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <FormLabel>Company Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your company name"
+                  aria-invalid={!!fieldState.error}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
+        />
 
-          <Button
-            type={step === 1 ? 'button' : 'submit'}
-            onClick={step === 1 ? handleNext : undefined}
-            className="w-full"
-            disabled={isPending}
-            variant="default"
-            size={'lg'}
-          >
-            {isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : step === 1 ? (
-              'Continue'
-            ) : (
-              'Create Account'
-            )}
-          </Button>
-        </div>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <FormLabel>Company Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your company email"
+                  type="email"
+                  aria-invalid={!!fieldState.error}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter password"
+                  inputType="password"
+                  aria-invalid={!!fieldState.error}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isPending}
+          variant="default"
+          size={'lg'}
+        >
+          {isPending ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            'Create Account'
+          )}
+        </Button>
       </form>
     </Form>
   );

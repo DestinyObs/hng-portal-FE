@@ -34,7 +34,7 @@ export interface User {
 
 export interface Role {
   id: number;
-  name: string;
+  name: 'talent' | 'employer';
   guard_name: string;
   created_at: string;
   updated_at: string;
@@ -66,7 +66,7 @@ export interface Company {
 
 export interface UserData {
   user: User;
-  token: '1|abc123def456ghi789jkl012mno345pqr678';
+  token: string;
 }
 
 export interface LoginType {

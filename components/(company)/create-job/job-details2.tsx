@@ -36,17 +36,20 @@ import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'next/navigation';
 import { usePostStore } from '@/store/create-post';
 import { useState } from 'react';
+import { useEditPost } from '@/hooks/posts';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
   onUpdate: (data: Partial<JobDetailsStep2FormData>) => void;
   onPrev: () => void;
+  id?: string;
 }
 
 export default function JobDetailsStep2({
   initialData,
   onUpdate,
   onPrev,
+  id,
 }: JobDetailsStep2Props) {
   const router = useRouter();
   const [isDrafting, setIsDrafting] = useState(false);
@@ -57,6 +60,7 @@ export default function JobDetailsStep2({
   const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
   const { user } = useAuthStore();
   const { setNewPost } = usePostStore();
+  const { editpost } = useEditPost(id!);
 
   const isLoading =
     tracksLoading ||
@@ -96,13 +100,15 @@ export default function JobDetailsStep2({
       category_id: initialData.category_id || ' ',
       job_type_id: data.job_type_id || ' ',
       work_mode_id: data.work_mode_id || ' ',
-      skills: initialData.skills || [],
+      skills: (initialData.skills as string[]) || [],
     };
-
-    console.log(formData);
-    // save using zustand
-    setNewPost(formData);
-    router.push('/dashboard/create-post/preview');
+    if (id) {
+      // console.log(formData)
+      editpost(formData);
+    } else {
+      setNewPost(formData);
+      router.push('/dashboard/create-post/preview');
+    }
   };
 
   const handleSaveDraft = async () => {
@@ -120,12 +126,12 @@ export default function JobDetailsStep2({
       category_id: initialData.category_id || ' ',
       job_type_id: data.job_type_id || ' ',
       work_mode_id: data.work_mode_id || ' ',
-      skills: initialData.skills || [],
+      skills: (initialData.skills as string[]) || [],
     };
 
     try {
       const response = await draftPost(formData);
-      console.log(response);
+      // console.log(response);
 
       if (response && !response?.success) {
         toast.error(response.message);
@@ -150,7 +156,7 @@ export default function JobDetailsStep2({
       <Card className="border border-black-50 shadow-none">
         <div className="p-6 border-b border-black-50">
           <h2 className="text-2xl text-tertiary-500 font-semibold">
-            Create a New Job Post
+            {id ? 'Edit a job post' : 'Create a New Job Post'}
           </h2>
           <p className="text-tertiary-200 mt-1 text-sm">
             Connect with verified HNG talents across design, developments, and
@@ -341,9 +347,9 @@ export default function JobDetailsStep2({
           <Button
             // onClick={handleSubmit(onSubmit)}
             disabled={isSubmitting}
-            className="bg-[#00AEFF] hover:bg-[#0088cc] text-white"
+            className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
           >
-            {isSubmitting ? 'Loading...' : 'Finish'}
+            {isSubmitting ? 'loading' : id ? 'edit post' : 'finish'}
           </Button>
         </div>
       </div>

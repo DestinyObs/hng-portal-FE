@@ -18,7 +18,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { X } from 'lucide-react';
-import type { JobDetailsProps, JobFormData } from '@/types/create-new-job';
+import type {
+  JobDetailsProps,
+  JobFormData,
+  JobFormData2,
+} from '@/types/create-new-job';
 import TextEditor from '@/components/shared/ui/text-editor';
 import Input from '@/components/ui/input';
 import {
@@ -34,6 +38,7 @@ export default function JobDetails({
   initialData,
   onUpdate,
   onNext,
+  id,
 }: JobDetailsProps) {
   const [isDrafting, setIsDrafting] = useState(false);
 
@@ -41,8 +46,8 @@ export default function JobDetails({
   const { data: skillsRes } = useSkills();
   const [selectedSkills, setSelectedSkills] = useState<
     { id: string; name: string }[]
-  >([]);
-
+  >(initialData.skills as { id: string; name: string }[]);
+  const initialSkills = initialData.skills.map((skill) => skill.id) || [];
   const {
     control,
     setValue,
@@ -55,7 +60,7 @@ export default function JobDetails({
       category_id: initialData.category_id,
       title: initialData.title,
       description: initialData.description || '',
-      skills: initialData.skills,
+      skills: initialSkills,
       price: initialData.price,
       acceptance_criteria: initialData.acceptance_criteria || '',
     },
@@ -72,6 +77,7 @@ export default function JobDetails({
       setSelectedSkills([...selectedSkills, skill]);
       // i want set value to store the id
       setValue('skills', [...skills, skill.id], { shouldValidate: true });
+    } else {
     }
   };
 
@@ -88,7 +94,7 @@ export default function JobDetails({
   };
 
   const onSubmit = (data: JobDetailsFormData) => {
-    const formDataUpdate: Partial<JobFormData> = {
+    const formDataUpdate: Partial<JobFormData2> = {
       category_id: data.category_id,
       title: data.title,
       description: data.description,
@@ -104,7 +110,7 @@ export default function JobDetails({
   const handleSaveDraft = async () => {
     setIsDrafting(true);
     const formData = getValues();
-    const formDataUpdate: Partial<JobFormData> = {
+    const formDataUpdate: Partial<JobFormData2> = {
       category_id: formData.category_id,
       title: formData.title,
       description: formData.description,
@@ -114,7 +120,7 @@ export default function JobDetails({
     // onUpdate(formDataUpdate);
     try {
       const response = await draftPost(formDataUpdate);
-      console.log(response);
+      // console.log(response);
 
       if (response && !response?.success) {
         toast.error(response.message);
@@ -137,7 +143,7 @@ export default function JobDetails({
       <Card className="border border-black-50 shadow-none">
         <div className="p-6 border-b border-black-50">
           <h2 className="text-2xl text-tertiary-500 font-semibold">
-            Create a New Job Post
+            {id ? 'Edit a job post' : 'Create a New Job Post'}
           </h2>
           <p className="text-tertiary-200 mt-1 text-sm">
             Connect with verified HNG talents across design, developments, and
