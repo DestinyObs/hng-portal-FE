@@ -73,17 +73,15 @@ export default function UserIdentityForm() {
         route.push('/onboarding/company?page=company-detail');
       } else {
         if (result.details?.errors) {
-          Object.entries(result.details.errors).forEach(
-            ([field, messages]: [string, any]) => {
-              const errorMessage = Array.isArray(messages)
-                ? messages.join(', ')
-                : messages;
+          Object.entries(result.details.errors).forEach(([field, messages]) => {
+            const errorMessage = Array.isArray(messages)
+              ? messages.join(', ')
+              : messages;
 
-              toast.error(`${field}`, {
-                description: errorMessage,
-              });
-            },
-          );
+            toast.error(`${field}`, {
+              description: errorMessage,
+            });
+          });
         } else {
           toast.error('Failed to save company identity', {
             description:
