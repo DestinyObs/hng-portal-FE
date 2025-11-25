@@ -1,24 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { User } from '@/lib/types';
+import { getServerCookies } from '@/lib/cookies-helper';
 import Link from 'next/link';
-import { NextRequest } from 'next/server';
 
-export default async function NotFound(req: NextRequest) {
-  function parseUserCookie(cookieValue: string): User | null {
-    try {
-      return JSON.parse(cookieValue);
-    } catch (error) {
-      console.error('Error parsing user cookie:', error);
-      return null;
-    }
-  }
+export default async function NotFound() {
+  const { user } = await getServerCookies();
+  const userRole = user.roles[0].name;
 
-  const userCookies = req.cookies.get('user');
-  const userData: User | null = userCookies
-    ? parseUserCookie(userCookies.value)
-    : null;
-
-  const userRole = userData?.roles[0].name;
   return (
     <div className="h-screen flex items-center flex-col justify-center bg-white px-5 relative">
       {/* 404 Text */}
