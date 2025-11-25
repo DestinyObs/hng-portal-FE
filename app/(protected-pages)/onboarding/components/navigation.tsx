@@ -15,15 +15,7 @@ export default function Navigation({
 }: NavigationProps) {
   const router = useRouter();
   return (
-    <div className="w-full max-w-[1200px] mx-auto flex justify-between gap-4 items-center flex-col md:flex-row mt-5 md:mt-10">
-      <Button
-        variant={'ghost'}
-        className="font-medium text-base text-primary-300 transition-all duration-300 ease-in flex gap-1 justify-center"
-        onClick={() => router.back()}
-      >
-        <ArrowLeft />
-        <span>Back</span>
-      </Button>
+    <div className="w-full max-w-[1200px] mx-auto flex justify-between gap-4 items-center flex-col md:flex-row mt-5 md:mt-10 md:justify-end">
       <Button
         variant={'ghost'}
         onClick={rightButtonAction}

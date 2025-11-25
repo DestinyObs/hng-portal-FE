@@ -42,7 +42,10 @@ export default function UserIdentityForm() {
       form.setValue('logo', file);
     }
   };
-
+  const handleCompleteLater = () => {
+    console.log('Complete later clicked');
+    // Handle skip action
+  };
   const onSubmit = (data: UserIdentitySchema) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
@@ -78,7 +81,7 @@ export default function UserIdentityForm() {
         <div>
           <label
             htmlFor="logo-upload"
-            className="inline-flex items-center gap-1 pl-3 pr-4 py-2 border border-tertiary-50 rounded-[8px] cursor-pointer hover:bg-gray-50 font-medium text-xs transition-all duration-300 ease-in"
+            className="inline-flex items-center gap-1 pl-3 pr-4 py-2 border border-tertiary-50 rounded-lg cursor-pointer hover:bg-gray-50 font-medium text-xs transition-all duration-300 ease-in"
           >
             <DocumentUploadIcon className="w-3 h-3" />
             <span>Upload Logo</span>
@@ -107,7 +110,7 @@ export default function UserIdentityForm() {
                   <Input
                     placeholder="HNG Connect"
                     {...field}
-                    className="h-10 border-tertiary-50 rounded-[8px]"
+                    className="h-10 border-tertiary-50 rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -126,7 +129,7 @@ export default function UserIdentityForm() {
                 <FormControl>
                   <Textarea
                     placeholder="e.g., Main House, Beach Condo"
-                    className="resize-none h-[130px] border-tertiary-50 rounded-[8px]"
+                    className="resize-none h-[130px] border-tertiary-50 rounded-lg"
                     {...field}
                   />
                 </FormControl>
@@ -141,6 +144,14 @@ export default function UserIdentityForm() {
               className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
             >
               Continue
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleCompleteLater}
+              className="text-primary-300 transition-all duration-300 ease-in"
+            >
+              Complete Later
             </Button>
           </div>
         </form>

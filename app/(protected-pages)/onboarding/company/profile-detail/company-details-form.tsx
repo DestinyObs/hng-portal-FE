@@ -11,6 +11,7 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import ConfirmationModal from '../components/confimation-modal';
 import Input from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,6 +26,7 @@ import { cities, countries } from '@/constants/dashboard';
 
 export default function CompanyDetailsForm() {
   const router = useRouter();
+  const [openDialog, setOpenDialog] = useState(false);
   const [showIndustryOther, setShowIndustryOther] = useState(false);
   const [showSizeOther, setShowSizeOther] = useState(false);
 
@@ -51,6 +53,11 @@ export default function CompanyDetailsForm() {
         formData.append(key, value);
       }
     });
+    // Show success modal after form submission
+    setOpenDialog(true);
+  };
+
+  const handleGoToDashboard = () => {
     router.push('/onboarding/company?page=profile-detail');
   };
 
@@ -78,7 +85,7 @@ export default function CompanyDetailsForm() {
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className="w-full h-10 rounded-[8px]">
+                  <SelectTrigger className="w-full h-10 rounded-lg">
                     <SelectValue placeholder="Select industry" />
                   </SelectTrigger>
                 </FormControl>
@@ -117,7 +124,7 @@ export default function CompanyDetailsForm() {
                   <Input
                     placeholder="Enter your industry"
                     {...field}
-                    className="h-10 rounded-[8px]"
+                    className="h-10 rounded-lg"
                   />
                 </FormControl>
                 <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
@@ -144,7 +151,7 @@ export default function CompanyDetailsForm() {
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className="w-full h-10 rounded-[8px]">
+                  <SelectTrigger className="w-full h-10 rounded-lg">
                     <SelectValue placeholder="Select company size" />
                   </SelectTrigger>
                 </FormControl>
@@ -193,7 +200,7 @@ export default function CompanyDetailsForm() {
                 <Input
                   placeholder="https://"
                   {...field}
-                  className="h-10 rounded-[8px]"
+                  className="h-10 rounded-lg"
                 />
               </FormControl>
               <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
@@ -215,7 +222,7 @@ export default function CompanyDetailsForm() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="w-full h-10 rounded-[8px]">
+                    <SelectTrigger className="w-full h-10 rounded-lg">
                       <SelectValue placeholder="Select city" />
                     </SelectTrigger>
                   </FormControl>
@@ -244,7 +251,7 @@ export default function CompanyDetailsForm() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="w-full h-10 rounded-[8px]">
+                    <SelectTrigger className="w-full h-10 rounded-lg">
                       <SelectValue placeholder="Select country" />
                     </SelectTrigger>
                   </FormControl>
@@ -269,8 +276,28 @@ export default function CompanyDetailsForm() {
           >
             Continue
           </Button>
+
+          {/* <Button
+            type="button"
+            onClick={() => setOpenDialog(true)}
+            className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
+          >
+            Continue
+          </Button>
+
+          <Button
+            type="submit"
+            className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
+          >
+            Continue
+          </Button>*/}
         </div>
       </form>
+      <ConfirmationModal
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        onGoToDashboard={handleGoToDashboard}
+      />
     </Form>
   );
 }

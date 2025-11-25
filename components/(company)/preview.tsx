@@ -20,6 +20,7 @@ import {
 import { createPost, draftPost } from '@/api/actions/create-post';
 
 import { Button } from '@/components/ui/button';
+import { Modal } from '../dashboard/modal';
 
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 
@@ -29,6 +30,7 @@ export const PreviewJob = () => {
   const router = useRouter();
   const [isPublishing, setIsPublishing] = useState(false);
   const [isDrafting, setIsDrafting] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
 
   const { data: work_modes } = useWorkModes();
   const { data: countries } = useCountries();
@@ -61,6 +63,7 @@ export const PreviewJob = () => {
   const handlePublish = async () => {
     if (!newPost) return;
     setIsPublishing(true);
+    setShowPublishModal(false);
     try {
       const response = await createPost(newPost);
       console.log(response);
@@ -208,7 +211,7 @@ export const PreviewJob = () => {
 
           <Button
             size={'sm'}
-            onClick={handlePublish}
+            onClick={() => setShowPublishModal(true)}
             disabled={isPublishing || isDrafting}
             className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
           >
@@ -216,6 +219,21 @@ export const PreviewJob = () => {
           </Button>
         </div>
       </div>
+      {/* Publish Confirmation Modal */}
+      <Modal
+        isOpen={showPublishModal}
+        onClose={() => setShowPublishModal(false)}
+        title="Are you sure you want to publish this job?"
+        message="Once published, this job will be visible to applicants and they can start applying immediately."
+        primaryButton={{
+          label: 'Publish Job',
+          onClick: handlePublish,
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: () => setShowPublishModal(false),
+        }}
+      />
     </div>
   );
 };
