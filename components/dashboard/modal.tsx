@@ -1,20 +1,6 @@
 import React from 'react';
 import { Button } from '../ui/button';
-
-// Type definitions
-interface ButtonConfig {
-  label: string;
-  onClick: () => void;
-}
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  message: string;
-  primaryButton?: ButtonConfig;
-  secondaryButton?: ButtonConfig;
-}
+import { ModalProps } from '@/types/modal';
 
 // Reusable Modal Component
 export const Modal: React.FC<ModalProps> = ({
