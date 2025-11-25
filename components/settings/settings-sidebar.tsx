@@ -25,7 +25,7 @@ export default function SettingsSidebar() {
   };
 
   return (
-    <div className="w-full lg:w-[288px] pt-8 lg:pt-30 px-4 lg:px-0">
+    <div className="w-full lg:w-[288px] pt-6 px-4 lg:px-0">
       <div className="lg:hidden w-full relative z-50">
         <div className="flex justify-center w-full">
           <button

@@ -1,118 +1,125 @@
-'use client';
+import * as React from 'react';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MoreHorizontalIcon,
+} from 'lucide-react';
 
-import { Table } from '@tanstack/react-table';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
-import { Button } from './button';
-import LimitSetter from './limit-setter';
-import { getPageNumbers } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { Button, buttonVariants } from '@/components/ui/button';
 
-// handle pagination manually if products are being fetched
-interface DataTablePaginationProps<TData> {
-  table: Table<TData>;
-  manualPagination: boolean;
-  limit?: number;
-}
-
-export function DataTablePagination<TData>({
-  table,
-  manualPagination,
-  limit,
-}: Readonly<DataTablePaginationProps<TData>>) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const entries = Array.from(searchParams.entries());
-  const defaultPage = entries
-    .map(([key, value]) => ({
-      filterKey: key,
-      filterValue: value,
-    }))
-    .find((filter) => filter.filterKey === 'page');
-  useEffect(() => {
-    if (defaultPage !== undefined) {
-      table.setPageIndex(Number(defaultPage.filterValue) - 1);
-    } else {
-      table.setPageIndex(0);
-    }
-  }, [defaultPage, table]);
-
-  //  get the params on refresh and set number value to that
-  const createQueryString = useCallback(
-    (value: string | number) => {
-      if (manualPagination) {
-        const params = new URLSearchParams(searchParams.toString());
-        params.set('page', `${value}`);
-        router.push(pathname + '?' + params.toString());
-      }
-      table.setPageIndex(Number(value) - 1);
-      console.log(
-        table.getState().pagination.pageSize,
-        'after creating query string',
-      );
-    },
-    [searchParams, pathname, router, table, manualPagination],
-  );
-
+function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (
-    <div className="flex items-center justify-center gap-5 py-2">
-      {/* PREVIOUS */}
-      <Button
-        variant="ghost"
-        className="flex font-medium text-[.85rem]"
-        onClick={() => {
-          table.previousPage();
-          createQueryString(table.getState().pagination.pageIndex);
-        }}
-        disabled={!table.getCanPreviousPage()}
-      >
-        <ChevronLeft />
-      </Button>
-
-      <div className="flex items-center space-x-2">
-        {getPageNumbers(
-          table.getState().pagination.pageIndex + 1,
-          table.getPageCount(),
-        ).map((page) =>
-          page === '...' ? (
-            <span key={page} className="px-2">
-              ...
-            </span>
-          ) : (
-            <button
-              key={page}
-              onClick={() => {
-                createQueryString(page);
-              }}
-              className={`px-3 py-1 ${
-                page === table.getState().pagination.pageIndex + 1
-                  ? 'bg-accent-50 text-primary-blue rounded-sm font-medium'
-                  : ' text-tertiary-500'
-              } hover:bg-accent-75 transition`}
-            >
-              {page.toString().padStart(2, '0')}
-            </button>
-          ),
-        )}
-      </div>
-      <div className="flex gap-5">
-        {limit && <LimitSetter limit={limit} />}
-
-        {/* NEXT */}
-        <Button
-          variant="ghost"
-          className="flex font-medium text-[.85rem]"
-          onClick={() => {
-            table.nextPage();
-            createQueryString(table.getState().pagination.pageIndex + 2);
-          }}
-          disabled={!table.getCanNextPage()}
-        >
-          <ChevronRight />
-        </Button>
-      </div>
-    </div>
+    <nav
+      role="navigation"
+      aria-label="pagination"
+      data-slot="pagination"
+      className={cn('mx-auto flex w-full justify-center', className)}
+      {...props}
+    />
   );
 }
+
+function PaginationContent({
+  className,
+  ...props
+}: React.ComponentProps<'ul'>) {
+  return (
+    <ul
+      data-slot="pagination-content"
+      className={cn('flex flex-row items-center gap-1', className)}
+      {...props}
+    />
+  );
+}
+
+function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
+  return <li data-slot="pagination-item" {...props} />;
+}
+
+type PaginationLinkProps = {
+  isActive?: boolean;
+} & Pick<React.ComponentProps<typeof Button>, 'size'> &
+  React.ComponentProps<'a'>;
+
+function PaginationLink({
+  className,
+  isActive,
+  size = 'icon',
+  ...props
+}: PaginationLinkProps) {
+  return (
+    <a
+      aria-current={isActive ? 'page' : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        buttonVariants({
+          variant: isActive ? 'outline' : 'ghost',
+          size,
+        }),
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function PaginationPrevious({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to previous page"
+      size="default"
+      className={cn('gap-1 px-2.5 sm:pl-2.5', className)}
+      {...props}
+    >
+      <ChevronLeftIcon />
+    </PaginationLink>
+  );
+}
+
+function PaginationNext({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to next page"
+      size="default"
+      className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
+      {...props}
+    >
+      <ChevronRightIcon />
+    </PaginationLink>
+  );
+}
+
+function PaginationEllipsis({
+  className,
+  ...props
+}: React.ComponentProps<'span'>) {
+  return (
+    <span
+      aria-hidden
+      data-slot="pagination-ellipsis"
+      className={cn('flex size-9 items-center justify-center', className)}
+      {...props}
+    >
+      <MoreHorizontalIcon className="size-4" />
+      <span className="sr-only">More pages</span>
+    </span>
+  );
+}
+
+export {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+};

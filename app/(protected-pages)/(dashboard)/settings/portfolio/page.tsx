@@ -46,7 +46,7 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className=" w-full pt-8 lg:pt-30 justify-center pb-10">
+    <div className=" w-full py-6 justify-center px-4 lg:px-0">
       <div className="w-full mb-6 space-y-1">
         <h3 className="text-2xl font-bold text-[#232323]">Portfolio</h3>
         <p className="font-normal text-base text-black-200">

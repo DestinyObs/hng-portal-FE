@@ -37,10 +37,6 @@ const CompanyOnboardingContent = () => {
           >
             <UserIdentityForm />
           </FormContainer>
-          <Navigation
-            rightButtonText={'Complete Later'}
-            rightButtonAction={() => router.push('/dashboard')}
-          />
         </OnboardLayout>
       ) : page === 'company-detail' ? (
         <OnboardLayout>
