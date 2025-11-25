@@ -15,6 +15,9 @@ import { Button } from '@/components/ui/button';
 export default function JobCard({ job }: { job: JobCardProps }) {
   const navigate = useRouter();
 
+  // view job posting handler
+  const viewJobHandler = () => navigate.push(`/company/jobs/${job?.id}`);
+
   return (
     <Card
       className={`col-span-1 gap-4 h-fit px-4 sm:px-6 py-4 rounded-xl bg-white-50 border-[0.5px] border-[#E8E8E8]`}
@@ -64,7 +67,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
           size="xs"
           variant={'outlineGray'}
           className="px-4 py-2 text-sm sm:text-xs"
-          onClick={() => navigate.push(`/company/job/${job?.id}`)}
+          onClick={viewJobHandler}
         >
           View Job Posting
         </Button>

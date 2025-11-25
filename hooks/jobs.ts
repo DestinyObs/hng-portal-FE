@@ -6,7 +6,7 @@ export const useGetAllJobs = <T = JobCardProps[]>(
   companyId: string | undefined,
 ): UseQueryResult<T> => {
   return useQuery<T>({
-    queryKey: ['get-all-jobs'],
+    queryKey: ['get-all-jobs', companyId],
     queryFn: async () => {
       const res = await makeAuthenticatedRequest(
         `employer/company/${companyId}/jobs`,

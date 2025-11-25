@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth';
-import { useGetAllJobs } from '@/hooks/jobs';
 
+import { useGetAllJobs } from '@/hooks/jobs';
 import { DASHBOARD_CARD } from '@/constants/dashboard';
 
 import JobCard from '@/components/dashboard/job-card';
@@ -46,15 +47,17 @@ export default function CompanyDashboardPage() {
           </Link>
         </div>
       </div>
-      {!allJobs ? (
-        <EmptyState />
-      ) : (
+      {isLoading ? (
+        <Loader2 className="h-12 w-12 animate-spin text-primary-blue" />
+      ) : allJobs && allJobs.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/*  Job Listing cards */}
-          {allJobs?.map((job, index) => (
-            <JobCard key={index} job={job} />
+          {allJobs.map((job) => (
+            <JobCard key={job.id} job={job} />
           ))}
         </div>
+      ) : (
+        <EmptyState />
       )}
     </div>
   );
