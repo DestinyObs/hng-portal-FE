@@ -1,9 +1,9 @@
 'use client';
-
+import React from 'react';
 import Link from 'next/link';
 
+import { SignInForm } from './_components/sign-in-form'; // Updated import for _components
 import { Button } from '@/components/ui/button';
-import { SignInForm } from './_components/sign-in-form';
 
 import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
 import GoogleColoredIcon from '@/public/assets/auth/icons/google-colored-icon';

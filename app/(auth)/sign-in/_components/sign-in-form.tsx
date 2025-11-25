@@ -1,15 +1,11 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-
-import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 
-import Input from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -20,13 +16,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Loader2 } from 'lucide-react';
 
-import { UserData } from '@/lib/types';
-import { login } from '@/api/actions/auth';
+import Input from '@/components/ui/input';
 import { SignInFormValues, signInSchema } from '@/validations/sign-in';
-
-import { useAuthStore } from '@/store/auth';
+import { useMutation } from '@tanstack/react-query';
+import { login } from '@/api/actions/auth';
+import { useRouter } from 'next/navigation';
 import { APIResponse } from '@/api/config.server';
+import { UserData } from '@/lib/types';
+import { useAuthStore } from '@/store/auth';
 
 export function SignInForm() {
   const router = useRouter();
@@ -63,12 +62,10 @@ export function SignInForm() {
           errorMessage = Object.values(response.errors).flat().join(' ');
         }
         toast.error(errorMessage);
-        console.log(errorMessage);
       }
     },
     onError: (error: Error) => {
       toast.error(error.message || 'A network or unexpected error occurred.');
-      console.log(error.message);
     },
   });
 
