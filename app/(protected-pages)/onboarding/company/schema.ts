@@ -6,7 +6,7 @@ export const companyDetailsSchema = z.object({
   size: z.string().min(1, 'Company size is required'),
   sizeOther: z.string().optional(),
   website: z.string().url('Please enter a valid URL').or(z.literal('')),
-  city: z.string().min(1, 'City is required'),
+  state: z.string().min(1, 'State is required'),
   country: z.string().min(1, 'Country is required'),
 });
 

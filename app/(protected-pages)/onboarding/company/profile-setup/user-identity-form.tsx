@@ -17,10 +17,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import DocumentUploadIcon from '@/public/assets/auth/icons/document-upload';
+import { saveCompanyOnboarding } from '@/api/actions/onboarding';
+import { toast } from 'sonner';
 
 export default function UserIdentityForm() {
   const route = useRouter();
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<UserIdentitySchema>({
     resolver: zodResolver(userIdentitySchema),
@@ -30,7 +33,9 @@ export default function UserIdentityForm() {
       description: '',
     },
   });
+
   const { isValid } = form.formState;
+
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -42,17 +47,59 @@ export default function UserIdentityForm() {
       form.setValue('logo', file);
     }
   };
+
   const handleCompleteLater = () => {
     console.log('Complete later clicked');
-    // Handle skip action
+    route.push('/dashboard');
   };
-  const onSubmit = (data: UserIdentitySchema) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    route.push('/onboarding/company?page=company-detail');
+
+  const onSubmit = async (data: UserIdentitySchema) => {
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+          formData.append(key, value);
+        }
+      });
+
+      const result = await saveCompanyOnboarding(formData);
+
+      if (result.success) {
+        toast.success('Company identity saved!', {
+          description: 'Proceeding to company details...',
+        });
+        route.push('/onboarding/company?page=company-detail');
+      } else {
+        if (result.details?.errors) {
+          Object.entries(result.details.errors).forEach(
+            ([field, messages]: [string, any]) => {
+              const errorMessage = Array.isArray(messages)
+                ? messages.join(', ')
+                : messages;
+
+              toast.error(`${field}`, {
+                description: errorMessage,
+              });
+            },
+          );
+        } else {
+          toast.error('Failed to save company identity', {
+            description:
+              result.error || 'Please check your information and try again.',
+          });
+        }
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred', {
+        description: 'Please check your connection and try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
   return (
     <div>
       <div className="text-center">
@@ -141,9 +188,10 @@ export default function UserIdentityForm() {
           <div className="flex flex-col gap-4 mt-10 md:w-[80%] mx-auto">
             <Button
               type="submit"
+              disabled={!isValid || isSubmitting}
               className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
             >
-              Continue
+              {isSubmitting ? 'Saving...' : 'Continue'}
             </Button>
             <Button
               type="button"
