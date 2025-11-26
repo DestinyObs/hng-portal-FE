@@ -6,19 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { DasbhoardCardProps } from '@/types/dashboard';
 
-export default function DashboardCard({
-  card,
-}: {
-  card: {
-    title: string;
-    description: string;
-    icon: string;
-    iconBg: string;
-    count: number;
-    color: string;
-  };
-}) {
+export default function DashboardCard({ card }: DasbhoardCardProps) {
   return (
     <Card
       className={`col-span-1 gap-3 px-4 sm:px-6 py-4 rounded-[15px] bg-white border-[0.5px]`}
