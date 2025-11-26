@@ -9,23 +9,27 @@ import DashboardNav from '@/components/dashboard/dashoard-nav';
 import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
 
 import { companyDashboardNavLinks } from '@/constants/dashboard';
+import { JobCardProps } from '@/types/job-card';
 
 export default function DraftsJobsPage() {
   const { user } = useAuthStore();
   const id = user?.company?.id;
-  console.log(user?.company);
-  const { data: allJobs, isLoading } = useGetAllJobs(id);
-  console.log(allJobs);
+  // console.log(user?.company);
+  const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
+    id,
+  );
+  // console.log(allJobs);
+  const jobs = allJobs?.data;
 
   return (
     <div>
       <DashboardNav navLinks={companyDashboardNavLinks} />
       {isLoading ? (
         <Loading />
-      ) : allJobs && allJobs.length > 0 ? (
+      ) : jobs && jobs.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/*  Job Listing cards */}
-          {allJobs.map((job) => (
+          {jobs.map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
         </div>

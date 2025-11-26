@@ -21,7 +21,7 @@ export default function DashboardNav({ navLinks }: DasbhoardNavLinkProps) {
               activePath ? 'font-semibold text-primary-300' : 'text-black-200',
             )}
           >
-            <Link href={link.href}>{link.title}</Link>
+            <Link href={`/company/jobs/${link.href}`}>{link.title}</Link>
           </nav>
         );
       })}
