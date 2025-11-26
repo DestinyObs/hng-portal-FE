@@ -32,19 +32,23 @@ export const Modal: React.FC<ModalProps> = ({
 
         <div className="flex gap-3 justify-end">
           {secondaryButton && (
-            <Button
-              onClick={secondaryButton.onClick}
-              variant="outlineGray"
-              className="border-black-50"
-            >
-              {secondaryButton.label}
-            </Button>
+            <div className="">
+              <Button
+                onClick={secondaryButton.onClick}
+                variant="outlineGray"
+                className="border-black-50"
+              >
+                {secondaryButton.label}
+              </Button>
+            </div>
           )}
 
           {primaryButton && (
-            <Button onClick={primaryButton.onClick} variant="default">
-              {primaryButton.label}
-            </Button>
+            <div className="">
+              <Button onClick={primaryButton.onClick} variant="default">
+                {primaryButton.label}
+              </Button>
+            </div>
           )}
         </div>
       </div>

@@ -62,19 +62,19 @@ const VerifyEmailPage = () => {
     mutationFn: verifyOtp,
     onSuccess: (response: APIResponse<UserData | null>) => {
       if (response.success && response.data?.user) {
-        toast.success('Verification successful! Redirecting...');
+        toast.success('Email Verification successful! Redirecting...');
         // Set the user data in the store with the fresh data from the response
         setData(response.data.user);
 
         // Infer role and redirect using the fresh user data
-        let dashboardUrl = '/sign-in'; // Default to sign-in as a fallback
-        if (response.data.user.company) {
-          dashboardUrl = '/company/dashboard';
+        let redirectTo = '/sign-in'; // Default to sign-in as a fallback
+        if (response.data.user.current_role === 'talent') {
+          redirectTo = '/onboarding/talent';
         } else {
-          dashboardUrl = '/talent/dashboard';
+          redirectTo = '/onboarding/company';
         }
 
-        router.push(dashboardUrl);
+        router.push(redirectTo);
       } else {
         let errorMessage = response.message || 'An unknown error occurred.';
         if (response.errors) {

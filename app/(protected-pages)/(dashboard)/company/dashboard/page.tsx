@@ -7,13 +7,14 @@ import { DASHBOARD_CARD } from '@/constants/dashboard';
 import { useAuthStore } from '@/store/auth';
 import { useGetAllJobs } from '@/hooks/jobs';
 import { Loader2 } from 'lucide-react';
+import { JobCardProps } from '@/types/job-card';
 
 export default function CompanyDashboardPage() {
   const { user } = useAuthStore();
   const id = user?.company?.id;
   // console.log(user?.company);
-  const { data: allJobs, isLoading } = useGetAllJobs(id);
-  // console.log(allJobs);
+  const { data: allJobs, isLoading } = useGetAllJobs<{data: JobCardProps[]}>(id);
+  const jobs = allJobs?.data
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col gap-8 sm:gap-6">
@@ -46,10 +47,10 @@ export default function CompanyDashboardPage() {
       </div>
       {isLoading ? (
         <Loader2 className="h-12 w-12 animate-spin text-primary-blue" />
-      ) : allJobs && allJobs.length > 0 ? (
+      ) : jobs && jobs.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/*  Job Listing cards */}
-          {allJobs.map((job) => (
+          {jobs.map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
         </div>

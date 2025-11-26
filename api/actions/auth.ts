@@ -76,12 +76,6 @@ export const verifyOtp = async (formData: { otp: number }) => {
       sameSite: 'strict',
       path: '/',
     });
-
-    (await cookies()).set('user', JSON.stringify(res.data.user), {
-      httpOnly: false,
-      sameSite: 'strict',
-      path: '/',
-    });
   }
 
   return res;
