@@ -13,7 +13,7 @@ const Welcome = () => {
         <h1 className="text-5xl text-primary-blue mb-5">[ ]</h1>
         <h1 className="text-4xl font-bold">
           Welcome to <br className="md:hidden" />{' '}
-          <span className="text-primary-blue">HNG Portal</span>
+          <span className="text-primary-blue">HNG Connect</span>
         </h1>
         <p className="text-[#60646E] my-4">
           Let&apos;s set up your professional profile so companies can discover

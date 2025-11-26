@@ -20,6 +20,13 @@ export type MergedTracksData = Tracks & {
   color: string;
 };
 
+export type ConfirmModalType = {
+  openDialog: boolean;
+  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  subtitle: string;
+};
+
 export interface TalentOnboardingResponse {
   success: boolean;
   data?: {
