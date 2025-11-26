@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from '@/components/ui/pagination';
-import { PaginationProps } from '@/lib/types';
+import { PaginationProps } from '@/types/pagination';
 import { useEffect, useRef } from 'react';
 
 export function DashboardPagination({
