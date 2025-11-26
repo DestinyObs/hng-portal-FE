@@ -47,7 +47,7 @@ export default function SignUpRolePage() {
           Join thousands of users already on our platform
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-0 mx-auto max-w-md">
+      <CardContent className="px-0 mx-auto min-w-[500px]">
         {role === 'talent' && <TalentSignUpForm role="talent" />}
         {role === 'company' && <CompanySignUpForm role="company" />}
 

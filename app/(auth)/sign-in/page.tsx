@@ -17,10 +17,10 @@ export default function SignInPage() {
           <HngLogo />
         </div>
         <h1 className="text-2xl font-bold mt-4">
-          Welcome back to <span className="text-primary-blue">HNG Portal</span>
+          Welcome back to <span className="text-primary-blue">HNG Connect</span>
         </h1>
         <p className="text-muted-foreground">
-          Access your dashboard to manage job posts and review applicants
+          Enter your details to access your dashboard
         </p>
       </div>
 

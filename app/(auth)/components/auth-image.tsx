@@ -96,9 +96,9 @@ export function AuthImage() {
       </div>
 
       <div className="text-center z-10 mt-8">
-        <h3 className="text-h3 font-bold">WELCOME TO HNG PORTAL!</h3>
+        <h3 className="text-h3 font-bold">WELCOME TO HNG CONNECT!</h3>
         <p className="text-subtitle">
-          Connect with top talent and discover your next hire
+          Connecting companies with top-tier talents worldwide
         </p>
       </div>
     </div>
