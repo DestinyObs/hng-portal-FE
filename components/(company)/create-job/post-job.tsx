@@ -6,15 +6,6 @@ import type { JobFormData, JobFormData2 } from '@/types/create-new-job';
 import { usePost } from '@/hooks/posts';
 import Loading from '@/app/loading';
 
-const initialJobData: JobFormData = {
-  category_id: '',
-  title: '',
-  description: '',
-  skills: [],
-  acceptance_criteria: '',
-  job_level_id: '',
-};
-
 const steps = [
   { id: 1, label: 'Job Details', sub: 'What is the job about?' },
   { id: 2, label: 'Location', sub: 'Where is job located?' },

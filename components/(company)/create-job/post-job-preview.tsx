@@ -109,11 +109,9 @@ const PostJobPreview = () => {
     setIsDrafting(true);
     try {
       const response = await draftPost(newPost);
-      console.log(response);
 
       if (response && !response?.success) {
         toast.error(response.message);
-        console.log(response);
 
         return;
       }
@@ -123,7 +121,6 @@ const PostJobPreview = () => {
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
-        console.log(error);
       }
     } finally {
       setIsDrafting(false);
