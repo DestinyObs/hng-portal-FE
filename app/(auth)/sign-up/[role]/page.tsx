@@ -16,7 +16,7 @@ import { ArrowLeft } from 'lucide-react';
 import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
 import { notFound, useParams } from 'next/navigation';
 import { useState } from 'react';
-import { signIn } from '@/auth';
+import { signIn } from 'next-auth/react';
 
 export default function SignUpRolePage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function SignUpRolePage() {
 
     try {
       await signIn('google', {
-        callbackUrl: `/auth/callback?role=${role}`,
+        callbackUrl: `/callback?role=${role}`,
       });
     } catch (error) {
       console.error('Sign-in error:', error);

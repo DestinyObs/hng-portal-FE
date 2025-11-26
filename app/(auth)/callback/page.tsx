@@ -6,9 +6,12 @@ import { useSession } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { google_signin } from '@/api/actions/auth';
+import { setToken, setUser } from '@/lib/cookies-helper';
 
 export default function AuthCallback() {
   const { data: session, status } = useSession();
+  console.log(session);
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const { setData } = useAuthStore();
@@ -20,7 +23,7 @@ export default function AuthCallback() {
 
       if (status === 'unauthenticated') {
         setError('Authentication failed. Please try again.');
-        setTimeout(() => router.push('/sign-in'), 2000);
+        // setTimeout(() => router.push('/sign-in'), 2000);
         return;
       }
 
@@ -29,28 +32,36 @@ export default function AuthCallback() {
 
         if (!role) {
           setError('Role not specified');
-          setTimeout(() => router.push('/sign-in'), 2000);
+          // setTimeout(() => router.push('/sign-in'), 2000);
           return;
         }
 
         try {
-          const result = await google_signin(session.accessToken, role);
+          const result = await google_signin(
+            session.accessToken,
+            role as string,
+          );
 
           if (result.success) {
-            setData(result.data.user);
-            router.push(
-              result.data.user.roles[0].name === 'employer'
-                ? '/company/dashboard'
-                : '/talent/dashboard',
-            );
+            console.log(result.data);
+
+            // setData(result.data.user);
+            // await setToken(result.data.token)
+            // await setUser(result.data.user)
+            // router.push(
+            //   result.data.user.current_role === 'employer' ||
+            //     result.data.user.current_role === 'company'
+            //     ? '/company/dashboard'
+            //     : '/talent/dashboard',
+            // );
           } else {
             setError(result.error || 'Backend authentication failed');
-            setTimeout(() => router.push('/sign-in'), 2000);
+            // setTimeout(() => router.push('/sign-in'), 2000);
           }
         } catch (err) {
           console.error('Auth callback error:', err);
           setError('An error occurred during authentication');
-          setTimeout(() => router.push('/sign-in'), 2000);
+          // setTimeout(() => router.push('/sign-in'), 2000);
         }
       }
     };

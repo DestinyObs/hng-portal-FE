@@ -21,7 +21,7 @@ export default function SignInPage() {
 
     try {
       await signIn('google', {
-        callbackUrl: `/auth/callback?role=${'talent'}`,
+        callbackUrl: `/callback`,
       });
     } catch (error) {
       console.error('Sign-in error:', error);

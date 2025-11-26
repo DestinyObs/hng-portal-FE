@@ -41,16 +41,19 @@ export const login = async (formData: LoginType) => {
 
 export async function google_signin(accessToken: string, role: string) {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/auth/google`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/google-auth`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          google_code: accessToken,
+          role,
+        }),
       },
-      body: JSON.stringify({
-        access_token: accessToken,
-        role: role,
-      }),
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
