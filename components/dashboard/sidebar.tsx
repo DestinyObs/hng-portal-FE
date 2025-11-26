@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { Button } from '../ui/button';
 import { AlertCircle } from 'lucide-react';
 import { Progress } from '../ui/progress';
-import { SidebarInsights } from './sidebar-insights';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 
@@ -102,9 +101,6 @@ const DashboardSidebar = () => {
           </div>
         </div>
       </div>
-
-      {/* sidebar - insight */}
-      {role === 'employer' && <SidebarInsights role={role} />}
     </aside>
   );
 };
