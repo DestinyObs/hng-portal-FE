@@ -130,6 +130,7 @@ export default function JobDetailsStep2({
       price: initialData.price || ' ',
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
+      job_level_id: initialData.job_level_id ?? '',
       job_type_id: data.job_type_id || ' ',
       work_mode_id: data.work_mode_id || ' ',
       skills: (initialData.skills as string[]) || [],
@@ -358,7 +359,6 @@ export default function JobDetailsStep2({
 
           <div className="">
             <Button
-              // onClick={handleSubmit(onSubmit)}
               disabled={isSubmitting}
               className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
             >
