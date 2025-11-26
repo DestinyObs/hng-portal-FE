@@ -2,9 +2,7 @@
 import { usePostStore } from '@/store/create-post';
 import { PreviewJob } from '../preview';
 import { useAuthStore } from '@/store/auth';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import {
   useCountries,
   useJobLevel,
@@ -16,15 +14,14 @@ import {
 import { DM_Sans } from 'next/font/google';
 import { Button } from '@/components/ui/button';
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
-import { createPost, draftPost } from '@/api/actions/create-post';
 import { Modal } from '@/components/dashboard/modal';
+import { useCreateJob, useDraftJob } from '@/hooks/jobs';
 
 const PostJobPreview = () => {
   const { newPost } = usePostStore();
+  const { createJob, isPending: isPublishing } = useCreateJob();
+  const { draftJob, isPending: isDrafting } = useDraftJob();
   const { user } = useAuthStore();
-  const router = useRouter();
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [isDrafting, setIsDrafting] = useState(false);
   const [showPublishModal, setShowPublishModal] = useState(false);
 
   const { data: work_modes } = useWorkModes();
@@ -77,55 +74,18 @@ const PostJobPreview = () => {
 
   console.log(job);
 
-  console.log(job);
-
+  // fixed
   const handlePublish = async () => {
     if (!newPost) return;
-    setIsPublishing(true);
     setShowPublishModal(false);
-    try {
-      const response = await createPost(newPost);
-      console.log(response);
-
-      if (response && !response?.success) {
-        toast.error(response.message);
-        return;
-      }
-
-      toast.success('Your job has been posted successfully');
-      router.push('/talent/jobs');
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-      console.log(error);
-    } finally {
-      setIsPublishing(false);
-    }
+    createJob(newPost);
   };
 
   const handleDraft = async () => {
     if (!newPost) return;
-    setIsDrafting(true);
-    try {
-      const response = await draftPost(newPost);
-
-      if (response && !response?.success) {
-        toast.error(response.message);
-
-        return;
-      }
-
-      toast.success('Your job has been saved to draft successfully');
-      router.push('/dashboard/jobs');
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    } finally {
-      setIsDrafting(false);
-    }
+    draftJob(newPost);
   };
+
   return (
     <div className=" p-6 bg-white shadow rounded-lg space-y-6">
       <PreviewJob postDetails={job} />

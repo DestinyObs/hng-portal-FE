@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 const FindJobsMessageIcon = ({ className }: { className?: string }) => {
   return (

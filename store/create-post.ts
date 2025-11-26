@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-type newPost = {
+export type newPost = {
   company_id: string;
   title: string;
   description: string;

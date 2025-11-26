@@ -11,13 +11,17 @@ import DashboardCard from '@/components/dashboard/dashboard-card';
 import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
 
 import { COMPANY_DASHBOARD_CARDS } from '@/constants/dashboard';
+import { JobCardProps } from '@/types/job-card';
 
 export default function CompanyDashboardPage() {
   const { user } = useAuthStore();
   const id = user?.company?.id;
   // console.log(user?.company);
-  const { data: allJobs, isLoading } = useGetAllJobs(id);
-  // console.log(allJobs);
+  const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
+    id,
+  );
+  const jobs = allJobs?.data;
+
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col gap-8 sm:gap-6">
@@ -50,10 +54,10 @@ export default function CompanyDashboardPage() {
       </div>
       {isLoading ? (
         <Loading />
-      ) : allJobs && allJobs.length > 0 ? (
+      ) : jobs && jobs.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/*  Job Listing cards */}
-          {allJobs.map((job) => (
+          {jobs.map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
         </div>

@@ -12,21 +12,35 @@ import { useMutation } from '@tanstack/react-query';
 import { logout } from '@/api/actions/auth';
 import { APIResponse } from '@/api/config.server';
 import { SuccessResponse } from '@/types/api-response';
-
 import Logo from '@/public/assets/images/landing-page/shared/logo.png';
-
-const dashboardLinks = [
-  { label: 'HOME', href: '/talent/dashboard', active: true },
-  { label: 'JOBS', href: '/talent/job', active: false },
-  { label: 'APPLICANTS', href: '/dashboard/applicants', active: false },
-];
+import { useAuthStore } from '@/store/auth';
 
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
-
+  const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const isCompany =
+    user?.roles?.[0]?.name && user?.roles?.[0]?.name === 'employer';
+
+  const dashboardLinks = [
+    {
+      label: 'HOME',
+      href: isCompany ? '/company/dashboard' : '/talent/dashboard',
+      active: true,
+    },
+    {
+      label: 'JOBS',
+      href: isCompany ? '/company/jobs' : '/talent/jobs',
+      active: false,
+    },
+    {
+      label: 'APPLICANTS',
+      href: isCompany ? '/company/applicants' : '/talent/applicants',
+      active: false,
+    },
+  ];
 
   const { mutate: a_logout, isPending: isLoggingOut } = useMutation({
     mutationKey: ['logout'],
