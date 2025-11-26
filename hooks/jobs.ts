@@ -1,4 +1,5 @@
-import { draftPost } from '@/api/actions/create-post';
+import { string } from 'zod';
+import { deleteJob, draftPost, updateStatus } from '@/api/actions/create-post';
 import { createPost } from './../api/actions/create-post';
 import {
   useMutation,
@@ -72,6 +73,88 @@ export const useCreateJob = () => {
 
   return {
     createJob,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  };
+};
+
+export const useUpdateStatus = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const {
+    mutate: changeStatus,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: ({
+      company_id,
+      job_id,
+      status,
+    }: {
+      company_id: string;
+      job_id: string;
+      status: string;
+    }) => updateStatus(company_id, job_id, status),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
+      toast.success('Your job has been updated successfully');
+      router.push('/company/dashboard');
+    },
+
+    onError: (err) => {
+      console.error('Failed to create job:', err);
+      toast.error(err.message);
+    },
+  });
+
+  return {
+    changeStatus,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  };
+};
+
+export const useDelete = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const {
+    mutate: removeJob,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: ({
+      company_id,
+      job_id,
+    }: {
+      company_id: string;
+      job_id: string;
+    }) => deleteJob(company_id, job_id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
+      toast.success('Your job has been removed successfully');
+      router.push('/company/dashboard');
+    },
+
+    onError: (err) => {
+      console.error('Failed to remove job:', err);
+      toast.error(err.message);
+    },
+  });
+
+  return {
+    removeJob,
     isPending,
     isSuccess,
     isError,

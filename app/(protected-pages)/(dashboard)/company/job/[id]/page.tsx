@@ -2,7 +2,7 @@
 import Loading from '@/app/loading';
 import { PreviewJob } from '@/components/(company)/preview';
 import { Button } from '@/components/ui/button';
-import { useGetJob } from '@/hooks/jobs';
+import { useDelete, useGetJob, useUpdateStatus } from '@/hooks/jobs';
 import { useAuthStore } from '@/store/auth';
 import { Job, RawJob } from '@/types/job-card';
 import { DM_Sans } from 'next/font/google';
@@ -16,7 +16,8 @@ const Page = () => {
   const { user } = useAuthStore(); // Get logged-in company user
 
   const companyId = user?.company?.id;
-
+  const { changeStatus, isPending: IsChanging } = useUpdateStatus();
+  const { removeJob, isPending: isRemoving } = useDelete();
   // Fetch job by company + job id
   const { data: job, isPending } = useGetJob(companyId, id as string);
   const rawJob = job as RawJob;
@@ -53,11 +54,17 @@ const Page = () => {
         {/* remove job */}
         <div className="">
           <Button
+            onClick={() =>
+              removeJob({
+                company_id: companyId || '',
+                job_id: (id as string) || '',
+              })
+            }
             size={'sm'}
             variant="destructiveOutline"
             className={`${dm_sans.className}`}
           >
-            Remove Job
+            {isRemoving ? 'Removing...' : 'Remove Job'}
           </Button>
         </div>
 
@@ -76,10 +83,17 @@ const Page = () => {
           {/* close job  */}
           <div className="">
             <Button
+              onClick={() =>
+                changeStatus({
+                  company_id: companyId || '',
+                  job_id: (id as string) || '',
+                  status: 'inactive',
+                })
+              }
               size={'sm'}
               className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
             >
-              close job
+              {!IsChanging ? 'close job' : 'closing...'}
             </Button>
           </div>
         </div>
