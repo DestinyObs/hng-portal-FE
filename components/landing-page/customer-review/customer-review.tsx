@@ -13,7 +13,7 @@ export const testimonials = [
     country: 'Nigeria',
     userType: 'Recruiter',
     testimonial:
-      'We hired two interns through HNG Portal in less than a week. The verified profiles and skill tags make screening 10x faster.',
+      'We hired two interns through HNG Connect in less than a week. The verified profiles and skill tags make screening 10x faster.',
     image: '/images/customer1.jpg',
   },
   {
@@ -21,7 +21,7 @@ export const testimonials = [
     country: 'Nigeria',
     userType: 'Hiring Manager',
     testimonial:
-      'HNG Portal helped us find qualified candidates without spending hours reviewing irrelevant CVs. The platform’s filters and assessments are incredibly accurate.',
+      'HNG Connect helped us find qualified candidates without spending hours reviewing irrelevant CVs. The platform’s filters and assessments are incredibly accurate.',
     image: '/images/customer2.png',
   },
   {
@@ -29,7 +29,7 @@ export const testimonials = [
     country: 'United Kingdom',
     userType: 'Tech Lead',
     testimonial:
-      'The talent pool on HNG Portal is impressive. The developers we interviewed were well-prepared, responsive, and possessed the exact skills we were looking for.',
+      'The talent pool on HNG Connect is impressive. The developers we interviewed were well-prepared, responsive, and possessed the exact skills we were looking for.',
     image: '/images/customer3.png',
   },
   {
@@ -37,7 +37,7 @@ export const testimonials = [
     country: 'Nigeria',
     userType: 'Product Designer',
     testimonial:
-      'HNG Portal gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
+      'HNG Connect gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
     image: '/images/customer1.jpg',
   },
   {
@@ -45,7 +45,7 @@ export const testimonials = [
     country: 'Nigeria',
     userType: 'Hiring Manager',
     testimonial:
-      'HNG Portal helped us find qualified candidates without spending hours reviewing irrelevant CVs. The platform’s filters and assessments are incredibly accurate.',
+      'HNG Connect helped us find qualified candidates without spending hours reviewing irrelevant CVs. The platform’s filters and assessments are incredibly accurate.',
     image: '/images/customer2.png',
   },
   {
@@ -53,7 +53,7 @@ export const testimonials = [
     country: 'United Kingdom',
     userType: 'Tech Lead',
     testimonial:
-      'The talent pool on HNG Portal is impressive. The developers we interviewed were well-prepared, responsive, and possessed the exact skills we were looking for.',
+      'The talent pool on HNG Connect is impressive. The developers we interviewed were well-prepared, responsive, and possessed the exact skills we were looking for.',
     image: '/images/customer3.png',
   },
   {
@@ -61,7 +61,7 @@ export const testimonials = [
     country: 'Nigeria',
     userType: 'Product Designer',
     testimonial:
-      'HNG Portal gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
+      'HNG Connect gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
     image: '/images/customer1.jpg',
   },
 ];
