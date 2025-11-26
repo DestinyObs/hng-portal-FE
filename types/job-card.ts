@@ -13,13 +13,13 @@ export interface JobCardProps {
 }
 
 export interface Job {
-  id: string;
-  category: string;
+  id?: string;
+  category?: string;
   title: string;
   description: string;
-  skills: { id: string; name: string }[];
+  skills: string[];
   acceptance_criteria: string;
-  track: string;
+  track?: string;
   job_type: string;
   work_mode: string;
   price?: string;
