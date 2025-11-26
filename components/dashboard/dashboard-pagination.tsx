@@ -9,6 +9,7 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from '@/components/ui/pagination';
+import { PaginationProps } from '@/lib/types';
 import { useEffect, useRef } from 'react';
 
 export function DashboardPagination({
@@ -16,12 +17,7 @@ export function DashboardPagination({
   totalPages,
   onPageChange,
   maxDesktopPages = 5,
-}: {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  maxDesktopPages?: number;
-}) {
+}: PaginationProps) {
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -33,7 +33,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
             {/* work-mode */}
             <span>{postDetails.work_mode}</span>
             <Dot />
-            <span>{postDetails.level}</span>
+            <span>{postDetails.level ?? postDetails.job_type}</span>
             <Dot />
             {/* location */}
             <span>

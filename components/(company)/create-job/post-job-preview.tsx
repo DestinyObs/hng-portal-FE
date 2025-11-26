@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import {
   useCountries,
+  useJobLevel,
   useJobTypes,
   useSkills,
   useStates,
@@ -31,6 +32,7 @@ const PostJobPreview = () => {
   const { data: states } = useStates();
   const { data: JOBTYPES } = useJobTypes();
   const { data: skillsRef } = useSkills();
+  const { data: jobLevel } = useJobLevel();
 
   const workMode =
     work_modes &&
@@ -53,21 +55,29 @@ const PostJobPreview = () => {
   const job_type =
     JOBTYPES &&
     JOBTYPES.find((item: { id: string }) => item.id === newPost?.job_type_id);
+  const job_level =
+    jobLevel &&
+    jobLevel.find((item: { id: string }) => item.id === newPost?.job_type_id);
 
   const job = {
     ...newPost,
-    state,
-    country,
+    state: state?.name ?? '',
+    country: country?.name ?? '',
     skills: skills ?? [],
     company: user?.company?.name ?? '',
     companyLogo: user?.company?.logo_url ?? '/images/company-profile.png',
-    job_type,
-    work_mode: workMode ?? '',
+    job_type: job_type?.name ?? '',
+    work_mode: workMode?.name ?? '',
     category: newPost?.category_id,
     title: newPost?.title ?? '',
     description: newPost?.description ?? '',
     acceptance_criteria: newPost?.acceptance_criteria ?? '',
+    level: job_level?.name ?? '',
   };
+
+  console.log(job);
+
+  console.log(job);
 
   const handlePublish = async () => {
     if (!newPost) return;
@@ -83,7 +93,7 @@ const PostJobPreview = () => {
       }
 
       toast.success('Your job has been posted successfully');
-      router.push('/dashboard/jobs');
+      router.push('/talent/jobs');
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -103,6 +113,8 @@ const PostJobPreview = () => {
 
       if (response && !response?.success) {
         toast.error(response.message);
+        console.log(response);
+
         return;
       }
 
@@ -111,6 +123,7 @@ const PostJobPreview = () => {
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
+        console.log(error);
       }
     } finally {
       setIsDrafting(false);
@@ -123,44 +136,52 @@ const PostJobPreview = () => {
       <div className="flex flex-col sm:flex-row justify-between gap-4 py-2">
         <div className={`flex justify-between ${dm_sans.className}`}>
           {/* add edit fxnality */}
-          <Button
-            variant="outlineGray"
-            size={'sm'}
-            disabled={isPublishing || isDrafting}
-            className={`font-medium`}
-          >
-            Edit
-          </Button>
-          <Button
-            size={'sm'}
-            variant="ghost"
-            disabled={isPublishing || isDrafting}
-            onClick={handleDraft}
-            className="text-tertiary-500 font-semibold border-0 capitalize md:hidden inline-flex"
-          >
-            Save as draft
-          </Button>
+          <div className="">
+            <Button
+              variant="outlineGray"
+              size={'sm'}
+              disabled={isPublishing || isDrafting}
+              className={`font-medium`}
+            >
+              Edit
+            </Button>
+          </div>
+          <div className="">
+            <Button
+              size={'sm'}
+              variant="ghost"
+              disabled={isPublishing || isDrafting}
+              onClick={handleDraft}
+              className="text-tertiary-500 font-semibold border-0 capitalize md:hidden inline-flex"
+            >
+              Save as draft
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <Button
-            size={'sm'}
-            variant="ghost"
-            disabled={isPublishing || isDrafting}
-            onClick={handleDraft}
-            className={`${dm_sans.className}`}
-          >
-            {isDrafting ? 'Saving to Draft' : 'Save As Draft'}
-          </Button>
+          <div className="">
+            <Button
+              size={'sm'}
+              variant="ghost"
+              disabled={isPublishing || isDrafting}
+              onClick={handleDraft}
+              className={`${dm_sans.className}`}
+            >
+              {isDrafting ? 'Saving to Draft' : 'Save As Draft'}
+            </Button>
+          </div>
 
-          <Button
-            size={'sm'}
-            onClick={() => setShowPublishModal(true)}
-            disabled={isPublishing || isDrafting}
-            className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
-          >
-            {isPublishing ? 'Publishing...' : 'Publish'}
-          </Button>
+          <div className="">
+            <Button
+              size={'sm'}
+              onClick={() => setShowPublishModal(true)}
+              disabled={isPublishing || isDrafting}
+              className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+            >
+              {isPublishing ? 'Publishing...' : 'Publish'}
+            </Button>
+          </div>
         </div>
       </div>
       {/* Publish Confirmation Modal */}

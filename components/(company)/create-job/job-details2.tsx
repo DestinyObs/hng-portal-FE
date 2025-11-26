@@ -62,6 +62,8 @@ export default function JobDetailsStep2({
   const { setNewPost } = usePostStore();
   const { editpost } = useEditPost(id!);
 
+  console.log(initialData);
+
   const isLoading =
     tracksLoading ||
     workModesLoading ||
@@ -82,6 +84,7 @@ export default function JobDetailsStep2({
       job_type_id: initialData.job_type_id || '',
       state_id: initialData.state_id || '',
       country_id: initialData.country_id || '',
+      work_mode_id: initialData.work_mode_id,
     },
     mode: 'onChange',
   });
@@ -99,15 +102,18 @@ export default function JobDetailsStep2({
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
       job_type_id: data.job_type_id || ' ',
+      job_level_id: initialData.job_level_id ?? '',
       work_mode_id: data.work_mode_id || ' ',
       skills: (initialData.skills as string[]) || [],
     };
+    console.log(formData);
+
     if (id) {
       // console.log(formData)
       editpost(formData);
     } else {
       setNewPost(formData);
-      router.push('/dashboard/create-post/preview');
+      router.push('/company/job/preview');
     }
   };
 
@@ -315,42 +321,50 @@ export default function JobDetailsStep2({
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={onPrev}
-            disabled={isDrafting || isSubmitting}
-            className="border-[#E7E7E7] text-[#344054] flex items-center gap-2"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Prev
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleSaveDraft}
-            disabled={isDrafting || isSubmitting}
-            className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
-          >
-            {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-          </Button>
+          <div className="">
+            <Button
+              variant="outline"
+              onClick={onPrev}
+              disabled={isDrafting || isSubmitting}
+              className="border-[#E7E7E7] text-[#344054] flex items-center gap-2"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Prev
+            </Button>
+          </div>
+          <div className="">
+            <Button
+              variant="outline"
+              onClick={handleSaveDraft}
+              disabled={isDrafting || isSubmitting}
+              className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
+            >
+              {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <Button
-            variant="outline"
-            onClick={handleSaveDraft}
-            disabled={isDrafting || isSubmitting}
-            className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
-          >
-            {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-          </Button>
+          <div className="">
+            <Button
+              variant="outline"
+              onClick={handleSaveDraft}
+              disabled={isDrafting || isSubmitting}
+              className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
+            >
+              {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+            </Button>
+          </div>
 
-          <Button
-            // onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
-            className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
-          >
-            {isSubmitting ? 'loading' : id ? 'edit post' : 'finish'}
-          </Button>
+          <div className="">
+            <Button
+              // onClick={handleSubmit(onSubmit)}
+              disabled={isSubmitting}
+              className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+            >
+              {isSubmitting ? 'loading' : id ? 'edit post' : 'finish'}
+            </Button>
+          </div>
         </div>
       </div>
     </form>

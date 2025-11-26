@@ -4,7 +4,18 @@ import Link from 'next/link';
 
 export default async function NotFound() {
   const { user } = await getServerCookies();
-  const userRole = user?.roles[0]?.name;
+  const userRole = user?.roles?.[0]?.name;
+
+  const getHomeLink = () => {
+    switch (userRole) {
+      case 'employer':
+        return '/company/dashboard';
+      case 'talent':
+        return '/talent/dashboard';
+      default:
+        return '/'; // Default to homepage if no user or role
+    }
+  };
 
   return (
     <div className="h-screen flex items-center flex-col justify-center bg-white px-5 relative">
@@ -29,17 +40,7 @@ export default async function NotFound() {
 
         {/* button */}
         <Button asChild className=" p-7 mt-2">
-          <Link
-            href={
-              userRole === 'employer'
-                ? '/company/dashboard'
-                : userRole === 'talent'
-                  ? '/talent/dashboard'
-                  : '/'
-            }
-          >
-            {userRole ? 'Back to Dashboard' : 'Back to Home'}
-          </Link>
+          <Link href={getHomeLink()}>Back to Home</Link>
         </Button>
       </div>
     </div>

@@ -91,3 +91,40 @@ export interface RegisterResponseData {
   email: string;
   token: string;
 }
+
+export interface CompanyOnboardingRequest {
+  logo?: File;
+  name?: string;
+  description?: string;
+  industry?: string;
+  company_size?: string;
+  website_url?: string;
+  state_id?: string;
+  country_id?: string;
+}
+
+export interface CompanyResponse {
+  id: string;
+  name: string;
+  description: string;
+  industry?: string;
+  company_size?: string;
+  website_url?: string;
+  logo_url?: string;
+  state_id?: string;
+  country_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  maxDesktopPages?: number;
+}
+export interface ConfirmationModalProps {
+  openDialog: boolean;
+  setOpenDialog: (value: boolean) => void;
+  onGoToDashboard: () => void;
+}

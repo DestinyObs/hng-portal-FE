@@ -22,7 +22,6 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation'; // Import useSearchParams
 import { useMutation } from '@tanstack/react-query';
 import { verifyOtp, resendOtp } from '@/api/actions/auth';
-import { SuccessResponse } from '@/types/api-response'; // Updated import
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth';
 import { APIResponse } from '@/api/config.server';
@@ -30,13 +29,15 @@ import {
   verifyEmailSchema,
   VerifyEmailFormValues,
 } from '@/validations/verify-email'; // New import for schema
+import { SuccessResponse } from '@/types/api-response';
+import { UserData } from '@/lib/types';
 
 const VerifyEmailPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams(); // Initialize useSearchParams
   const [timeLeft, setTimeLeft] = useState(180);
   const [canResendOTP, setCanResendOTP] = useState(false);
-  const { email: storedEmail, hydrated, setEmail } = useAuthStore(); // Rename email to storedEmail
+  const { email: storedEmail, hydrated, setEmail, setData } = useAuthStore();
 
   // Get email from query parameter, fallback to store
   const emailToDisplay = searchParams.get('email') || storedEmail;
@@ -59,10 +60,21 @@ const VerifyEmailPage = () => {
   const { mutate: a_verifyOtp, isPending: isVerifying } = useMutation({
     mutationKey: ['verify-otp'],
     mutationFn: verifyOtp,
-    onSuccess: (response: APIResponse<SuccessResponse | null>) => {
-      if (response.success) {
-        toast.success('Email verified successfully! Redirecting...');
-        router.push('/company/dashboard');
+    onSuccess: (response: APIResponse<UserData | null>) => {
+      if (response.success && response.data?.user) {
+        toast.success('Verification successful! Redirecting...');
+        // Set the user data in the store with the fresh data from the response
+        setData(response.data.user);
+
+        // Infer role and redirect using the fresh user data
+        let dashboardUrl = '/sign-in'; // Default to sign-in as a fallback
+        if (response.data.user.company) {
+          dashboardUrl = '/company/dashboard';
+        } else {
+          dashboardUrl = '/talent/dashboard';
+        }
+
+        router.push(dashboardUrl);
       } else {
         let errorMessage = response.message || 'An unknown error occurred.';
         if (response.errors) {

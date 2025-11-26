@@ -2,13 +2,8 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import GreenCheck from '@/public/assets/auth/icons/green-check';
-import { DialogDescription } from '@radix-ui/react-dialog';
-
-interface ConfirmationModalProps {
-  openDialog: boolean;
-  setOpenDialog: (value: boolean) => void;
-  onGoToDashboard: () => void;
-}
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
+import { ConfirmationModalProps } from '@/lib/types';
 
 export default function ConfirmationModal({
   openDialog,
@@ -21,6 +16,7 @@ export default function ConfirmationModal({
         className="rounded-xl w-[90%]  max-w-[590px] border-none"
         showCloseButton={false}
       >
+        <DialogTitle className="hidden"></DialogTitle>
         <div className="flex flex-col items-center justify-center gap-6 text-center">
           {/* Success Icon */}
           <div className="flex flex-col gap-3 justify-center items-center">

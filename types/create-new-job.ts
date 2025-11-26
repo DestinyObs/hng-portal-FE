@@ -6,6 +6,7 @@ export interface JobFormData {
   description: string;
   skills: { id: string; name: string }[];
   acceptance_criteria: string;
+  job_level_id: string;
 
   // Step 2
   track_id?: string;
@@ -21,8 +22,9 @@ export interface JobFormData2 {
   category_id: string;
   title: string;
   description: string;
-  skills: string[];
+  skills: string[] | { id: string; name: string }[];
   acceptance_criteria: string;
+  job_level_id: string;
 
   // Step 2
   track_id?: string;
@@ -34,7 +36,7 @@ export interface JobFormData2 {
 }
 
 export interface JobDetailsProps {
-  initialData: JobFormData;
+  initialData: JobFormData2;
   onUpdate: (data: Partial<JobFormData2>) => void;
   onNext?: () => void;
   id?: string;

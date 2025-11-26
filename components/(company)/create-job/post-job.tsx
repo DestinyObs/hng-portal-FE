@@ -12,6 +12,7 @@ const initialJobData: JobFormData = {
   description: '',
   skills: [],
   acceptance_criteria: '',
+  job_level_id: '',
 };
 
 const steps = [
@@ -21,27 +22,29 @@ const steps = [
 ];
 
 export default function PostJob({ id }: { id?: string }) {
-  const { data, isPending } = usePost(id!);
+  const { data, isPending } = usePost(id || '');
   const [currentStep, setCurrentStep] = useState(1);
 
-  const skills = ((data as JobFormData | undefined)?.skills ?? []).map(
+  const skills = (data as JobFormData | undefined)?.skills?.map(
     (skill: string | { id: string }) =>
       typeof skill === 'string' ? skill : skill?.id,
   ) as string[];
-  const [formData, setFormData] = useState<JobFormData2 | JobFormData>(
-    id ? ({ ...data, skills } as JobFormData2) : initialJobData,
-  );
-  // console.log(skills)
-  // console.log('FORM DATA:', formData);
-  // console.log("🔍 EDITING JOB - Payload being sent:", JSON.stringify(data, null, 2));
-  // console.log("🔍 Skills type:", typeof formData.skills);
-  // console.log("🔍 Skills value:", formData.skills);
 
-  const handleFormUpdate = (data: Partial<JobFormData2>): void => {
-    setFormData((prev) => ({ ...prev, ...data, skills: skills }));
+  const [formData, setFormData] = useState<JobFormData2>({
+    category_id: (data as JobFormData | undefined)?.category_id ?? '',
+    title: (data as JobFormData | undefined)?.title ?? '',
+    description: (data as JobFormData | undefined)?.description ?? '',
+    acceptance_criteria:
+      (data as JobFormData | undefined)?.acceptance_criteria ?? '',
+    skills: (data as JobFormData | undefined)?.skills ?? [],
+    job_level_id: (data as JobFormData | undefined)?.job_level_id ?? '',
+  });
+
+  // setData
+  const handleFormUpdate = (details: Partial<JobFormData2>): void => {
+    setFormData((prev) => ({ ...prev, ...details }));
   };
 
-  // console.log(data);
   const handleNext = (): void => {
     setCurrentStep(2);
   };
@@ -61,7 +64,7 @@ export default function PostJob({ id }: { id?: string }) {
           <div className="lg:w-3/4">
             {currentStep === 1 && (
               <JobDetails
-                initialData={data ? (data as JobFormData) : initialJobData}
+                initialData={formData}
                 onUpdate={handleFormUpdate}
                 onNext={handleNext}
                 id={id}
@@ -70,7 +73,7 @@ export default function PostJob({ id }: { id?: string }) {
 
             {currentStep === 2 && (
               <JobDetailsStep2
-                initialData={data ? (data as JobFormData) : initialJobData}
+                initialData={formData}
                 onUpdate={handleFormUpdate}
                 onPrev={handlePrev}
                 id={id}

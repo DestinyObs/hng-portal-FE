@@ -12,6 +12,19 @@ export const useCategories = () => {
   });
 };
 
+export const useJobLevel = () => {
+  return useQuery({
+    queryKey: ['job-level'],
+    queryFn: async () => {
+      const res = await publicFetch('lookups/job-levels');
+      if (!res.success) throw new Error(res.message);
+      console.log(res.data);
+
+      return res.data.data || [];
+    },
+  });
+};
+
 export const useJobTypes = () => {
   return useQuery({
     queryKey: ['job-types'],
