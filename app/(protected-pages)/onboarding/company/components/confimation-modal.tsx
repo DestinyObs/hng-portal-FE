@@ -9,9 +9,8 @@ import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
 export default function ConfirmationModal({
   openDialog,
   setOpenDialog,
-  onGoToDashboard,
 }: ConfirmationModalProps) {
-    const { skipToDashboard } = useSkipToDashboard();
+  const { skipToDashboard } = useSkipToDashboard();
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogContent
@@ -45,7 +44,7 @@ export default function ConfirmationModal({
           {/* Go to Dashboard Button */}
           <DialogFooter className="w-full flex justify-center items-center">
             <Button
-              onClick={()=>skipToDashboard('/talent/dashboard')}
+              onClick={() => skipToDashboard('/talent/dashboard')}
               className="bg-gray-900 hover:bg-gray-800 text-white px-4 h-10 rounded-lg"
               style={{ fontFamily: 'DM Sans' }}
             >

@@ -12,11 +12,9 @@ import {
 } from '@/store/onboarding';
 import Navigation from '../components/navigation';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
 const CompanyOnboardingContent = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const page = searchParams.get('page');
   const setUserType = useUserType((state) => state.setUserType);
   const setTabs = useCompanyOnboardTab((state) => state.setTabs);

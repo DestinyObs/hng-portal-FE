@@ -14,5 +14,4 @@ export interface ModalProps {
 export interface ConfirmationModalProps {
   openDialog: boolean;
   setOpenDialog: (value: boolean) => void;
-  onGoToDashboard: () => void;
 }

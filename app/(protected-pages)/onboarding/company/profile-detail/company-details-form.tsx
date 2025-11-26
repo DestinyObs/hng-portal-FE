@@ -22,7 +22,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useState } from 'react';
-import { countries, cities as states } from '@/constants/dashboard';
 import { saveCompanyOnboarding } from '@/api/actions/onboarding';
 import { toast } from 'sonner';
 import CountryStateSelect from '@/components/shared/ui/country-state-select';
@@ -34,20 +33,20 @@ export default function CompanyDetailsForm() {
   const [showSizeOther, setShowSizeOther] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-const form = useForm<CompanyDetailsSchema>({
-  resolver: zodResolver(companyDetailsSchema),
-  mode: 'onSubmit', // only validate on submit
-  reValidateMode: 'onChange', // Re-validate on change after first submit
-  defaultValues: {
-    industry: '',
-    industryOther: '',
-    size: '',
-    sizeOther: '',
-    website: '',
-    state: '',
-    country: '',
-  },
-});
+  const form = useForm<CompanyDetailsSchema>({
+    resolver: zodResolver(companyDetailsSchema),
+    mode: 'onSubmit', // only validate on submit
+    reValidateMode: 'onChange', // Re-validate on change after first submit
+    defaultValues: {
+      industry: '',
+      industryOther: '',
+      size: '',
+      sizeOther: '',
+      website: '',
+      state: '',
+      country: '',
+    },
+  });
 
   const { isValid } = form.formState;
 
@@ -271,7 +270,6 @@ const form = useForm<CompanyDetailsSchema>({
       <ConfirmationModal
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
-        onGoToDashboard={handleGoToDashboard}
       />
     </Form>
   );

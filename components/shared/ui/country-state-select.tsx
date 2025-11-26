@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Country, State } from 'country-state-city';
 import {
   Select,
@@ -16,8 +16,9 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
-import {FieldValues, useFormContext } from 'react-hook-form';
+import { FieldValues, useFormContext } from 'react-hook-form';
 import { CountryStateSelectProps } from '@/types/country-state-select';
+import type { ICountry, IState } from 'country-state-city';
 
 export default function CountryStateSelect<T extends FieldValues>({
   control,
@@ -32,24 +33,17 @@ export default function CountryStateSelect<T extends FieldValues>({
   statePlaceholder = 'Select state',
   disabled = false,
 }: CountryStateSelectProps<T>) {
-  const [countries, setCountries] = useState<any[]>([]);
-  const [states, setStates] = useState<any[]>([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const { setValue, clearErrors } = useFormContext<T>();
 
-  // Load countries once
-  useEffect(() => {
-    setCountries(Country.getAllCountries());
+  // ⬇️ FIX: useMemo instead of useEffect + setState()
+  const countries: ICountry[] = useMemo(() => {
+    return Country.getAllCountries();
   }, []);
 
-  // Load states when country changes
-  useEffect(() => {
-    if (selectedCountry) {
-      const statesData = State.getStatesOfCountry(selectedCountry);
-      setStates(statesData);
-    } else {
-      setStates([]);
-    }
+  const states: IState[] = useMemo(() => {
+    if (!selectedCountry) return [];
+    return State.getStatesOfCountry(selectedCountry);
   }, [selectedCountry]);
 
   return (
@@ -63,14 +57,17 @@ export default function CountryStateSelect<T extends FieldValues>({
             {showLabels && (
               <FormLabel className={labelClassName}>{countryLabel}</FormLabel>
             )}
+
             <Select
               value={field.value}
               onValueChange={(value) => {
                 field.onChange(value);
                 setSelectedCountry(value);
-                // Reset state field when country changes WITHOUT validation
-                setValue(stateName, '' as any, { shouldValidate: false });
-                // Clear any existing state errors
+
+                // Reset state when country changes
+                setValue(stateName, '' as T[typeof stateName], {
+                  shouldValidate: false,
+                });
                 clearErrors(stateName);
               }}
               disabled={disabled}
@@ -80,6 +77,7 @@ export default function CountryStateSelect<T extends FieldValues>({
                   <SelectValue placeholder={countryPlaceholder} />
                 </SelectTrigger>
               </FormControl>
+
               <SelectContent className="max-h-[200px]">
                 {countries.map((c) => (
                   <SelectItem key={c.isoCode} value={c.isoCode}>
@@ -88,9 +86,8 @@ export default function CountryStateSelect<T extends FieldValues>({
                 ))}
               </SelectContent>
             </Select>
-            <div className="">
-              <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
-            </div>
+
+            <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
           </FormItem>
         )}
       />
@@ -104,6 +101,7 @@ export default function CountryStateSelect<T extends FieldValues>({
             {showLabels && (
               <FormLabel className={labelClassName}>{stateLabel}</FormLabel>
             )}
+
             <Select
               value={field.value}
               onValueChange={field.onChange}
@@ -120,6 +118,7 @@ export default function CountryStateSelect<T extends FieldValues>({
                   />
                 </SelectTrigger>
               </FormControl>
+
               <SelectContent className="max-h-[200px]">
                 {states.length > 0 ? (
                   states.map((s) => (
@@ -134,9 +133,8 @@ export default function CountryStateSelect<T extends FieldValues>({
                 )}
               </SelectContent>
             </Select>
-            <div className="">
-              <FormMessage className="animate-in slide-in-from-top-1 duration-200 text-xs" />
-            </div>
+
+            <FormMessage className="animate-in slide-in-from-top-1 duration-200 text-xs" />
           </FormItem>
         )}
       />
