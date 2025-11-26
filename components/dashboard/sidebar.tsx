@@ -97,9 +97,6 @@ const DashboardSidebar = () => {
           </div>
         </div>
       </div>
-
-      {/* sidebar - insight */}
-      <SidebarInsights role={role} />
     </aside>
   );
 };

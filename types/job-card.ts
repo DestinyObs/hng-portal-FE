@@ -6,6 +6,9 @@ export interface JobCardProps {
   job_type: {
     name: string;
   };
+  job_level: {
+    name: string;
+  };
   created_at: string | undefined;
   countries: {
     name: string;
