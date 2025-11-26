@@ -1,7 +1,5 @@
 import { useRouter } from 'next/navigation';
-
 import { cn, formatTime } from '@/lib/utils';
-
 import { JobCardProps } from '@/types/job-card';
 import {
   Card,
@@ -16,7 +14,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
   const navigate = useRouter();
 
   // view job posting handler
-  const viewJobHandler = () => navigate.push(`/company/jobs/${job?.id}`);
+  const viewJobHandler = () => navigate.push(`/company/job/${job?.id}`);
 
   return (
     <Card
@@ -49,7 +47,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
               </span>
               <div className="rounded-full size-1 bg-[#E8E8E8]" />
               <span className="capitalize text-sm sm:text-xs text-black-200 leading-5">
-                Entry Level
+                {job.job_level?.name}
               </span>
               <div className="rounded-full size-1 bg-[#E8E8E8]" />
               <span className="text-sm sm:text-xs text-black-200 leading-5">
@@ -63,7 +61,8 @@ export default function JobCard({ job }: { job: JobCardProps }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex sm:justify-end gap-4 sm:gap-2 px-0 font-dm_sans">
-        <Button
+        <div className="">
+          <Button
           size="xs"
           variant={'outlineGray'}
           className="px-4 py-2 text-sm sm:text-xs"
@@ -71,13 +70,17 @@ export default function JobCard({ job }: { job: JobCardProps }) {
         >
           View Job Posting
         </Button>
-        <Button
+        </div>
+        <div className="">
+          <Button
           size="xs"
           variant="default"
           className="px-4 py-2 text-sm sm:text-xs"
         >
           View Applicants
         </Button>
+        </div>
+        
       </CardContent>
     </Card>
   );

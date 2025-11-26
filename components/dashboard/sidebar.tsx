@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { Button } from '../ui/button';
 import { AlertCircle } from 'lucide-react';
 import { Progress } from '../ui/progress';
-import { SidebarInsights } from './sidebar-insights';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 
@@ -48,6 +47,11 @@ const DashboardSidebar = () => {
           {role === 'employer' && (
             <Button className="cursor-pointer" size={'md'} asChild>
               <Link href={'/company/job/create'}>Post a Job</Link>
+            </Button>
+          )}
+          {role === 'talent' && (
+            <Button className="cursor-pointer" size={'md'} asChild>
+              <Link href={'/settings/profile'}>View Profile</Link>
             </Button>
           )}
           <Button size={'sm'} className="text-base" variant={'outlineGray'}>
@@ -97,9 +101,6 @@ const DashboardSidebar = () => {
           </div>
         </div>
       </div>
-
-      {/* sidebar - insight */}
-      <SidebarInsights role={role} />
     </aside>
   );
 };

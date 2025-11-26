@@ -21,7 +21,7 @@ import { Loader2 } from 'lucide-react';
 import Input from '@/components/ui/input';
 import { SignInFormValues, signInSchema } from '@/validations/sign-in';
 import { useMutation } from '@tanstack/react-query';
-import { login } from '@/api/actions/auth';
+import { login, requestOtpForUnauthenticatedUser } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
 import { APIResponse } from '@/api/config.server';
 import { UserData } from '@/lib/types';
@@ -29,7 +29,7 @@ import { useAuthStore } from '@/store/auth';
 
 export function SignInForm() {
   const router = useRouter();
-  const { setData } = useAuthStore();
+  const { setData, setEmail } = useAuthStore();
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -58,11 +58,24 @@ export function SignInForm() {
         toast.success('Login successful!');
         router.push(dashboardUrl);
       } else {
-        let errorMessage = response.message || 'An unknown error occurred.';
-        if (response.errors) {
-          errorMessage = Object.values(response.errors).flat().join(' ');
+        const errorMessage = response.message || 'An unknown error occurred.';
+
+        // Handle unverified user case based on exact backend response
+        if (response.status === 401 && errorMessage === 'Unauthenticated.') {
+          const email = form.getValues('email');
+          setEmail(email);
+          requestOtpForUnauthenticatedUser({ email });
+          toast.info('Your email is not verified. A new code has been sent.');
+          router.push('/verify-email');
+        } else {
+          // Handle other login errors
+          if (response.errors) {
+            const errorString = Object.values(response.errors).flat().join(' ');
+            toast.error(errorString);
+          } else {
+            toast.error(errorMessage);
+          }
         }
-        toast.error(errorMessage);
       }
     },
     onError: (error: Error) => {
