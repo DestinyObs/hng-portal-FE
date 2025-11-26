@@ -13,5 +13,6 @@ export const authRoutes = [
 export const publicRoutes = [
   '/',
   '/waitlist',
+  '/job-route',
   // Add other public pages
 ];

@@ -14,6 +14,7 @@ type newPost = {
   job_type_id: string;
   work_mode_id: string;
   skills: string[];
+  job_level_id: string;
 };
 
 interface postStore {

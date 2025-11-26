@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  "p-6 flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-title1 font-semibold transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive active:bg-primary-400 transition-colors transition-shadow transition-transform duration-200 ease-in-out ",
+  "p-6 flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-md text-title1 font-semibold transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-colors transition-shadow transition-transform duration-200 ease-in-out",
   {
     variants: {
       variant: {
@@ -17,11 +17,10 @@ const buttonVariants = cva(
         outline:
           'border bg-transparent hover:bg-primary-50 border-primary-blue text-primary-blue active:bg-primary-50 disabled:border-gray-200 disabled:border-gray-200',
         outlineGray:
-          'border bg-transparent hover:bg-primary-50 border-[#E7E7E7] text-black active:bg-primary-50 disabled:border-gray-200 disabled:border-gray-200',
+          'border bg-transparent hover:bg-primary-50 border-tertiary-50 text-black active:bg-primary-50 disabled:border-gray-200 disabled:border-gray-200',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost:
-          'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+        ghost: 'hover:bg-transparent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {

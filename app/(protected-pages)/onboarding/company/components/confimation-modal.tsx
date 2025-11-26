@@ -16,7 +16,7 @@ export default function ConfirmationModal({
         className="rounded-xl w-[90%]  max-w-[590px] border-none"
         showCloseButton={false}
       >
-        <DialogTitle className='hidden'></DialogTitle>
+        <DialogTitle className="hidden"></DialogTitle>
         <div className="flex flex-col items-center justify-center gap-6 text-center">
           {/* Success Icon */}
           <div className="flex flex-col gap-3 justify-center items-center">
