@@ -1,4 +1,4 @@
-import { FieldValues,Control, Path } from "react-hook-form";
+import { FieldValues, Control, Path } from 'react-hook-form';
 
 export interface CountryStateSelectProps<T extends FieldValues> {
   // Form control

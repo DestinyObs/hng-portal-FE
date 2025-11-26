@@ -80,15 +80,26 @@ const Header = () => {
             ))}
           </ul>
 
-          <Link href="/sign-up" passHref>
-            <Button
-              asChild
-              variant="outline"
-              className="bg-[#D9ECFE] border-[#8CC6FC] border-2 rounded-full w-[138px] h-14 hidden lg:flex"
-            >
-              <span>Get Started</span>
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/sign-in" passHref>
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full w-[138px] h-14 hidden lg:flex"
+              >
+                <span>Login</span>
+              </Button>
+            </Link>
+            <Link href="/sign-up" passHref>
+              <Button
+                asChild
+                variant="outline"
+                className="bg-[#D9ECFE] border-[#8CC6FC] border-2 rounded-full w-[138px] h-14 hidden lg:flex"
+              >
+                <span>Get Started</span>
+              </Button>
+            </Link>
+          </div>
         </nav>
 
         <div
