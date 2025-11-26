@@ -33,8 +33,13 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/auth/')
   ) {
     if (isLoggedIn && userData) {
-      // Get user role
-      const userRole = userData?.roles?.[0]?.name;
+      // Get user role by inferring from the company property
+      let userRole: 'employer' | 'talent' | undefined;
+      if (userData?.company) {
+        userRole = 'employer';
+      } else if (isLoggedIn) {
+        userRole = 'talent';
+      }
 
       if (!userRole) {
         // If logged in but no role, stay on auth page or redirect to error
@@ -58,7 +63,12 @@ export default async function middleware(req: NextRequest) {
   }
 
   // Get user role for protected route checks
-  const userRole = userData?.roles?.[0]?.name;
+  let userRole: 'employer' | 'talent' | undefined;
+  if (userData?.company) {
+    userRole = 'employer';
+  } else if (isLoggedIn) {
+    userRole = 'talent';
+  }
 
   // If logged in but no role, redirect to sign-in
   if (!userRole) {
