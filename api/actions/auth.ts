@@ -8,6 +8,7 @@ import {
 } from '../config.server';
 import { cookies } from 'next/headers';
 import { signIn } from '@/auth';
+import { ChangePasswordFormValues } from '@/validations/change-password';
 
 export const siginWithGoogle = async () => {
   return await signIn('google', { redirectTo: '/dashboard' });
@@ -60,13 +61,23 @@ export const register = async (formData: RegisterType) => {
 };
 
 export const verifyOtp = async (formData: { otp: string }) => {
-  const res = await makeOtpRequest<SuccessResponse, { otp: number }>(
+  const res = await makeOtpRequest<UserData, { otp: number }>(
     '/otp/verify-otp',
     {
       method: 'POST',
       body: { otp: parseInt(formData.otp, 10) },
     },
   );
+
+  if (res.success && res.data?.token) {
+    (await cookies()).set('token', res.data.token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/',
+    });
+  }
+
   return res;
 };
 
@@ -102,6 +113,16 @@ export const resetPassword = async (formData: {
     },
   );
   return res;
+};
+
+export const changePassword = async (data: ChangePasswordFormValues) => {
+  return await makeAuthenticatedRequest<
+    SuccessResponse,
+    ChangePasswordFormValues
+  >('/talent/profile/change-password', {
+    method: 'PUT',
+    body: data,
+  });
 };
 
 export const logout = async () => {

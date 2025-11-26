@@ -8,7 +8,7 @@ import {
   Smartphone,
 } from 'lucide-react';
 
-export const tracks = [
+export const TRACKS = [
   {
     id: 'ui-ux',
     icon: Palette,

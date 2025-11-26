@@ -34,7 +34,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       className={cn(
         // Base styles matching Input component
-        'border-gray-50 relative flex w-full items-center rounded-lg border transition-[color,box-shadow] outline-none cursor-pointer',
+        'border-[#E7E8E9] relative flex w-full items-center rounded-lg border transition-[color,box-shadow] outline-none cursor-pointer',
         'h-14 min-w-0 px-3',
         // Text styles
         'text-foreground text-sm font-medium',

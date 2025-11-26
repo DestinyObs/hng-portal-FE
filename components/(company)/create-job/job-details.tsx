@@ -18,18 +18,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { X } from 'lucide-react';
-import type {
-  JobDetailsProps,
-  JobFormData,
-  JobFormData2,
-} from '@/types/create-new-job';
+import type { JobDetailsProps, JobFormData2 } from '@/types/create-new-job';
 import TextEditor from '@/components/shared/ui/text-editor';
 import Input from '@/components/ui/input';
 import {
   JobDetailsFormData,
   jobDetailsSchema,
+  JobPostPayload2,
 } from '@/validations/create-post.schema';
-import { useCategories, useSkills } from '@/hooks/lookups';
+import { useCategories, useJobLevel, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { draftPost } from '@/api/actions/create-post';
@@ -43,11 +40,15 @@ export default function JobDetails({
   const [isDrafting, setIsDrafting] = useState(false);
 
   const { data: categories } = useCategories();
+  const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
   const [selectedSkills, setSelectedSkills] = useState<
     { id: string; name: string }[]
-  >(initialData.skills as { id: string; name: string }[]);
-  const initialSkills = initialData.skills.map((skill) => skill.id) || [];
+  >((initialData.skills as { id: string; name: string }[]) ?? []);
+  const initialSkills =
+    initialData?.skills?.map((skill) =>
+      typeof skill === 'string' ? skill : skill.id,
+    ) ?? [];
   const {
     control,
     setValue,
@@ -58,6 +59,7 @@ export default function JobDetails({
     resolver: zodResolver(jobDetailsSchema),
     defaultValues: {
       category_id: initialData.category_id,
+      job_level_id: initialData.job_level_id,
       title: initialData.title,
       description: initialData.description || '',
       skills: initialSkills,
@@ -101,6 +103,7 @@ export default function JobDetails({
       skills: data.skills,
       price: data.price,
       acceptance_criteria: data.acceptance_criteria,
+      job_level_id: data.job_level_id,
     };
 
     onUpdate(formDataUpdate);
@@ -110,11 +113,11 @@ export default function JobDetails({
   const handleSaveDraft = async () => {
     setIsDrafting(true);
     const formData = getValues();
-    const formDataUpdate: Partial<JobFormData2> = {
+    const formDataUpdate: Partial<JobPostPayload2> = {
       category_id: formData.category_id,
       title: formData.title,
       description: formData.description,
-      skills: formData.skills,
+      skills: formData.skills as string[],
       acceptance_criteria: formData.acceptance_criteria,
     };
     // onUpdate(formDataUpdate);
@@ -174,6 +177,37 @@ export default function JobDetails({
                   <SelectContent>
                     {categories &&
                       categories.map((cat: { id: string; name: string }) => (
+                        <SelectItem key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.category_id && (
+              <p className="text-xs text-red-500">
+                {errors.category_id.message}
+              </p>
+            )}
+          </div>
+
+          {/* Job level Select */}
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-gray-200">
+              Select Job Level
+            </label>
+            <Controller
+              name="job_level_id"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full border-input bg-white">
+                    <SelectValue placeholder="Choose a job level for this job" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {job_level &&
+                      job_level.map((cat: { id: string; name: string }) => (
                         <SelectItem key={cat.id} value={cat.id}>
                           {cat.name}
                         </SelectItem>
@@ -325,6 +359,7 @@ export default function JobDetails({
               )}
             </div>
           </div>
+
           {/* acceptance criteria */}
           <div className="space-y-3">
             <label htmlFor="criteria" className="text-sm font-semibold">
@@ -353,7 +388,7 @@ export default function JobDetails({
             )}
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons - fixed */}
           <div className="flex flex-col sm:flex-row justify-between gap-4">
             <div className="flex justify-between">
               <Button
@@ -363,33 +398,30 @@ export default function JobDetails({
               >
                 Cancel
               </Button>
-              <Button
-                variant="outline"
-                onClick={handleSaveDraft}
-                disabled={isDrafting}
-                className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
-              >
-                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-              </Button>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <Button
-                variant="outlineGray"
-                onClick={handleSaveDraft}
-                disabled={isDrafting}
-                className="border-[#E7E7E7]"
-              >
-                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-              </Button>
-              <Button
-                onClick={handleSubmit(onSubmit)}
-                variant={'ghost'}
-                disabled={isDrafting}
-                className="text-primary-blue"
-              >
-                Next
-              </Button>
+              <div className="">
+                <Button
+                  variant="outlineGray"
+                  onClick={handleSaveDraft}
+                  disabled={isDrafting}
+                  className="border-[#E7E7E7]"
+                >
+                  {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+                </Button>
+              </div>
+
+              <div className="">
+                <Button
+                  onClick={handleSubmit(onSubmit)}
+                  variant={'ghost'}
+                  disabled={isDrafting}
+                  className="text-primary-blue cursor-pointer"
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         </CardContent>
