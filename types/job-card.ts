@@ -38,3 +38,50 @@ export interface Job {
   posted?: string;
   applyLink?: string;
 }
+
+export interface RawJob {
+  id: string;
+  title: string;
+  description: string;
+  acceptance_criteria: string;
+  state_id: string;
+  country_id: string;
+  company_id: string;
+  price?: string;
+  track_id?: string;
+  work_mode_id?: string;
+  category_id?: string;
+  job_type_id?: string;
+  job_level_id?: string;
+  publication_status?: string;
+  status?: string;
+  deleted_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  company?: {
+    name: string;
+    logo_url?: string;
+  };
+  skills?: {
+    id: string;
+    name: string;
+  }[];
+  track?: {
+    name: string;
+  };
+  job_type?: {
+    name: string;
+  };
+  work_mode?: {
+    name: string;
+  };
+  job_levels?: {
+    name: string;
+  }[];
+  states?: {
+    name: string;
+  }[];
+  countries?: {
+    name: string;
+  }[];
+}
