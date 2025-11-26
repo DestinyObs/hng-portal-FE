@@ -1,7 +1,7 @@
-import { PreviewJob } from '@/components/(company)/preview';
+import PostJobPreview from '@/components/(company)/create-job/post-job-preview';
 
 const Page = () => {
-  return <PreviewJob />;
+  return <PostJobPreview />;
 };
 
 export default Page;

@@ -14,5 +14,6 @@ export const publicRoutes = [
   '/',
   '/waitlist',
   '/callback',
+  '/job-route',
   // Add other public pages
 ];
