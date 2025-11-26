@@ -7,16 +7,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/input';
 import { useTalentOnboardTab } from '@/store/onboarding';
 import UserProfileIcon from '@/public/assets/auth/icons/user-profile';
 import DocumentUploadIcon from '@/public/assets/auth/icons/document-upload';
 import { Textarea } from '@/components/ui/textarea';
+import { useMutation } from '@tanstack/react-query';
+import { talent_onboarding_api } from '@/api/actions/talent-onboarding';
+import { toast } from 'sonner';
+import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
 
 // Zod validation schema
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
   'image/jpg',
@@ -37,17 +40,16 @@ const basicInfoSchema = z.object({
       return ACCEPTED_IMAGE_TYPES.includes(files[0].type);
     }, 'Only .jpg, .jpeg, .png, and .webp images are accepted'),
   role: z.string().min(1, 'Role is required'),
-  bio: z
-    .string()
-    .min(1, 'Short bio is required')
-    .max(500, 'Bio must be less than 500 characters'),
+  bio: z.string().min(1, 'Short bio is required').max(500),
 });
 
 type BasicInfoFormData = z.infer<typeof basicInfoSchema>;
 
 export default function BasicInformation() {
+  const { skipToDashboard } = useSkipToDashboard();
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [profileError, setProfileError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useRouter();
 
@@ -66,31 +68,68 @@ export default function BasicInformation() {
     },
   });
 
-  const onSubmit = () => {
-    // Log the actual file to be sent to backend
-    if (selectedFile) {
-      // const formData = new FormData();
-
-      navigate.push('/onboarding/talent?page=track');
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: FormData) => talent_onboarding_api(data),
+    onSuccess: () => {
+      toast.success('Basic information saved');
       setTabs('track');
-    } else {
-      throw new Error('No profile image selected');
+      navigate.push('/onboarding/talent?page=track');
+    },
+    onError: (err) => {
+      console.error('Error onboarding:', err);
+      toast.error(err.message);
+    },
+  });
+
+  const onSubmit = (data: BasicInfoFormData) => {
+    if (!selectedFile) {
+      setProfileError('No profile image selected');
+      return;
     }
+
+    const formData = new FormData();
+    formData.append('current_role', data.role);
+    formData.append('bio', data.bio);
+    formData.append('profile_image', selectedFile);
+
+    mutate(formData);
   };
 
   const handleFileChange = (files: FileList | null) => {
-    if (files && files.length > 0) {
-      const file = files[0];
-      setSelectedFile(file);
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-
-      setValue('profileImage', files);
+    if (!files || files.length === 0) {
+      setSelectedFile(null);
+      setProfilePreview(null);
+      setProfileError('No profile image selected');
+      return;
     }
+
+    const file = files[0];
+
+    // validate size
+    if (file.size > MAX_FILE_SIZE) {
+      setProfileError('Image size must be less than 5MB');
+      setSelectedFile(null);
+      setProfilePreview(null);
+      return;
+    }
+
+    // validate type
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      setProfileError('Only .jpg, .jpeg, .png, and .webp images are accepted');
+      setSelectedFile(null);
+      setProfilePreview(null);
+      return;
+    }
+
+    // valid file
+    setSelectedFile(file);
+    setProfileError(''); // clear live error
+
+    const reader = new FileReader();
+    reader.onloadend = () => setProfilePreview(reader.result as string);
+    reader.readAsDataURL(file);
+
+    setValue('profileImage', files);
   };
 
   const handleImageClick = () => {
@@ -149,10 +188,8 @@ export default function BasicInformation() {
             accept=".jpg,.jpeg,.png,.webp"
           />
 
-          {errors.profileImage && (
-            <p className="text-red-500 text-xs mt-2">
-              {errors.profileImage.message as string}
-            </p>
+          {profileError && (
+            <p className="text-red-500 text-xs mt-2">{profileError}</p>
           )}
         </div>
 
@@ -195,20 +232,22 @@ export default function BasicInformation() {
 
       <div className="mt-6 flex flex-col items-center gap-3">
         <Button
-          variant={'default'}
+          variant="default"
           onClick={handleContinue}
-          size={'sm'}
+          size="sm"
+          disabled={isPending}
           className="w-full md:w-88"
         >
-          Continue
+          {isPending ? 'Saving...' : 'Continue'}
         </Button>
 
-        <Link
-          href={'/dashboard'}
+        <Button
+          variant={'link'}
+          onClick={() => skipToDashboard('/talent/dashboard')}
           className="mt-5 text-primary-blue font-medium text-lg hover:text-primary-blue/60 transition-colors"
         >
           Complete Later
-        </Link>
+        </Button>
       </div>
     </div>
   );

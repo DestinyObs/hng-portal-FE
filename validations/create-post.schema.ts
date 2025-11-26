@@ -15,6 +15,7 @@ export const jobDetailsSchema = z.object({
     .string()
     .min(50, 'Acceptance criteria must be at least 50 characters')
     .min(50, 'Acceptance criteria must be at least 50 characters'),
+  job_level_id: z.string().min(1, 'Candidate Location is required'),
 });
 
 export type JobDetailsFormData = z.infer<typeof jobDetailsSchema>;
@@ -40,6 +41,7 @@ export type JobPostPayload = {
   track_id: string;
   category_id: string;
   job_type_id: string;
+  job_level_id: string;
   work_mode_id: string;
   skills: { id: string; name: string }[] | string[];
 };

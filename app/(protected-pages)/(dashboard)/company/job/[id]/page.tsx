@@ -1,5 +1,6 @@
 import { PreviewJob } from '@/components/(company)/preview';
+import { job } from '@/constants/constants';
 
 export default function page() {
-  return <PreviewJob />;
+  return <PreviewJob postDetails={job} />;
 }
