@@ -70,7 +70,7 @@ export function Tabs({ tabs, variant }: TabsProps) {
         {/*  Tab Content Panels  */}
         {tabs.map(({ value, TabView }) => (
           <TabsContent key={value} value={value}>
-            <Card className="bg-transparent border-0 shadow-none">
+            <Card className="bg-transparent border-0 shadow-none py-0 px-0">
               <TabView />
             </Card>
           </TabsContent>

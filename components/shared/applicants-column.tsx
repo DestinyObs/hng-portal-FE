@@ -3,6 +3,12 @@ import Dropdown from '@/components/shared/ui/dropdown';
 import { DataStatus } from '@/components/shared/ui/table-status';
 import { ColumnDef } from '@tanstack/react-table';
 import { EllipsisVertical, Verified } from 'lucide-react';
+import { DM_Sans } from 'next/font/google';
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+});
 
 export type Applicant = {
   id: string;
@@ -55,7 +61,9 @@ export const columns: ColumnDef<Applicant>[] = [
       const verified = row.getValue('verified') as boolean;
 
       return (
-        <span className="flex items-center gap-1 text-tertiary-500 text-base">
+        <span
+          className={`${dmSans.className} flex items-center gap-1 text-tertiary-500 text-base font-normal`}
+        >
           <span>{name}</span>{' '}
           {verified && <Verified fill="#00AEFF" color="white" size={15} />}
         </span>
@@ -63,16 +71,38 @@ export const columns: ColumnDef<Applicant>[] = [
     },
   },
 
-  // phone no
+  // email
   {
     accessorKey: 'email',
     header: 'Email *',
+    cell: ({ row }) => {
+      const email = row.getValue('email') as string;
+
+      return (
+        <span
+          className={`${dmSans.className} text-[#121212] text-base font-normal`}
+        >
+          {email}
+        </span>
+      );
+    },
   },
 
   // Job Applied
   {
     accessorKey: 'applied_role',
     header: 'Job Applied',
+    cell: ({ row }) => {
+      const role = row.getValue('applied_role') as string;
+
+      return (
+        <span
+          className={`${dmSans.className} text-black text-base font-normal`}
+        >
+          {role}
+        </span>
+      );
+    },
   },
 
   // Job status
@@ -88,9 +118,17 @@ export const columns: ColumnDef<Applicant>[] = [
   {
     accessorKey: 'applied_date',
     header: 'Date Applied',
-    // cell: ({row})=> {
-    //    return <ProductStatus status={row.getValue('label_status')} />
-    // }
+    cell: ({ row }) => {
+      const date = row.getValue('applied_date') as string;
+
+      return (
+        <span
+          className={`${dmSans.className} text-tertiary-75 text-base font-normal`}
+        >
+          {date}
+        </span>
+      );
+    },
   },
 
   {
@@ -102,7 +140,7 @@ export const columns: ColumnDef<Applicant>[] = [
           dropdownMenuContent={'end'}
           triggerVariant="data-menu"
           title={<EllipsisVertical size={15} />}
-          values={[{ name: 'action' }, { name: 'delete' }, { name: 'view' }]}
+          values={[{ name: 'View' }, { name: 'Edit Status' }]}
         />
       );
     },
