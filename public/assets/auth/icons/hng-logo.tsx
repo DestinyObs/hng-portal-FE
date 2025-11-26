@@ -4,8 +4,8 @@ import React from 'react';
 export function HngLogo() {
   return (
     <Image
-      src="/images/hng-logo-2.png"
-      alt="HNG Portal"
+      src="/images/hng-connect-logo.png"
+      alt="HNG Connect"
       width={180}
       height={40}
     />

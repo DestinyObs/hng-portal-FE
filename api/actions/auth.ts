@@ -60,12 +60,12 @@ export const register = async (formData: RegisterType) => {
   return res;
 };
 
-export const verifyOtp = async (formData: { otp: string }) => {
+export const verifyOtp = async (formData: { otp: number }) => {
   const res = await makeOtpRequest<UserData, { otp: number }>(
     '/otp/verify-otp',
     {
       method: 'POST',
-      body: { otp: parseInt(formData.otp, 10) },
+      body: { otp: formData.otp },
     },
   );
 
@@ -129,6 +129,18 @@ export const changePassword = async (data: ChangePasswordFormValues) => {
     method: 'PUT',
     body: data,
   });
+};
+
+export const requestOtpForUnauthenticatedUser = async (formData: {
+  email: string;
+}) => {
+  return await makePublicRequest<SuccessResponse, { email: string }>(
+    '/otp/resend-otp',
+    {
+      method: 'POST',
+      body: formData,
+    },
+  );
 };
 
 export const logout = async () => {
