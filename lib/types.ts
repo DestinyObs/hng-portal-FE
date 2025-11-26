@@ -20,6 +20,7 @@ export interface User {
   firstname: string | null;
   lastname: string | null;
   othername: string | null;
+  current_role: string;
   email: string;
   email_verified_at: string | null;
   phone: string | null;

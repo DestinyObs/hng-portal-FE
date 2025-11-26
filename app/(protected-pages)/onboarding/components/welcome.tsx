@@ -1,9 +1,11 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
 import { useRouter } from 'next/navigation';
 
 const Welcome = () => {
   const navigate = useRouter();
+  const { skipToDashboard } = useSkipToDashboard();
 
   return (
     <div className="w-[90%] mx-auto md:w-3/5 lg:w-1/2 min-h-screen h-full flex justify-center items-center">
@@ -29,7 +31,7 @@ const Welcome = () => {
           <Button
             variant={'outline'}
             size={'sm'}
-            onClick={() => navigate.push('/dashboard')}
+            onClick={() => skipToDashboard('/talent/dashboard')}
             className="font-normal bg-primary-50 text-primary-blue hover:bg-primary-50"
           >
             Skip to Dashboard
