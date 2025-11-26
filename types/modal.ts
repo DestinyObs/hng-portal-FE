@@ -11,3 +11,8 @@ export interface ModalProps {
   primaryButton?: ButtonConfig;
   secondaryButton?: ButtonConfig;
 }
+export interface ConfirmationModalProps {
+  openDialog: boolean;
+  setOpenDialog: (value: boolean) => void;
+  onGoToDashboard: () => void;
+}

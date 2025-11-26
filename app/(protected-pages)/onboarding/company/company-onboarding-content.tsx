@@ -13,13 +13,14 @@ import {
 import Navigation from '../components/navigation';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
 const CompanyOnboardingContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = searchParams.get('page');
   const setUserType = useUserType((state) => state.setUserType);
   const setTabs = useCompanyOnboardTab((state) => state.setTabs);
-
+  const { skipToDashboard } = useSkipToDashboard();
   useEffect(() => {
     setUserType('company');
     if (page) {
@@ -48,7 +49,7 @@ const CompanyOnboardingContent = () => {
           </FormContainer>
           <Navigation
             rightButtonText={'Skip'}
-            rightButtonAction={() => router.push('/dashboard')}
+            rightButtonAction={() => skipToDashboard('/talent/dashboard')}
           />
         </OnboardLayout>
       ) : (
