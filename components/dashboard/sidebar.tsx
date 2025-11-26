@@ -49,6 +49,11 @@ const DashboardSidebar = () => {
               <Link href={'/company/job/create'}>Post a Job</Link>
             </Button>
           )}
+          {role === 'talent' && (
+            <Button className="cursor-pointer" size={'md'} asChild>
+              <Link href={'/settings/profile'}>View Profile</Link>
+            </Button>
+          )}
           <Button size={'sm'} className="text-base" variant={'outlineGray'}>
             Request Verification
           </Button>

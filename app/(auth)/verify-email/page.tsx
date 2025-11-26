@@ -127,7 +127,7 @@ const VerifyEmailPage = () => {
   };
 
   const onSubmit = (data: VerifyEmailFormValues) => {
-    a_verifyOtp({ otp: data.pin });
+    a_verifyOtp({ otp: parseInt(data.pin, 10) });
   };
 
   const handleResend = () => {
