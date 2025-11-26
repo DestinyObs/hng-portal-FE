@@ -16,8 +16,8 @@ import { SuccessResponse } from '@/types/api-response';
 import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 
 const dashboardLinks = [
-  { label: 'HOME', href: '/dashboard', active: true },
-  { label: 'JOBS', href: '/dashboard/jobs', active: false },
+  { label: 'HOME', href: '/talent/dashboard', active: true },
+  { label: 'JOBS', href: '/talent/job', active: false },
   { label: 'APPLICANTS', href: '/dashboard/applicants', active: false },
 ];
 

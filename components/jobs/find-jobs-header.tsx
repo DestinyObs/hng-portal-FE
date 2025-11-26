@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import { Menu, X } from "lucide-react";
-import FindJobsBellIcon from "../icons/find-jobs-bell-icon";
-import FindJobsMessageIcon from "../icons/find-jobs-message-icon";
-import FindJobsSettingsIcon from "../icons/find-jobs-settings-icon";
+import { useState } from 'react';
+import Image from 'next/image';
+import { Menu, X } from 'lucide-react';
+import FindJobsBellIcon from '../icons/find-jobs-bell-icon';
+import FindJobsMessageIcon from '../icons/find-jobs-message-icon';
+import FindJobsSettingsIcon from '../icons/find-jobs-settings-icon';
 
 export default function FindJobsHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,18 +22,17 @@ export default function FindJobsHeader() {
           className="h-9 w-auto"
         />
 
-
         <nav className="hidden md:flex items-center gap-10">
           {[
-            { label: "HOME", active: false },
-            { label: "JOBS", active: true },
-            { label: "APPLICANTS", active: false },
+            { label: 'HOME', active: false },
+            { label: 'JOBS', active: true },
+            { label: 'APPLICANTS', active: false },
           ].map((item) => (
             <a
               key={item.label}
               href="#"
               className={`text-sm font-semibold transition-colors ${
-                item.active ? "text-gray-900" : "text-gray-100"
+                item.active ? 'text-gray-900' : 'text-gray-100'
               }`}
             >
               {item.label}
@@ -79,45 +78,44 @@ export default function FindJobsHeader() {
         </button>
       </div>
 
-{menuOpen && (
-  <div className="w-full bg-white shadow-md border-b p-6 md:hidden animate-fade-in">
-    <nav className="flex flex-col gap-6">
-      {[
-        { label: "HOME", active: false },
-        { label: "JOBS", active: true },
-        { label: "APPLICANTS", active: false },
-      ].map((item) => (
-        <a
-          key={item.label}
-          href="#"
-          className={`text-base font-semibold ${
-            item.active ? "text-gray-900" : "text-tertiary-75"
-          }`}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
+      {menuOpen && (
+        <div className="w-full bg-white shadow-md border-b p-6 md:hidden animate-fade-in">
+          <nav className="flex flex-col gap-6">
+            {[
+              { label: 'HOME', active: false },
+              { label: 'JOBS', active: true },
+              { label: 'APPLICANTS', active: false },
+            ].map((item) => (
+              <a
+                key={item.label}
+                href="#"
+                className={`text-base font-semibold ${
+                  item.active ? 'text-gray-900' : 'text-tertiary-75'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
 
-    <div className="flex items-center gap-4 mt-8">
-      <FindJobsMessageIcon className="h-6 w-6 text-gray-700" />
-      <FindJobsBellIcon className="h-6 w-6 text-gray-700" />
-      <FindJobsSettingsIcon className="h-6 w-6 text-gray-700" />
-    </div>
+          <div className="flex items-center gap-4 mt-8">
+            <FindJobsMessageIcon className="h-6 w-6 text-gray-700" />
+            <FindJobsBellIcon className="h-6 w-6 text-gray-700" />
+            <FindJobsSettingsIcon className="h-6 w-6 text-gray-700" />
+          </div>
 
-    <div className="flex items-center gap-2 mt-6">
-      <Image
-        src="/images/talent-profile.jpg"
-        alt="User"
-        width={40}
-        height={40}
-        className="rounded-full"
-      />
-      <p className="text-sm font-medium">My Profile</p>
-    </div>
-  </div>
-)}
-
+          <div className="flex items-center gap-2 mt-6">
+            <Image
+              src="/images/talent-profile.jpg"
+              alt="User"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+            <p className="text-sm font-medium">My Profile</p>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

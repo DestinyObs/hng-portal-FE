@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FiltersSidebar from './filters-sidebar';
 import JobCard from './job-card';
 import SearchBar from './search-bar';
-import FindJobsHeader from './find-jobs-header';
+// import FindJobsHeader from './find-jobs-header';
 import ApplyJobs from './apply-jobs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -42,30 +42,36 @@ const mockJobs = [
 ];
 
 export default function FindJobsPage() {
-  const [selectedJob, setSelectedJob] = useState<(typeof mockJobs)[0] | null>(null);
+  const [selectedJob, setSelectedJob] = useState<(typeof mockJobs)[0] | null>(
+    null,
+  );
 
   return (
     <>
       <div className="min-h-screen bg-(--color-white-100)">
-        <FindJobsHeader />
+        {/* <FindJobsHeader /> */}
 
         <main className="mx-auto max-w-[1440px] px-6 py-8 md:px-12 lg:px-20 xl:px-32">
           <nav className="mb-6 text-sm" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2">
-              {['Explore Jobs', 'Applied (0)', 'Saved Jobs (1)'].map((item, i) => (
-                <li key={item} className="flex items-center">
-                  {i > 0 && <span className="mx-2 text-(--color-gray-100)">•</span>}
-                  <span
-                    className={
-                      item === 'Explore Jobs'
-                        ? 'font-semibold text-(--color-primary-blue)'
-                        : 'text-(--color-gray-100)'
-                    }
-                  >
-                    {item}
-                  </span>
-                </li>
-              ))}
+              {['Explore Jobs', 'Applied (0)', 'Saved Jobs (1)'].map(
+                (item, i) => (
+                  <li key={item} className="flex items-center">
+                    {i > 0 && (
+                      <span className="mx-2 text-(--color-gray-100)">•</span>
+                    )}
+                    <span
+                      className={
+                        item === 'Explore Jobs'
+                          ? 'font-semibold text-(--color-primary-blue)'
+                          : 'text-(--color-gray-100)'
+                      }
+                    >
+                      {item}
+                    </span>
+                  </li>
+                ),
+              )}
             </ol>
           </nav>
 
@@ -130,7 +136,6 @@ export default function FindJobsPage() {
         </main>
       </div>
 
-  
       {selectedJob && (
         <ApplyJobs job={selectedJob} onClose={() => setSelectedJob(null)} />
       )}
