@@ -1,8 +1,6 @@
 'use client';
-import ArrowLeft from '@/public/assets/auth/icons/arrow-left';
 import ArrowRight from '@/public/assets/auth/icons/arrow-right';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface NavigationProps {
@@ -13,17 +11,8 @@ export default function Navigation({
   rightButtonText,
   rightButtonAction,
 }: NavigationProps) {
-  const router = useRouter();
   return (
-    <div className="w-full max-w-[1200px] mx-auto flex justify-between gap-4 items-center flex-col md:flex-row mt-5 md:mt-10">
-      <Button
-        variant={'ghost'}
-        className="font-medium text-base text-primary-300 transition-all duration-300 ease-in flex gap-1 justify-center"
-        onClick={() => router.back()}
-      >
-        <ArrowLeft />
-        <span>Back</span>
-      </Button>
+    <div className="w-full max-w-[1200px] mx-auto flex justify-between gap-4 items-center flex-col md:flex-row mt-5 md:mt-10 md:justify-end">
       <Button
         variant={'ghost'}
         onClick={rightButtonAction}

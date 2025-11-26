@@ -17,10 +17,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import DocumentUploadIcon from '@/public/assets/auth/icons/document-upload';
+import { saveCompanyOnboarding } from '@/api/actions/onboarding';
+import { toast } from 'sonner';
 
 export default function UserIdentityForm() {
   const route = useRouter();
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<UserIdentitySchema>({
     resolver: zodResolver(userIdentitySchema),
@@ -30,7 +33,9 @@ export default function UserIdentityForm() {
       description: '',
     },
   });
+
   const { isValid } = form.formState;
+
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -43,13 +48,56 @@ export default function UserIdentityForm() {
     }
   };
 
-  const onSubmit = (data: UserIdentitySchema) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    route.push('/onboarding/company?page=company-detail');
+  const handleCompleteLater = () => {
+    console.log('Complete later clicked');
+    route.push('/dashboard');
   };
+
+  const onSubmit = async (data: UserIdentitySchema) => {
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+          formData.append(key, value);
+        }
+      });
+
+      const result = await saveCompanyOnboarding(formData);
+
+      if (result.success) {
+        toast.success('Company identity saved!', {
+          description: 'Proceeding to company details...',
+        });
+        route.push('/onboarding/company?page=company-detail');
+      } else {
+        if (result.details?.errors) {
+          Object.entries(result.details.errors).forEach(([field, messages]) => {
+            const errorMessage = Array.isArray(messages)
+              ? messages.join(', ')
+              : messages;
+
+            toast.error(`${field}`, {
+              description: errorMessage,
+            });
+          });
+        } else {
+          toast.error('Failed to save company identity', {
+            description:
+              result.error || 'Please check your information and try again.',
+          });
+        }
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred', {
+        description: 'Please check your connection and try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <div className="text-center">
@@ -78,7 +126,7 @@ export default function UserIdentityForm() {
         <div>
           <label
             htmlFor="logo-upload"
-            className="inline-flex items-center gap-1 pl-3 pr-4 py-2 border border-tertiary-50 rounded-[8px] cursor-pointer hover:bg-gray-50 font-medium text-xs transition-all duration-300 ease-in"
+            className="inline-flex items-center gap-1 pl-3 pr-4 py-2 border border-tertiary-50 rounded-lg cursor-pointer hover:bg-gray-50 font-medium text-xs transition-all duration-300 ease-in"
           >
             <DocumentUploadIcon className="w-3 h-3" />
             <span>Upload Logo</span>
@@ -107,7 +155,7 @@ export default function UserIdentityForm() {
                   <Input
                     placeholder="HNG Connect"
                     {...field}
-                    className="h-10 border-tertiary-50 rounded-[8px]"
+                    className="h-10 border-tertiary-50 rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -126,7 +174,7 @@ export default function UserIdentityForm() {
                 <FormControl>
                   <Textarea
                     placeholder="e.g., Main House, Beach Condo"
-                    className="resize-none h-[130px] border-tertiary-50 rounded-[8px]"
+                    className="resize-none h-[130px] border-tertiary-50 rounded-lg"
                     {...field}
                   />
                 </FormControl>
@@ -138,9 +186,18 @@ export default function UserIdentityForm() {
           <div className="flex flex-col gap-4 mt-10 md:w-[80%] mx-auto">
             <Button
               type="submit"
+              disabled={!isValid || isSubmitting}
               className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
             >
-              Continue
+              {isSubmitting ? 'Saving...' : 'Continue'}
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleCompleteLater}
+              className="text-primary-300 transition-all duration-300 ease-in"
+            >
+              Complete Later
             </Button>
           </div>
         </form>

@@ -7,7 +7,7 @@ import Sidebar from '@/components/dashboard/sidebar';
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  const isSettingsPage = pathname?.startsWith('/dashboard/settings');
+  const isSettingsPage = pathname?.startsWith('/settings');
 
   return (
     <div className=" flex flex-col bg-white-100 relative">
