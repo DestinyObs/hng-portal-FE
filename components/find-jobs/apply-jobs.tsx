@@ -25,8 +25,9 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    Promise.resolve().then(() => setIsVisible(true));
     document.body.style.overflow = 'hidden';
+
     return () => {
       document.body.style.overflow = 'unset';
     };
