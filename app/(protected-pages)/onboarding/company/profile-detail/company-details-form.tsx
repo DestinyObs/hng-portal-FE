@@ -22,9 +22,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useState } from 'react';
-import { countries, cities as states } from '@/constants/dashboard';
 import { saveCompanyOnboarding } from '@/api/actions/onboarding';
 import { toast } from 'sonner';
+import CountryStateSelect from '@/components/shared/ui/country-state-select';
 
 export default function CompanyDetailsForm() {
   const router = useRouter();
@@ -35,7 +35,8 @@ export default function CompanyDetailsForm() {
 
   const form = useForm<CompanyDetailsSchema>({
     resolver: zodResolver(companyDetailsSchema),
-    mode: 'onChange',
+    mode: 'onSubmit', // only validate on submit
+    reValidateMode: 'onChange', // Re-validate on change after first submit
     defaultValues: {
       industry: '',
       industryOther: '',
@@ -97,7 +98,7 @@ export default function CompanyDetailsForm() {
   };
 
   const handleGoToDashboard = () => {
-    router.push('/onboarding/company?page=profile-detail');
+    router.push('/company/dashboard');
   };
 
   return (
@@ -248,63 +249,11 @@ export default function CompanyDetailsForm() {
         />
 
         {/* State + Country Grid */}
-        <div className="grid grid-cols-2 gap-4">
-          {/* Country */}
-          <FormField
+        <div className="grid grid-cols-2 gap-4 mt-2">
+          <CountryStateSelect
             control={form.control}
-            name="country"
-            render={({ field }) => (
-              <FormItem className="space-y-2">
-                <FormLabel>Country</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full h-10 rounded-lg">
-                      <SelectValue placeholder="Select country" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="max-h-[200px]">
-                    {countries.map((country) => (
-                      <SelectItem key={country} value={country}>
-                        {country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
-              </FormItem>
-            )}
-          />
-
-          {/*   State */}
-          <FormField
-            control={form.control}
-            name="state"
-            render={({ field }) => (
-              <FormItem className="space-y-2">
-                <FormLabel>State</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full h-10 rounded-lg">
-                      <SelectValue placeholder="Select State" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="max-h-[200px]">
-                    {states.map((state) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage className="animate-in slide-in-from-top-1 duration-200" />
-              </FormItem>
-            )}
+            countryName="country"
+            stateName="state"
           />
         </div>
         <div className="flex flex-col gap-4 mt-10 w-full md:w-[80%] mx-auto">
@@ -312,7 +261,7 @@ export default function CompanyDetailsForm() {
           <Button
             type="submit"
             disabled={!isValid || isSubmitting}
-            className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
+            className="bg-primary-300 disabled:bg-[#7ED3FF] h-12 transition-all duration-300 ease-in disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Saving...' : 'Continue'}
           </Button>
@@ -321,7 +270,6 @@ export default function CompanyDetailsForm() {
       <ConfirmationModal
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
-        onGoToDashboard={handleGoToDashboard}
       />
     </Form>
   );
