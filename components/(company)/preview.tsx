@@ -17,7 +17,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
             <Image
               className="rounded-full"
               fill
-              src={postDetails.companyLogo || '/images/company-profile.png'}
+              src={postDetails?.companyLogo || '/images/company-profile.png'}
               alt={''}
             />
           </div>
@@ -31,13 +31,13 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
             className={`text-[14px] capitalize text-black-200 font-['var(--font-dm_sans)'] flex ${dm_sans.className}`}
           >
             {/* work-mode */}
-            <span>{postDetails.work_mode}</span>
+            <span>{postDetails?.work_mode}</span>
             <Dot />
-            <span>{postDetails.level ?? postDetails.job_type}</span>
+            <span>{postDetails?.level ?? postDetails?.job_type}</span>
             <Dot />
             {/* location */}
             <span>
-              {postDetails.state}, {postDetails.country}
+              {postDetails?.state}, {postDetails?.country}
             </span>
           </div>
         </div>
@@ -49,7 +49,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
           Job Description
         </h3>
         <p className="text-tertiary-200 text-[16px]">
-          {postDetails.description}
+          {postDetails?.description}
         </p>
       </div>
 
@@ -59,8 +59,8 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
           Skills and Expertise
         </h3>
         <ul className="flex justify-start flex-wrap gap-3 text-gray-600">
-          {postDetails.skills &&
-            postDetails.skills.map((item: string, index: number) => (
+          {postDetails?.skills &&
+            postDetails?.skills.map((item: string, index: number) => (
               <li
                 key={index}
                 className="border border-[#EAF0ED] py-1.5 px-3 p rounded-full"
