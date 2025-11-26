@@ -13,26 +13,77 @@ export const createPost = async (formData: JobPostPayload) => {
   if (!token) return false;
 
   try {
-     const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
-    method: 'POST',
-    body: formData,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
+    const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-   if (res && !res?.success) {
-        throw res.errors
-      }
-      
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw error
-      }
-    } 
+    if (res && !res?.success) {
+      throw res.errors;
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw error;
+    }
+  }
+};
 
- 
+export const updateStatus = async (
+  company_id: string,
+  jobId: string,
+  status: string,
+) => {
+  const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${company_id}/jobs/${jobId}/${status}`;
+
+  const token = (await cookies()).get('token')?.value;
+  if (!token) return false;
+
+  try {
+    const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res && !res?.success) {
+      throw res.errors;
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw error;
+    }
+  }
+};
+
+export const deleteJob = async (company_id: string, jobId: string) => {
+  const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${company_id}/jobs/${jobId}`;
+
+  const token = (await cookies()).get('token')?.value;
+  if (!token) return false;
+
+  try {
+    const res = await makeAuthenticatedRequest(endpoint, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res && !res?.success) {
+      throw res.errors;
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw error;
+    }
+  }
 };
 
 export const draftPost = async (formData: JobDraftPayload) => {
@@ -43,25 +94,24 @@ export const draftPost = async (formData: JobDraftPayload) => {
 
   try {
     const res = await makeAuthenticatedRequest<JobDraftPayload>(endpoint, {
-    method: 'POST',
-    body: formData,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  if (res && !res?.success) {
-        throw res.errors
-      }
+    if (res && !res?.success) {
+      throw res.errors;
+    }
 
-  return res;
+    return res;
   } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw error
-      }
-    } 
-  
+    if (error instanceof Error) {
+      throw error;
+    }
+  }
 };
 
 export const updatePost = async (
