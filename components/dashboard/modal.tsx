@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { ModalProps } from '@/types/modal';
+import { motion, AnimatePresence } from 'motion/react';
 
 // Reusable Modal Component
 export const Modal: React.FC<ModalProps> = ({
@@ -14,44 +15,57 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0"
-        style={{ backgroundColor: 'rgba(36, 36, 36, 0.50)' }}
-        onClick={onClose}
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <motion.div
+            className="absolute inset-0"
+            style={{ backgroundColor: 'rgba(36, 36, 36, 0.50)' }}
+            onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
 
-      {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-        <h2 className="text-lg font-bold text-tertiary-500 mb-3 text-center">
-          {title}
-        </h2>
+          {/* Modal */}
+          <motion.div
+            className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+          >
+            <h2 className="text-lg font-bold text-tertiary-500 mb-3 text-center">
+              {title}
+            </h2>
 
-        <p className="text-sm text-gray-200 text-center mb-6">{message}</p>
+            <p className="text-sm text-gray-200 text-center mb-6">{message}</p>
 
-        <div className="flex gap-3 justify-end">
-          {secondaryButton && (
-            <div className="">
-              <Button
-                onClick={secondaryButton.onClick}
-                variant="outlineGray"
-                className="border-black-50"
-              >
-                {secondaryButton.label}
-              </Button>
+            <div className="flex gap-3 justify-end">
+              {secondaryButton && (
+                <div>
+                  <Button
+                    onClick={secondaryButton.onClick}
+                    variant="outlineGray"
+                    className="border-black-50"
+                  >
+                    {secondaryButton.label}
+                  </Button>
+                </div>
+              )}
+
+              {primaryButton && (
+                <div>
+                  <Button onClick={primaryButton.onClick} variant="default">
+                    {primaryButton.label}
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
-
-          {primaryButton && (
-            <div className="">
-              <Button onClick={primaryButton.onClick} variant="default">
-                {primaryButton.label}
-              </Button>
-            </div>
-          )}
+          </motion.div>
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 };

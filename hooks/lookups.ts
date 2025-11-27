@@ -21,7 +21,7 @@ export const useJobLevel = () => {
       const res = await publicFetch('lookups/job-levels');
       if (!res.success) throw new Error(res.message);
 
-      return res.data.data || [];
+      return res.data || [];
     },
   });
 };
