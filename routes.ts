@@ -13,6 +13,8 @@ export const authRoutes = [
 export const publicRoutes = [
   '/',
   '/waitlist',
+  '/authenticate',
+  '/authenticate/google',
   '/job-route',
   // Add other public pages
 ];
