@@ -74,20 +74,18 @@ const PostJobPreview = () => {
 
   console.log(job);
 
-// fixed 
+  // fixed
   const handlePublish = async () => {
     if (!newPost) return;
     setShowPublishModal(false);
-    createJob(newPost)
+    createJob(newPost);
   };
 
   const handleDraft = async () => {
     if (!newPost) return;
-      draftJob(newPost);
-
-
+    draftJob(newPost);
   };
-  
+
   return (
     <div className=" p-6 bg-white shadow rounded-lg space-y-6">
       <PreviewJob postDetails={job} />

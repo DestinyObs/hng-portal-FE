@@ -37,14 +37,14 @@ export const JOB_CARDS = [
   },
 ];
 
-export const DASHBOARD_CARD = [
+export const COMPANY_DASHBOARD_CARDS = [
   {
     title: 'Active Job Posting',
     icon: '/assets/dashboard/icons/briefcase.svg',
     description: 'Active Jobs',
     color: 'var(--color-accent-3-dark)',
     iconBg: 'var(--color-accent-3)',
-    count: 10,
+    count: 2,
   },
   {
     title: 'Total Applicants',
@@ -52,7 +52,7 @@ export const DASHBOARD_CARD = [
     description: 'New Applicants',
     color: 'var(--color-secondary)',
     iconBg: 'var(--color-light-blue)',
-    count: 80,
+    count: 0,
   },
   {
     title: 'Hires Completed',
@@ -60,7 +60,34 @@ export const DASHBOARD_CARD = [
     description: 'Hires',
     color: 'var(--color-accent-pink)',
     iconBg: 'var(--color-accent-pink-light)',
-    count: 15,
+    count: 0,
+  },
+];
+
+export const TALENT_DASHBOARD_CARDS = [
+  {
+    title: 'Job Applications',
+    icon: '/assets/dashboard/icons/briefcase.svg',
+    description: 'Applications Sent',
+    color: 'var(--color-accent-3-dark)',
+    iconBg: 'var(--color-accent-3)',
+    count: 0,
+  },
+  {
+    title: 'Profile Views',
+    icon: '/assets/dashboard/icons/people.svg',
+    description: 'Views this month',
+    color: 'var(--color-secondary)',
+    iconBg: 'var(--color-light-blue)',
+    count: 0,
+  },
+  {
+    title: 'Save Jobs',
+    icon: '/assets/dashboard/icons/profile-tick.svg',
+    description: 'Jobs Saved',
+    color: 'var(--color-accent-pink)',
+    iconBg: 'var(--color-accent-pink-light)',
+    count: 0,
   },
 ];
 
@@ -233,4 +260,10 @@ export const cities = [
   'Cairo',
   'Auckland',
   'Wellington',
+];
+
+export const companyDashboardNavLinks = [
+  { title: 'Active Jobs', href: '/active' },
+  { title: 'Closed Jobs', href: '/closed' },
+  { title: 'Drafts', href: '/drafts' },
 ];
