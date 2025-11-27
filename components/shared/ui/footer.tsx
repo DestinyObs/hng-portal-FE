@@ -29,6 +29,7 @@ const Footer = () => {
                       <li key={link.label}>
                         <a
                           href={link.href}
+                          target="_blank"
                           className="text-gray-75 hover:text-primary-blue transition text-base lg:text-sm font-dm_sans focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 rounded"
                         >
                           {link.label}
@@ -44,7 +45,7 @@ const Footer = () => {
           <div className="mt-16 lg:mt-20">
             <div className="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-9 sm:gap-0">
               <p className="text-tertiary-75 text-sm font-dm_sans mt-4 md:mt-0">
-                © 2025 HNG Portal. All rights reserved.
+                © 2025 HNG Connect. All rights reserved.
               </p>
 
               <div

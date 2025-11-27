@@ -74,13 +74,13 @@ const DashboardHeader = () => {
           className="flex items-center justify-between"
           aria-label="Dashboard navigation"
         >
-          <Link href="/dashboard" aria-label="HNG Portal Home">
+          <Link href="/dashboard" aria-label="HNG Connect Home">
             <div className="flex items-center gap-2">
               <Image
                 src={Logo}
                 width={100}
                 height={30}
-                alt="HNG Portal"
+                alt="HNG Connect"
                 className="object-contain"
               />
             </div>
