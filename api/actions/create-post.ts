@@ -30,14 +30,6 @@ export const createPost = async (formData: JobPostPayload) => {
       throw error;
     }
   }
-    if (res && !res?.success) {
-      throw res.errors;
-    }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw error;
-    }
-  }
 };
 
 export const updateStatus = async (
