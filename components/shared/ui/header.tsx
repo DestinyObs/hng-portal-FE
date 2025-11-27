@@ -29,17 +29,17 @@ const Header = () => {
           aria-label="Main navigation"
         >
           <div className="flex justify-between items-center w-full lg:w-auto">
-            <Link href="/" aria-label="HNG Portal Home">
+            <Link href="/" aria-label="HNG Connect Home">
               <Image
                 src={Logo}
-                alt="HNG Portal Logo"
+                alt="HNG Connect Logo"
                 width={140}
                 height={450}
                 className="hidden md:block"
               />
               <Image
                 src={Logo}
-                alt="HNG Portal Logo"
+                alt="HNG Connect Logo"
                 width={95}
                 height={37}
                 className="md:hidden"

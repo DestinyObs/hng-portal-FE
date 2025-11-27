@@ -10,10 +10,14 @@ import {
 } from './icons';
 
 export const NavLinks = [
-  { label: 'HNG Portal', href: '/', active: true, icon: <HNGPortalIcon /> },
-  { label: 'HNG Internship', href: '#', icon: <HNGInternshipIcon /> },
-  { label: 'Learn', href: '#', icon: <LearnIcon /> },
-  { label: 'Premium', href: '#', icon: <PremiumIcon /> },
+  { label: 'HNG Connect', href: '/', active: true, icon: <HNGPortalIcon /> },
+  {
+    label: 'HNG Internship',
+    href: 'https://hng.tech/internship',
+    icon: <HNGInternshipIcon />,
+  },
+  { label: 'Learn', href: 'https://hng.tech/learn', icon: <LearnIcon /> },
+  { label: 'Premium', href: 'https://hng.tech/premium', icon: <PremiumIcon /> },
 ];
 
 export const LinkClasses =
@@ -30,22 +34,22 @@ export const FooterSections = [
   {
     title: 'FOR TALENTS',
     links: [
-      { label: 'HNG Learn', href: '#' },
-      { label: 'HNG Internship', href: '#' },
-      { label: 'HNG Network', href: '#' },
-      { label: 'HNG Products', href: '#' },
+      { label: 'HNG Learn', href: 'https://hng.tech/learn' },
+      { label: 'HNG Internship', href: 'https://hng.tech/internship' },
+      { label: 'HNG Network', href: 'https://hng.tech/premium' },
+      { label: 'HNG Products', href: 'https://hng.tech/products' },
     ],
   },
   {
     title: 'FOR COMPANIES',
-    links: [{ label: 'Hire Talents', href: '#' }],
+    links: [{ label: 'Hire Talents', href: 'https://hng.tech/hire' }],
     className: 'md:ml-8 lg:ml-0',
   },
   {
     title: 'LEGAL',
     links: [
-      { label: 'Privacy Policy', href: '#' },
-      { label: 'Terms of Service', href: '#' },
+      { label: 'Privacy Policy', href: 'https://hng.tech/privacy' },
+      { label: 'Terms of Service', href: 'https://hng.tech/terms' },
       { label: 'Cookies', href: '#' },
     ],
     className: 'md:ml-20',
@@ -53,7 +57,7 @@ export const FooterSections = [
   {
     title: 'SUPPORT',
     links: [
-      { label: 'Blog', href: '#' },
+      { label: 'Blog', href: 'https://hng.tech/blog' },
       { label: 'Help Center', href: '#' },
       { label: 'FAQs', href: '#' },
       { label: 'Contact Support', href: 'mailto:support@hng.tech' },
