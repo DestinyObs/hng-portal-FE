@@ -187,7 +187,7 @@ export default function UserIdentityForm() {
             <Button
               type="submit"
               disabled={!isValid || isSubmitting}
-              className={`${isValid ? 'bg-primary-300' : 'bg-[#7ED3FF]'} h-12 transition-all duration-300 ease-in`}
+              className="bg-primary-300 disabled:bg-[#7ED3FF] disabled:cursor-not-allowed h-12 transition-all duration-300 ease-in"
             >
               {isSubmitting ? 'Saving...' : 'Continue'}
             </Button>

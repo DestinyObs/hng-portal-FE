@@ -35,7 +35,7 @@ export default function ConfirmationModal({
               {subtitle}
             </p>
           </div>
-          <hr className="my-1 h-[1px] w-full border-none bg-[#E7E7E7]" />
+          <hr className="my-1 h-px w-full border-none bg-[#E7E7E7]" />
           <section className="w-full flex justify-center items-center">
             <Button
               onClick={() => {
