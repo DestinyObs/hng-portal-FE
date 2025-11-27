@@ -18,16 +18,29 @@ import { useAuthStore } from '@/store/auth';
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const isCompany = user?.roles?.[0]?.name && user?.roles?.[0]?.name === "employer" 
+  const isCompany =
+    user?.roles?.[0]?.name && user?.roles?.[0]?.name === 'employer';
 
-const dashboardLinks = [
-  { label: 'HOME', href: isCompany ? '/company/dashboard' : '/talent/dashboard', active: true },
-  { label: 'JOBS', href: isCompany ? '/company/jobs' : '/talent/jobs', active: false },
-  { label: 'APPLICANTS', href: isCompany ? '/company/applicants' : '/talent/applicants', active: false },
-];
+  const dashboardLinks = [
+    {
+      label: 'HOME',
+      href: isCompany ? '/company/dashboard' : '/talent/dashboard',
+      active: true,
+    },
+    {
+      label: 'JOBS',
+      href: isCompany ? '/company/jobs' : '/talent/jobs',
+      active: false,
+    },
+    {
+      label: 'APPLICANTS',
+      href: isCompany ? '/company/applicants' : '/talent/applicants',
+      active: false,
+    },
+  ];
 
   const { mutate: a_logout, isPending: isLoggingOut } = useMutation({
     mutationKey: ['logout'],
