@@ -6,18 +6,10 @@ import { useEffect, useState } from 'react';
 import JobsPageBackIcon from '../icons/jobs-page-back-icon';
 import FindJobsNewWindow from '../icons/find-jobs-new-window';
 import Link from 'next/link';
+import { RawJob2 } from '@/types/job-card'; // Import RawJob
 
 interface ApplyJobsModalProps {
-  job: {
-    id: number;
-    title: string;
-    company: string;
-    salary: string;
-    type: string;
-    location: string;
-    posted: string;
-    image?: string;
-  };
+  job: RawJob2;
   onClose: () => void;
 }
 
@@ -37,6 +29,14 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
     setIsVisible(false);
     setTimeout(onClose, 300);
   };
+
+  const companyName = job.company?.name || 'N/A';
+  const jobType = job.job_type?.name || 'N/A';
+  const workMode = job.work_mode?.name || 'N/A';
+  const jobLevel = job.job_levels?.[0]?.name || 'N/A';
+  const location =
+    (job.states?.[0]?.name ? `${job.states[0].name}, ` : '') +
+    (job.countries?.[0]?.name || 'N/A');
 
   return (
     <div className="fixed inset-0 z-50 flex">
@@ -59,7 +59,7 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
           </button>
 
           <Link
-            href={`/find-jobs/${job.id}`}
+            href={`/find-jobs/${job.id}`} // Using job.id for the link
             target="_blank"
             className="flex items-center gap-2 text-sm text-(--color-gray-100) hover:text-(--color-gray-300) transition no-underline"
           >
@@ -72,10 +72,10 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
           <div className="w-full min-h-[696px] bg-[(--color-white-50)] rounded-xl border border-[#9C9C9C] p-8 flex flex-col">
             <div className="flex items-start gap-5 mb-6">
               <div className="relative">
-                {job.image ? (
+                {job.company?.logo_url ? (
                   <Image
-                    src={job.image}
-                    alt={job.company}
+                    src={job.company.logo_url}
+                    alt={companyName}
                     width={64}
                     height={64}
                     className="rounded-xl shadow object-cover"
@@ -83,7 +83,7 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
                 ) : (
                   <div className="w-16 h-16 rounded-xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow">
                     <span className="text-2xl font-bold text-white">
-                      {job.company.charAt(0)}
+                      {companyName.charAt(0)}
                     </span>
                   </div>
                 )}
@@ -94,20 +94,23 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
                   {job.title}
                 </h1>
                 <p className="text-base font-medium text-(--color-gray-300) mt-1 flex items-center gap-1">
-                  {job.company}
-                  <span className="inline-flex items-center justify-center w-4 h-4 bg-(--color-primary-blue) rounded-full">
-                    <svg
-                      className="w-3 h-3 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </span>
+                  {companyName}
+                  {/* Assuming isVerified would come from job.company or similar */}
+                  {job.company?.name && (
+                    <span className="inline-flex items-center justify-center w-4 h-4 bg-(--color-primary-blue) rounded-full">
+                      <svg
+                        className="w-3 h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  )}
                 </p>
               </div>
 
@@ -118,40 +121,38 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
 
             <div className="mb-6">
               <p className="text-sm text-(--color-gray-300) leading-relaxed">
-                Design and refine intuitive web interfaces that provide users
-                with a seamless and visually engaging experience. Collaborate
-                with developers and product teams to improve usability,
-                accessibility, and performance across desktop and mobile
-                platforms, ensuring consistent design standards and user
-                satisfaction.
+                {job.description}
               </p>
             </div>
 
             <div className="mb-6 flex flex-wrap gap-3">
-              {[
-                'Proficiency in Figma, Adobe XD, or Sketch',
-                'Excellent communication & collaboration skills',
-                'Strong understanding of UX principles & design systems',
-              ].map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="inline-block px-4 py-2 text-xs font-medium text-(--color-gray-300) bg-white border border-[#9C9C9C] rounded-[36px]"
-                >
-                  {tag}
+              {job.skills && job.skills.length > 0 ? (
+                job.skills.map((skill) => (
+                  <span
+                    key={skill.id}
+                    className="inline-block px-4 py-2 text-xs font-medium text-(--color-gray-300) bg-white border border-[#9C9C9C] rounded-[36px]"
+                  >
+                    {skill.name}
+                  </span>
+                ))
+              ) : (
+                <span className="inline-block px-4 py-2 text-xs font-medium text-(--color-gray-300) bg-white border border-[#9C9C9C] rounded-[36px]">
+                  No skills specified
                 </span>
-              ))}
+              )}
             </div>
 
             <div className="mb-6">
               <p className="text-xs text-(--color-gray-100)">
-                Posted: {job.posted} - Remote - Entry Level - Freelance -{' '}
-                {job.location}
+                Posted: {job.created_at?.split('T')[0]} • {workMode} • {jobType}{' '}
+                • {jobLevel} • {location}
               </p>
             </div>
 
             <div className="mb-8">
               <p className="text-2xl font-bold text-(--color-gray-500)">
-                {job.salary} per Month
+                {job.salary ? `₦ ${job.salary}` : 'Salary not specified'} per
+                Month
               </p>
             </div>
 
