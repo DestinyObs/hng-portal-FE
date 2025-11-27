@@ -29,6 +29,14 @@ export default function PostJob({ id }: { id?: string }) {
       (data as JobFormData | undefined)?.acceptance_criteria ?? '',
     skills: (data as JobFormData | undefined)?.skills ?? [],
     job_level_id: (data as JobFormData | undefined)?.job_level_id ?? '',
+
+    // Step 2
+    track_id: (data as JobFormData | undefined)?.track_id ?? '',
+    job_type_id: (data as JobFormData | undefined)?.job_type_id ?? '',
+    work_mode_id: (data as JobFormData | undefined)?.work_mode_id ?? '',
+    price: (data as JobFormData | undefined)?.price ?? '',
+    state: (data as JobFormData | undefined)?.state ?? '',
+    country: (data as JobFormData | undefined)?.country ?? '',
   });
 
   // setData
