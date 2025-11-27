@@ -14,6 +14,7 @@ export const siginWithGoogle = async () => {
   return await signIn('google', { redirectTo: '/dashboard' });
 };
 import { SuccessResponse } from '@/types/api-response';
+import { GoogleAuthRequest } from '@/types/auth';
 
 export const login = async (formData: LoginType) => {
   const res = await makePublicRequest<UserData, LoginType>('/auth/login', {
@@ -39,7 +40,7 @@ export const login = async (formData: LoginType) => {
   return res;
 };
 
-export async function google_signin(accessToken: string, role: string) {
+export async function google_signin(formData: GoogleAuthRequest) {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/google-auth`,
@@ -48,24 +49,31 @@ export async function google_signin(accessToken: string, role: string) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          google_code: accessToken,
-          role,
-        }),
+        body: JSON.stringify(formData),
       },
     );
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Authentication failed');
+    if (response.ok) {
+      const data = await response.json();
+      (await cookies()).set('token', data?.data?.token as string, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
+
+      (await cookies()).set('user', JSON.stringify(data?.data?.user), {
+        httpOnly: false,
+        sameSite: 'strict',
+        path: '/',
+      });
+
+      return data;
     }
 
-    const data = await response.json();
-    console.log(data);
-
-    return { success: true, data };
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Authentication failed');
   } catch (error) {
-    console.error('Backend auth error:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Authentication failed',

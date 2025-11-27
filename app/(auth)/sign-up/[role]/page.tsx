@@ -37,7 +37,7 @@ export default function SignUpRolePage() {
 
     try {
       await signIn('google', {
-        callbackUrl: `/callback?role=${role}`,
+        callbackUrl: `/authenticate/google?role=${role}`,
       });
     } catch (error) {
       console.error('Sign-in error:', error);
