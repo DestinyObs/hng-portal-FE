@@ -51,7 +51,7 @@ const DashboardSidebar = () => {
           )}
           {role === 'talent' && (
             <Button className="cursor-pointer" size={'md'} asChild>
-              <Link href={'/settings/profile'}>View Profile</Link>
+              <Link href={'/profile-view'}>View Profile</Link>
             </Button>
           )}
           <Button size={'sm'} className="text-base" variant={'outlineGray'}>
