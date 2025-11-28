@@ -1,4 +1,3 @@
-import { string } from 'zod';
 import { deleteJob, draftPost, updateStatus } from '@/api/actions/create-post';
 import { createPost } from './../api/actions/create-post';
 import {
@@ -44,6 +43,21 @@ export const useGetJob = (
   });
 
   return { data, isPending, error };
+};
+
+export const useGetTalentJob = <T>(
+  jobId: string | undefined,
+): UseQueryResult<T> => {
+  return useQuery({
+    queryKey: ['get-job', jobId],
+    queryFn: async () => {
+      const res = await makeAuthenticatedRequest(
+        `/talent/jobs/${jobId}`,
+      );
+      return res?.data as T;
+    },
+    enabled: !!jobId,
+  });
 };
 
 export const useCreateJob = () => {

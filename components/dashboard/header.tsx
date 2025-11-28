@@ -5,15 +5,14 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
-
 import { logout } from '@/api/actions/auth';
 import { APIResponse } from '@/api/config.server';
 import { SuccessResponse } from '@/types/api-response';
 import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 import { useAuthStore } from '@/store/auth';
+import PlaceholderProfile from './placeholder-profile';
 
 const DashboardHeader = () => {
   const router = useRouter();
@@ -21,8 +20,7 @@ const DashboardHeader = () => {
   const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const isCompany =
-    user?.roles?.[0]?.name && user?.roles?.[0]?.name === 'employer';
+  const isCompany = user?.current_role === 'employer';
 
   const dashboardLinks = [
     {
@@ -36,7 +34,7 @@ const DashboardHeader = () => {
       active: false,
     },
     {
-      label: 'APPLICANTS',
+      label: isCompany ? 'TALENTS' : 'MY APPLICATIONS',
       href: isCompany ? '/company/applicants' : '/talent/applicants',
       active: false,
     },
@@ -128,14 +126,33 @@ const DashboardHeader = () => {
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className="flex items-center gap-2 pl-2 focus:outline-none"
               >
-                <div className="w-8 h-8 rounded-full overflow-hidden">
+                <div className="w-9 h-9 rounded-full overflow-hidden">
+                    {
+                  user?.company?.logo_url && isCompany  ?
                   <Image
-                    src="/images/profile.png"
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    className="object-cover w-full h-full"
-                  />
+                src={user?.company?.logo_url}
+                alt="Profile"
+                width={40}
+                height={40}
+                className="object-cover w-full h-full"
+              /> : user?.photo_url && !isCompany ? 
+                <Image
+                  src={user.photo_url}
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  className="object-cover w-full h-full"
+                />
+                : <PlaceholderProfile
+                size={'100%'} 
+                fontSize={'1rem'}
+                name={
+                  isCompany
+                    ? user?.company?.name ?? ""
+                    : `${user?.firstname ?? ""} ${user?.lastname ?? ""}`.trim()
+                }
+                    />
+                }
                 </div>
 
                 <ChevronDown
