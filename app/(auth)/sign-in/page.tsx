@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 import { SignInForm } from './_components/sign-in-form'; // Updated import for _components
@@ -7,9 +7,24 @@ import { Button } from '@/components/ui/button';
 
 import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
 import GoogleColoredIcon from '@/public/assets/auth/icons/google-colored-icon';
-import { siginWithGoogle } from '@/api/actions/auth';
+import { signIn } from 'next-auth/react';
 
 export default function SignInPage() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+
+    try {
+      await signIn('google', {
+        callbackUrl: `/authenticate/google`,
+      });
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-md mx-auto py-12 px-6">
       <div className="text-center mb-8">
@@ -39,10 +54,10 @@ export default function SignInPage() {
         variant="outline"
         className="w-full"
         size={'lg'}
-        onClick={siginWithGoogle}
+        onClick={handleGoogleSignIn}
       >
         <GoogleColoredIcon className="mr-2 h-4 w-4" />
-        Sign in with Google
+        {isLoading ? 'Signing in...' : 'Sign up with Google'}
       </Button>
 
       <p className="mt-6 text-center text-sm text-muted-foreground">

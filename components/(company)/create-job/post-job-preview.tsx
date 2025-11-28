@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 import { Modal } from '@/components/dashboard/modal';
 import { useCreateJob, useDraftJob } from '@/hooks/jobs';
+import { Mail } from 'lucide-react';
 
 const PostJobPreview = () => {
   const { newPost } = usePostStore();
@@ -62,7 +63,7 @@ const PostJobPreview = () => {
     country: country?.name ?? '',
     skills: skills ?? [],
     company: user?.company?.name ?? '',
-    companyLogo: user?.company?.logo_url ?? '/images/company-profile.png',
+    companyLogo: user?.company?.logo_url || undefined,
     job_type: job_type?.name ?? '',
     work_mode: workMode?.name ?? '',
     category: newPost?.category_id,
@@ -72,22 +73,20 @@ const PostJobPreview = () => {
     level: job_level?.name ?? '',
   };
 
-  console.log(job);
+  // console.log(job);
 
-// fixed 
+  // fixed
   const handlePublish = async () => {
     if (!newPost) return;
     setShowPublishModal(false);
-    createJob(newPost)
+    createJob(newPost);
   };
 
   const handleDraft = async () => {
     if (!newPost) return;
-      draftJob(newPost);
-
-
+    draftJob(newPost);
   };
-  
+
   return (
     <div className=" p-6 bg-white shadow rounded-lg space-y-6">
       <PreviewJob postDetails={job} />
@@ -149,6 +148,7 @@ const PostJobPreview = () => {
         onClose={() => setShowPublishModal(false)}
         title="Are you sure you want to publish this job?"
         message="Once published, this job will be visible to applicants and they can start applying immediately."
+        icon={<Mail size={48} />}
         primaryButton={{
           label: 'Publish Job',
           onClick: handlePublish,

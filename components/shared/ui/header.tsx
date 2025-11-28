@@ -29,17 +29,17 @@ const Header = () => {
           aria-label="Main navigation"
         >
           <div className="flex justify-between items-center w-full lg:w-auto">
-            <Link href="/" aria-label="HNG Portal Home">
+            <Link href="/" aria-label="HNG Connect Home">
               <Image
                 src={Logo}
-                alt="HNG Portal Logo"
+                alt="HNG Connect Logo"
                 width={140}
                 height={450}
                 className="hidden md:block"
               />
               <Image
                 src={Logo}
-                alt="HNG Portal Logo"
+                alt="HNG Connect Logo"
                 width={95}
                 height={37}
                 className="md:hidden"
@@ -114,15 +114,13 @@ const Header = () => {
               {NavLinks.map((item) => (
                 <li
                   key={item.label}
-                  className="flex items-center gap-2 text-white hover:text-primary-blue cursor-pointer"
+                  className="flex items-center gap-2 text-white cursor-pointer hover:text-white"
                 >
                   {item.icon}
                   <Link
                     href={item.href}
-                    className={`${LinkClasses} text-white ${
-                      item.active
-                        ? 'border-b-2 border-white hover:border-primary-blue'
-                        : ''
+                    className={`${LinkClasses} hover:text-white text-white ${
+                      item.active ? 'border-b-2 border-white' : ''
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
@@ -130,16 +128,29 @@ const Header = () => {
                   </Link>
                 </li>
               ))}
+              <li>
+                <div className="flex items-center justify-center gap-4">
+                  <Link href="/sign-in" passHref>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                    >
+                      <span>Login</span>
+                    </Button>
+                  </Link>
 
-              <Link href="/sign-up" passHref>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
-                >
-                  <span>Get Started</span>
-                </Button>
-              </Link>
+                  <Link href="/sign-up" passHref>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                    >
+                      <span>Get Started</span>
+                    </Button>
+                  </Link>
+                </div>
+              </li>
             </ul>
           </nav>
         </div>

@@ -15,6 +15,8 @@ export interface JobFormData {
   price?: string;
   state?: string;
   country?: string;
+  state_id: string;
+  country_id: string;
 }
 export interface JobFormData2 {
   // Step 1
@@ -33,6 +35,8 @@ export interface JobFormData2 {
   price?: string;
   state?: string;
   country?: string;
+  state_id: string;
+  country_id: string;
 }
 
 export interface JobDetailsProps {

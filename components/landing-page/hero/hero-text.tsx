@@ -17,7 +17,7 @@ export default function HeroText() {
 
       <p className="not-sm:w-[90%] mx-auto text-white mt-3 md:mt-4 mb-4 md:mb-6">
         {
-          "Whether you're building your career or building your team, HNG Portal connects you with the right opportunities."
+          "Whether you're building your career or building your team, HNG Connect connects you with the right opportunities."
         }
       </p>
       <div className="flex gap-4 justify-center md:justify-start items-center">

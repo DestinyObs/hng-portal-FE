@@ -5,29 +5,42 @@ import { AlertCircle } from 'lucide-react';
 import { Progress } from '../ui/progress';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
+import PlaceholderProfile from './placeholder-profile';
 
 const DashboardSidebar = () => {
   const { user } = useAuthStore();
-
-  // Workaround: Infer role based on the presence of the company object
-  const role = user?.company ? 'employer' : 'talent';
-
+  const role = user?.current_role ? 'employer' : 'talent';
   return (
     <aside className="w-72 hidden lg:flex flex-col gap-5">
       {/* profile-card */}
       <div className="border border-tertiary-50 profilecard flex justify-center items-center gap-2 bg-white rounded-md flex-col py-6 px-3">
         {/* user profile image */}
         <div className="relative w-40 h-40 mx-auto">
-          <Image
-            src={
-              role === 'employer'
-                ? '/images/company-profile.png'
-                : '/images/talent-profile.jpg'
-            }
-            alt="profile"
-            fill
-            className="rounded-full object-cover"
-          />
+          {user?.company?.logo_url && role === 'employer' ? (
+            <Image
+              src={user?.company?.logo_url}
+              alt="profile"
+              fill
+              className="rounded-full object-cover"
+            />
+          ) : user?.photo_url && role === 'talent' ? (
+            <Image
+              src={user.photo_url}
+              alt="profile"
+              fill
+              className="rounded-full object-cover"
+            />
+          ) : (
+            <PlaceholderProfile
+              radius={'50%'}
+              size={'100%'}
+              name={
+                role === 'employer' && user?.company?.name
+                  ? user?.company?.name
+                  : `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim()
+              }
+            />
+          )}
         </div>
 
         {/* name */}
@@ -51,7 +64,7 @@ const DashboardSidebar = () => {
           )}
           {role === 'talent' && (
             <Button className="cursor-pointer" size={'md'} asChild>
-              <Link href={'/settings/profile'}>View Profile</Link>
+              <Link href={'/profile-view'}>View Profile</Link>
             </Button>
           )}
           <Button size={'sm'} className="text-base" variant={'outlineGray'}>
@@ -85,7 +98,7 @@ const DashboardSidebar = () => {
             size={'sm'}
             className="text-body-1 text-primary-blue bg-primary-50"
           >
-            <Link href={'/settings/profile'}>Finish your profile</Link>
+            <Link href={'/talent/profile'}>Finish your profile</Link>
           </Button>
         </div>
 

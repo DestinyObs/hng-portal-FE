@@ -6,7 +6,7 @@ import { Eye, EyeClosed } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 
 const inputGroup = cva(
-  "text-text-secondary flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-6 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 focus:border-1 focus-within:border-primary-blue text-foreground font-medium",
+  "text-text-secondary flex h-auto cursor-text items-center justify-center gap-2 [&>input]:py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-6 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 focus:border-1 focus-within:border-primary-blue text-foreground font-medium",
   {
     variants: {
       variant: {
