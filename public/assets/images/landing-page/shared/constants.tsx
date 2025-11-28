@@ -71,8 +71,8 @@ export const FooterSections = [
     links: [
       { label: 'Blog', href: 'https://hng.tech/blog' },
       { label: 'Help Center', href: '#' },
-      { label: 'FAQs', href: '#' },
-      { label: 'Contact Support', href: '/contact-us' },
+      { label: 'FAQs', href: '/faq' },
+      { label: 'Contact Us', href: '/contact-us' },
     ],
     className: 'lg:ml-20',
   },
