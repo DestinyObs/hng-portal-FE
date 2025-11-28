@@ -37,6 +37,7 @@ import { useRouter } from 'next/navigation';
 import { usePostStore } from '@/store/create-post';
 import { useState } from 'react';
 import { useEditPost } from '@/hooks/posts';
+import { Modal } from '@/components/dashboard/modal';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
@@ -61,6 +62,8 @@ export default function JobDetailsStep2({
   const { user } = useAuthStore();
   const { setNewPost } = usePostStore();
   const { editpost } = useEditPost(id!);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [payload, setPayload] = useState<JobPostPayload | null>(null);
 
   console.log(initialData);
 
@@ -110,7 +113,10 @@ export default function JobDetailsStep2({
 
     if (id) {
       // console.log(formData)
-      editpost(formData);
+
+      setPayload(formData);
+
+      setShowEditModal(true);
     } else {
       setNewPost(formData);
       router.push('/company/job/preview');
@@ -367,6 +373,26 @@ export default function JobDetailsStep2({
           </div>
         </div>
       </div>
+      {/* Edit Modal */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        title="Do you want to save the edited post?"
+        message="This job description will be updated."
+        primaryButton={{
+          label: 'Save Edit',
+          onClick: () => {
+            if (payload) {
+              editpost(payload);
+            }
+            setShowEditModal(false);
+          },
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: () => setShowEditModal(false),
+        }}
+      />
     </form>
   );
 }

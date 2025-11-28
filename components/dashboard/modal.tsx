@@ -11,6 +11,7 @@ export const Modal: React.FC<ModalProps> = ({
   message,
   primaryButton,
   secondaryButton,
+  icon,
 }) => {
   if (!isOpen) return null;
 
@@ -36,6 +37,8 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
+            {icon && <div className="mb-4">{icon}</div>}
+
             <h2 className="text-lg font-bold text-tertiary-500 mb-3 text-center">
               {title}
             </h2>
