@@ -91,3 +91,10 @@ export interface RegisterResponseData {
   email: string;
   token: string;
 }
+
+export interface ArticleCard {
+  title: string;
+  image: string;
+  description: string;
+  cta: string;
+}

@@ -127,3 +127,36 @@ export const content2 = [
       'A section for companies providing answers to getting the best talents and maximizing the benefits of the Atalanta internship track.',
   },
 ];
+
+const nextArticles = [
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+  },
+  {
+    title: 'Tech in 2025: A Saturated Space or No?',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+  },
+];
