@@ -175,7 +175,7 @@ export default function WaitlistPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="w-full mx-auto border-b bg-white max-w-[1440px]">
+      <header className="w-full mx-auto border-b bg-white ">
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-[60px] py-6">
           <Image
             src="/images/hng-logo.png"
