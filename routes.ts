@@ -18,5 +18,6 @@ export const publicRoutes = [
   '/job-route',
   '/terms-of-service',
   '/contact-us',
+  '/privacy-policy',
   // Add other public pages
 ];
