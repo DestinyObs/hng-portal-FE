@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 import { useAuthStore } from '@/store/auth';
 import TalentJobCard from '@/components/dashboard/talent-job-card';
 import Link from 'next/link';
@@ -10,9 +9,6 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT_DASHBOARD_CARDS
 import DashboardCard from '@/components/dashboard/dashboard-card';
-
-// Define Job type based on RawJob structure, for consistency with the API response
-type Job = RawJob2;
 
 const TalentDashboardPage = () => {
   const { user } = useAuthStore();
