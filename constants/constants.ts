@@ -127,3 +127,7 @@ export const content2 = [
       'A section for companies providing answers to getting the best talents and maximizing the benefits of the Atalanta internship track.',
   },
 ];
+
+
+ export const formatNumbers = (value: number): string =>
+    new Intl.NumberFormat('en-US').format(value);

@@ -13,6 +13,7 @@ import {
 } from '@/public/assets/images/landing-page/shared/icons';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { formatNumbers } from '@/constants/constants';
 
 const TalentJob = ({ id }: { id: string }) => {
   const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
@@ -86,7 +87,7 @@ const TalentJob = ({ id }: { id: string }) => {
             {/* Salary */}
             <div className="border-b border-tertiary-50 pb-5">
               <p className="text-2xl font-semibold text-primary-blue text-[28px]">
-                ₦{job.salary}
+                ₦{formatNumbers(job.salary)}
               </p>
               <p className="text-sm font-semibold text-gray-400 mt-1 text-[16px]">
                 Salary

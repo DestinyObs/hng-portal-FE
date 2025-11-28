@@ -14,23 +14,6 @@ export interface Permissions {
   name: string;
   guard_name: string;
 }
-export interface User {
-  id: string;
-  firstname: string | null;
-  lastname: string | null;
-  othername: string | null;
-  current_role: string;
-  email: string;
-  email_verified_at: string | null;
-  phone: string | null;
-  dob: string | null;
-  status: string;
-  photo_url: string | null;
-  created_at: string;
-  updated_at: string;
-  roles: Role[];
-  company: Company | null;
-}
 
 export interface Role {
   id: number;
@@ -97,4 +80,81 @@ export interface ArticleCard {
   image: string;
   description: string;
   cta: string;
+}
+
+
+export interface User {
+  id: string;
+  firstname: string | null;
+  lastname: string | null;
+  othername: string | null;
+  email: string;
+  email_verified_at: string | null;
+  phone: string | null;
+  dob: string | null;
+  photo_url: string | null;
+  address_id: string | null;
+  current_role: string;
+  status: string;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+  permissions: any[];    
+  roles: Role[];
+  company: Company | null;
+  bio: Bio
+}
+
+export interface Bio {
+  id: string;
+  user_id: string;
+  bio: string | null;
+  content: string | null;
+  country: string | null;
+  state: string | null;
+  links: string | null;
+  cv_id: string | null;
+  project_name: string | null;
+  project_url: string | null;
+  min_salary: number | null;
+  max_salary: number | null;
+  onboarding_status: string;
+  track_id: string | null;
+  is_verified: number;
+  current_role: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  user: User;     // nested user object
+}
+
+export interface Experience {
+  // Your API returned an empty array, so add fields when known
+}
+
+export interface Preference {
+  // empty array as well, add fields when known
+}
+
+export interface Skill {
+  // empty array as well, add fields when known
+}
+
+export interface ProfileResponse {
+  id: string;
+  firstname: string;
+  lastname: string;
+  othername: string | null;
+  email: string;
+  email_verification: boolean;
+  current_role: string;
+  company: string | null;
+  photo_url: string | null;
+  created_at: string;
+  updated_at: string;
+  skills: Skill[];
+  experiences: Experience[];
+  preferences: Preference[];
+  verification: any | null;
+  bio: Bio;      // nested bio object
 }

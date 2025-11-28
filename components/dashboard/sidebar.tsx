@@ -9,7 +9,8 @@ import PlaceholderProfile from './placeholder-profile';
 
 const DashboardSidebar = () => {
   const { user } = useAuthStore();
-  const role = user?.current_role ? 'employer' : 'talent';
+  const role = user?.current_role
+  
   return (
     <aside className="w-72 hidden lg:flex flex-col gap-5">
       {/* profile-card */}
@@ -62,9 +63,9 @@ const DashboardSidebar = () => {
               <Link href={'/company/job/create'}>Post a Job</Link>
             </Button>
           )}
-          {role === 'talent' && (
+          {role === "talent" && (
             <Button className="cursor-pointer" size={'md'} asChild>
-              <Link href={'/profile-view'}>View Profile</Link>
+              <Link href={'/talent/profile'}>View Profile</Link>
             </Button>
           )}
           <Button size={'sm'} className="text-base" variant={'outlineGray'}>
@@ -74,6 +75,9 @@ const DashboardSidebar = () => {
       </div>
 
       {/* complete profile card */}
+      {
+        user?.bio.onboarding_status === "pending" &&
+
       <div className="border border-tertiary-50 profilecard flex justify-center items-start gap-4 bg-white rounded-md flex-col py-5 px-3">
         <h3 className="font-semibold text-h5">Complete your profile</h3>
 
@@ -98,7 +102,7 @@ const DashboardSidebar = () => {
             size={'sm'}
             className="text-body-1 text-primary-blue bg-primary-50"
           >
-            <Link href={'/talent/profile'}>Finish your profile</Link>
+            <Link href={'/settings/profile'}>Finish your profile</Link>
           </Button>
         </div>
 
@@ -114,6 +118,8 @@ const DashboardSidebar = () => {
           </div>
         </div>
       </div>
+      }
+      
     </aside>
   );
 };

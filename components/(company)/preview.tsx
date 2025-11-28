@@ -15,20 +15,20 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <div className="flex flex-col gap-2">
           {/* company-logo */}
           <div className="relative w-28 h-28 img">
-            {postDetails?.companyLogo ? (
+            {/* {postDetails?.companyLogo ? (
               <Image
                 src={postDetails?.companyLogo}
                 alt="profile"
                 fill
                 className="rounded-full object-cover"
               />
-            ) : (
+            ) : ( */}
               <PlaceholderProfile
                 radius={'50%'}
                 size={'100%'}
                 name={postDetails.company}
               />
-            )}
+            {/* )} */}
           </div>
           <h2 className="text-[32px] font-bold text-gray-800 ">
             {postDetails?.title}

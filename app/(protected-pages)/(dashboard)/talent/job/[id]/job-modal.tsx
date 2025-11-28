@@ -3,16 +3,16 @@
 import Loading from '@/app/loading';
 import PlaceholderProfile from '@/components/dashboard/placeholder-profile';
 import { Button } from '@/components/ui/button';
+import { formatNumbers } from '@/constants/constants';
 import { useGetTalentJob } from '@/hooks/jobs';
 import { JobDetailsResponse } from '@/types/talent-jobs';
 import { Heart, ChevronLeft, ExpandIcon, Verified } from 'lucide-react';
-import Image from 'next/image';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import {  useRouter, useSearchParams } from 'next/navigation';
 
 export const JobModal = () => {
-  const { id } = useParams();
   const searchParams = useSearchParams();
   const modalParam = searchParams.get('modal');
+  const id = searchParams.get('id');
   const isModalOpen = modalParam === 'true';
   const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
@@ -48,20 +48,20 @@ export const JobModal = () => {
           <div className="flex items-center gap-3">
             {/* company logo */}
             <div className="relative w-14 h-14 img">
-              {job?.company.logo_url ? (
+              {/* {job?.company.logo_url ? (
                 <Image
                   fill
                   className="rounded-2xl"
                   src={job?.company.logo_url}
                   alt={''}
                 />
-              ) : (
+              ) : ( */}
                 <PlaceholderProfile
                   radius={'16px'}
                   size={'100%'}
                   name={job?.company.name || ''}
                 />
-              )}
+              {/* )} */}
             </div>
             {/* jobe title & company */}
             <div className="">
@@ -108,7 +108,7 @@ export const JobModal = () => {
           {/* Salary */}
           <div className=" ">
             <p className="text-xl font-bold text-tertiary-500">
-              ₦{job?.salary} per Month
+              ₦{formatNumbers(job?.salary || 0)} per Month
             </p>
           </div>
 
