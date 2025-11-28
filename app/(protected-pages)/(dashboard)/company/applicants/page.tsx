@@ -1,13 +1,19 @@
 'use client';
 
 import React from 'react';
+import { Tabs } from '@/components/shared/ui/tabs';
+import AllApplicants from './all-applicants';
+import Candidatelists from './candidate-lists';
 
-const ApplicantsPage: React.FC = () => {
+export default function ApplicantsPage() {
+  const tabsData = [
+    { value: 'all', tabsName: 'All Applicants', TabView: AllApplicants },
+    { value: 'lists', tabsName: 'Candidates List', TabView: Candidatelists },
+  ];
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Applicants</h1>
+    <div className="w-full min-h-screen px-6 py-4">
+      <Tabs tabs={tabsData} variant="ghost" />
     </div>
   );
-};
-
-export default ApplicantsPage;
+}
