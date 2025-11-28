@@ -2,42 +2,30 @@
 
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Paperclip } from 'lucide-react';
 import TextEditor from '../shared/ui/text-editor';
 import Input from '../ui/input';
 import { Button } from '../ui/button';
 import JobApplicationDetails from './job-details';
+import {
+  formSchema,
+  JobApplicationFormData,
+  JobApplicationFormProps,
+} from '@/types/job-application-form';
 
-const formSchema = z.object({
-  coverLetter: z
-    .string()
-    .min(10, 'Cover letter must be at least 10 characters'),
-  portfolioLink: z
-    .string()
-    .url('Must be a valid URL')
-    .optional()
-    .or(z.literal('')),
-  resume: z.any().refine((files) => files?.length > 0, 'Resume is required'),
-});
-
-const JobApplicationForm = () => {
+const JobApplicationForm = ({ onNext }: JobApplicationFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+    control,
+  } = useForm<JobApplicationFormData>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = () => {
-    console.log('Form submitted:');
-    // Handle form submission
+  const onSubmit = (data: JobApplicationFormData) => {
+    onNext(data);
   };
-
-  const { control } = useForm({
-    resolver: zodResolver(formSchema),
-  });
 
   return (
     <div className="max-w-[1120px] mx-auto bg-gray-50 p-4 space-y-6">
