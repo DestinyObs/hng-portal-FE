@@ -45,6 +45,21 @@ export const useGetJob = (
   return { data, isPending, error };
 };
 
+export const useGetTalentJob = <T>(
+  jobId: string | undefined,
+): UseQueryResult<T> => {
+  return useQuery({
+    queryKey: ['get-job', jobId],
+    queryFn: async () => {
+      const res = await makeAuthenticatedRequest(
+        `/talent/jobs/${jobId}`,
+      );
+      return res?.data as T;
+    },
+    enabled: !!jobId,
+  });
+};
+
 export const useCreateJob = () => {
   const queryClient = useQueryClient();
   const router = useRouter();

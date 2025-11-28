@@ -26,7 +26,7 @@ const features: Feature[] = [
     image: 'features/JobPost.png',
     header: 'Smart Job Matching',
     description:
-      'From verified profiles to smart job matching, HNG Portal gives both sides exactly what they need to succeed.',
+      'From verified profiles to smart job matching, HNG Connect gives both sides exactly what they need to succeed.',
   },
 ];
 export default function Features() {
@@ -50,7 +50,7 @@ export default function Features() {
         <CardContent>
           <p className="text-[#4e4a4a] text-sm md:text-[18px]">
             {' '}
-            From verified profiles to smart job matching, HNG Portal gives both
+            From verified profiles to smart job matching, HNG Connect gives both
             sides <br className="hidden md:block" /> exactly what they need to
             succeed.
           </p>

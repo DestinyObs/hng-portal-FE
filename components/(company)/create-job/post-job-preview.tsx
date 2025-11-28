@@ -62,7 +62,7 @@ const PostJobPreview = () => {
     country: country?.name ?? '',
     skills: skills ?? [],
     company: user?.company?.name ?? '',
-    companyLogo: user?.company?.logo_url ?? '/images/company-profile.png',
+    companyLogo: user?.company?.logo_url || undefined,
     job_type: job_type?.name ?? '',
     work_mode: workMode?.name ?? '',
     category: newPost?.category_id,
@@ -74,20 +74,18 @@ const PostJobPreview = () => {
 
   console.log(job);
 
-// fixed 
+  // fixed
   const handlePublish = async () => {
     if (!newPost) return;
     setShowPublishModal(false);
-    createJob(newPost)
+    createJob(newPost);
   };
 
   const handleDraft = async () => {
     if (!newPost) return;
-      draftJob(newPost);
-
-
+    draftJob(newPost);
   };
-  
+
   return (
     <div className=" p-6 bg-white shadow rounded-lg space-y-6">
       <PreviewJob postDetails={job} />

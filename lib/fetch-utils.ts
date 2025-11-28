@@ -43,11 +43,11 @@ interface FetchConfig {
  * @class HttpError
  * @extends {Error}
  * @property {number} statusCode - The HTTP status code of the response.
- * @property {any} responseBody - The body of the response.
+ * @property {unknown} responseBody - The body of the response.
  * @property {string} statusText - The status text from the response.
  *
  * @param {Response} response - The Response object from the fetch call.
- * @param {any} responseBody - The body of the response, parsed or raw.
+ * @param {unknown} responseBody - The body of the response, parsed or raw.
  * @param {string} statusText - The status text from the response.
  */
 export class HttpError<T> extends Error {
@@ -66,6 +66,11 @@ export class HttpError<T> extends Error {
     this.responseBody = responseBody;
     this.statusText = statusText;
   }
+}
+
+interface ErrorResponseBody {
+  message?: string;
+  errors?: Record<string, string[]>;
 }
 
 /**
@@ -134,7 +139,7 @@ export const createFetchUtil = (config: FetchConfig) => {
 
     const response = await fetch(url.toString(), fetchOptions);
 
-    let responseBody;
+    let responseBody: unknown;
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       responseBody = await response.json();
@@ -152,7 +157,28 @@ export const createFetchUtil = (config: FetchConfig) => {
         },
       );
 
-      throw new HttpError(response, responseBody, response.statusText);
+      // --- Custom error message extraction logic ---
+      let customErrorMessage = `Error: ${response.status}`;
+
+      if (typeof responseBody === 'object' && responseBody !== null) {
+        const errorBody = responseBody as ErrorResponseBody;
+        if (errorBody.message) {
+          customErrorMessage = errorBody.message;
+        } else if (errorBody.errors) {
+          // Handle validation errors or multiple error messages
+          const errorMessages = Object.values(errorBody.errors)
+            .flat()
+            .filter((msg) => typeof msg === 'string')
+            .join('; ');
+          if (errorMessages) {
+            customErrorMessage = errorMessages;
+          }
+        }
+      } else if (typeof responseBody === 'string' && responseBody.length > 0) {
+        customErrorMessage = responseBody;
+      }
+
+      throw new Error(customErrorMessage); // Re-throw with custom message
     }
 
     return responseBody as TResponse;

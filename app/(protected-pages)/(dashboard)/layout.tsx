@@ -6,6 +6,7 @@ import Header from '@/components/dashboard/header';
 import Sidebar from '@/components/dashboard/sidebar';
 import { useAuthStore } from '@/store/auth';
 import Loading from '@/app/loading';
+import { JobModal } from './talent/job/[id]/job-modal';
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
@@ -28,6 +29,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         {/* Main content */}
         <main className="flex-1 h-full">{children}</main>
       </div>
+
+      <JobModal />
     </div>
   );
 };

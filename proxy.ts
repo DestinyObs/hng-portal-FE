@@ -29,7 +29,8 @@ export default async function middleware(req: NextRequest) {
   if (
     authRoutes.includes(pathname) ||
     pathname.startsWith('/onboarding/') ||
-    pathname.startsWith('/sign-up/')
+    pathname.startsWith('/sign-up/') ||
+    pathname.startsWith('/auth/')
   ) {
     if (isLoggedIn && userData) {
       // Get user role by inferring from the company property

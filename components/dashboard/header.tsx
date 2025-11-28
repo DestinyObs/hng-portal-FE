@@ -12,6 +12,7 @@ import { APIResponse } from '@/api/config.server';
 import { SuccessResponse } from '@/types/api-response';
 import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 import { useAuthStore } from '@/store/auth';
+import PlaceholderProfile from './placeholder-profile';
 
 const DashboardHeader = () => {
   const router = useRouter();
@@ -71,13 +72,13 @@ const DashboardHeader = () => {
           className="flex items-center justify-between"
           aria-label="Dashboard navigation"
         >
-          <Link href="/dashboard" aria-label="HNG Portal Home">
+          <Link href="/dashboard" aria-label="HNG Connect Home">
             <div className="flex items-center gap-2">
               <Image
                 src={Logo}
                 width={100}
                 height={30}
-                alt="HNG Portal"
+                alt="HNG Connect"
                 className="object-contain"
               />
             </div>
@@ -125,14 +126,33 @@ const DashboardHeader = () => {
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className="flex items-center gap-2 pl-2 focus:outline-none"
               >
-                <div className="w-8 h-8 rounded-full overflow-hidden">
+                <div className="w-9 h-9 rounded-full overflow-hidden">
+                    {
+                  user?.company?.logo_url && isCompany  ?
                   <Image
-                    src="/images/profile.png"
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    className="object-cover w-full h-full"
-                  />
+                src={user?.company?.logo_url}
+                alt="Profile"
+                width={40}
+                height={40}
+                className="object-cover w-full h-full"
+              /> : user?.photo_url && !isCompany ? 
+                <Image
+                  src={user.photo_url}
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  className="object-cover w-full h-full"
+                />
+                : <PlaceholderProfile
+                size={'100%'} 
+                fontSize={'1rem'}
+                name={
+                  isCompany
+                    ? user?.company?.name ?? ""
+                    : `${user?.firstname ?? ""} ${user?.lastname ?? ""}`.trim()
+                }
+                    />
+                }
                 </div>
 
                 <ChevronDown
@@ -196,6 +216,15 @@ const DashboardHeader = () => {
                 </li>
               ))}
               <hr />
+              <li>
+                <button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="w-full text-left block font-medium text-primary-error py-2 disabled:opacity-50"
+                >
+                  {isLoggingOut ? 'Logging out...' : 'Log out'}
+                </button>
+              </li>
 
               <div className="flex gap-4 py-2">
                 <Image

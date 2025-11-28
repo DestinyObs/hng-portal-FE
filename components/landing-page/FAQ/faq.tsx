@@ -2,13 +2,14 @@ import { Accordion } from '../../shared/ui/accordion';
 
 const faq = [
   {
-    title: 'What is HNG Portal?',
+    title: 'What is HNG Connect?',
     content:
-      'HNG Portal is a job platform that connects verified HNG Internship talents with recruiters looking for real, proven skills. It organizes internship tasks, projects, and endorsements into structured profiles that make hiring easier and more transparent.',
+      'HNG Connect is a job platform that connects verified HNG Internship talents with recruiters looking for real, proven skills. It organizes internship tasks, projects, and endorsements into structured profiles that make hiring easier and more transparent.',
   },
   {
     title: 'Is it free to create a talent profile?',
-    content: 'Yes, creating a talent profile on HNG Portal is completely free.',
+    content:
+      'Yes, creating a talent profile on HNG Connect is completely free.',
   },
   {
     title: 'How long does it take to get approved as a verified talent?',
@@ -18,7 +19,7 @@ const faq = [
   {
     title: 'How does job matching work?',
     content:
-      'HNG Portal matches your verified skills, tasks, and projects with recruiter requirements, making it easier for companies to find candidates with the exact skills they need.',
+      'HNG Connect matches your verified skills, tasks, and projects with recruiter requirements, making it easier for companies to find candidates with the exact skills they need.',
   },
   {
     title: 'Can I edit my profile later?',
@@ -41,7 +42,7 @@ export const FAQ = () => {
 
         <p className="short-note leading-normal mx-auto text-[#4E4A4A] text-[18px]">
           Here’s a quick guide to help talents and recruiters understand how HNG{' '}
-          <br /> Portal works within the HNG ecosystem.
+          <br /> Connect works within the HNG ecosystem.
         </p>
       </div>
 

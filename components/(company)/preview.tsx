@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Dot } from 'lucide-react';
 import { DM_Sans } from 'next/font/google';
 import { Job } from '@/types/job-card';
+import PlaceholderProfile from '../dashboard/placeholder-profile';
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 
 export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
@@ -14,12 +15,20 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <div className="flex flex-col gap-2">
           {/* company-logo */}
           <div className="relative w-28 h-28 img">
-            <Image
-              className="rounded-full"
+            {
+              postDetails?.companyLogo  ?
+              <Image
+              src={postDetails?.companyLogo}
+              alt="profile"
               fill
-              src={postDetails?.companyLogo || '/images/company-profile.png'}
-              alt={''}
-            />
+              className="rounded-full object-cover"
+            /> : <PlaceholderProfile 
+                radius={'50%'} 
+                size={'100%'} 
+                name={postDetails.company}
+                    />
+            }
+
           </div>
           <h2 className="text-[32px] font-bold text-gray-800 ">
             {postDetails?.title}
