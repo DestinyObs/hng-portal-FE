@@ -1,5 +1,5 @@
 import FindJobsPage from '@/components/jobs/find-jobs-page';
 
 export default function page() {
-  return <div>job</div>;
+  return <FindJobsPage />;
 }

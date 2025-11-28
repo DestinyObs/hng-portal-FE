@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default async function NotFound() {
   const { user } = await getServerCookies();
-  const userRole = user?.roles?.[0]?.name;
+  const userRole = user?.current_role;
 
   const getHomeLink = () => {
     switch (userRole) {
