@@ -72,7 +72,7 @@ export const FooterSections = [
       { label: 'Blog', href: 'https://hng.tech/blog' },
       { label: 'Help Center', href: '#' },
       { label: 'FAQs', href: '/faq' },
-      { label: 'Contact Support', href: 'mailto:support@hng.tech' },
+      { label: 'Contact Us', href: '/contact-us' },
     ],
     className: 'lg:ml-20',
   },
