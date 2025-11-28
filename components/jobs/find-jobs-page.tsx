@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react'; // Import useCallback
 import FiltersSidebar from './filters-sidebar';
 import JobCard from './job-card';
 import SearchBar from './search-bar';
-import ApplyJobs from './apply-jobs';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'; // Import Loader2
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
 import { getTalentJobs } from '@/api/actions/talent'; // Import getTalentJobs
@@ -39,17 +38,6 @@ export default function FindJobsPage() {
   if (isError) {
     toast.error(error?.message || 'Failed to fetch jobs.');
   }
-
-  const handleViewJob = (jobId: string) => {
-    const job = jobs.find((j) => j.id === jobId);
-    if (job) {
-      setSelectedJob(job);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setSelectedJob(null);
-  };
 
   const handlePageChange = useCallback((page: number) => {
     setQueryParams((prev) => ({ ...prev, page }));
@@ -171,9 +159,9 @@ export default function FindJobsPage() {
         </main>
       </div>
 
-      {selectedJob && (
+      {/* {selectedJob && (
         <ApplyJobs job={selectedJob} onClose={handleCloseModal} />
-      )}
+      )} */}
     </>
   );
 }

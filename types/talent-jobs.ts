@@ -4,8 +4,8 @@ export interface JobDetailsResponse {
   description: string;
   acceptance_criteria: string;
   salary: number;
-  created_at: string; // e.g., "2 hours ago"
-  is_published: string; // "published"
+  created_at: string;
+  is_published: string;
   is_saved: boolean;
   status: string;
 
@@ -18,7 +18,6 @@ export interface JobDetailsResponse {
   track: Track;
 
   skills: Skill[];
-  saved_jobs: any[]; // update if structure is known
 }
 
 export interface Category {
