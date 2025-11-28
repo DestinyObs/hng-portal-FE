@@ -10,16 +10,18 @@ import Image from 'next/image';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 export const JobModal = () => {
-  const {id} = useParams()
+  const { id } = useParams();
   const searchParams = useSearchParams();
   const modalParam = searchParams.get('modal');
   const isModalOpen = modalParam === 'true';
-  const {data: job, isPending} = useGetTalentJob<JobDetailsResponse>(id as string)
+  const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
+    id as string,
+  );
 
   const router = useRouter();
 
   if (!isModalOpen) return;
-  if(isPending) return <Loading />
+  if (isPending) return <Loading />;
   return (
     <div className="fixed inset-0 z-50 sm:flex items-center justify-end bg-tertiary-500/60">
       <div className="bg-white w-full max-w-[664px] overflow-y-auto h-screen p-6 py-12 space-y-8">
@@ -32,7 +34,10 @@ export const JobModal = () => {
             <ChevronLeft className="w-5 h-5" />
           </button>
           {/* route to the full job page */}
-          <button onClick={()=> router.push(`/talent/job/${id}`)} className="flex items-center gap-1.5 cursor-pointer">
+          <button
+            onClick={() => router.push(`/talent/job/${id}`)}
+            className="flex items-center gap-1.5 cursor-pointer"
+          >
             <ExpandIcon className="w-3 h-3 bg-[#737373] text-white rounded-sm" />
             <p className="text-title">Open in a new window</p>
           </button>
@@ -43,20 +48,20 @@ export const JobModal = () => {
           <div className="flex items-center gap-3">
             {/* company logo */}
             <div className="relative w-14 h-14 img">
-              {
-                job?.company.logo_url ? 
+              {job?.company.logo_url ? (
                 <Image
-                fill
-                className="rounded-2xl"
-                src={job?.company.logo_url}
-                alt={''}
-              /> : 
-              <PlaceholderProfile 
-              radius={'16px'} 
-              size={'100%'} 
-              name={job?.company.name || ''}  />
-              }
-              
+                  fill
+                  className="rounded-2xl"
+                  src={job?.company.logo_url}
+                  alt={''}
+                />
+              ) : (
+                <PlaceholderProfile
+                  radius={'16px'}
+                  size={'100%'}
+                  name={job?.company.name || ''}
+                />
+              )}
             </div>
             {/* jobe title & company */}
             <div className="">
@@ -64,7 +69,7 @@ export const JobModal = () => {
                 {job?.title}
               </h2>
               <p className="text-xl font-semibold text-tertiary-700 flex items-center gap-1">
-                {job?.company.name} {' '}
+                {job?.company.name}{' '}
                 <Verified fill="#00AEFF" color="white" size={13} />
               </p>
             </div>
@@ -76,15 +81,15 @@ export const JobModal = () => {
 
           {/* Skills */}
           <ul className="flex justify-start flex-wrap gap-3 text-gray-600 font-light">
-              {
-                job?.skills && job.skills.map((item)=> 
-                <li 
-                className="border border-[#EAF0ED] text-sm py-1.5 px-3 p rounded-full"
-                key={item.id}>
+            {job?.skills &&
+              job.skills.map((item) => (
+                <li
+                  className="border border-[#EAF0ED] text-sm py-1.5 px-3 p rounded-full"
+                  key={item.id}
+                >
                   {item.name}
                 </li>
-                )
-              }
+              ))}
           </ul>
 
           {/* time posted - work-mode - job_level - freelance - lagos, nigeria */}

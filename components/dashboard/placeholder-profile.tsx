@@ -12,7 +12,7 @@ export default function PlaceholderProfile({
   size = 35,
   fontSize,
   radius = '.35rem',
-  bgColor = 'var(--color-primary-blue)', 
+  bgColor = 'var(--color-primary-blue)',
 }: Readonly<AvatarProps>) {
   const getInitials = (name: string) => {
     const names = name.trim().split(' ');
@@ -20,8 +20,8 @@ export default function PlaceholderProfile({
     return (names[0][0] + names[1][0]).toUpperCase();
   };
 
-  const containerSize = window.innerWidth * 0.1; 
-const fontSizeDefault = containerSize * 0.3;
+  const containerSize = window.innerWidth * 0.1;
+  const fontSizeDefault = containerSize * 0.3;
 
   return (
     <div
@@ -38,7 +38,7 @@ const fontSizeDefault = containerSize * 0.3;
         fontSize: fontSize || fontSizeDefault,
         textTransform: 'uppercase',
         userSelect: 'none',
-        textAlign: 'center'
+        textAlign: 'center',
       }}
     >
       {getInitials(name)}

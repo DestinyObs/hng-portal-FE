@@ -16,29 +16,31 @@ const DashboardSidebar = () => {
       <div className="border border-tertiary-50 profilecard flex justify-center items-center gap-2 bg-white rounded-md flex-col py-6 px-3">
         {/* user profile image */}
         <div className="relative w-40 h-40 mx-auto">
-          {
-            user?.company?.logo_url && role === 'employer'  ?
+          {user?.company?.logo_url && role === 'employer' ? (
             <Image
-            src={user?.company?.logo_url}
-            alt="profile"
-            fill
-            className="rounded-full object-cover"
-          /> : user?.photo_url && role === 'talent' ? 
-          <Image
-            src={user.photo_url}
-            alt="profile"
-            fill
-            className="rounded-full object-cover"
-          />
-          : <PlaceholderProfile 
-          radius={'50%'} 
-          size={'100%'} 
-          name={
-            role === "employer" && user?.company?.name ? user?.company?.name
-              : `${user?.firstname ?? ""} ${user?.lastname ?? ""}`.trim()
-          }
-              />
-          }
+              src={user?.company?.logo_url}
+              alt="profile"
+              fill
+              className="rounded-full object-cover"
+            />
+          ) : user?.photo_url && role === 'talent' ? (
+            <Image
+              src={user.photo_url}
+              alt="profile"
+              fill
+              className="rounded-full object-cover"
+            />
+          ) : (
+            <PlaceholderProfile
+              radius={'50%'}
+              size={'100%'}
+              name={
+                role === 'employer' && user?.company?.name
+                  ? user?.company?.name
+                  : `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim()
+              }
+            />
+          )}
         </div>
 
         {/* name */}

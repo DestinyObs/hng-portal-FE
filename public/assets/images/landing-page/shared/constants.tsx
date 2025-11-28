@@ -24,10 +24,22 @@ export const LinkClasses =
   'font-medium text-xl text-gray-200 font-dm_sans hover:text-primary-blue transition';
 
 export const SocialLinks = [
-  { icon: FacebookIcon, href: '#', label: 'Facebook' },
-  { icon: TwitterIcon, href: '#', label: 'Twitter' },
-  { icon: LinkedInIcon, href: '#', label: 'LinkedIn' },
-  { icon: InstagramIcon, href: '#', label: 'Instagram' },
+  {
+    icon: FacebookIcon,
+    href: 'https://web.facebook.com/hngtech/',
+    label: 'Facebook',
+  },
+  { icon: TwitterIcon, href: 'https://x.com/hnginternship', label: 'Twitter' },
+  {
+    icon: LinkedInIcon,
+    href: 'https://www.linkedin.com/company/hng-internship/',
+    label: 'LinkedIn',
+  },
+  {
+    icon: InstagramIcon,
+    href: 'https://www.instagram.com/hngtech',
+    label: 'Instagram',
+  },
 ];
 
 export const FooterSections = [

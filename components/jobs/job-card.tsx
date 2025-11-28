@@ -30,15 +30,16 @@ export default function JobCard({ job }: JobCardProps) {
     >
       <div className="mb-6 flex items-start justify-between">
         <div className="flex items-start gap-4">
-          {shouldRenderImage ? (
-            <Image
-              src={job.company!.logo_url!}
-              alt={companyName}
-              width={56}
-              height={56}
-              className="rounded-xl object-cover"
-            />
-          ) : null // Render nothing if logo_url is a placeholder or doesn't exist
+          {
+            shouldRenderImage ? (
+              <Image
+                src={job.company!.logo_url!}
+                alt={companyName}
+                width={56}
+                height={56}
+                className="rounded-xl object-cover"
+              />
+            ) : null // Render nothing if logo_url is a placeholder or doesn't exist
           }
 
           <div className="space-y-1">

@@ -51,9 +51,7 @@ export const useGetTalentJob = <T>(
   return useQuery({
     queryKey: ['get-job', jobId],
     queryFn: async () => {
-      const res = await makeAuthenticatedRequest(
-        `/talent/jobs/${jobId}`,
-      );
+      const res = await makeAuthenticatedRequest(`/talent/jobs/${jobId}`);
       return res?.data as T;
     },
     enabled: !!jobId,
