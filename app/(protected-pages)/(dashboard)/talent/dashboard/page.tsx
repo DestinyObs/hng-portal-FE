@@ -16,8 +16,6 @@ type Job = RawJob2;
 
 const TalentDashboardPage = () => {
   const { user } = useAuthStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
   const {
     data: jobs,
@@ -68,28 +66,6 @@ const TalentDashboardPage = () => {
     }
     return card;
   });
-
-  const getIconAndBackground = (title: string) => {
-    switch (title) {
-      case 'Job Applications':
-        return {
-          icon: '/assets/dashboard/icons/briefcase.svg',
-          bgColor: 'bg-green-100',
-        };
-      case 'Profile Views':
-        return {
-          icon: '/assets/dashboard/icons/people.svg',
-          bgColor: 'bg-purple-100',
-        };
-      case 'Save Jobs':
-        return {
-          icon: '/assets/dashboard/icons/profile-tick.svg',
-          bgColor: 'bg-blue-100',
-        };
-      default:
-        return { icon: '', bgColor: 'bg-gray-200' };
-    }
-  };
 
   return (
     <>

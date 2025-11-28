@@ -11,7 +11,6 @@ import { RawJob2, TalentJobsQueryParams } from '@/types/job-card'; // Import Raw
 import { toast } from 'sonner';
 
 export default function FindJobsPage() {
-  const [selectedJob, setSelectedJob] = useState<RawJob2 | null>(null);
   const [queryParams, setQueryParams] = useState<TalentJobsQueryParams>({
     page: 1,
     per_page: 10,
