@@ -82,7 +82,6 @@ export interface ArticleCard {
   cta: string;
 }
 
-
 export interface User {
   id: string;
   firstname: string | null;
@@ -99,10 +98,9 @@ export interface User {
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
-  permissions: any[];    
   roles: Role[];
   company: Company | null;
-  bio: Bio
+  bio: Bio;
 }
 
 export interface Bio {
@@ -125,20 +123,14 @@ export interface Bio {
   status: string;
   created_at: string;
   updated_at: string;
-  user: User;     // nested user object
+  user: User; // nested user object
 }
 
-export interface Experience {
-  // Your API returned an empty array, so add fields when known
-}
+export type Experience = string[];
 
-export interface Preference {
-  // empty array as well, add fields when known
-}
+export type Preference = string[];
 
-export interface Skill {
-  // empty array as well, add fields when known
-}
+export type Skill = string[];
 
 export interface ProfileResponse {
   id: string;
@@ -155,6 +147,5 @@ export interface ProfileResponse {
   skills: Skill[];
   experiences: Experience[];
   preferences: Preference[];
-  verification: any | null;
-  bio: Bio;      // nested bio object
+  bio: Bio; // nested bio object
 }

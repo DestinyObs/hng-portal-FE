@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Dot } from 'lucide-react';
 import { DM_Sans } from 'next/font/google';
 import { Job } from '@/types/job-card';
@@ -23,11 +22,11 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
                 className="rounded-full object-cover"
               />
             ) : ( */}
-              <PlaceholderProfile
-                radius={'50%'}
-                size={'100%'}
-                name={postDetails.company}
-              />
+            <PlaceholderProfile
+              radius={'50%'}
+              size={'100%'}
+              name={postDetails.company}
+            />
             {/* )} */}
           </div>
           <h2 className="text-[32px] font-bold text-gray-800 ">

@@ -42,12 +42,12 @@ export function DashboardPagination({
     if (totalPages <= maxDesktopPages + 1) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
-    const showPages =
-      currentPage <= maxDesktopPages - 1
-        ? maxDesktopPages
-        : currentPage >= totalPages - (maxDesktopPages - 2)
-          ? maxDesktopPages
-          : 3;
+    // const showPages =
+    //   currentPage <= maxDesktopPages - 1
+    //     ? maxDesktopPages
+    //     : currentPage >= totalPages - (maxDesktopPages - 2)
+    //       ? maxDesktopPages
+    //       : 3;
 
     if (currentPage <= maxDesktopPages - 1) {
       // Near start: 1 2 3 4 5 ... 12
