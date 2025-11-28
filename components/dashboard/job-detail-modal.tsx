@@ -11,6 +11,11 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { X, Heart } from 'lucide-react';
 import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { saveJob } from '@/api/actions/talent';
+import { toast } from 'sonner';
+import { APIResponse } from '@/api/config.server';
+import { SuccessResponse } from '@/types/api-response';
 
 interface JobDetailModalProps {
   isOpen: boolean;
@@ -19,6 +24,24 @@ interface JobDetailModalProps {
 }
 
 const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: a_saveJob, isPending: isSaving } = useMutation({
+    mutationKey: ['saveJob', job?.id],
+    mutationFn: () => saveJob(job!.id),
+    onSuccess: (response: APIResponse<SuccessResponse>) => {
+      if (response.success) {
+        toast.success('Job saved successfully!');
+        queryClient.invalidateQueries({ queryKey: ['savedJobs'] }); // Invalidate saved jobs query to refetch
+      } else {
+        toast.error(response.message || 'Failed to save job.');
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network error occurred.');
+    },
+  });
+
   if (!job) {
     return null;
   }
@@ -104,7 +127,13 @@ const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
             <Button className="w-full" size="lg">
               Start Application
             </Button>
-            <Button className="w-full" variant="outline" size="lg">
+            <Button
+              className="w-full"
+              variant="outline"
+              size="lg"
+              onClick={() => a_saveJob()}
+              disabled={isSaving}
+            >
               <Heart className="mr-2 h-4 w-4" /> Save job
             </Button>
           </div>

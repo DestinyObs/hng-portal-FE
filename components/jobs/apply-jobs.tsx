@@ -7,6 +7,11 @@ import JobsPageBackIcon from '../icons/jobs-page-back-icon';
 import FindJobsNewWindow from '../icons/find-jobs-new-window';
 import Link from 'next/link';
 import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { saveJob } from '@/api/actions/talent';
+import { toast } from 'sonner';
+import { APIResponse } from '@/api/config.server';
+import { SuccessResponse } from '@/types/api-response';
 
 interface ApplyJobsModalProps {
   job: RawJob2;
@@ -15,6 +20,23 @@ interface ApplyJobsModalProps {
 
 export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutate: a_saveJob, isPending: isSaving } = useMutation({
+    mutationKey: ['saveJob', job.id],
+    mutationFn: () => saveJob(job.id),
+    onSuccess: (response: APIResponse<SuccessResponse>) => {
+      if (response.success) {
+        toast.success('Job saved successfully!');
+        queryClient.invalidateQueries({ queryKey: ['savedJobs'] }); // Invalidate saved jobs query to refetch
+      } else {
+        toast.error(response.message || 'Failed to save job.');
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network error occurred.');
+    },
+  });
 
   useEffect(() => {
     Promise.resolve().then(() => setIsVisible(true));
@@ -161,7 +183,11 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
                 Start Application
               </button>
 
-              <button className="w-full flex items-center justify-center gap-2 py-3.5 border border-[#00AEFF] rounded-lg font-medium hover:bg-(--color-gray-50) transition text-sm">
+              <button
+                onClick={() => a_saveJob()}
+                disabled={isSaving}
+                className="w-full flex items-center justify-center gap-2 py-3.5 border border-[#00AEFF] rounded-lg font-medium hover:bg-(--color-gray-50) transition text-sm"
+              >
                 <Heart className="h-4 w-4 text-(--color-primary-blue)" />
                 <span className=" text-(--color-primary-blue)">Save job</span>
               </button>

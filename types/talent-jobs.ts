@@ -7,6 +7,7 @@ export interface JobDetailsResponse {
   created_at: string;
   is_published: string;
   is_saved: boolean;
+  is_applied: boolean;
   status: string;
 
   category: Category;

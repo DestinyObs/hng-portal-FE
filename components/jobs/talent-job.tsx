@@ -13,6 +13,11 @@ import {
 } from '@/public/assets/images/landing-page/shared/icons';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { saveJob } from '@/api/actions/talent';
+import { toast } from 'sonner';
+import { APIResponse } from '@/api/config.server';
+import { SuccessResponse } from '@/types/api-response';
 
 const TalentJob = ({ id }: { id: string }) => {
   const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
@@ -20,6 +25,26 @@ const TalentJob = ({ id }: { id: string }) => {
   );
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const { mutate: a_saveJob, isPending: isSaving } = useMutation({
+    mutationKey: ['saveJob', id],
+    mutationFn: () => saveJob(id),
+    onSuccess: (response: APIResponse<SuccessResponse>) => {
+      if (response.success) {
+        toast.success(response.message || 'Job bookmark updated!');
+        queryClient.invalidateQueries({ queryKey: ['talentJob', id] });
+        queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
+        queryClient.invalidateQueries({ queryKey: ['talentFindJobs'] });
+        queryClient.invalidateQueries({ queryKey: ['talentJobs'] });
+      } else {
+        toast.error(response.message || 'Failed to save job.');
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network error occurred.');
+    },
+  });
 
   const skills = job?.skills.map((item: { name: string }) => item.name);
   const fixedJob = {
@@ -95,17 +120,23 @@ const TalentJob = ({ id }: { id: string }) => {
 
             {/* Apply Button */}
             <div className=" space-y-3">
-              <Button disabled={job.is_saved || false} size={'xs'}>
+              <Button disabled={job.is_applied || false} size={'xs'}>
                 Apply Now
               </Button>
 
               {/* Save Job */}
               <Button
-                disabled={job.is_saved || false}
+                onClick={() => a_saveJob()}
+                disabled={isSaving}
                 variant={'outline'}
                 size={'xs'}
               >
-                <Heart /> Save job
+                <Heart
+                  className={`mr-2 ${
+                    job.is_saved ? 'fill-red-500 text-red-500' : ''
+                  }`}
+                />{' '}
+                {job.is_saved ? 'Saved' : 'Save job'}
               </Button>
             </div>
 

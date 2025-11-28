@@ -3,8 +3,12 @@ import { useAuthStore } from '@/store/auth';
 import TalentJobCard from '@/components/dashboard/talent-job-card';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
-import { getTalentJobs, getSavedJobs } from '@/api/actions/talent'; // Import getTalentJobs and getSavedJobs
-import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import {
+  getTalentJobs,
+  getSavedJobs,
+  getTalentApplications,
+} from '@/api/actions/talent'; // Import getTalentJobs, getSavedJobs, getTalentApplications
+import { RawJob2, TalentApplication } from '@/types/job-card'; // Import RawJob and TalentApplication
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT_DASHBOARD_CARDS
@@ -22,16 +26,18 @@ const TalentDashboardPage = () => {
     // Explicitly type TData and TError
     queryKey: ['talentJobs'],
     queryFn: async () => {
-      const response = await getTalentJobs();
+      const response = await getTalentJobs({ per_page: 4 }); // Fetch only 4 for the dashboard
       if (!response.success) {
         throw new Error(response.message || 'Failed to fetch jobs.');
       }
       return response.data || [];
     },
+    staleTime: 0,
   });
 
   const {
     data: savedJobs,
+    isLoading: isLoadingSavedJobs,
     isError: isErrorSavedJobs,
     error: errorSavedJobs,
   } = useQuery<RawJob2[], Error>({
@@ -44,9 +50,29 @@ const TalentDashboardPage = () => {
       }
       return response.data || [];
     },
+    staleTime: 0,
+  });
+
+  const {
+    data: applications,
+    isLoading: isLoadingApplications,
+    isError: isErrorApplications,
+    error: errorApplications,
+  } = useQuery<TalentApplication[], Error>({
+    // Explicitly type TData and TError
+    queryKey: ['talentApplications'],
+    queryFn: async () => {
+      const response = await getTalentApplications();
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to fetch applications.');
+      }
+      return response.data || [];
+    },
+    staleTime: 0,
   });
 
   const savedJobsCount = savedJobs?.length || 0;
+  const jobApplicationsCount = applications?.length || 0;
 
   if (isErrorJobs) {
     toast.error(errorJobs?.message || 'Failed to fetch jobs.');
@@ -54,11 +80,17 @@ const TalentDashboardPage = () => {
   if (isErrorSavedJobs) {
     toast.error(errorSavedJobs?.message || 'Failed to fetch saved jobs.');
   }
+  if (isErrorApplications) {
+    toast.error(errorApplications?.message || 'Failed to fetch applications.');
+  }
 
-  // Use TALENT_DASHBOARD_CARDS and update the count for 'Save Jobs'
+  // Use TALENT_DASHBOARD_CARDS and update the count for 'Save Jobs' and 'Job Applications'
   const dashboardCards = TALENT_DASHBOARD_CARDS.map((card) => {
     if (card.title === 'Save Jobs') {
       return { ...card, count: savedJobsCount };
+    }
+    if (card.title === 'Job Applications') {
+      return { ...card, count: jobApplicationsCount };
     }
     return card;
   });
@@ -101,7 +133,7 @@ const TalentDashboardPage = () => {
           <h2 className="text-xl font-bold text-gray-900">
             Recommended Jobs for You
           </h2>
-          <Link href="/talent/job" className="text-sm text-black font-medium">
+          <Link href="/talent/jobs" className="text-sm text-black font-medium">
             View All Jobs
           </Link>
         </div>

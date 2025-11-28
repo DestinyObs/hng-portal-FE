@@ -8,6 +8,11 @@ import { JobDetailsResponse } from '@/types/talent-jobs';
 import { Heart, ChevronLeft, ExpandIcon, Verified } from 'lucide-react';
 import Image from 'next/image';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { saveJob } from '@/api/actions/talent';
+import { toast } from 'sonner';
+import { APIResponse } from '@/api/config.server';
+import { SuccessResponse } from '@/types/api-response';
 
 export const JobModal = () => {
   const { id } = useParams();
@@ -17,6 +22,23 @@ export const JobModal = () => {
   const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
   );
+  const queryClient = useQueryClient();
+
+  const { mutate: a_saveJob, isPending: isSaving } = useMutation({
+    mutationKey: ['saveJob', job?.id],
+    mutationFn: () => saveJob(job!.id),
+    onSuccess: (response: APIResponse<SuccessResponse>) => {
+      if (response.success) {
+        toast.success('Job saved successfully!');
+        queryClient.invalidateQueries({ queryKey: ['savedJobs'] }); // Invalidate saved jobs query to refetch
+      } else {
+        toast.error(response.message || 'Failed to save job.');
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network error occurred.');
+    },
+  });
 
   const router = useRouter();
 
@@ -115,7 +137,12 @@ export const JobModal = () => {
           {/* Actions */}
           <div className=" space-y-6 mt-4">
             <Button size={'xs'}>Start Application</Button>
-            <Button size={'xs'} variant="outline">
+            <Button
+              size={'xs'}
+              variant="outline"
+              onClick={() => a_saveJob()}
+              disabled={isSaving}
+            >
               <Heart /> Save job
             </Button>
           </div>
