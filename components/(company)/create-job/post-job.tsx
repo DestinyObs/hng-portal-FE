@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import JobDetails from './job-details';
 import JobDetailsStep2 from './job-details2';
 import type { JobFormData, JobFormData2 } from '@/types/create-new-job';
@@ -12,34 +12,44 @@ const steps = [
   { id: 3, label: 'Preview', sub: 'Preview job post' },
 ];
 
+const getInitialFormData = (data: JobFormData | undefined): JobFormData2 => ({
+  category_id: data?.category_id ?? '',
+  title: data?.title ?? '',
+  description: data?.description ?? '',
+  acceptance_criteria: data?.acceptance_criteria ?? '',
+  skills: data?.skills ?? [],
+  job_level_id: data?.job_level_id ?? '',
+  track_id: data?.track_id ?? '',
+  job_type_id: data?.job_type_id ?? '',
+  work_mode_id: data?.work_mode_id ?? '',
+  price: data?.price ?? '',
+  state_id: data?.state_id ?? '',
+  country_id: data?.country_id ?? '',
+});
+
 export default function PostJob({ id }: { id?: string }) {
   const { data, isPending } = usePost(id || '');
   const [currentStep, setCurrentStep] = useState(1);
+  console.log('API Data:', data);
 
-  const skills = (data as JobFormData | undefined)?.skills?.map(
-    (skill: string | { id: string }) =>
-      typeof skill === 'string' ? skill : skill?.id,
-  ) as string[];
+  // Compute form data whenever data changes
+  const initialFormData = useMemo(
+    () => getInitialFormData(data as JobFormData | undefined),
+    [data],
+  );
 
-  const [formData, setFormData] = useState<JobFormData2>({
-    category_id: (data as JobFormData | undefined)?.category_id ?? '',
-    title: (data as JobFormData | undefined)?.title ?? '',
-    description: (data as JobFormData | undefined)?.description ?? '',
-    acceptance_criteria:
-      (data as JobFormData | undefined)?.acceptance_criteria ?? '',
-    skills: (data as JobFormData | undefined)?.skills ?? [],
-    job_level_id: (data as JobFormData | undefined)?.job_level_id ?? '',
+  const [formData, setFormData] = useState<JobFormData2>(initialFormData);
 
-    // Step 2
-    track_id: (data as JobFormData | undefined)?.track_id ?? '',
-    job_type_id: (data as JobFormData | undefined)?.job_type_id ?? '',
-    work_mode_id: (data as JobFormData | undefined)?.work_mode_id ?? '',
-    price: (data as JobFormData | undefined)?.price ?? '',
-    state: (data as JobFormData | undefined)?.state ?? '',
-    country: (data as JobFormData | undefined)?.country ?? '',
-  });
+  // Update formData when initialFormData changes (data loads)
+  if (
+    JSON.stringify(formData) ===
+      JSON.stringify(getInitialFormData(undefined)) &&
+    data &&
+    JSON.stringify(initialFormData) !== JSON.stringify(formData)
+  ) {
+    setFormData(initialFormData);
+  }
 
-  // setData
   const handleFormUpdate = (details: Partial<JobFormData2>): void => {
     setFormData((prev) => ({ ...prev, ...details }));
   };
@@ -52,7 +62,7 @@ export default function PostJob({ id }: { id?: string }) {
     setCurrentStep(1);
   };
 
-  if (isPending) {
+  if (id && isPending) {
     return <Loading />;
   }
 

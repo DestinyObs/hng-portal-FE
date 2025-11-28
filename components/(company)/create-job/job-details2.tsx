@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, OctagonAlert } from 'lucide-react';
 import {
   JobDetailsStep2FormData,
   jobDetailsStep2Schema,
@@ -379,6 +379,7 @@ export default function JobDetailsStep2({
         onClose={() => setShowEditModal(false)}
         title="Do you want to save the edited post?"
         message="This job description will be updated."
+        icon={<OctagonAlert size={48} />}
         primaryButton={{
           label: 'Save Edit',
           onClick: () => {

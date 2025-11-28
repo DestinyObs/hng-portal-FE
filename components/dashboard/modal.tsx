@@ -37,7 +37,13 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
-            {icon && <div className="mb-4">{icon}</div>}
+            {icon && (
+              <div className="mb-4 rounded-full flex items-center justify-center">
+                <div className="text-primary-300 flex items-center justify-center text-4xl bg-primary-50 rounded-full w-16 h-16">
+                  {icon}
+                </div>
+              </div>
+            )}
 
             <h2 className="text-lg font-bold text-tertiary-500 mb-3 text-center">
               {title}
