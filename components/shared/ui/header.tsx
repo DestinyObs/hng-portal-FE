@@ -114,15 +114,13 @@ const Header = () => {
               {NavLinks.map((item) => (
                 <li
                   key={item.label}
-                  className="flex items-center gap-2 text-white hover:text-primary-blue cursor-pointer"
+                  className="flex items-center gap-2 text-white cursor-pointer hover:text-white"
                 >
                   {item.icon}
                   <Link
                     href={item.href}
                     className={`${LinkClasses} text-white ${
-                      item.active
-                        ? 'border-b-2 border-white hover:border-primary-blue'
-                        : ''
+                      item.active ? 'border-b-2 border-white' : ''
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
