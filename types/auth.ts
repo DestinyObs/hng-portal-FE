@@ -25,3 +25,18 @@ export interface TalentSignUpFormStepOneProps {
 export interface TalentSignUpFormStepTwoProps {
   form: UseFormReturn<TalentSignUpFormValues>;
 }
+
+export interface AuthResponseError {
+  message: string;
+  status: number;
+  success: boolean;
+}
+
+export interface GoogleAuthRequest {
+  google_token: string;
+  role?: string;
+  company_name?: string;
+  isNewUser?: boolean;
+}
+
+export type Role = 'talent' | 'company';

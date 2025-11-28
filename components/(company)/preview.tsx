@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Dot } from 'lucide-react';
 import { DM_Sans } from 'next/font/google';
 import { Job } from '@/types/job-card';
+import PlaceholderProfile from '../dashboard/placeholder-profile';
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 
 export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
@@ -14,12 +15,20 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <div className="flex flex-col gap-2">
           {/* company-logo */}
           <div className="relative w-28 h-28 img">
-            <Image
-              className="rounded-full"
-              fill
-              src={postDetails?.companyLogo || '/images/company-profile.png'}
-              alt={''}
-            />
+            {postDetails?.companyLogo ? (
+              <Image
+                src={postDetails?.companyLogo}
+                alt="profile"
+                fill
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <PlaceholderProfile
+                radius={'50%'}
+                size={'100%'}
+                name={postDetails.company}
+              />
+            )}
           </div>
           <h2 className="text-[32px] font-bold text-gray-800 ">
             {postDetails?.title}
@@ -48,7 +57,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <h3 className="text-xl font-semibold text-tertiary-500 ">
           Job Description
         </h3>
-        <p className="text-tertiary-200 text-[16px]">
+        <p className="text-tertiary-200 text-[16px] wrap-anywhere">
           {postDetails?.description}
         </p>
       </div>
@@ -76,7 +85,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <h3 className="text-xl font-semibold text-tertiary-500">
           Acceptance Criteria
         </h3>
-        <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className}">
+        <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className} wrap-anywhere">
           {postDetails?.acceptance_criteria}
         </div>
       </div>

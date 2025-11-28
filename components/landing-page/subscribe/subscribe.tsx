@@ -76,7 +76,7 @@ export default function SubscribeSection() {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex items-center gap-2 w-full"
+                className="flex flex-col sm:flex-row items-start gap-3 w-full"
               >
                 <FormField
                   control={form.control}
@@ -90,20 +90,20 @@ export default function SubscribeSection() {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage className="absolute text-red-100 text-xs mt-1" />
+                      <FormMessage className="text-red-100 text-xs mt-1 text-left pl-1" />
                     </FormItem>
                   )}
                 />
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="shrink-0 bg-[#E5F6FF] hover:bg-white text-[#00AEFF] h-12 px-4 sm:px-8 font-semibold rounded-lg transition-colors"
+                  className="shrink-0 bg-[#E5F6FF] hover:bg-white text-black h-12 px-4 sm:px-8 font-semibold rounded-lg transition-colors w-full sm:w-auto"
                 >
                   {isLoading ? '...' : 'Subscribe'}
                 </Button>
               </form>
             </Form>
-            <p className="text-sm text-white/80 m-2">
+            <p className="text-sm text-white/80 m-2 mt-4 text-center sm:text-left">
               By subscribing you agree to our{' '}
               <a
                 href="#"
