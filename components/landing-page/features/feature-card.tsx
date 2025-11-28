@@ -22,7 +22,7 @@ export default function FeatureCard({ feature }: FeatureCardProps) {
       </CardContent>
       <CardDescription className="text-[#1e1e1e] max-w-[468px]">
         <h4 className="text-2xl font-medium">{feature.header}</h4>
-        <p className="text-sm text-base">{feature.description}</p>
+        <p className="text-sm">{feature.description}</p>
       </CardDescription>
     </Card>
   );
