@@ -12,8 +12,8 @@ import { useParams } from 'next/navigation';
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 
 const Page = () => {
-  const { id } = useParams(); 
-  const { user } = useAuthStore(); 
+  const { id } = useParams();
+  const { user } = useAuthStore();
 
   const companyId = user?.company?.id;
   const { changeStatus, isPending: IsChanging } = useUpdateStatus();

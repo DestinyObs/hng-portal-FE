@@ -1,26 +1,28 @@
-"use client"
-import { JobDetailsResponse } from "@/types/talent-jobs"
-import { PreviewJob } from "../(company)/preview"
-import { useGetTalentJob } from "@/hooks/jobs"
-import Loading from "@/app/loading"
-import { Button } from "../ui/button"
-import { ChevronLeft, Heart } from "lucide-react"
-import { 
-    FacebookIcon, 
-    InstagramIcon, 
-    LinkedInIcon, 
-    TwitterIcon } from "@/public/assets/images/landing-page/shared/icons"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+'use client';
+import { JobDetailsResponse } from '@/types/talent-jobs';
+import { PreviewJob } from '../(company)/preview';
+import { useGetTalentJob } from '@/hooks/jobs';
+import Loading from '@/app/loading';
+import { Button } from '../ui/button';
+import { ChevronLeft, Heart } from 'lucide-react';
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  TwitterIcon,
+} from '@/public/assets/images/landing-page/shared/icons';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
+const TalentJob = ({ id }: { id: string }) => {
+  const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
+    id as string,
+  );
+  const [isCopied, setIsCopied] = useState(false);
+  const router = useRouter();
 
-const TalentJob = ({id}:{id: string}) => {
-    const {data: job, isPending} = useGetTalentJob<JobDetailsResponse>(id as string)
-    const [isCopied, setIsCopied] = useState(false);
-    const router = useRouter()
-    
-    const skills = job?.skills.map((item: {name: string})=> item.name)
-    const fixedJob = {
+  const skills = job?.skills.map((item: { name: string }) => item.name);
+  const fixedJob = {
     id: job?.id || '',
     category: job?.category.name || '',
     title: job?.title || '',
@@ -40,43 +42,43 @@ const TalentJob = ({id}:{id: string}) => {
     workType: job?.job_type.name || '',
     level: job?.job_levels.name || '',
     onsiteOrRemote: job?.job_type.name || '',
-    }
+  };
 
-    const handleCopy =()=> {
-    navigator.clipboard.writeText(
-    `https://takeda.emerj.net/talent/jobs/${id}`
-    )
-    setIsCopied(true)
-    setTimeout(()=>{
-        setIsCopied(false)
-    }, 1000)
-    }
-    
-    if (isPending || !job) return <Loading />
+  const handleCopy = () => {
+    navigator.clipboard.writeText(`https://takeda.emerj.net/talent/jobs/${id}`);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
+
+  if (isPending || !job) return <Loading />;
   return (
     <>
-    <div className="flex justify-start ">
+      <div className="flex justify-start ">
         {/* Back button */}
-        <button onClick={()=> router.back()} className="inline-flex items-center text-left text-primary-blue font-semibold pt-0 pb-5 cursor-pointer">
+        <button
+          onClick={() => router.back()}
+          className="inline-flex items-center text-left text-primary-blue font-semibold pt-0 pb-5 cursor-pointer"
+        >
           <ChevronLeft className="mr-2" />
           Back
         </button>
       </div>
 
-    
-    <div className=" flex flex-col md:flex-row gap-4 lg:gap-5">
+      <div className=" flex flex-col md:flex-row gap-4 lg:gap-5">
         <div className="w-full p-2 sm:p-6 bg-white border border-tertiary-50 rounded-xl space-y-6">
           <PreviewJob postDetails={fixedJob} />
           {/* about the company should be added here  */}
-           <div className="space-y-2">
+          <div className="space-y-2">
             <h3 className="text-xl font-semibold text-tertiary-500">
-            About the company
+              About the company
             </h3>
             <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className} wrap-anywhere">
-            {job.company.description}
+              {job.company.description}
             </div>
             {/* button to view company profile... dont add till a page like that exist  */}
-        </div>
+          </div>
         </div>
 
         <div className="card-2 w-full md:w-[315px] space-y-6">
@@ -93,10 +95,16 @@ const TalentJob = ({id}:{id: string}) => {
 
             {/* Apply Button */}
             <div className=" space-y-3">
-              <Button disabled={job.is_saved || false} size={'xs'}>Apply Now</Button>
+              <Button disabled={job.is_saved || false} size={'xs'}>
+                Apply Now
+              </Button>
 
               {/* Save Job */}
-              <Button disabled={job.is_saved || false} variant={'outline'} size={'xs'}>
+              <Button
+                disabled={job.is_saved || false}
+                variant={'outline'}
+                size={'xs'}
+              >
                 <Heart /> Save job
               </Button>
             </div>
@@ -109,26 +117,26 @@ const TalentJob = ({id}:{id: string}) => {
                   <InstagramIcon />{' '}
                 </a>
                 <a
-                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                        `https://takeda.emerj.net/talent/jobs/${id}`
-                    )}&text=${encodeURIComponent(job?.title ?? "")}`}
-                    target="_blank"
-                    >
+                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                    `https://takeda.emerj.net/talent/jobs/${id}`,
+                  )}&text=${encodeURIComponent(job?.title ?? '')}`}
+                  target="_blank"
+                >
                   <TwitterIcon />{' '}
                 </a>
                 <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                    `https://takeda.emerj.net/talent/jobs/${id}`
-                )}`}
-                target="_blank"
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    `https://takeda.emerj.net/talent/jobs/${id}`,
+                  )}`}
+                  target="_blank"
                 >
                   <FacebookIcon />{' '}
                 </a>
                 <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                    `https://takeda.emerj.net/talent/jobs/${id}`
-                )}`}
-                target="_blank"
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                    `https://takeda.emerj.net/talent/jobs/${id}`,
+                  )}`}
+                  target="_blank"
                 >
                   <LinkedInIcon />{' '}
                 </a>
@@ -149,17 +157,24 @@ const TalentJob = ({id}:{id: string}) => {
               </a>
             </div>
 
-            <button onClick={handleCopy} className="text-sm font-semibold cursor-pointer">
-              <span className="text-primary-blue  hover:underline">Copy link</span>
-              {
-                isCopied && <span className="mx-4 text-tertiary-200 rounded-sm no-underline p-1 bg-tertiary-50">copied!</span>
-              }
+            <button
+              onClick={handleCopy}
+              className="text-sm font-semibold cursor-pointer"
+            >
+              <span className="text-primary-blue  hover:underline">
+                Copy link
+              </span>
+              {isCopied && (
+                <span className="mx-4 text-tertiary-200 rounded-sm no-underline p-1 bg-tertiary-50">
+                  copied!
+                </span>
+              )}
             </button>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default TalentJob
+export default TalentJob;
