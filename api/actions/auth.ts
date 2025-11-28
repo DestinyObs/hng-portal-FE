@@ -62,11 +62,13 @@ export async function google_signin(formData: GoogleAuthRequest) {
         path: '/',
       });
 
-      (await cookies()).set('user', JSON.stringify(data?.data?.user), {
-        httpOnly: false,
-        sameSite: 'strict',
-        path: '/',
-      });
+      if (formData.isNewUser === false) {
+        (await cookies()).set('user', JSON.stringify(data?.data?.user), {
+          httpOnly: false,
+          sameSite: 'strict',
+          path: '/',
+        });
+      }
 
       return data;
     }
