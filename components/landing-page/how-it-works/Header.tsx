@@ -4,7 +4,10 @@ export default function Header() {
   return (
     <div className="text-center mb-12">
       <div className="inline-block mb-4">
-        <Badge className="bg-white text-primary-blue px-4 py-2 rounded-full text-caption font-medium border border-primary-blue">
+        <Badge
+          className="border-primary-300 text-primary-300 font-semibold text-[14px] px-4 py-1"
+          variant={'outline'}
+        >
           How it Works
         </Badge>
       </div>

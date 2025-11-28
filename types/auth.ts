@@ -36,6 +36,7 @@ export interface GoogleAuthRequest {
   google_token: string;
   role?: string;
   company_name?: string;
+  isNewUser?: boolean;
 }
 
 export type Role = 'talent' | 'company';

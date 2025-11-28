@@ -61,6 +61,8 @@ export const FooterSections = [
     title: 'LEGAL',
     links: [
       { label: 'Privacy Policy', href: 'https://hng.tech/privacy' },
+      { label: 'Terms of Service', href: '/terms-of-service' },
+      { label: 'Privacy Policy', href: '/privacy-policy' },
       { label: 'Terms of Service', href: 'https://hng.tech/terms' },
       { label: 'Cookies', href: '#' },
     ],
@@ -72,7 +74,7 @@ export const FooterSections = [
       { label: 'Blog', href: 'https://hng.tech/blog' },
       { label: 'Help Center', href: '#' },
       { label: 'FAQs', href: '/faq' },
-      { label: 'Contact Support', href: 'mailto:support@hng.tech' },
+      { label: 'Contact Us', href: '/contact-us' },
     ],
     className: 'lg:ml-20',
   },

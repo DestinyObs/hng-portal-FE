@@ -26,8 +26,8 @@ export default function ServiceCards() {
         <motion.div
           key={index}
           variants={{
-            hidden: { opacity: 0, y: 40 },
-            visible: { opacity: 1, y: 0 },
+            hidden: { opacity: 0, x: index % 2 === 0 ? -50 : 50, y: 20 }, // alternate left/right
+            visible: { opacity: 1, x: 0, y: 0 },
           }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="w-full sm:w-[90%] md:w-auto md:flex-1 md:max-w-[379px]"

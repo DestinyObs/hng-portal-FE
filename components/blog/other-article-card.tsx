@@ -1,4 +1,3 @@
-import React from 'react';
 import { CarouselItem } from '../ui/carousel';
 import { Card, CardContent } from '../ui/card';
 import Image from 'next/image';
@@ -7,15 +6,15 @@ import Link from 'next/link';
 
 export const OtherArticleCard = ({ article }: { article: ArticleCard }) => {
   return (
-    <CarouselItem className="cursor-pointer basis-full w-[384px] sm:basis-1/2 lg:basis-1/4">
+    <CarouselItem className="cursor-pointer group basis-full w-[384px] sm:basis-1/2 lg:basis-1/4">
       <div className="w-full">
         <Card className="group p-0 py-0 w-full md:h-[292px] h-64 flex flex-col sm:flex-row gap-0 border-0 transition-all duration-300 ease-in-out">
-          <CardContent className="relative w-full h-full p-0">
+          <CardContent className="relative p-3 rounded-2xl w-full h-full">
             <Image
               src={article.image}
               alt={article.title}
               fill
-              className="object-cover rounded-[11px]"
+              className="object-cover rounded-[11px] group-hover:rounded-[11px] group-hover:scale-105 transition-transform duration-300"
             />
           </CardContent>
         </Card>
@@ -30,8 +29,8 @@ export const OtherArticleCard = ({ article }: { article: ArticleCard }) => {
           </p>
 
           <Link
-            href={'/'}
-            className="pt-5 inline-block underline text-primary-blue"
+            href={'/resources/the-ultimate-guide-to-getting-hired'}
+            className="pt-5 inline-block underline text-primary-blue hover:text-primary-400"
           >
             see more
           </Link>

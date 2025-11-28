@@ -128,7 +128,7 @@ const BlogPost = () => {
                 />
               </div>
 
-              <CarouselContent>
+              <CarouselContent className="p-3">
                 {nextArticles.map((article, index) => (
                   <OtherArticleCard article={article} key={index} />
                 ))}
