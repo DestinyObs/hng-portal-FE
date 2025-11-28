@@ -1,10 +1,21 @@
 import { CarouselItem } from '../ui/carousel';
 import { Card, CardContent } from '../ui/card';
 import Image from 'next/image';
-import { ArticleCard } from '@/lib/types';
 import Link from 'next/link';
 
-export const OtherArticleCard = ({ article }: { article: ArticleCard }) => {
+type blogPosts = {
+  id: number;
+  title: string;
+  slug: string;
+  image: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  tags: string[];
+  publishedAt: string;
+};
+
+export const OtherArticleCard = ({ article }: { article: blogPosts }) => {
   return (
     <CarouselItem className="cursor-pointer group basis-full w-[384px] sm:basis-1/2 lg:basis-1/4">
       <div className="w-full">
@@ -20,16 +31,12 @@ export const OtherArticleCard = ({ article }: { article: ArticleCard }) => {
         </Card>
         <div className="py-2">
           <h3 className="text-tertiary-200 py-3 text-2xl font-medium">
-            Understanding the Right Talent For The Jobs
+            {article.title}
           </h3>
-          <p className="text-tertiary-75 text-sm ">
-            Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas
-            arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque
-            faucibus. Aliquet tellus venenatis tristique bibendum lectus.
-          </p>
+          <p className="text-tertiary-75 text-sm ">{article.excerpt}</p>
 
           <Link
-            href={'/resources/the-ultimate-guide-to-getting-hired'}
+            href={`/resources/${article.slug}`}
             className="pt-5 inline-block underline text-primary-blue hover:text-primary-400"
           >
             see more

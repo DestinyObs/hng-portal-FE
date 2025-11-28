@@ -19,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { blogPosts } from '@/lib/blog-post';
 
 const contactSchema = z.object({
   fullName: z
@@ -29,14 +30,6 @@ const contactSchema = z.object({
     .string()
     .min(10, { message: 'Message must be at least 10 characters.' }),
 });
-
-const BLOG_POSTS = [1, 2, 3, 4, 5, 6].map((item) => ({
-  id: item,
-  title: 'Understanding the Right Talent For The Jobs',
-  summary:
-    'Lorem ipsum dolor sit amet consectetur. Convallis hunc eget egestas arcu enim sem.',
-  image: '/assets/resources/images/blog.png',
-}));
 
 export default function BlogPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -87,9 +80,9 @@ export default function BlogPage() {
         <section className="py-8 lg:py-20 bg-white">
           <div className="container mx-auto px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
-              {BLOG_POSTS.map((post) => (
+              {blogPosts.map((post) => (
                 <Link
-                  href="/resources/the-ultimate-guide-to-getting-hired"
+                  href={`/resources/${post.slug}`}
                   key={post.id}
                   className="block"
                 >
@@ -106,7 +99,7 @@ export default function BlogPage() {
                       <h3 className="font-bold text-2xl text-gray-200 mb-2">
                         {post.title}
                       </h3>
-                      <p className="text-gray-75 text-base ">{post.summary}</p>
+                      <p className="text-gray-75 text-base ">{post.excerpt}</p>
                     </div>
                   </article>
                 </Link>

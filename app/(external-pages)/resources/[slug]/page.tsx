@@ -7,10 +7,31 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { nextArticles } from '@/public/assets/images/landing-page/shared/constants';
+import ReactMarkdown from 'react-markdown';
 import { OtherArticleCard } from '@/components/blog/other-article-card';
+import { blogPosts } from '@/lib/blog-post';
 
-const BlogPost = () => {
+const BlogPost = async ({ params }: { params: { slug: string } }) => {
+  const param = await params;
+  const slug = param.slug;
+  console.log(params.slug);
+
+  const post = blogPosts.find((p) => p.slug === slug);
+  console.log('Post:', post);
+
+  if (!post) return <div>Post not found</div>;
+
+  const date = new Date(post?.publishedAt || '');
+
+  // Format as "Month Day, Year"
+  const formattedDate = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  console.log(formattedDate);
+
   return (
     <>
       <Head>
@@ -25,12 +46,12 @@ const BlogPost = () => {
           {/* Date */}
           <div className="min-w-sm space-y-8">
             <p className="text-base text-tertiary-100 mb-2 font-light">
-              November 28, 2025
+              {formattedDate}
             </p>
 
             {/* Title */}
             <h1 className="text-3xl sm:text-5xl font-bold mb-8">
-              The Ultimate Guide to <br /> Getting Hired in 2025
+              {post.title}
             </h1>
           </div>
 
@@ -46,65 +67,11 @@ const BlogPost = () => {
           {/* First Section */}
           <section className="pt-12 space-y-[30px] ">
             <h2 className="text-xl sm:text-3xl font-semibold mb-4">
-              Lorem Ipsum
+              {post.title}
             </h2>
-            <p className="text-gray-700 leading-relaxed text-base md:text-lg">
-              Lorem ipsum dolor sit amet consectetur. Convallis nunc eget
-              egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper
-              neque faucibus. Aliquet tellus venenatis tristique bibendum lectus
-              in sit elit id. Ornare porta rutrum faucibus ligula ut in id ante
-              duis. Cum pharetra scelerisque amet feugiat diam congue sed
-              pellentesque. Interdum quis id molestie id ultrices. In praesent
-              ut semper dictum augue pharetra tristique. Nibh consequat purus
-              lacus quis placerat duis tempus. Elementum posuere ut quis ipsum
-              et. Eleifend quis in iaculis semper. Quis faucibus non eu eget vel
-              est ut. Est dolor orci placerat faucibus pellentesque ultrices
-              parturient. Eu morbi integer sit sit sed. Id justo amet vestibulum
-              eget a. Id turpis gravida sed amet. Euismod lorem est pulvinar
-              amet et diam arcu. Nulla ut nunc senectus lectus cursus neque.
-              Nascetur justo at auctor habitant. Eget consequat quis
-              pellentesque non euismod convallis tortor euismod. Purus amet a
-              purus bibendum amet. Id enim duis praesent elementum nunc fames.
-              Ornare dis mi mattis cursus vel eu aenean gravida purus. Integer
-              id egestas blandit tristique at eget odio id nisl. Vel auctor
-              consectetur sapien est est et. Mi ac pulvinar pellentesque dui
-              iaculis ut vitae purus. Elementum hendrerit scelerisque leo quam
-              orci. Ullamcorper ac amet ullamcorper consectetur. Id sed ut id
-              tellus. Nisl massa adipiscing turpis sed amet non. Dictum euismod
-              fermentum rhoncus morbi massa.
-            </p>
-          </section>
-
-          {/* Second Section */}
-          <section className="pt-12">
-            <h2 className="text-xl sm:text-3xl font-semibold mb-4">
-              Lorem Ipsum
-            </h2>
-            <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
-              Lorem ipsum dolor sit amet consectetur. Convallis nunc eget
-              egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper
-              neque faucibus. Aliquet tellus venenatis tristique bibendum lectus
-              in sit elit id. Ornare porta rutrum faucibus ligula ut in id ante
-              duis. Cum pharetra scelerisque amet feugiat diam congue sed
-              pellentesque. Interdum quis id molestie id ultrices. In praesent
-              ut semper dictum augue pharetra tristique. Nibh consequat purus
-              lacus quis placerat duis tempus. Elementum posuere ut quis ipsum
-              et. Eleifend quis in iaculis semper. Quis faucibus non eu eget vel
-              est ut. Est dolor orci placerat faucibus pellentesque ultrices
-              parturient. Eu morbi integer sit sit sed. Id justo amet vestibulum
-              eget a. Id turpis gravida sed amet. Euismod lorem est pulvinar
-              amet et diam arcu. Nulla ut nunc senectus lectus cursus neque.
-              Nascetur justo at auctor habitant. Eget consequat quis
-              pellentesque non euismod convallis tortor euismod. Purus amet a
-              purus bibendum amet. Id enim duis praesent elementum nunc fames.
-              Ornare dis mi mattis cursus vel eu aenean gravida purus. Integer
-              id egestas blandit tristique at eget odio id nisl. Vel auctor
-              consectetur sapien est est et. Mi ac pulvinar pellentesque dui
-              iaculis ut vitae purus. Elementum hendrerit scelerisque leo quam
-              orci. Ullamcorper ac amet ullamcorper consectetur. Id sed ut id
-              tellus. Nisl massa adipiscing turpis sed amet non. Dictum euismod
-              fermentum rhoncus morbi massa.
-            </p>
+            <div className="prose prose-lg mx-auto text-gray-700 leading-relaxed text-base md:text-lg">
+              <ReactMarkdown>{post.content}</ReactMarkdown>
+            </div>
           </section>
         </main>
 
@@ -129,7 +96,7 @@ const BlogPost = () => {
               </div>
 
               <CarouselContent className="p-3">
-                {nextArticles.map((article, index) => (
+                {blogPosts.map((article, index) => (
                   <OtherArticleCard article={article} key={index} />
                 ))}
               </CarouselContent>
