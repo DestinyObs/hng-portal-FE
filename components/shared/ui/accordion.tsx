@@ -10,11 +10,17 @@ export function Accordion({
   classname,
   triggerClassname,
   contentClassname,
+  itemVariant,
+  triggerVariant,
+  contentVariant,
   content,
 }: {
   classname?: string;
   triggerClassname?: string;
   contentClassname?: string;
+  itemVariant?: 'default' | 'leftBorder';
+  triggerVariant?: 'default' | 'borderless' | 'noIcon' | 'minimal';
+  contentVariant?: 'default' | 'leftBorder' | 'minimal';
   content: {
     title: string;
     content: string;
@@ -24,11 +30,22 @@ export function Accordion({
     <AccordionUI type="single" className={cn('', classname)} collapsible>
       {content &&
         content.map(({ title, content }, index) => (
-          <AccordionItem key={index} value={title} className="py-3 border-0">
-            <AccordionTrigger className={triggerClassname}>
+          <AccordionItem
+            variant={itemVariant}
+            key={index}
+            value={title}
+            className=" border-0"
+          >
+            <AccordionTrigger
+              variant={triggerVariant}
+              className={triggerClassname}
+            >
               {title}
             </AccordionTrigger>
-            <AccordionContent className={contentClassname}>
+            <AccordionContent
+              variant={contentVariant}
+              className={contentClassname}
+            >
               {content}
             </AccordionContent>
           </AccordionItem>

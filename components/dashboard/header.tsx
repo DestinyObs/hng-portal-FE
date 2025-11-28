@@ -72,7 +72,7 @@ const DashboardHeader = () => {
           className="flex items-center justify-between"
           aria-label="Dashboard navigation"
         >
-          <Link href="/dashboard" aria-label="HNG Connect Home">
+          <Link href={dashboardLinks[0].href} aria-label="HNG Connect Home">
             <div className="flex items-center gap-2">
               <Image
                 src={Logo}
@@ -127,32 +127,33 @@ const DashboardHeader = () => {
                 className="flex items-center gap-2 pl-2 focus:outline-none"
               >
                 <div className="w-9 h-9 rounded-full overflow-hidden">
-                    {
-                  user?.company?.logo_url && isCompany  ?
-                  <Image
-                src={user?.company?.logo_url}
-                alt="Profile"
-                width={40}
-                height={40}
-                className="object-cover w-full h-full"
-              /> : user?.photo_url && !isCompany ? 
-                <Image
-                  src={user.photo_url}
-                  alt="Profile"
-                  width={40}
-                  height={40}
-                  className="object-cover w-full h-full"
-                />
-                : <PlaceholderProfile
-                size={'100%'} 
-                fontSize={'1rem'}
-                name={
-                  isCompany
-                    ? user?.company?.name ?? ""
-                    : `${user?.firstname ?? ""} ${user?.lastname ?? ""}`.trim()
-                }
+                  {user?.company?.logo_url && isCompany ? (
+                    <Image
+                      src={user?.company?.logo_url}
+                      alt="Profile"
+                      width={40}
+                      height={40}
+                      className="object-cover w-full h-full"
                     />
-                }
+                  ) : user?.photo_url && !isCompany ? (
+                    <Image
+                      src={user.photo_url}
+                      alt="Profile"
+                      width={40}
+                      height={40}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <PlaceholderProfile
+                      size={'100%'}
+                      fontSize={'1rem'}
+                      name={
+                        isCompany
+                          ? (user?.company?.name ?? '')
+                          : `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim()
+                      }
+                    />
+                  )}
                 </div>
 
                 <ChevronDown
