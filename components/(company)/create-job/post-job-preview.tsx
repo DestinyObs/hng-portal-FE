@@ -63,7 +63,7 @@ const PostJobPreview = () => {
     country: country?.name ?? '',
     skills: skills ?? [],
     company: user?.company?.name ?? '',
-    companyLogo: user?.company?.logo_url ?? '/images/company-profile.png',
+    companyLogo: user?.company?.logo_url || undefined,
     job_type: job_type?.name ?? '',
     work_mode: workMode?.name ?? '',
     category: newPost?.category_id,

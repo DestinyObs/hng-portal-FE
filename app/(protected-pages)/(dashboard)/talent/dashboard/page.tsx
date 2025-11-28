@@ -1,10 +1,7 @@
 'use client';
-import { useState } from 'react';
 import { useAuthStore } from '@/store/auth';
 import TalentJobCard from '@/components/dashboard/talent-job-card';
 import Link from 'next/link';
-import JobDetailModal from '@/components/dashboard/job-detail-modal';
-import Image from 'next/image'; // Import Image
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
 import { getTalentJobs, getSavedJobs } from '@/api/actions/talent'; // Import getTalentJobs and getSavedJobs
 import { RawJob2 } from '@/types/job-card'; // Import RawJob
@@ -12,15 +9,9 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT_DASHBOARD_CARDS
 import DashboardCard from '@/components/dashboard/dashboard-card';
-import { ca } from 'zod/v4/locales';
-
-// Define Job type based on RawJob structure, for consistency with the API response
-type Job = RawJob2;
 
 const TalentDashboardPage = () => {
   const { user } = useAuthStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
   const {
     data: jobs,
@@ -41,7 +32,6 @@ const TalentDashboardPage = () => {
 
   const {
     data: savedJobs,
-    isLoading: isLoadingSavedJobs,
     isError: isErrorSavedJobs,
     error: errorSavedJobs,
   } = useQuery<RawJob2[], Error>({
@@ -73,41 +63,6 @@ const TalentDashboardPage = () => {
     return card;
   });
 
-  const handleViewJob = (jobId: string) => {
-    const job = jobs?.find((j) => j.id === jobId);
-    if (job) {
-      setSelectedJob(job);
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedJob(null);
-  };
-
-  const getIconAndBackground = (title: string) => {
-    switch (title) {
-      case 'Job Applications':
-        return {
-          icon: '/assets/dashboard/icons/briefcase.svg',
-          bgColor: 'bg-green-100',
-        };
-      case 'Profile Views':
-        return {
-          icon: '/assets/dashboard/icons/people.svg',
-          bgColor: 'bg-purple-100',
-        };
-      case 'Save Jobs':
-        return {
-          icon: '/assets/dashboard/icons/profile-tick.svg',
-          bgColor: 'bg-blue-100',
-        };
-      default:
-        return { icon: '', bgColor: 'bg-gray-200' };
-    }
-  };
-
   return (
     <>
       <div className="flex flex-col gap-8">
@@ -125,7 +80,6 @@ const TalentDashboardPage = () => {
         {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {dashboardCards.map((card, index) => {
-            const { icon, bgColor } = getIconAndBackground(card.title);
             return (
               <DashboardCard
                 key={index}
@@ -163,11 +117,6 @@ const TalentDashboardPage = () => {
           )}
         </div>
       </div>
-      <JobDetailModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        job={selectedJob}
-      />
     </>
   );
 };
