@@ -8,8 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
 export default function ContactUsPage() {
-  const router = useRouter();
-
   return (
     <div className="bg-white text-gray-800">
       {/* Hero Section */}
