@@ -10,25 +10,12 @@ import {
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { X, Heart } from 'lucide-react';
-
-// This Job type now includes a dedicated 'skills' array
-interface Job {
-  id: string;
-  companyLogo: string;
-  jobTitle: string;
-  companyName: string;
-  isVerified: boolean;
-  salary: string;
-  tags: string[]; // e.g., ['Remote', 'Full time']
-  skills: string[]; // e.g., ['Figma', 'Adobe XD']
-  postedDate: string;
-  description: string;
-}
+import { RawJob2 } from '@/types/job-card'; // Import RawJob
 
 interface JobDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  job: Job | null;
+  job: RawJob2 | null; // Use RawJob
 }
 
 const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
@@ -36,27 +23,41 @@ const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
     return null;
   }
 
+  const companyName = job.company?.name || 'N/A';
+  const jobLevel = job.job_levels?.[0]?.name || 'N/A';
+  const workMode = job.work_mode?.name || 'N/A';
+  const jobType = job.job_type?.name || 'N/A';
+  const location =
+    (job.states?.[0]?.name ? `${job.states[0].name}, ` : '') +
+    (job.countries?.[0]?.name || 'N/A');
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[650px] p-8">
         <DialogHeader className="flex-row items-center justify-between space-y-0">
           <div className="flex items-center gap-4">
-            <Image
-              src={job.companyLogo}
-              alt={job.companyName}
-              width={56}
-              height={56}
-              className="rounded-lg"
-            />
+            {job.company?.logo_url ? (
+              <Image
+                src={job.company.logo_url}
+                alt={companyName}
+                width={56}
+                height={56}
+                className="rounded-lg"
+              />
+            ) : (
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-blue-500 to-purple-600">
+                <span className="text-2xl font-bold text-white">
+                  {companyName.charAt(0)}
+                </span>
+              </div>
+            )}
             <div>
               <DialogTitle className="text-xl font-bold">
-                {job.jobTitle}
+                {job.title}
               </DialogTitle>
               <p className="text-md text-gray-600 flex items-center">
-                {job.companyName}
-                {job.isVerified && (
-                  <span className="ml-1 text-primary-blue">&#10003;</span>
-                )}
+                {companyName}
+                {/* isVerified not directly available in RawJob */}
               </p>
             </div>
           </div>
@@ -70,25 +71,33 @@ const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
         <div className="mt-6 space-y-6">
           <p className="text-sm text-gray-800">{job.description}</p>
 
-          {/* Skills Section - Now uses job.skills */}
+          {/* Skills Section */}
           <div className="flex flex-wrap gap-2">
-            {job.skills.map((skill, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-white border border-gray-300 rounded-md text-xs text-gray-700"
-              >
-                {skill}
+            {job.skills && job.skills.length > 0 ? (
+              job.skills.map((skill) => (
+                <span
+                  key={skill.id}
+                  className="px-3 py-1 bg-white border border-gray-300 rounded-md text-xs text-gray-700"
+                >
+                  {skill.name}
+                </span>
+              ))
+            ) : (
+              <span className="px-3 py-1 bg-white border border-gray-300 rounded-md text-xs text-gray-700">
+                No skills specified
               </span>
-            ))}
+            )}
           </div>
 
-          {/* Metadata Line - Now correctly formatted */}
+          {/* Metadata Line */}
           <div className="text-sm text-gray-500">
-            Posted: {job.postedDate} &mdash; {job.tags.join(' — ')}
+            Posted: {job.created_at ? job.created_at.split('T')[0] : 'N/A'}{' '}
+            &mdash; {workMode} &mdash; {jobType} &mdash; {jobLevel} &mdash;{' '}
+            {location}
           </div>
 
           <p className="text-xl font-bold text-gray-900">
-            {job.salary} per Month
+            {job.salary ? `₦ ${job.salary}` : 'Salary not specified'} per Month
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full mt-8">

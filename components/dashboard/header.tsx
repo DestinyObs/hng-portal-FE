@@ -199,6 +199,15 @@ const DashboardHeader = () => {
                 </li>
               ))}
               <hr />
+              <li>
+                <button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="w-full text-left block font-medium text-primary-error py-2 disabled:opacity-50"
+                >
+                  {isLoggingOut ? 'Logging out...' : 'Log out'}
+                </button>
+              </li>
 
               <div className="flex gap-4 py-2">
                 <Image
