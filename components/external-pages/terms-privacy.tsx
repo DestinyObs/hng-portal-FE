@@ -57,7 +57,9 @@ export default function TermsOfServiceAndPrivacy({
                     <h2 className="pl-2 text-2xl font-semibold mb-1">
                       {id}. {title}
                     </h2>
-                    <p className="text-[#9C9C9C] leading-relaxed">{subtitle}</p>
+                    <div className="text-[#9C9C9C] leading-relaxed">
+                      {subtitle}
+                    </div>
                   </section>
                 );
               })}

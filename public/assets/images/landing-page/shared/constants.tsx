@@ -61,7 +61,7 @@ export const FooterSections = [
     title: 'LEGAL',
     links: [
       { label: 'Privacy Policy', href: 'https://hng.tech/privacy' },
-      { label: 'Terms of Service', href: 'https://hng.tech/terms' },
+      { label: 'Terms of Service', href: '/terms-of-service' },
       { label: 'Cookies', href: '#' },
     ],
     className: 'md:ml-20',

@@ -82,7 +82,7 @@ export const TERMS_OF_SERVICE_CONTENT = [
     sectionId: 'prohibited-actions',
 
     subtitle: (
-      <p>
+      <div>
         Users must avoid:
         <ul className="text-[#9C9C9C] list-disc pl-6">
           <li>Uploading harmful files</li>
@@ -93,7 +93,7 @@ export const TERMS_OF_SERVICE_CONTENT = [
           <li>Posting illegal content</li>
           <li>Sharing confidential details they have no rights to release</li>
         </ul>
-      </p>
+      </div>
     ),
   },
   {
