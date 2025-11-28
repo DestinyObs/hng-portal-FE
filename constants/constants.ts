@@ -127,3 +127,30 @@ export const content2 = [
       'A section for companies providing answers to getting the best talents and maximizing the benefits of the Atalanta internship track.',
   },
 ];
+
+export const squeeze_benefits = [
+  {
+    id: '1',
+    text: 'Intelligent matching system that pairs the right talent with the right company',
+  },
+  {
+    id: '2',
+    text: '	Verified profiles and trusted employer listings',
+  },
+  {
+    id: '3',
+    text: 'Structured pipeline from internship to employment',
+  },
+  {
+    id: '4',
+    text: 'Streamlined recruitment and application process.',
+  },
+  {
+    id: '5',
+    text: 'Visibility tools that help the right candidates stand out.',
+  },
+  {
+    id: '6',
+    text: 'Direct connection to a thriving community of tech professionals and innovators.',
+  },
+];
