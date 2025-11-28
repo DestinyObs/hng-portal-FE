@@ -65,7 +65,7 @@ export default function JobDetailsStep2({
   const [showEditModal, setShowEditModal] = useState(false);
   const [payload, setPayload] = useState<JobPostPayload | null>(null);
 
-  console.log(initialData);
+  // console.log(initialData);
 
   const isLoading =
     tracksLoading ||
@@ -109,7 +109,7 @@ export default function JobDetailsStep2({
       work_mode_id: data.work_mode_id || ' ',
       skills: (initialData.skills as string[]) || [],
     };
-    console.log(formData);
+    // console.log(formData);
 
     if (id) {
       // console.log(formData)

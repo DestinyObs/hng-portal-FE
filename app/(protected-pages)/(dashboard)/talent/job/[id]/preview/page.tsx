@@ -1,8 +1,17 @@
-import PreviewForm from '@/components/job-application/preview-form';
-import { ChevronLeft } from 'lucide-react';
-import React from 'react';
+'use client';
 
-const page = () => {
+import PreviewForm from '@/components/job-application/preview-form';
+import { JobApplicationFormData } from '@/types/job-application-form';
+import { ChevronLeft } from 'lucide-react';
+import React, { useState } from 'react';
+
+const Page = () => {
+  const [formData, setFormData] = useState<JobApplicationFormData>({
+    coverLetter: 'My cover letter...',
+    portfolioLink: 'https://myportfolio.com',
+    resume: undefined, // or a FileList if selected
+  });
+
   return (
     <div className="max-w-[1120px] mx-auto px-4">
       <div className="flex justify-start ">
@@ -12,9 +21,9 @@ const page = () => {
           Back
         </button>
       </div>
-      <PreviewForm />
+      <PreviewForm data={formData} onSubmit={() => {}} onEdit={() => {}} />
     </div>
   );
 };
 
-export default page;
+export default Page;

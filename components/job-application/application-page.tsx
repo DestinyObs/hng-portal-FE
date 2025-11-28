@@ -19,7 +19,7 @@ const JobApplicationPage = () => {
   ) : (
     <JobApplicationPreview
       data={formData!}
-      onSubmit={() => console.log('Final submit')}
+      onSubmit={() => {}}
       onEdit={() => setStep('form')}
     />
   );

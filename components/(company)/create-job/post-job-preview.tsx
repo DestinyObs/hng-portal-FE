@@ -73,7 +73,7 @@ const PostJobPreview = () => {
     level: job_level?.name ?? '',
   };
 
-  console.log(job);
+  // console.log(job);
 
   // fixed
   const handlePublish = async () => {
