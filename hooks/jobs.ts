@@ -1,4 +1,3 @@
-import { string } from 'zod';
 import { deleteJob, draftPost, updateStatus } from '@/api/actions/create-post';
 import { createPost } from './../api/actions/create-post';
 import {

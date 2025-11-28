@@ -5,10 +5,8 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
-
 import { logout } from '@/api/actions/auth';
 import { APIResponse } from '@/api/config.server';
 import { SuccessResponse } from '@/types/api-response';
@@ -18,16 +16,28 @@ import { useAuthStore } from '@/store/auth';
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const isCompany = user?.roles?.[0]?.name && user?.roles?.[0]?.name === "employer" 
+  const isCompany = user?.current_role === 'employer';
 
-const dashboardLinks = [
-  { label: 'HOME', href: isCompany ? '/company/dashboard' : '/talent/dashboard', active: true },
-  { label: 'JOBS', href: isCompany ? '/company/jobs' : '/talent/jobs', active: false },
-  { label: 'APPLICANTS', href: isCompany ? '/company/applicants' : '/talent/applicants', active: false },
-];
+  const dashboardLinks = [
+    {
+      label: 'HOME',
+      href: isCompany ? '/company/dashboard' : '/talent/dashboard',
+      active: true,
+    },
+    {
+      label: 'JOBS',
+      href: isCompany ? '/company/jobs' : '/talent/jobs',
+      active: false,
+    },
+    {
+      label: isCompany ? 'TALENTS' : 'MY APPLICATIONS',
+      href: isCompany ? '/company/applicants' : '/talent/applicants',
+      active: false,
+    },
+  ];
 
   const { mutate: a_logout, isPending: isLoggingOut } = useMutation({
     mutationKey: ['logout'],

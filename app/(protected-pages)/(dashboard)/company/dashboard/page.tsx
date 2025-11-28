@@ -12,9 +12,10 @@ import { JobCardProps } from '@/types/job-card';
 export default function CompanyDashboardPage() {
   const { user } = useAuthStore();
   const id = user?.company?.id;
-  // console.log(user?.company);
-  const { data: allJobs, isLoading } = useGetAllJobs<{data: JobCardProps[]}>(id);
-  const jobs = allJobs?.data
+  const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
+    id,
+  );
+  const jobs = allJobs?.data;
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col gap-8 sm:gap-6">

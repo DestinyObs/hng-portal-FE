@@ -10,7 +10,7 @@ const DashboardSidebar = () => {
   const { user } = useAuthStore();
 
   // Workaround: Infer role based on the presence of the company object
-  const role = user?.company ? 'employer' : 'talent';
+  const role = user?.current_role ? 'employer' : 'talent';
 
   return (
     <aside className="w-72 hidden lg:flex flex-col gap-5">
@@ -51,7 +51,7 @@ const DashboardSidebar = () => {
           )}
           {role === 'talent' && (
             <Button className="cursor-pointer" size={'md'} asChild>
-              <Link href={'/settings/profile'}>View Profile</Link>
+              <Link href={'/profile-view'}>View Profile</Link>
             </Button>
           )}
           <Button size={'sm'} className="text-base" variant={'outlineGray'}>

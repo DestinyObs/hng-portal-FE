@@ -4,11 +4,16 @@ import { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import Header from '@/components/dashboard/header';
 import Sidebar from '@/components/dashboard/sidebar';
+import { useAuthStore } from '@/store/auth';
+import Loading from '@/app/loading';
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const isSettingsPage = pathname?.startsWith('/settings');
   const isJobDetailsPage = pathname?.startsWith('/talent/job');
+  const { user } = useAuthStore();
+
+  if (!user) return <Loading />;
 
   return (
     <div className=" flex flex-col bg-white-100">

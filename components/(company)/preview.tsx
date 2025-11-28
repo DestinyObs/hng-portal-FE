@@ -48,7 +48,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <h3 className="text-xl font-semibold text-tertiary-500 ">
           Job Description
         </h3>
-        <p className="text-tertiary-200 text-[16px]">
+        <p className="text-tertiary-200 text-[16px] wrap-anywhere">
           {postDetails?.description}
         </p>
       </div>
@@ -76,7 +76,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <h3 className="text-xl font-semibold text-tertiary-500">
           Acceptance Criteria
         </h3>
-        <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className}">
+        <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className} wrap-anywhere">
           {postDetails?.acceptance_criteria}
         </div>
       </div>
