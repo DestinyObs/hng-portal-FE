@@ -16,6 +16,7 @@ export const publicRoutes = [
   '/authenticate',
   '/authenticate/google',
   '/job-route',
+  '/terms-of-service',
   '/contact-us',
   // Add other public pages
 ];

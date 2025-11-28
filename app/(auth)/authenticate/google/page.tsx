@@ -17,6 +17,7 @@ export default function AuthCallback() {
   const { setData } = useAuthStore();
   const [error, setError] = useState<string | null>(null);
   const pathname = usePathname();
+  const [isNewUser, setIsNewUser] = useState(false);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -43,14 +44,24 @@ export default function AuthCallback() {
     onSuccess: (data) => {
       if (data.success) {
         setData(data.data.user);
-        router.push(
-          data.data.user.current_role === 'employer' ||
-            data.data.user.current_role === 'company'
-            ? '/company/dashboard'
-            : '/talent/dashboard',
-        );
+        if (isNewUser) {
+          router.push(
+            data.data.user.current_role === 'talent'
+              ? '/onboarding/talent'
+              : '/onboarding/company',
+          );
+        } else {
+          router.push(
+            data.data.user.current_role === 'talent'
+              ? '/talent/dashboard'
+              : '/company/dashboard',
+          );
+        }
       } else {
         setError(data.error);
+        if (data.error === 'Role is required for new user signup.') {
+          setIsNewUser(true);
+        }
       }
     },
   });
@@ -67,7 +78,11 @@ export default function AuthCallback() {
       if (status === 'authenticated' && session?.accessToken) {
         const role = searchParams.get('role');
 
-        mutate({ google_token: session.accessToken, role: role as string });
+        mutate({
+          google_token: session.accessToken,
+          role: role as string,
+          isNewUser,
+        });
       }
     };
 
