@@ -1,5 +1,3 @@
-// app/privacy/components/PrivacySidebar.tsx
-
 'use client';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -14,9 +12,9 @@ export default function PrivacySidebar({
 }) {
   return (
     <aside className="hidden md:block  lg:w-[400px] h-screen sticky top-0 bg-[#0d0d0d]">
-      <ScrollArea className="h-full p-4 border-l-2 border-primary-300">
+      <ScrollArea className="p-4 border-l-2 border-primary-300">
         <nav className="space-y-2">
-          {POLICY_DATA.map((section, index) => (
+          {POLICY_DATA.map((section) => (
             <button
               key={section.id}
               onClick={() => onSelect(section.id)}
