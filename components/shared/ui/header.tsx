@@ -130,16 +130,29 @@ const Header = () => {
                   </Link>
                 </li>
               ))}
+              <li>
+                <div className="flex items-center justify-center gap-4">
+                  <Link href="/sign-in" passHref>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                    >
+                      <span>Login</span>
+                    </Button>
+                  </Link>
 
-              <Link href="/sign-up" passHref>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
-                >
-                  <span>Get Started</span>
-                </Button>
-              </Link>
+                  <Link href="/sign-up" passHref>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                    >
+                      <span>Get Started</span>
+                    </Button>
+                  </Link>
+                </div>
+              </li>
             </ul>
           </nav>
         </div>

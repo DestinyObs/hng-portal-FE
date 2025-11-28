@@ -4,11 +4,17 @@ import { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import Header from '@/components/dashboard/header';
 import Sidebar from '@/components/dashboard/sidebar';
+import { useAuthStore } from '@/store/auth';
+import Loading from '@/app/loading';
+import { JobModal } from './talent/job/[id]/job-modal';
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const isSettingsPage = pathname?.startsWith('/settings');
   const isJobDetailsPage = pathname?.startsWith('/talent/job');
+  const { user } = useAuthStore();
+
+  if (!user) return <Loading />;
 
   return (
     <div className=" flex flex-col bg-white-100">
@@ -23,6 +29,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         {/* Main content */}
         <main className="flex-1 h-full">{children}</main>
       </div>
+
+      <JobModal />
     </div>
   );
 };

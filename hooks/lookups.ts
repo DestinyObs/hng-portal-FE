@@ -20,8 +20,9 @@ export const useJobLevel = () => {
     queryFn: async () => {
       const res = await publicFetch('lookups/job-levels');
       if (!res.success) throw new Error(res.message);
+      console.log(res);
 
-      return res.data.data || [];
+      return res.data || [];
     },
   });
 };

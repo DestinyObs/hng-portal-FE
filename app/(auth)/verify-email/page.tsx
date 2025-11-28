@@ -135,7 +135,7 @@ const VerifyEmailPage = () => {
   };
 
   const otpSlotClasses = `
-    w-[60px] h-[60px] md:w-[100px] md:h-[100px]
+    w-[40px] h-[40px] md:w-[80px] md:h-[80px]
     rounded-xl border-2 text-center text-5xl text-[#969696] font-medium data-[active=true]:border-[#1A1A1A] ring-0 ring-offset-0 first:rounded-xl last:rounded-xl first:border-2 last:border-2
   `;
 
