@@ -11,7 +11,7 @@ import Loading from '@/app/loading';
 import { UserProfileData } from '@/types/profile';
 
 const MOCK_PROFILE = {
-  name: 'Okorie Esther',
+  name: '',
   role: 'UI / UX Designer',
   location: 'Lagos, Nigeria',
   avatar: '/assets/dashboard-settings/images/avatar.png',
@@ -50,22 +50,21 @@ export default function ProfilePage() {
   // const { data: skills } = useSkills();
 
   const trackName =
-    tracks?.find((track) => track.id === profile?.bio?.track_id?.toString())?.name ??
-    MOCK_PROFILE.name;
+    tracks?.find((track) => track.id === profile?.bio?.track_id?.toString())
+      ?.name ?? MOCK_PROFILE.name;
 
   const countryName =
     Country.getCountryByCode(profile?.bio?.country ?? '')?.name ?? 'Nigeria';
 
   const stateName =
-    State.getStateByCodeAndCountry(profile?.bio?.state ?? '', profile?.bio?.country ?? '')
-      ?.name || 'Lagos';
+    State.getStateByCodeAndCountry(
+      profile?.bio?.state ?? '',
+      profile?.bio?.country ?? '',
+    )?.name || 'Lagos';
 
   if (isLoading || tracksLoading) return <Loading />;
 
-  // const Bio = profile?.bio || "N/A";
-  // const Project_Url = profile?.project_url || "N/A";
-  // const Project_File = profile?.project_file || "N/A";
-
+  console.log('Profile:', profile);
   return (
     <div className="w-full max-w-4xl mx-auto p-8">
       {/* Back */}

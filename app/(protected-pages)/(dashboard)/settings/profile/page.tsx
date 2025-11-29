@@ -1,5 +1,5 @@
 'use client';
-
+import { useEffect } from 'react';
 import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useTracks } from '@/hooks/lookups';
-import { UserProfileData } from '@/lib/types';
 import { Country, State } from 'country-state-city';
 import Loading from '@/app/loading';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -30,58 +29,51 @@ import {
   SelectItem,
   SelectValue,
 } from '@/components/ui/select';
+import { useGetUserProfile, useUpdateUserProfile } from '@/hooks/profile';
+import { UserProfileData } from '@/types/profile';
 
-const AvailabilityEnum = z.enum(['available', 'open']);
+// const AvailabilityEnum = z.enum(['available', 'open']);
 
 const formSchema = z.object({
-  photo_url: z.string(),
+  photo_url: z.string().optional(),
   professionalTitle: z.string().min(1, 'Professional title is required'),
   bio: z.string().min(1, 'Short bio is required'),
   experience: z.string().min(1, 'Experience is required'),
   country: z.string().min(1, 'Country is required'),
   state: z.string().min(1, 'State is required '),
-  availability: AvailabilityEnum,
-  jobTypes: z.array(z.string()).min(1, 'Select at least one job type'),
+  availability: z.string().min(1, 'Select'),
+  jobTypes: z.string().min(1, 'Select at least one job type'),
   track_id: z.string().min(1, 'Track is required'),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export default function ProfilePage() {
+  const { data: profile, isLoading } = useGetUserProfile<UserProfileData>();
   const [avatar, setAvatar] = useState(
     '/assets/dashboard-settings/images/avatar.png',
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { updateProfile, isPending } = useUpdateUserProfile();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      professionalTitle: 'UI/UX Designer',
-      bio: '',
-      experience: '',
-      country: 'Nigeria',
-      state: 'Lagos',
-      availability: 'available',
-      jobTypes: [],
-      track_id: '',
+      photo_url: profile?.bio?.user?.photo_url || '',
+      professionalTitle: profile?.bio?.track_id || ' ',
+      bio: profile?.bio?.bio || ' ',
+      experience: profile?.bio?.experience || ' ',
+      country: profile?.bio?.country || ' ',
+      state: profile?.bio?.state || ' ',
+      availability: profile?.bio?.status || ' ',
+      jobTypes: profile?.bio?.job_type_preference || ' ',
+      track_id: profile?.bio?.track_id || ' ',
     },
   });
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setAvatar(imageUrl);
-    }
-  };
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
   const onSubmit = (values: FormValues) => {
-    // console.log('Form submitted:', values);
-    // Handle form submission
+    updateProfile(values);
   };
 
   const { data: tracks, isLoading: tracksLoading } = useTracks();
@@ -91,15 +83,8 @@ export default function ProfilePage() {
     form.reset();
   };
 
-  const jobTypeOptions = [
-    { id: 'remote', label: 'Remote' },
-    { id: 'hybrid', label: 'Hybrid' },
-    { id: 'onsite', label: 'Onsite' },
-  ];
-  // const Bio = bio || "N/A";
+  if (tracksLoading || isLoading) return <Loading />;
 
-  console.log('Tracks loading:', tracksLoading, 'Tracks:', tracks);
-  if (tracksLoading) return <Loading />;
   return (
     <div className="w-full py-6 justify-center px-4 lg:px-0">
       <div className="w-full mb-4 space-y-1 text-center md:text-left">
@@ -119,37 +104,56 @@ export default function ProfilePage() {
               className="flex gap-8 flex-col w-full"
             >
               {/* Profile Photo Upload */}
-              <div className="flex flex-col items-center md:flex-row md:items-center gap-4 md:gap-6 mb-2">
-                <div className="relative w-24 h-24 shrink-0">
-                  <img
-                    src={avatar}
-                    alt="Profile"
-                    className="w-full h-full rounded-full object-cover border border-gray-200"
-                  />
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                </div>
-                <div className="flex justify-end mt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleUploadClick}
-                    className="flex items-center gap-2 text-black border-[#E7E8E9] rounded-lg hover:bg-gray-50 w-auto"
-                  >
-                    <img
-                      src="/assets/dashboard-settings/icons/upload.png"
-                      alt="Upload"
-                      className="w-4 h-4"
-                    />
-                    Upload New Photo
-                  </Button>
-                </div>
-              </div>
+              <FormField
+                control={form.control}
+                name="photo_url"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-center md:flex-row md:items-center gap-4 md:gap-6 mb-2">
+                    <div className="relative w-24 h-24 shrink-0">
+                      <img
+                        src={
+                          field.value ||
+                          '/assets/dashboard-settings/images/avatar.png'
+                        }
+                        alt="Profile"
+                        className="w-full h-full rounded-full object-cover border border-gray-200"
+                      />
+                    </div>
+                    <FormControl>
+                      <>
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (!file) return;
+                            const url = URL.createObjectURL(file);
+                            field.onChange(url);
+                            setAvatar(url);
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="flex items-center gap-2 text-black border-[#E7E8E9] rounded-lg hover:bg-gray-50 w-auto"
+                        >
+                          <img
+                            src="/assets/dashboard-settings/icons/upload.png"
+                            alt="Upload"
+                            className="w-4 h-4"
+                          />
+                          Upload New Photo
+                        </Button>
+                      </>
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* Professional Title */}
               <FormField
@@ -175,10 +179,7 @@ export default function ProfilePage() {
                         </SelectTrigger>
                         <SelectContent>
                           {tracks?.map((track) => (
-                            <SelectItem
-                              key={track.id}
-                              value={track.id.toString()}
-                            >
+                            <SelectItem key={track.id} value={track.id}>
                               {track.name}
                             </SelectItem>
                           ))}
@@ -327,7 +328,7 @@ export default function ProfilePage() {
                         >
                           <FormItem className="flex items-center gap-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="available" />
+                              <RadioGroupItem value="active" />
                             </FormControl>
                             <FormLabel className="text-black text-sm font-medium cursor-pointer">
                               Available for work
@@ -335,10 +336,10 @@ export default function ProfilePage() {
                           </FormItem>
                           <FormItem className="flex items-center gap-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="open" />
+                              <RadioGroupItem value="inactive" />
                             </FormControl>
                             <FormLabel className="text-black text-sm font-medium cursor-pointer">
-                              Open to offers
+                              Not Looking
                             </FormLabel>
                           </FormItem>
                         </RadioGroup>
@@ -352,68 +353,71 @@ export default function ProfilePage() {
                 <FormField
                   control={form.control}
                   name="jobTypes"
-                  render={() => (
+                  render={({ field }) => (
                     <FormItem className="flex-1 space-y-4">
                       <FormLabel className="text-sm text-[#1A1A1A]">
                         Job Type Preference{' '}
                         <span className="text-[#FF3B30]">*</span>
                       </FormLabel>
-                      <div className="space-y-3 mt-4">
-                        {jobTypeOptions.map((item) => (
-                          <FormField
-                            key={item.id}
-                            control={form.control}
-                            name="jobTypes"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item.id}
-                                  className="flex items-center gap-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                              ...field.value,
-                                              item.id,
-                                            ])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id,
-                                              ),
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="text-black font-medium cursor-pointer">
-                                    {item.label}
-                                  </FormLabel>
-                                </FormItem>
-                              );
-                            }}
-                          />
-                        ))}
-                      </div>
+
+                      <FormControl>
+                        <div className="space-y-3 mt-4">
+                          <FormItem className="flex items-center gap-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === 'remote'}
+                                onCheckedChange={() => field.onChange('remote')}
+                              />
+                            </FormControl>
+                            <FormLabel className="text-black text-sm font-medium cursor-pointer">
+                              Remote
+                            </FormLabel>
+                          </FormItem>
+
+                          <FormItem className="flex items-center gap-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === 'hybrid'}
+                                onCheckedChange={() => field.onChange('hybrid')}
+                              />
+                            </FormControl>
+                            <FormLabel className="text-black text-sm font-medium cursor-pointer">
+                              Hybrid
+                            </FormLabel>
+                          </FormItem>
+
+                          <FormItem className="flex items-center gap-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === 'onsite'}
+                                onCheckedChange={() => field.onChange('onsite')}
+                              />
+                            </FormControl>
+                            <FormLabel className="text-black text-sm font-medium cursor-pointer">
+                              Onsite
+                            </FormLabel>
+                          </FormItem>
+                        </div>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
 
-              {/* Action Buttons */}
               <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleCancel}
+                  disabled={isPending}
                   className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
+                  disabled={isPending}
                   className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl"
                 >
                   Save Changes
