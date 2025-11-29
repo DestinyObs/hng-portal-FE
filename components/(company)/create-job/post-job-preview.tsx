@@ -92,7 +92,7 @@ const PostJobPreview = () => {
       <PreviewJob postDetails={job} />
 
       <div className="flex flex-col sm:flex-row justify-between gap-4 py-2">
-        <div className={`flex justify-between ${dm_sans.className}`}>
+        <div className={`flex justify-between ${dm_sans.className} hidden`}>
           {/* add edit fxnality */}
           <div className="">
             <Button
@@ -148,7 +148,11 @@ const PostJobPreview = () => {
         onClose={() => setShowPublishModal(false)}
         title="Are you sure you want to publish this job?"
         message="Once published, this job will be visible to applicants and they can start applying immediately."
-        icon={<Mail size={48} />}
+        icon={
+          <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#F4EBFF] rounded-full w-16 h-16">
+            <Mail size={48} className="text-[#5903B5]" />
+          </div>
+        }
         primaryButton={{
           label: 'Publish Job',
           onClick: handlePublish,

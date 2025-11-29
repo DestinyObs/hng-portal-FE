@@ -379,7 +379,12 @@ export default function JobDetailsStep2({
         onClose={() => setShowEditModal(false)}
         title="Do you want to save the edited post?"
         message="This job description will be updated."
-        icon={<OctagonAlert size={48} />}
+        icon={
+          <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#FEF0C7] rounded-full w-16 h-16">
+            {' '}
+            <OctagonAlert size={48} className="text-[#E3822A]" />
+          </div>
+        }
         primaryButton={{
           label: 'Save Edit',
           onClick: () => {

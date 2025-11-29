@@ -1,29 +1,31 @@
-# name: CI for Production
+name: CI for Production
 
-# on:
-#   pull_request:
-#     branches:
-#       - prod
+on:
+  pull_request:
+    branches:
+      - prod
 
-# permissions:
-#   contents: read
-#   pull-requests: write
+permissions:
+  contents: read
+  pull-requests: write
 
-# jobs:
-#   checks:
-#     runs-on: [self-hosted]
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v5
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20
-#       - name: Install dependencies
-#         run: pnpm install --frozen-lockfile
+jobs:
+  checks:
+    runs-on: [self-hosted, Linux, X64, hngconnect-fe, not4hng-fe, frontend-server]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-#       - name: Lint
-#         run: pnpm lint
+      - name: Lint
+        run: pnpm lint
         
-#       - name: Build app
-#         run: pnpm build
+      - name: Build app
+
+        run: pnpm build
+

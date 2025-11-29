@@ -2,19 +2,12 @@
 
 import { faq } from '@/constants/landing-page';
 import { Accordion } from '../../shared/ui/accordion';
-import { motion } from 'motion/react';
 
 export const FAQ = () => {
   return (
     <div className="py-12 pt-20 sm:pt-24 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
       {/* heading */}
-      <motion.div
-        className="top text-center"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
+      <div className="top text-center">
         <div className="first-text p-2 px-5 border border-primary-blue text-primary-blue inline-block rounded-full text-subtitle tracking-wide font-medium mb-4">
           FAQs
         </div>
@@ -26,18 +19,12 @@ export const FAQ = () => {
           Here’s a quick guide to help talents and recruiters understand how HNG{' '}
           <br /> Connect works within the HNG ecosystem.
         </p>
-      </motion.div>
+      </div>
 
       {/* accordion */}
-      <motion.div
-        className="accordion w-full sm:max-w-[75%] mx-auto py-8 px-3 sm:px-0"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
+      <div className="accordion w-full sm:max-w-[75%] mx-auto py-8 px-3 sm:px-0">
         <Accordion content={faq} />
-      </motion.div>
+      </div>
     </div>
   );
 };
