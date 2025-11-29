@@ -1,28 +1,38 @@
 'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+
 import { DasbhoardNavLinkProps } from '@/types/dashboard';
 
-export default function DashboardNav({ navLinks }: DasbhoardNavLinkProps) {
-  const pathname = usePathname();
+export default function DashboardNav({
+  tabs,
+}: {
+  tabs: DasbhoardNavLinkProps[];
+}) {
+  const [activeTab, setActiveTab] = useState<DasbhoardNavLinkProps>(tabs[0]);
+
+  //on change tab
+  const onTabChange = (tab: DasbhoardNavLinkProps) => {
+    setActiveTab(tab);
+  };
 
   return (
     <div className="flex items-center justify-start gap-8">
-      {navLinks.map((link, index) => {
-        const activePath = pathname?.includes(link.href.toLowerCase());
+      {tabs?.map((tab, index) => {
+        const isActive = activeTab.value === tab.value;
 
         return (
-          <nav
+          <button
             key={index}
+            onClick={() => onTabChange(tab)}
             className={cn(
               `text-xl`,
-              activePath ? 'font-semibold text-primary-300' : 'text-black-200',
+              isActive ? 'font-semibold text-primary-300' : 'text-black-200',
             )}
           >
-            <Link href={`/company/jobs/${link.href}`}>{link.title}</Link>
-          </nav>
+            {tab.title}
+          </button>
         );
       })}
     </div>

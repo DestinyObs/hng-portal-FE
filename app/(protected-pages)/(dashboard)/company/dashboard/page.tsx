@@ -15,7 +15,10 @@ import { JobCardProps } from '@/types/job-card';
 
 export default function CompanyDashboardPage() {
   const { user } = useAuthStore();
+  //extract current user id
   const id = user?.company?.id;
+
+  //Get all jobs
   const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
     id,
   );
@@ -43,7 +46,7 @@ export default function CompanyDashboardPage() {
             Active Jobs
           </span>
           <Link
-            href="/company/jobs/active"
+            href="/company/jobs"
             className="text-base text-[#1A1A1A] font-normal leading-6 cursor-pointer"
           >
             View All Jobs
