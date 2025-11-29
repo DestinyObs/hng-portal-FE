@@ -1,3 +1,4 @@
+name: Deploy to Staging
 
 on:
   push:
@@ -6,14 +7,14 @@ on:
 
 jobs:
   build-deploy:
-    runs-on: [self-hosted]
-
+    runs-on: [self-hosted, Linux, X64, hngconnect-fe, not4hng-fe, frontend-server]
+    
     steps:
       - name: Install sshpass
         run: |
           sudo apt-get update
           sudo apt-get install -y sshpass
-
+      
       - name: Sync code to remote server and deploy
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
