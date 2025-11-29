@@ -3,7 +3,6 @@
  * @typedef {('GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH')} HttpMethod
  */
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-
 /**
  * Options for customizing a fetch request.
  *
@@ -23,7 +22,6 @@ interface FetchOptions<TRequestBody>
   body?: TRequestBody;
   params?: Record<string, string>;
 }
-
 /**
  * Configuration for the fetch utility, including the base URL and default headers.
  *
@@ -35,7 +33,6 @@ interface FetchConfig {
   apiUrl: string;
   defaultHeaders?: Record<string, string>;
 }
-
 /**
  * Custom error class to represent HTTP errors.
  * Extends the native `Error` class to include additional properties like status code and response body.
@@ -54,7 +51,6 @@ export class HttpError<T> extends Error {
   public statusCode: number;
   public responseBody: T;
   public statusText: string;
-
   constructor(
     public response: Response,
     responseBody: T,
@@ -67,12 +63,10 @@ export class HttpError<T> extends Error {
     this.statusText = statusText;
   }
 }
-
 interface ErrorResponseBody {
   message?: string;
   errors?: Record<string, string[]>;
 }
-
 /**
  * Creates a utility function for making fetch requests with custom configuration.
  *
@@ -85,7 +79,6 @@ interface ErrorResponseBody {
  */
 export const createFetchUtil = (config: FetchConfig) => {
   const { apiUrl, defaultHeaders = {} } = config;
-
   /**
    * A helper function to make HTTP requests.
    *
@@ -104,41 +97,39 @@ export const createFetchUtil = (config: FetchConfig) => {
       params,
       ...restOptions
     } = options;
-
     const normalizedApiUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
     const normalizedEndpoint = endpoint.startsWith('/')
       ? endpoint.slice(1)
       : endpoint;
-
     const url = new URL(normalizedEndpoint, normalizedApiUrl);
-
     // console.log(`${method} request to URL: ${url.toString()}`);
-
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         url.searchParams.append(key, value);
         console.log(`${method} request to URL: ${url.toString()}`);
       });
     }
-
-    const mergedHeaders = {
-      'Content-Type': 'application/json',
+    const mergedHeaders: Record<string, string> = {
       ...defaultHeaders,
       ...headers,
     };
-
     const fetchOptions: RequestInit = {
       method,
       headers: mergedHeaders,
       ...restOptions,
     };
-
-    if (body) {
+    if (body instanceof FormData) {
+      // Let the browser set the Content-Type + boundary
+      fetchOptions.body = body;
+      // :no_entry_symbol: Remove JSON content-type if present
+      if (mergedHeaders['Content-Type']) {
+        delete mergedHeaders['Content-Type'];
+      }
+    } else if (body !== undefined && body !== null) {
+      mergedHeaders['Content-Type'] = 'application/json';
       fetchOptions.body = JSON.stringify(body);
     }
-
     const response = await fetch(url.toString(), fetchOptions);
-
     let responseBody: unknown;
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
@@ -146,7 +137,6 @@ export const createFetchUtil = (config: FetchConfig) => {
     } else {
       responseBody = await response.text();
     }
-
     if (!response.ok) {
       console.error(
         `fetchUtil - HTTP ${response.status} error for ${url.toString()}:`,
@@ -156,10 +146,8 @@ export const createFetchUtil = (config: FetchConfig) => {
           responseBody,
         },
       );
-
       // --- Custom error message extraction logic ---
       let customErrorMessage = `Error: ${response.status}`;
-
       if (typeof responseBody === 'object' && responseBody !== null) {
         const errorBody = responseBody as ErrorResponseBody;
         if (errorBody.message) {
@@ -177,14 +165,11 @@ export const createFetchUtil = (config: FetchConfig) => {
       } else if (typeof responseBody === 'string' && responseBody.length > 0) {
         customErrorMessage = responseBody;
       }
-
       throw new Error(customErrorMessage); // Re-throw with custom message
     }
-
     return responseBody as TResponse;
   };
 };
-
 /**
  * Creates an authorization header for API requests.
  *

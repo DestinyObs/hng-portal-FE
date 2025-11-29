@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
-import { Paperclip } from 'lucide-react';
+import React, { useState } from 'react';
+import { OctagonAlert, Paperclip } from 'lucide-react';
 import JobApplicationDetails from './job-details';
 import { Button } from '../ui/button';
 import { PreviewProps } from '@/types/job-application-form';
+import { Modal } from '../dashboard/modal';
 
 const JobApplicationPreview: React.FC<PreviewProps> = ({
   data,
@@ -13,6 +14,7 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
 }) => {
   const { cover_letter, portfolioLink, resume } = data;
   const file = resume instanceof FileList ? resume[0] : resume;
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
 
   return (
     <div className="w-full mx-auto bg-gray-50 p-4 space-y-6">
@@ -65,7 +67,7 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div className="flex justify-between gap-4">
           <Button
-            onClick={onSubmit}
+            onClick={() => setShowApplicationModal(true)}
             variant={'default'}
             className="cursor-pointer"
           >
@@ -80,6 +82,28 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
           </Button>
         </div>
       </div>
+      <Modal
+        isOpen={showApplicationModal}
+        onClose={() => setShowApplicationModal(false)}
+        title="Submit Application?"
+        message="Are you sure you want to proceed with your job application?"
+        icon={
+          <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#FEF0C7] rounded-full w-16 h-16">
+            <OctagonAlert size={48} className="text-[#E3822A] " />
+          </div>
+        }
+        primaryButton={{
+          label: 'Yes, Submit',
+          onClick: () => {
+            onSubmit();
+            setShowApplicationModal(false);
+          },
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: () => setShowApplicationModal(false),
+        }}
+      />
     </div>
   );
 };

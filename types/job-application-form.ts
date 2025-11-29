@@ -28,6 +28,7 @@ export type PreviewProps = {
 
 export type JobApplicationFormProps = {
   onNext: (data: JobApplicationFormData) => void;
+  defaultValues?: JobApplicationFormData;
 };
 export interface JobApplicationPayload {
   cover_letter: string;

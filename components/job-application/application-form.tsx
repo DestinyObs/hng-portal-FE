@@ -15,8 +15,13 @@ import {
 import { useState, ChangeEvent } from 'react';
 import { toast } from 'sonner';
 
-const JobApplicationForm = ({ onNext }: JobApplicationFormProps) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const JobApplicationForm = ({
+  onNext,
+  defaultValues,
+}: JobApplicationFormProps) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(
+    defaultValues?.resume instanceof FileList ? defaultValues.resume[0] : null,
+  );
 
   const {
     register,
@@ -26,6 +31,7 @@ const JobApplicationForm = ({ onNext }: JobApplicationFormProps) => {
     setValue,
   } = useForm<JobApplicationFormData>({
     resolver: zodResolver(formSchema),
+    defaultValues,
   });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {

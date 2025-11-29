@@ -10,7 +10,7 @@ interface Job {
   description: string;
   acceptance_criteria: string;
   salary: number;
-  postedAgo?: string;
+  created_at?: string;
   work_type?: { id: string; name: string };
   location?: string;
   job_levels?: { id: string; name: string };
@@ -29,7 +29,6 @@ const JobApplicationDetails = () => {
     data: Job;
     isPending: boolean;
   };
-  console.log('JOB DATA:', job);
   if (isPending) return <Loading />;
 
   return (
@@ -43,14 +42,14 @@ const JobApplicationDetails = () => {
           <div className="flex justify-between items-start mb-4">
             <div>
               <h3 className="text-xl font-semibold mb-2">{job?.title}</h3>
-              <p className="text-sm text-tertiary-300">
-                Posted {job?.postedAgo} • {job?.work_type?.name} •{' '}
-                {job?.location}
+              <p className="text-sm text-gray-200">
+                Posted {job?.created_at} - {job?.job_type?.name} -{' '}
+                {job?.state?.name}, {job?.country?.name}
               </p>
             </div>
           </div>
 
-          <div className="space-y-3 mb-4 text-tertiary-300 text-sm">
+          <div className="space-y-3 mb-4 text-gray-200 text-sm">
             <p>{job?.description}</p>
           </div>
 

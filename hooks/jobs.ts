@@ -224,10 +224,10 @@ export const useApplyForJob = () => {
     mutationFn: (application: JobApplicationPayload) =>
       applyForJob(application),
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['job-applications'] });
       toast.success('Your application has been submitted successfully');
-      router.push('/talent/dashboard');
+      console.log(data);
     },
 
     onError: (err) => {

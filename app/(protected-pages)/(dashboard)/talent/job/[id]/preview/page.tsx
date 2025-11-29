@@ -7,9 +7,9 @@ import React, { useState } from 'react';
 
 const Page = () => {
   const [formData, setFormData] = useState<JobApplicationFormData>({
-    coverLetter: 'My cover letter...',
+    cover_letter: 'My cover letter...',
     portfolioLink: 'https://myportfolio.com',
-    resume: undefined, // or a FileList if selected
+    resume: undefined as unknown as FileList, // or a FileList if selected
   });
 
   return (
