@@ -152,7 +152,12 @@ export const JobModal = () => {
             >
               Start Application
             </Button>
-            <Button size={'xs'} variant="outline">
+            <Button
+              size={'xs'}
+              variant="outline"
+              onClick={() => a_saveJob()}
+              disabled={isSaving}
+            >
               <Heart /> Save job
             </Button>
           </div>

@@ -40,7 +40,7 @@ export function CompanySignUpForm({ role }: { role: 'company' }) {
       password: '',
       firstname: '',
       lastname: '',
-      role: 'company',
+      role,
     },
   });
 

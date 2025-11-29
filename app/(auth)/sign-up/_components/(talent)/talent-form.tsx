@@ -39,7 +39,7 @@ export function TalentSignUpForm({ role }: { role: 'talent' }) {
       lastname: '',
       email: '',
       password: '',
-      role: 'talent',
+      role,
     },
   });
 
