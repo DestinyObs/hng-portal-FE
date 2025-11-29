@@ -20,6 +20,7 @@ interface FiltersSidebarProps {
 
 interface LookupItem {
   id: string;
+  slug: string;
   name: string;
 }
 
@@ -137,7 +138,7 @@ export default function FiltersSidebar({
 
   const handleCheckboxChange = useCallback(
     (
-      id: string,
+      slug: string,
       type:
         | 'workMode'
         | 'jobType'
@@ -154,8 +155,8 @@ export default function FiltersSidebar({
         setter: React.Dispatch<React.SetStateAction<string[]>>,
       ) => {
         const newState = isChecked
-          ? [...prev, id]
-          : prev.filter((item) => item !== id);
+          ? [...prev, slug]
+          : prev.filter((item) => item !== slug);
         setter(newState);
       };
 
@@ -232,13 +233,14 @@ export default function FiltersSidebar({
     selectedStates,
     selectedCategories,
     selectedTracks,
+    onFilterChange,
   ]);
 
   const renderFilterGroup = (
     title: string,
     items: LookupItem[] | undefined,
     selectedItems: string[],
-    handleToggle: (id: string, isChecked: boolean) => void,
+    handleToggle: (slug: string, isChecked: boolean) => void,
     isLoading: boolean,
     isError: boolean,
   ) => {
@@ -280,8 +282,8 @@ export default function FiltersSidebar({
             >
               <input
                 type="checkbox"
-                checked={selectedItems.includes(item.id)}
-                onChange={(e) => handleToggle(item.id, e.target.checked)}
+                checked={selectedItems.includes(item.slug)}
+                onChange={(e) => handleToggle(item.slug, e.target.checked)}
                 className="h-4 w-4 rounded border-(--color-gray-75) text-(--color-primary-blue) focus:ring-(--color-primary-blue) focus:ring-offset-0"
               />
               <span className="text-sm text-(--color-gray-300)">
@@ -316,7 +318,8 @@ export default function FiltersSidebar({
           'Work Mode',
           workModesData?.data,
           selectedWorkModes,
-          (id, isChecked) => handleCheckboxChange(id, 'workMode', isChecked),
+          (slug, isChecked) =>
+            handleCheckboxChange(slug, 'workMode', isChecked),
           isLoadingWorkModes,
           isErrorWorkModes,
         )}
@@ -324,7 +327,7 @@ export default function FiltersSidebar({
           'Job Type',
           jobTypesData?.data,
           selectedJobTypes,
-          (id, isChecked) => handleCheckboxChange(id, 'jobType', isChecked),
+          (slug, isChecked) => handleCheckboxChange(slug, 'jobType', isChecked),
           isLoadingJobTypes,
           isErrorJobTypes,
         )}
@@ -332,7 +335,8 @@ export default function FiltersSidebar({
           'Job Level',
           jobLevelsData?.data,
           selectedJobLevels,
-          (id, isChecked) => handleCheckboxChange(id, 'jobLevel', isChecked),
+          (slug, isChecked) =>
+            handleCheckboxChange(slug, 'jobLevel', isChecked),
           isLoadingJobLevels,
           isErrorJobLevels,
         )}
@@ -340,7 +344,7 @@ export default function FiltersSidebar({
           'Skills',
           skillsData?.data,
           selectedSkills,
-          (id, isChecked) => handleCheckboxChange(id, 'skill', isChecked),
+          (slug, isChecked) => handleCheckboxChange(slug, 'skill', isChecked),
           isLoadingSkills,
           isErrorSkills,
         )}
@@ -348,7 +352,7 @@ export default function FiltersSidebar({
           'Country',
           countriesData?.data,
           selectedCountries,
-          (id, isChecked) => handleCheckboxChange(id, 'country', isChecked),
+          (slug, isChecked) => handleCheckboxChange(slug, 'country', isChecked),
           isLoadingCountries,
           isErrorCountries,
         )}
@@ -356,7 +360,7 @@ export default function FiltersSidebar({
           'State',
           statesData?.data,
           selectedStates,
-          (id, isChecked) => handleCheckboxChange(id, 'state', isChecked),
+          (slug, isChecked) => handleCheckboxChange(slug, 'state', isChecked),
           isLoadingStates,
           isErrorStates,
         )}
@@ -364,7 +368,8 @@ export default function FiltersSidebar({
           'Category',
           categoriesData?.data,
           selectedCategories,
-          (id, isChecked) => handleCheckboxChange(id, 'category', isChecked),
+          (slug, isChecked) =>
+            handleCheckboxChange(slug, 'category', isChecked),
           isLoadingCategories,
           isErrorCategories,
         )}
@@ -372,7 +377,7 @@ export default function FiltersSidebar({
           'Track',
           tracksData?.data,
           selectedTracks,
-          (id, isChecked) => handleCheckboxChange(id, 'track', isChecked),
+          (slug, isChecked) => handleCheckboxChange(slug, 'track', isChecked),
           isLoadingTracks,
           isErrorTracks,
         )}

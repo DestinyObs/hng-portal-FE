@@ -3,6 +3,7 @@ import { APIResponse } from '@/types/api-response';
 
 interface LookupItem {
   id: string;
+  slug: string;
   name: string;
 }
 
