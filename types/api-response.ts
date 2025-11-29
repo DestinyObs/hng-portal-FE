@@ -1,5 +1,15 @@
 import { RawJob2 } from './job-card';
 
+export type APIResponse<T> = {
+  success: boolean | 'true' | 'false';
+  message: string;
+  status: number;
+  data: T;
+  errors?: Record<string, string[]>;
+  total?: number;
+  last_page?: number;
+};
+
 export interface SuccessResponse {
   success: boolean;
   message: string;
@@ -16,12 +26,4 @@ export interface APIError {
   message: string;
   status: number;
   errors?: Record<string, string[]>;
-}
-
-export interface TalentJobsResponse {
-  success: boolean;
-  message: string;
-  data: RawJob2[];
-  total: number;
-  last_page: number;
 }

@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query'; // Import useQuery
 import { getTalentJobs, getSavedJobs } from '@/api/actions/talent'; // Import getTalentJobs and getSavedJobs
 import { RawJob2, TalentJobsQueryParams } from '@/types/job-card'; // Import RawJob and TalentJobsQueryParams
 import { toast } from 'sonner';
-import { TalentJobsResponse } from '@/types/api-response'; // Import TalentJobsResponse
+import { APIResponse } from '@/types/api-response'; // Import APIResponse
 
 export default function FindJobsPage() {
   const [queryParams, setQueryParams] = useState<TalentJobsQueryParams>({
@@ -24,7 +24,7 @@ export default function FindJobsPage() {
     isLoading: isLoadingJobs,
     isError: isErrorJobs,
     error: errorJobs,
-  } = useQuery<TalentJobsResponse, Error>({
+  } = useQuery<APIResponse<RawJob2[]>, Error>({
     queryKey: [
       'talentFindJobs',
       { ...queryParams, ...(searchQuery && { search: searchQuery }) },

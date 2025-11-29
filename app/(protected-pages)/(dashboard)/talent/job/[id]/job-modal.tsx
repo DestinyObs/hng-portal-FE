@@ -11,17 +11,17 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
-import { APIResponse } from '@/api/config.server';
-import { SuccessResponse } from '@/types/api-response';
+import { APIResponse, SuccessResponse } from '@/types/api-response';
 
 export const JobModal = () => {
   const { id } = useParams();
   const searchParams = useSearchParams();
   const modalParam = searchParams.get('modal');
   const isModalOpen = modalParam === 'true';
-  const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
+  const { data: jobResponse, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
   );
+  const job = jobResponse?.data; // Access the data property
   const queryClient = useQueryClient();
 
   const { mutate: a_saveJob, isPending: isSaving } = useMutation({
@@ -70,18 +70,18 @@ export const JobModal = () => {
           <div className="flex items-center gap-3">
             {/* company logo */}
             <div className="relative w-14 h-14 img">
-              {job?.company.logo_url ? (
+              {job?.company?.logo_url ? ( // Add optional chaining
                 <Image
                   fill
                   className="rounded-2xl"
-                  src={job?.company.logo_url}
+                  src={job?.company?.logo_url} // Add optional chaining
                   alt={''}
                 />
               ) : (
                 <PlaceholderProfile
                   radius={'16px'}
                   size={'100%'}
-                  name={job?.company.name || ''}
+                  name={job?.company?.name || ''} // Add optional chaining
                 />
               )}
             </div>
@@ -91,7 +91,7 @@ export const JobModal = () => {
                 {job?.title}
               </h2>
               <p className="text-xl font-semibold text-tertiary-700 flex items-center gap-1">
-                {job?.company.name}{' '}
+                {job?.company?.name}{' '}
                 <Verified fill="#00AEFF" color="white" size={13} />
               </p>
             </div>
@@ -119,12 +119,14 @@ export const JobModal = () => {
             {/* time posted */}
             <span>Posted: {job?.created_at} - </span>
             {/* job type */}
-            <span>{job?.job_type.name} - </span>
+            <span>{job?.job_type?.name} - </span> {/* Add optional chaining */}
             {/* job - level */}
-            <span>{job?.job_levels.name} - </span>
+            <span>{job?.job_levels?.name} - </span>{' '}
+            {/* Add optional chaining */}
             <span>
-              {job?.state.name}, {job?.country.name}
-            </span>
+              {job?.state?.name}, {job?.country?.name}
+            </span>{' '}
+            {/* Add optional chaining */}
           </div>
 
           {/* Salary */}

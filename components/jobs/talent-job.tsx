@@ -16,13 +16,13 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
-import { APIResponse } from '@/api/config.server';
-import { SuccessResponse } from '@/types/api-response';
+import { APIResponse, SuccessResponse } from '@/types/api-response'; // Combined import
 
 const TalentJob = ({ id }: { id: string }) => {
-  const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
+  const { data: jobResponse, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
   );
+  const job = jobResponse?.data; // Access the data property
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -46,27 +46,27 @@ const TalentJob = ({ id }: { id: string }) => {
     },
   });
 
-  const skills = job?.skills.map((item: { name: string }) => item.name);
+  const skills = job?.skills?.map((item: { name: string }) => item.name); // Add optional chaining
   const fixedJob = {
     id: job?.id || '',
-    category: job?.category.name || '',
+    category: job?.category?.name || '', // Add optional chaining
     title: job?.title || '',
     description: job?.description || '',
     skills: skills || [],
     acceptance_criteria: job?.acceptance_criteria || '',
-    track: job?.track.name || '',
-    job_type: job?.job_type.name || '',
-    work_mode: job?.job_levels.name || '',
-    price: job?.salary.toString() || '',
-    state: job?.state.name || '',
-    country: job?.country.name || '',
-    company: job?.company.name || '',
-    companyLogo: job?.company.logo_url || '',
-    salary: job?.salary.toString() || '',
-    location: job?.country.name || '',
-    workType: job?.job_type.name || '',
-    level: job?.job_levels.name || '',
-    onsiteOrRemote: job?.job_type.name || '',
+    track: job?.track?.name || '', // Add optional chaining
+    job_type: job?.job_type?.name || '', // Add optional chaining
+    work_mode: job?.job_levels?.name || '', // Add optional chaining
+    price: job?.salary?.toString() || '', // Add optional chaining
+    state: job?.state?.name || '', // Add optional chaining
+    country: job?.country?.name || '', // Add optional chaining
+    company: job?.company?.name || '', // Add optional chaining
+    companyLogo: job?.company?.logo_url || '', // Add optional chaining
+    salary: job?.salary?.toString() || '', // Add optional chaining
+    location: job?.country?.name || '', // Add optional chaining
+    workType: job?.job_type?.name || '', // Add optional chaining
+    level: job?.job_levels?.name || '', // Add optional chaining
+    onsiteOrRemote: job?.job_type?.name || '', // Add optional chaining
   };
 
   const handleCopy = () => {
@@ -77,7 +77,7 @@ const TalentJob = ({ id }: { id: string }) => {
     }, 1000);
   };
 
-  if (isPending || !job) return <Loading />;
+  if (isPending || !job) return <Loading />; // Update check
   return (
     <>
       <div className="flex justify-start ">
@@ -99,8 +99,10 @@ const TalentJob = ({ id }: { id: string }) => {
             <h3 className="text-xl font-semibold text-tertiary-500">
               About the company
             </h3>
-            <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className} wrap-anywhere">
-              {job.company.description}
+            <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] wrap-anywhere">
+              {' '}
+              {/* Removed dm_sans.className */}
+              {job?.company?.description} {/* Add optional chaining */}
             </div>
             {/* button to view company profile... dont add till a page like that exist  */}
           </div>
@@ -111,7 +113,7 @@ const TalentJob = ({ id }: { id: string }) => {
             {/* Salary */}
             <div className="border-b border-tertiary-50 pb-5">
               <p className="text-2xl font-semibold text-primary-blue text-[28px]">
-                ₦{job.salary}
+                ₦{job?.salary} {/* Add optional chaining */}
               </p>
               <p className="text-sm font-semibold text-gray-400 mt-1 text-[16px]">
                 Salary
@@ -120,7 +122,9 @@ const TalentJob = ({ id }: { id: string }) => {
 
             {/* Apply Button */}
             <div className=" space-y-3">
-              <Button disabled={job.is_applied || false} size={'xs'}>
+              <Button disabled={job?.is_applied || false} size={'xs'}>
+                {' '}
+                {/* Add optional chaining */}
                 Apply Now
               </Button>
 
@@ -133,10 +137,11 @@ const TalentJob = ({ id }: { id: string }) => {
               >
                 <Heart
                   className={`mr-2 ${
-                    job.is_saved ? 'fill-red-500 text-red-500' : ''
+                    job?.is_saved ? 'fill-red-500 text-red-500' : '' // Add optional chaining
                   }`}
                 />{' '}
-                {job.is_saved ? 'Saved' : 'Save job'}
+                {job?.is_saved ? 'Saved' : 'Save job'}{' '}
+                {/* Add optional chaining */}
               </Button>
             </div>
 

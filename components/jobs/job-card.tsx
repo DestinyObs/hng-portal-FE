@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 import { useMutation, useQueryClient } from '@tanstack/react-query'; // Import useMutation and useQueryClient
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
-import { APIResponse } from '@/api/config.server';
+import { APIResponse } from '@/types/api-response';
 import { SuccessResponse } from '@/types/api-response';
 import PlaceholderProfile from '../dashboard/placeholder-profile';
 

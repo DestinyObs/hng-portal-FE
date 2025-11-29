@@ -10,7 +10,7 @@ import { RawJob2 } from '@/types/job-card'; // Import RawJob
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
-import { APIResponse } from '@/api/config.server';
+import { APIResponse } from '@/types/api-response';
 import { SuccessResponse } from '@/types/api-response';
 
 interface ApplyJobsModalProps {

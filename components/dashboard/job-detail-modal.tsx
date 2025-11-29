@@ -14,8 +14,7 @@ import { RawJob2 } from '@/types/job-card'; // Import RawJob
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
-import { APIResponse } from '@/api/config.server';
-import { SuccessResponse } from '@/types/api-response';
+import { APIResponse, SuccessResponse } from '@/types/api-response';
 
 interface JobDetailModalProps {
   isOpen: boolean;
