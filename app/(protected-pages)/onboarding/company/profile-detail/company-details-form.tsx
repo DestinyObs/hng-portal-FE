@@ -65,9 +65,6 @@ export default function CompanyDetailsForm() {
 
       if (result.success) {
         setOpenDialog(true);
-        toast.success('Company details saved successfully!', {
-          description: 'Your company profile is now complete.',
-        });
       } else {
         if (result.details?.errors) {
           // Show field-specific validation errors
@@ -97,9 +94,6 @@ export default function CompanyDetailsForm() {
     }
   };
 
-  const handleGoToDashboard = () => {
-    router.push('/company/dashboard');
-  };
 
   return (
     <Form {...form}>
