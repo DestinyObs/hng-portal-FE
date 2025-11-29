@@ -2,14 +2,7 @@
 
 import { createFetchUtil, withAuth } from '@/lib/fetch-utils';
 import { cookies } from 'next/headers';
-
-export type APIResponse<T> = {
-  success: boolean | 'true' | 'false';
-  message: string;
-  status: number;
-  data: T;
-  errors?: Record<string, string[]>;
-};
+import { APIResponse } from '@/types/api-response';
 
 const apiHandler = createFetchUtil({
   apiUrl: process.env.NEXT_PUBLIC_API_URL!,

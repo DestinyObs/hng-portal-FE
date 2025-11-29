@@ -23,7 +23,7 @@ import { SignInFormValues, signInSchema } from '@/validations/sign-in';
 import { useMutation } from '@tanstack/react-query';
 import { login, requestOtpForUnauthenticatedUser } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
-import { APIResponse } from '@/api/config.server';
+import { APIResponse } from '@/types/api-response';
 import { UserData } from '@/lib/types';
 import { useAuthStore } from '@/store/auth';
 

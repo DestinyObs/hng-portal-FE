@@ -21,8 +21,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { forgotPassword } from '@/api/actions/auth';
 import { toast } from 'sonner';
-import { SuccessResponse } from '@/types/api-response'; // Updated import
-import { APIResponse } from '@/api/config.server';
+import { APIResponse, SuccessResponse } from '@/types/api-response';
 
 export function ForgotPasswordForm() {
   const form = useForm<CompanyForgotPasswordFormValues & FieldValues>({

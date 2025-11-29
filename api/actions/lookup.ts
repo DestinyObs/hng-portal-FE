@@ -1,4 +1,5 @@
-import { APIResponse, makePublicRequest } from '../config.server';
+import { makePublicRequest } from '../config.server';
+import { APIResponse } from '@/types/api-response';
 
 interface LookupItem {
   id: string;

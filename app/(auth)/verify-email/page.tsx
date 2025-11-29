@@ -24,12 +24,11 @@ import { useMutation } from '@tanstack/react-query';
 import { verifyOtp, resendOtp } from '@/api/actions/auth';
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth';
-import { APIResponse } from '@/api/config.server';
+import { APIResponse, SuccessResponse } from '@/types/api-response';
 import {
   verifyEmailSchema,
   VerifyEmailFormValues,
 } from '@/validations/verify-email'; // New import for schema
-import { SuccessResponse } from '@/types/api-response';
 import { UserData } from '@/lib/types';
 
 const VerifyEmailPage = () => {
