@@ -1,34 +1,34 @@
 
-on:
-  push:
-    branches:
-      - staging
+# on:
+#   push:
+#     branches:
+#       - staging
 
-jobs:
-  build-deploy:
-    runs-on: [self-hosted]
+# jobs:
+#   build-deploy:
+#     runs-on: [self-hosted]
 
-    steps:
-      - name: Install sshpass
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
+#     steps:
+#       - name: Install sshpass
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y sshpass
 
-      - name: Sync code to remote server and deploy
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-        run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
-            set -e
-            cd ~/staging/frontend/hng-portal-FE
-            git reset --hard origin/staging
-            git pull origin staging
-            export PNPM_HOME="$HOME/.pnpm-store"
-            export PATH="$PNPM_HOME:$PATH"
-            export CI=true
-            pnpm install --frozen-lockfile
-            pnpm run build
-            pm2 restart 0 --update-env
-          EOF
+#       - name: Sync code to remote server and deploy
+#         env:
+#           SSH_HOST: ${{ secrets.SSH_HOST }}
+#           SSH_USER: ${{ secrets.SSH_USER }}
+#           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+#         run: |
+#           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
+#             set -e
+#             cd ~/staging/frontend/hng-portal-FE
+#             git reset --hard origin/staging
+#             git pull origin staging
+#             export PNPM_HOME="$HOME/.pnpm-store"
+#             export PATH="$PNPM_HOME:$PATH"
+#             export CI=true
+#             pnpm install --frozen-lockfile
+#             pnpm run build
+#             pm2 restart 0 --update-env
+#           EOF

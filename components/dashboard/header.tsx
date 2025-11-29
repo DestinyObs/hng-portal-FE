@@ -129,35 +129,35 @@ const DashboardHeader = () => {
                 <div className="w-9 h-9 rounded-full overflow-hidden">
                   {user?.company?.logo_url && isCompany ? (
                     <Link href={'/profile-view'}>
-                    <Image
-                      src={user?.company?.logo_url}
-                      alt="Profile"
-                      width={40}
-                      height={40}
-                      className="object-cover w-full h-full"
-                    />
+                      <Image
+                        src={user?.company?.logo_url}
+                        alt="Profile"
+                        width={40}
+                        height={40}
+                        className="object-cover w-full h-full"
+                      />
                     </Link>
                   ) : user?.photo_url && !isCompany ? (
                     <Link href={'/profile-view'}>
-                    <Image
-                      src={user.photo_url}
-                      alt="Profile"
-                      width={40}
-                      height={40}
-                      className="object-cover w-full h-full"
-                    />
+                      <Image
+                        src={user.photo_url}
+                        alt="Profile"
+                        width={40}
+                        height={40}
+                        className="object-cover w-full h-full"
+                      />
                     </Link>
                   ) : (
                     <Link href={'/profile-view'}>
-                    <PlaceholderProfile
-                      size={'100%'}
-                      fontSize={'1rem'}
-                      name={
-                        isCompany
-                          ? (user?.company?.name ?? '')
-                          : `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim()
-                      }
-                    />
+                      <PlaceholderProfile
+                        size={'100%'}
+                        fontSize={'1rem'}
+                        name={
+                          isCompany
+                            ? (user?.company?.name ?? '')
+                            : `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim()
+                        }
+                      />
                     </Link>
                   )}
                 </div>
