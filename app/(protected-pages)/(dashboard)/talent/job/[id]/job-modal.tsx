@@ -104,9 +104,9 @@ export const JobModal = () => {
             </div>
           </div>
           {/* description */}
-          <p className="text-tertiary-200 text-base leading-relaxed">
+          <div className="text-tertiary-200 text-base leading-relaxed">
             <ReactMarkdown>{job?.description}</ReactMarkdown>
-          </p>
+          </div>
 
           {/* Skills */}
           <ul className="flex justify-start flex-wrap gap-3 text-gray-600 font-light">
