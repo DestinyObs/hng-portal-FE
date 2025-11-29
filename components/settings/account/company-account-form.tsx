@@ -13,16 +13,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import { useAuthStore } from '@/store/auth';
 
 const companyFormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
-  email: z.string().email('Invalid email address'),
-  website: z.string().url('Please enter a valid URL'),
-  city: z.string().min(1, 'City is required'),
-  country: z.string().min(1, 'Country is required'),
+  email: z.email('Invalid email address'),
+  website: z.url('Please enter a valid URL'),
+  //city: z.string().min(1, 'City is required'),
+  //country: z.string().min(1, 'Country is required'),
 });
 
 type CompanyFormValues = z.infer<typeof companyFormSchema>;
@@ -37,8 +38,6 @@ export default function CompanyAccountForm() {
       companyName: user?.company?.name || '',
       email: user?.email || '',
       website: user?.company?.website_url || '',
-      city: '',
-      country: '',
     },
   });
 
@@ -100,16 +99,20 @@ export default function CompanyAccountForm() {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel className="text-sm text-[#1A1A1A]">
-                      Email Address <span className="text-[#FF3B30]">*</span>
+                      Email Address
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         placeholder="job.doe@example.com"
+                        disabled
                         {...field}
-                        className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
+                        className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] text-black-200 transition placeholder:text-black-200"
                       />
                     </FormControl>
+                    <FormDescription className="text-xs font-normal text-black-200">
+                      Your email address can&apos;t be changed.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -134,7 +137,7 @@ export default function CompanyAccountForm() {
                   </FormItem>
                 )}
               />
-
+              {/* 
               <div className="flex flex-col md:flex-row gap-6 w-full">
                 <FormField
                   control={form.control}
@@ -175,7 +178,7 @@ export default function CompanyAccountForm() {
                     </FormItem>
                   )}
                 />
-              </div>
+              </div>*/}
 
               <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
                 <Button

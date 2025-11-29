@@ -49,7 +49,6 @@ interface WorkExperienceFormProps {
   onSuccess?: () => void;
 }
 
-// Helper function to convert YYYY-MM-DD to MM/DD/YYYY
 function formatDateToMMDDYYYY(dateString: string): string {
   const date = new Date(dateString);
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -100,8 +99,6 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
 
         // Reset form
         form.reset();
-        
-        // Call onSuccess callback if provided
         if (onSuccess) {
           onSuccess();
         }
@@ -129,7 +126,7 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex gap-8 flex-col w-full"
+            className="flex gap-4 flex-col w-full"
           >
             <FormField
               control={form.control}
@@ -143,7 +140,7 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
                     <Input
                       placeholder="Add your name in the body"
                       {...field}
-                      className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
+                      className="mt-2 w-full p-3 h-10 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                     />
                   </FormControl>
                   <FormMessage />
@@ -163,7 +160,7 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
                     <Input
                       placeholder="Add your name in the body"
                       {...field}
-                      className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
+                      className="mt-2 w-full p-3 h-10 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                     />
                   </FormControl>
                   <FormMessage />
@@ -184,7 +181,7 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
                       <Input
                         type="date"
                         {...field}
-                        className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition"
+                        className="mt-2 w-full p-3 h-10 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition"
                       />
                     </FormControl>
                     <FormMessage />
@@ -205,7 +202,7 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
                         type="date"
                         {...field}
                         disabled={isCurrentlyWorking}
-                        className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-black-200"
+                        className="mt-2 w-full p-3 h-10 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-black-200"
                       />
                     </FormControl>
                     <FormMessage />
@@ -251,7 +248,7 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
                     <Textarea
                       placeholder="Add your name in the body"
                       {...field}
-                      className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200 min-h-32"
+                      className="mt-2 w-full p-3 resize-none rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200 min-h-32"
                     />
                   </FormControl>
                   <FormMessage />
@@ -259,7 +256,7 @@ export default function WorkExperienceForm({ onSuccess }: WorkExperienceFormProp
               )}
             />
 
-            <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
+            <div className="flex flex-row justify-end gap-4 pt-6 w-full">
               <Button
                 type="button"
                 variant="outline"

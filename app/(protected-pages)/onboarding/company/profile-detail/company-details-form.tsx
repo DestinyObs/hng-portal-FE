@@ -27,7 +27,6 @@ import { toast } from 'sonner';
 import CountryStateSelect from '@/components/shared/ui/country-state-select';
 
 export default function CompanyDetailsForm() {
-  const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
   const [showIndustryOther, setShowIndustryOther] = useState(false);
   const [showSizeOther, setShowSizeOther] = useState(false);

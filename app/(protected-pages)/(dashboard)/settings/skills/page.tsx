@@ -4,6 +4,7 @@ import {
   CommandList,
   CommandGroup,
   CommandItem,
+  CommandInput
 } from '@/components/ui/command';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -85,7 +86,9 @@ export default function SkillsAndExperiencePage() {
   const handleRemoveSkill = (skillToRemove: Skill) => {
     setSkills(skills.filter((skill) => skill.id !== skillToRemove.id));
   };
-
+const handleReset = () => {
+    setSkills(userSkills);
+  }
   const handleRemoveExperience = (id: string) => {
     setExperiences(experiences.filter((exp) => exp.id !== id));
   };
@@ -108,18 +111,17 @@ export default function SkillsAndExperiencePage() {
             <label className="text-sm text-[#1A1A1A] font-medium">Skills</label>
 
             <div className="relative">
-              <input
-                type="text"
-                placeholder="Add skills to help employers find you"
-                value={skillInput}
-                onChange={(e) => setSkillInput(e.target.value)}
-                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
-              />
-
-              {/* Dropdown shows ONLY when typing */}
-              {skillInput.length > 0 && (
-                <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                  <Command>
+              {/* Dropdown shows when typing */}
+              {skillInput.length > 0 ? (
+                <div className="absolute z-20 top-0 left-0 w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                  <Command shouldFilter={false}>
+                    <CommandInput
+                      placeholder="Add skills to help employers find you"
+                      value={skillInput}
+                      onValueChange={setSkillInput}
+                      className="p-3 border-none focus:outline-none focus:ring-0"
+                      autoFocus
+                    />
                     <CommandList className="max-h-48 overflow-y-auto">
                       <CommandGroup heading="Available Skills">
                         {skillsRes
@@ -135,7 +137,7 @@ export default function SkillsAndExperiencePage() {
                                 if (
                                   !skills.some((s: any) => s.id === skill.id)
                                 ) {
-                                  setSkills([...skills, skill]); // add full skill object
+                                  setSkills([...skills, skill]);
                                 }
                                 setSkillInput('');
                               }}
@@ -157,6 +159,14 @@ export default function SkillsAndExperiencePage() {
                     </CommandList>
                   </Command>
                 </div>
+              ) : (
+                <input
+                  type="text"
+                  placeholder="Add skills to help employers find you"
+                  value={skillInput}
+                  onChange={(e) => setSkillInput(e.target.value)}
+                  className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
+                />
               )}
             </div>
 
@@ -190,10 +200,13 @@ export default function SkillsAndExperiencePage() {
 
             <div className="space-y-4">
               {experiences.map((exp) => {
-                const startDate = new Date(exp.start_date).toLocaleDateString('en-US', {
-                  month: 'short',
-                  year: 'numeric',
-                });
+                const startDate = new Date(exp.start_date).toLocaleDateString(
+                  'en-US',
+                  {
+                    month: 'short',
+                    year: 'numeric',
+                  },
+                );
                 const endDate = exp.end_date
                   ? new Date(exp.end_date).toLocaleDateString('en-US', {
                       month: 'short',
@@ -248,6 +261,7 @@ export default function SkillsAndExperiencePage() {
             <Button
               type="button"
               variant="outline"
+              onClick={handleReset}
               className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl"
             >
               Cancel

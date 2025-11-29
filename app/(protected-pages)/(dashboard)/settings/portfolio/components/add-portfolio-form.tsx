@@ -24,7 +24,7 @@ import Image from 'next/image';
 const portfolioSchema = z.object({
   title: z.string().min(1, 'Project title is required'),
   description: z.string().optional(),
-  url: z.string().url('Please enter a valid URL').min(1, 'Project URL is required'),
+  url: z.url('Please enter a valid URL').min(1, 'Project URL is required'),
   image_url: z.string().optional(),
 });
 
@@ -70,8 +70,6 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
     setIsSubmitting(true);
 
     try {
-      // For now, we'll use image_url as a string (URL)
-      // If you need file upload, you'll need to handle FormData separately
       const payload = {
         title: data.title,
         description: data.description || null,
@@ -96,11 +94,6 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
         form.reset();
         setImagePreview(null);
         setImageFile(null);
-
-        // Call onSuccess callback if provided
-        if (onSuccess) {
-          onSuccess();
-        }
       } else {
         console.error('Error saving portfolio:', result.error);
       }
@@ -125,7 +118,7 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex gap-8 flex-col w-full"
+          className="flex gap-4 flex-col w-full"
         >
           <FormField
             control={form.control}
@@ -139,7 +132,7 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
                   <Input
                     placeholder="E-Commerce Platform"
                     {...field}
-                    className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
+                    className="mt-2 w-full p-3 h-10 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                   />
                 </FormControl>
                 <FormMessage />
@@ -160,7 +153,7 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
                     type="url"
                     placeholder="https://example.com/project"
                     {...field}
-                    className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
+                    className="mt-2 w-full p-3 h-10 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                   />
                 </FormControl>
                 <FormMessage />
@@ -180,7 +173,8 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
                   <Textarea
                     placeholder="Full-stack e-commerce solution with React, Node.js..."
                     {...field}
-                    className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200 min-h-32"
+                  
+                    className="mt-2 w-full p-3 resize-none rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200 min-h-32"
                   />
                 </FormControl>
                 <FormMessage />
@@ -193,21 +187,11 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
               Project Image
             </FormLabel>
             <div className="mt-2 space-y-4">
-              {imagePreview && (
-                <div className="relative w-full h-48 border border-[#E7E8E9] rounded-lg overflow-hidden">
-                  <Image
-                    src={imagePreview}
-                    alt="Project preview"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
               <Input
                 type="file"
                 accept="image/jpeg,image/jpg,image/png,image/webp"
                 onChange={handleImageChange}
-                className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition"
+                className="mt-2 w-full p-3 h-10 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition"
               />
             </div>
           </div>
