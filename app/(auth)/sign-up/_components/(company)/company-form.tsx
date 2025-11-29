@@ -25,10 +25,10 @@ import { useMutation } from '@tanstack/react-query';
 import { register } from '@/api/actions/auth';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
-import { APIResponse } from '@/api/config.server';
+import { APIResponse } from '@/types/api-response';
 import { RegisterType, UserData } from '@/lib/types';
 
-export function CompanySignUpForm({ role }: { role: string }) {
+export function CompanySignUpForm({ role }: { role: 'company' }) {
   const router = useRouter();
   const setEmail = useAuthStore((state) => state.setEmail);
 

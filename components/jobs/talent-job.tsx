@@ -15,36 +15,60 @@ import {
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatNumbers } from '@/constants/constants';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { saveJob } from '@/api/actions/talent';
+import { toast } from 'sonner';
+import { APIResponse, SuccessResponse } from '@/types/api-response'; // Combined import
 
 const TalentJob = ({ id }: { id: string }) => {
-  const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
+  const { data: jobResponse, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
   );
+  const job = jobResponse?.data; // Access the data property
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const skills = job?.skills.map((item: { name: string }) => item.name);
+  const { mutate: a_saveJob, isPending: isSaving } = useMutation({
+    mutationKey: ['saveJob', id],
+    mutationFn: () => saveJob(id),
+    onSuccess: (response: APIResponse<SuccessResponse>) => {
+      if (response.success) {
+        toast.success(response.message || 'Job bookmark updated!');
+        queryClient.invalidateQueries({ queryKey: ['talentJob', id] });
+        queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
+        queryClient.invalidateQueries({ queryKey: ['talentFindJobs'] });
+        queryClient.invalidateQueries({ queryKey: ['talentJobs'] });
+      } else {
+        toast.error(response.message || 'Failed to save job.');
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network error occurred.');
+    },
+  });
 
+  const skills = job?.skills?.map((item: { name: string }) => item.name); // Add optional chaining
   const fixedJob = {
     id: job?.id || '',
-    category: job?.category.name || '',
+    category: job?.category?.name || '', // Add optional chaining
     title: job?.title || '',
     description: job?.description || '',
     skills: skills || [],
     acceptance_criteria: job?.acceptance_criteria || '',
-    track: job?.track.name || '',
-    job_type: job?.job_type.name || '',
-    work_mode: job?.job_levels.name || '',
-    price: job?.salary.toString() || '',
-    state: job?.state.name || '',
-    country: job?.country.name || '',
-    company: job?.company.name || '',
-    companyLogo: job?.company.logo_url || '',
-    salary: job?.salary.toString() || '',
-    location: job?.country.name || '',
-    workType: job?.job_type.name || '',
-    level: job?.job_levels.name || '',
-    onsiteOrRemote: job?.job_type.name || '',
+    track: job?.track?.name || '', // Add optional chaining
+    job_type: job?.job_type?.name || '', // Add optional chaining
+    work_mode: job?.job_levels?.name || '', // Add optional chaining
+    price: job?.salary?.toString() || '', // Add optional chaining
+    state: job?.state?.name || '', // Add optional chaining
+    country: job?.country?.name || '', // Add optional chaining
+    company: job?.company?.name || '', // Add optional chaining
+    companyLogo: job?.company?.logo_url || '', // Add optional chaining
+    salary: job?.salary?.toString() || '', // Add optional chaining
+    location: job?.country?.name || '', // Add optional chaining
+    workType: job?.job_type?.name || '', // Add optional chaining
+    level: job?.job_levels?.name || '', // Add optional chaining
+    onsiteOrRemote: job?.job_type?.name || '', // Add optional chaining
   };
 
   const handleCopy = () => {
@@ -57,7 +81,7 @@ const TalentJob = ({ id }: { id: string }) => {
     }, 1000);
   };
 
-  if (isPending || !job) return <Loading />;
+  if (isPending || !job) return <Loading />; // Update check
   return (
     <>
       <div className="flex justify-start ">
@@ -105,8 +129,19 @@ const TalentJob = ({ id }: { id: string }) => {
               </Button>
 
               {/* Save Job */}
-              <Button disabled={job?.is_saved} variant={'outline'} size={'xs'}>
-                <Heart /> Save job
+              <Button
+                onClick={() => a_saveJob()}
+                disabled={isSaving}
+                variant={'outline'}
+                size={'xs'}
+              >
+                <Heart
+                  className={`mr-2 ${
+                    job?.is_saved ? 'fill-red-500 text-red-500' : '' // Add optional chaining
+                  }`}
+                />{' '}
+                {job?.is_saved ? 'Saved' : 'Save job'}{' '}
+                {/* Add optional chaining */}
               </Button>
             </div>
 

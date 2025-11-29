@@ -50,15 +50,17 @@ export default function ProfilePage() {
   // const { data: skills } = useSkills();
 
   const trackName =
-    tracks?.find((track) => track.id === profile?.bio?.track_id?.toString())?.name ??
-    MOCK_PROFILE.name;
+    tracks?.find((track) => track.id === profile?.bio?.track_id?.toString())
+      ?.name ?? MOCK_PROFILE.name;
 
   const countryName =
     Country.getCountryByCode(profile?.bio?.country ?? '')?.name ?? 'Nigeria';
 
   const stateName =
-    State.getStateByCodeAndCountry(profile?.bio?.state ?? '', profile?.bio?.country ?? '')
-      ?.name || 'Lagos';
+    State.getStateByCodeAndCountry(
+      profile?.bio?.state ?? '',
+      profile?.bio?.country ?? '',
+    )?.name || 'Lagos';
 
   if (isLoading || tracksLoading) return <Loading />;
 
