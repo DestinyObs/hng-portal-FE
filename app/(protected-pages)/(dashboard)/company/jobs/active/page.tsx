@@ -23,7 +23,7 @@ export default function ActiveJobsPage() {
 
   return (
     <div>
-      <DashboardNav navLinks={companyDashboardNavLinks} />
+      <DashboardNav tabs={companyDashboardNavLinks} />
       {isLoading ? (
         <Loading />
       ) : jobs && jobs.length > 0 ? (

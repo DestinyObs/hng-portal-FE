@@ -263,7 +263,7 @@ export const cities = [
 ];
 
 export const companyDashboardNavLinks = [
-  { title: 'Active Jobs', href: '/active' },
-  { title: 'Closed Jobs', href: '/closed' },
-  { title: 'Drafts', href: '/drafts' },
+  { title: 'Active Jobs', value: '/active' },
+  { title: 'Closed Jobs', value: '/closed' },
+  { title: 'Drafts', value: '/drafts' },
 ];
