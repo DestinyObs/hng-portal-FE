@@ -149,3 +149,34 @@ export interface ProfileResponse {
   preferences: Preference[];
   bio: Bio; // nested bio object
 }
+
+export interface UserProfileData {
+  id: string;
+  user_id: string;
+  content: string | null;
+  min_salary: number | null;
+  max_salary: number | null;
+  track_id: number | null;
+  is_verified: number; // or boolean if your API converts it
+  links: string | null;
+  cv_id: string | null;
+  current_role: string;
+  bio: string | null;
+  project_name: string | null;
+  project_url: string | null;
+  state: string | null;
+  country: string | null;
+  onboarding_status: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  user: User;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  media: any[]; // update if you know the media type
+}
+
+export interface Pivot {
+  model_type: string;
+  model_id: string;
+  role_id: number;
+}

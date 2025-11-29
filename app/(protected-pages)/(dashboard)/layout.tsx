@@ -12,6 +12,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const isSettingsPage = pathname?.startsWith('/settings');
   const isJobDetailsPage = pathname?.startsWith('/talent/job');
+  const isSidebarHidden = pathname?.startsWith('/profile-view');
   const { user } = useAuthStore();
 
   if (!user) return <Loading />;
@@ -25,7 +26,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         className={`flex flex-1 min-h-0 gap-6 ${isSettingsPage || isJobDetailsPage ? 'p-0' : 'p-8'}`}
       >
         {/* Sidebar */}
-        {!isSettingsPage && !isJobDetailsPage && <Sidebar />}
+        {!isSettingsPage && !isJobDetailsPage && !isSidebarHidden && (
+          <Sidebar />
+        )}
         {/* Main content */}
         <main className="flex-1 h-full min-h-screen">{children}</main>
       </div>
