@@ -11,7 +11,7 @@ import Loading from '@/app/loading';
 import { UserProfileData } from '@/types/profile';
 
 const MOCK_PROFILE = {
-  name: 'Okorie Esther',
+  name: '',
   role: 'UI / UX Designer',
   location: 'Lagos, Nigeria',
   avatar: '/assets/dashboard-settings/images/avatar.png',
@@ -64,10 +64,7 @@ export default function ProfilePage() {
 
   if (isLoading || tracksLoading) return <Loading />;
 
-  // const Bio = profile?.bio || "N/A";
-  // const Project_Url = profile?.project_url || "N/A";
-  // const Project_File = profile?.project_file || "N/A";
-
+  console.log('Profile:', profile);
   return (
     <div className="w-full max-w-4xl mx-auto p-8">
       {/* Back */}

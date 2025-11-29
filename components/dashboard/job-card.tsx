@@ -74,15 +74,14 @@ export default function JobCard({ job }: { job: JobCardProps }) {
           </Button>
         </div>
         <div className="">
-          {job.status === 'active' && (
-            <Button
-              size="xs"
-              variant="default"
-              className="px-4 py-2 text-sm sm:text-xs"
-            >
-              View Applicants
-            </Button>
-          )}
+          <Button
+            size="xs"
+            variant="default"
+            className="px-4 py-2 text-sm sm:text-xs"
+            onClick={() => navigate.push('/company/applicants')}
+          >
+            View Applicants
+          </Button>
         </div>
       </CardContent>
     </Card>

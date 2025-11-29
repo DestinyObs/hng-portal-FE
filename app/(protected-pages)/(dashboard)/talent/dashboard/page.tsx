@@ -13,9 +13,12 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT_DASHBOARD_CARDS
 import DashboardCard from '@/components/dashboard/dashboard-card';
+import { useState } from 'react';
+import { SortByDropdown } from '@/components/dashboard/sort-by-dropdown';
 
 const TalentDashboardPage = () => {
   const { user } = useAuthStore();
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
   const {
     data: jobs,
@@ -24,9 +27,9 @@ const TalentDashboardPage = () => {
     error: errorJobs,
   } = useQuery<RawJob2[], Error>({
     // Explicitly type TData and TError
-    queryKey: ['talentJobs'],
+    queryKey: ['talentJobs', sortOrder],
     queryFn: async () => {
-      const response = await getTalentJobs({ per_page: 4 }); // Fetch only 4 for the dashboard
+      const response = await getTalentJobs({ per_page: 4, sort: sortOrder }); // Fetch only 4 for the dashboard
       if (!response.success) {
         throw new Error(response.message || 'Failed to fetch jobs.');
       }
@@ -130,12 +133,18 @@ const TalentDashboardPage = () => {
 
         {/* Recommended Jobs */}
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-base md:text-xl font-bold text-gray-900">
             Recommended Jobs for You
           </h2>
-          <Link href="/talent/jobs" className="text-sm text-black font-medium">
+          <Link
+            href="/talent/jobs"
+            className="hidden md:block text-sm text-black font-medium"
+          >
             View All Jobs
           </Link>
+          <div className="block md:hidden">
+            <SortByDropdown sortOrder={sortOrder} setSortOrder={setSortOrder} />
+          </div>
         </div>
 
         {/* Job Grid */}
