@@ -21,9 +21,8 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { resetPassword } from '@/api/actions/auth';
 import { toast } from 'sonner';
-import { SuccessResponse } from '@/types/api-response'; // Updated import
+import { APIResponse, SuccessResponse } from '@/types/api-response';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { APIResponse } from '@/api/config.server';
 
 export function ResetPasswordForm() {
   const router = useRouter();

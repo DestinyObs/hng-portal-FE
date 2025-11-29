@@ -1,6 +1,4 @@
 'use client';
-
-import { motion } from 'motion/react';
 import StatCard from './StatCard';
 import WhyDescription from './WhyDescription';
 
@@ -9,38 +7,22 @@ const DesktopLayout = () => (
     <div className="flex flex-col gap-6">
       {/* Top row */}
       <div className="flex items-start gap-10">
-        <motion.h2
-          className="font-medium text-4xl text-primary-black w-[285px] shrink-0 leading-tight"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <h2 className="font-medium text-4xl text-primary-black w-[285px] shrink-0 leading-tight">
           Why
           <br />
           Choose Us?
-        </motion.h2>
+        </h2>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+        <div>
           <StatCard
             value="50K+"
             description="Talents trained through the HNG ecosystem"
             variant="gradient"
             className="w-[266px] shrink-0"
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
+        <div>
           <StatCard
             value="85"
             suffix="%"
@@ -48,28 +30,17 @@ const DesktopLayout = () => (
             variant="bordered"
             className="w-[266px] shrink-0"
           />
-        </motion.div>
+        </div>
       </div>
 
       {/* Bottom row */}
       <div className="flex items-end justify-between">
-        <motion.div
-          className="max-w-lg p-5"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
+        <div>
           <WhyDescription />
-        </motion.div>
+        </div>
 
         <div className="flex gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
+          <div>
             <StatCard
               value="30"
               suffix="%"
@@ -77,14 +48,9 @@ const DesktopLayout = () => (
               variant="gradient"
               className="w-[266px] shrink-0"
             />
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-          >
+          <div>
             <StatCard
               value="15"
               suffix="+"
@@ -92,7 +58,7 @@ const DesktopLayout = () => (
               variant="bordered"
               className="w-[266px] shrink-0"
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

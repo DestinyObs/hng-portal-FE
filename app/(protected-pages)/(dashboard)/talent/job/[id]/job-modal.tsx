@@ -10,15 +10,37 @@ import { Heart, ChevronLeft, ExpandIcon, Verified } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { saveJob } from '@/api/actions/talent';
+import { toast } from 'sonner';
+import { APIResponse, SuccessResponse } from '@/types/api-response';
 
 export const JobModal = () => {
   const searchParams = useSearchParams();
   const modalParam = searchParams.get('modal');
   const id = searchParams.get('id');
   const isModalOpen = modalParam === 'true';
-  const { data: job, isPending } = useGetTalentJob<JobDetailsResponse>(
+  const { data: jobResponse, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
   );
+  const job = jobResponse?.data; // Access the data property
+  const queryClient = useQueryClient();
+
+  const { mutate: a_saveJob, isPending: isSaving } = useMutation({
+    mutationKey: ['saveJob', job?.id],
+    mutationFn: () => saveJob(job!.id),
+    onSuccess: (response: APIResponse<SuccessResponse>) => {
+      if (response.success) {
+        toast.success('Job saved successfully!');
+        queryClient.invalidateQueries({ queryKey: ['savedJobs'] }); // Invalidate saved jobs query to refetch
+      } else {
+        toast.error(response.message || 'Failed to save job.');
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'A network error occurred.');
+    },
+  });
 
   const router = useRouter();
 
@@ -52,11 +74,11 @@ export const JobModal = () => {
           <div className="flex items-center gap-3">
             {/* company logo */}
             <div className="relative w-14 h-14 img">
-              {job?.company.logo_url ? (
+              {job?.company?.logo_url ? ( // Add optional chaining
                 <Image
                   fill
                   className="rounded-2xl"
-                  src={job?.company.logo_url}
+                  src={job?.company?.logo_url} // Add optional chaining
                   alt={''}
                 />
               ) : (
@@ -82,9 +104,9 @@ export const JobModal = () => {
             </div>
           </div>
           {/* description */}
-          <p className="text-tertiary-200 text-base leading-relaxed">
+          <div className="text-tertiary-200 text-base leading-relaxed">
             <ReactMarkdown>{job?.description}</ReactMarkdown>
-          </p>
+          </div>
 
           {/* Skills */}
           <ul className="flex justify-start flex-wrap gap-3 text-gray-600 font-light">
@@ -104,12 +126,14 @@ export const JobModal = () => {
             {/* time posted */}
             <span>Posted: {job?.created_at} - </span>
             {/* job type */}
-            <span>{job?.job_type.name} - </span>
+            <span>{job?.job_type?.name} - </span> {/* Add optional chaining */}
             {/* job - level */}
-            <span>{job?.job_levels.name} - </span>
+            <span>{job?.job_levels?.name} - </span>{' '}
+            {/* Add optional chaining */}
             <span>
-              {job?.state.name}, {job?.country.name}
-            </span>
+              {job?.state?.name}, {job?.country?.name}
+            </span>{' '}
+            {/* Add optional chaining */}
           </div>
 
           {/* Salary */}
@@ -128,7 +152,12 @@ export const JobModal = () => {
             >
               Start Application
             </Button>
-            <Button size={'xs'} variant="outline">
+            <Button
+              size={'xs'}
+              variant="outline"
+              onClick={() => a_saveJob()}
+              disabled={isSaving}
+            >
               <Heart /> Save job
             </Button>
           </div>

@@ -11,6 +11,9 @@ import { newPost } from '@/store/create-post';
 import { toast } from 'sonner';
 import { JobDraftPayload } from '@/validations/create-post.schema';
 import { useRouter } from 'next/navigation';
+import { JobApplicationPayload } from '@/types/job-application-form';
+import { applyForJob } from '@/api/actions/applications';
+import { APIResponse } from '@/types/api-response';
 
 export const useGetAllJobs = <T>(
   companyId: string | undefined,
@@ -47,12 +50,12 @@ export const useGetJob = (
 
 export const useGetTalentJob = <T>(
   jobId: string | undefined,
-): UseQueryResult<T> => {
+): UseQueryResult<APIResponse<T>> => {
   return useQuery({
     queryKey: ['get-job', jobId],
     queryFn: async () => {
-      const res = await makeAuthenticatedRequest(`/talent/jobs/${jobId}`);
-      return res?.data as T;
+      const res = await makeAuthenticatedRequest<T>(`/talent/jobs/${jobId}`);
+      return res; // Return the full APIResponse
     },
     enabled: !!jobId,
   });
@@ -201,6 +204,41 @@ export const useDraftJob = () => {
 
   return {
     draftJob,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  };
+};
+
+export const useApplyForJob = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const {
+    mutate: applyJob,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: (application: JobApplicationPayload) =>
+      applyForJob(application),
+
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['job-applications'] });
+      toast.success('Your application has been submitted successfully');
+      console.log(data);
+    },
+
+    onError: (err) => {
+      console.error('Failed to submit application:', err);
+      toast.error(err.message || 'Failed to submit application');
+    },
+  });
+
+  return {
+    applyJob,
     isPending,
     isSuccess,
     isError,

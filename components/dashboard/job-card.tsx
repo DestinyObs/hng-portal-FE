@@ -74,13 +74,15 @@ export default function JobCard({ job }: { job: JobCardProps }) {
           </Button>
         </div>
         <div className="">
-          <Button
-            size="xs"
-            variant="default"
-            className="px-4 py-2 text-sm sm:text-xs"
-          >
-            View Applicants
-          </Button>
+          {job.status === 'active' && (
+            <Button
+              size="xs"
+              variant="default"
+              className="px-4 py-2 text-sm sm:text-xs"
+            >
+              View Applicants
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

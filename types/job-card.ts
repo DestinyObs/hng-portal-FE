@@ -88,6 +88,7 @@ export interface RawJob {
 
 export interface RawJob2 {
   id: string;
+  is_saved: boolean;
   title: string;
   description: string;
   acceptance_criteria: string;
@@ -142,4 +143,11 @@ export interface TalentJobsQueryParams {
   skills?: string[]; // Array of skill IDs
   page?: number;
   per_page?: number;
+}
+
+export interface TalentApplication {
+  id: string;
+  job_id: string;
+  status: string;
+  // Add other properties as needed
 }
