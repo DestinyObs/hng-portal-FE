@@ -221,22 +221,17 @@ export const useApplyForJob = () => {
     isError,
     error,
   } = useMutation({
-    mutationFn: async (application: JobApplicationPayload) =>
-      await applyForJob(application),
+    mutationFn: (application: JobApplicationPayload) =>
+      applyForJob(application),
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['job-applications'] });
       toast.success('Your application has been submitted successfully');
       router.push('/talent/dashboard');
-      if (!data.success) {
-        console.log(data);
-      }
     },
 
     onError: (err) => {
-      console.error('Failed to create job:', err.errors.cover_letter);
-      console.error('Failed to create job:', err.errors.job_id);
-      console.error('Failed to create job:', err.errors.resume);
+      console.error('Failed to submit application:', err);
       toast.error(err.message || 'Failed to submit application');
     },
   });

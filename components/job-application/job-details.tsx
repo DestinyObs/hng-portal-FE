@@ -29,6 +29,7 @@ const JobApplicationDetails = () => {
     data: Job;
     isPending: boolean;
   };
+  console.log('JOB DATA:', job);
   if (isPending) return <Loading />;
 
   return (

@@ -15,8 +15,7 @@ const JobApplicationPage = () => {
   const [step, setStep] = useState<'form' | 'preview'>('form');
   const [formData, setFormData] = useState<JobApplicationFormData | null>(null);
 
-  const { applyJob, isPending, error } = useApplyForJob();
-  console.log(error);
+  const { applyJob, isPending } = useApplyForJob();
 
   if (!jobId) {
     // Stop submission if jobId is missing
@@ -30,7 +29,16 @@ const JobApplicationPage = () => {
   };
 
   const handleFinalSubmit = () => {
-    if (!formData || !formData.resume) return;
+    if (
+      !formData?.resume ||
+      !(formData.resume instanceof FileList) ||
+      formData.resume.length === 0
+    ) {
+      toast.error('Resume is required.');
+      return;
+    }
+
+    const file = formData.resume[0]; // ✅ Extract the actual File
 
     const jobId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     if (!jobId) {
@@ -40,13 +48,13 @@ const JobApplicationPage = () => {
 
     console.log('Submitting:', {
       cover_letter: formData.cover_letter,
-      resume: formData.resume,
+      resume: file,
       job_id: jobId,
     });
 
     applyJob({
       cover_letter: formData.cover_letter,
-      resume: formData.resume as File,
+      resume: file, // ✅ Now it's a single File
       job_id: jobId,
     });
   };
