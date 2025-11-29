@@ -24,7 +24,7 @@ export const login = async (formData: LoginType) => {
   });
 
   if (res.success) {
-    const user = getEssentialUserData(res.data.user);
+    // const user = getEssentialUserData(res.data.user);
     (await cookies()).set('token', res.data?.token as string, {
       httpOnly: true,
       secure: true,
@@ -32,7 +32,7 @@ export const login = async (formData: LoginType) => {
       path: '/',
     });
 
-    (await cookies()).set('user', JSON.stringify(user), {
+    (await cookies()).set('user', JSON.stringify(res.data.user), {
       httpOnly: false,
       sameSite: 'strict',
       path: '/',
@@ -57,7 +57,7 @@ export async function google_signin(formData: GoogleAuthRequest) {
 
     if (response.ok) {
       const data = await response.json();
-      const user = getEssentialUserData(data.data.user);
+      // const user = getEssentialUserData(data.data.user);
       (await cookies()).set('token', data?.data?.token as string, {
         httpOnly: true,
         secure: true,
@@ -66,7 +66,7 @@ export async function google_signin(formData: GoogleAuthRequest) {
       });
 
       if (formData.isNewUser === false) {
-        (await cookies()).set('user', JSON.stringify(user), {
+        (await cookies()).set('user', JSON.stringify(data.data.user), {
           httpOnly: false,
           sameSite: 'strict',
           path: '/',
@@ -191,6 +191,10 @@ export const logout = async () => {
       method: 'POST',
     },
   );
+  if (res.status === 401) {
+    (await cookies()).delete('user');
+    (await cookies()).delete('token');
+  }
   if (res.success) {
     (await cookies()).delete('user');
     (await cookies()).delete('token');

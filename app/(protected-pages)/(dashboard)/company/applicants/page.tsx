@@ -1,14 +1,29 @@
-'use client';
-
 import React from 'react';
 import { Tabs } from '@/components/shared/ui/tabs';
 import AllApplicants from './all-applicants';
 import Candidatelists from './candidate-lists';
 
-export default function ApplicantsPage() {
+// interface ApplicantsPageProps {
+//   params: {
+//     companyId: string;
+//   };
+// }
+
+export default async function ApplicantsPage() {
+  // export default async function ApplicantsPage({ params }: ApplicantsPageProps) {
+  // const { companyId: company_id } = await params;
+
   const tabsData = [
-    { value: 'all', tabsName: 'All Applicants', TabView: AllApplicants },
-    { value: 'lists', tabsName: 'Candidates List', TabView: Candidatelists },
+    {
+      value: 'all',
+      tabsName: 'All Applicants',
+      TabView: () => <AllApplicants />,
+    },
+    {
+      value: 'lists',
+      tabsName: 'Candidates List',
+      TabView: () => <Candidatelists />,
+    },
   ];
 
   return (

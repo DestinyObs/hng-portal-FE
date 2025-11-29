@@ -78,6 +78,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
             size="xs"
             variant="default"
             className="px-4 py-2 text-sm sm:text-xs"
+            onClick={() => navigate.push('/company/applicants')}
           >
             View Applicants
           </Button>

@@ -1,100 +1,35 @@
 'use client';
 
-import React from 'react';
-import { Search, ListFilter, ChevronDown, Trash } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
 import { columns, Applicant } from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
+import { JobApplicationItem } from '@/types/view-job-applicants';
+import { view_applicants_per_company } from '@/api/actions/view-applicants';
+import { useAuthStore } from '@/store/auth';
 
-const applicantsData: Applicant[] = [
-  {
-    id: '1',
-    name: 'Mark Essien',
-    email: 'markessien@gmail.com',
-    applied_role: 'Visual Designer',
-    status: 'Shortlisted',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '2',
-    name: 'Chinedu Okeke',
-    email: 'markessien@gmail.com',
-    applied_role: 'Visual Designer',
-    status: 'Shortlisted',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '3',
-    name: 'Folajomi',
-    email: 'markessien@gmail.com',
-    applied_role: 'Visual Designer',
-    status: 'Shortlisted',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '4',
-    name: 'Wade Warren',
-    email: 'markessien@gmail.com',
-    applied_role: 'Visual Designer',
-    status: 'Rejected',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '5',
-    name: 'Wade Warren',
-    email: 'markessien@gmail.com',
-    applied_role: 'Visual Designer',
-    status: 'Applied',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '6',
-    name: 'Olivia Smith',
-    email: 'markessien@gmail.com',
-    applied_role: 'Visual Designer',
-    status: 'Applied',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '7',
-    name: 'Liam Johnson',
-    email: 'markessien@gmail.com',
-    applied_role: 'Graphics Designer',
-    status: 'Applied',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '8',
-    name: 'Emma Brown',
-    email: 'markessien@gmail.com',
-    applied_role: 'Graphics Designer',
-    status: 'Shortlisted',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '9',
-    name: 'Noah Davis',
-    email: 'markessien@gmail.com',
-    applied_role: 'Graphics Designer',
-    status: 'Rejected',
-    applied_date: 'Jan 25, 2025',
-  },
-  {
-    id: '10',
-    name: 'Noah Davis',
-    email: 'markessien@gmail.com',
-    applied_role: 'Motion Designer',
-    status: 'Shortlisted',
-    applied_date: 'Jan 25, 2025',
-  },
-];
+// interface AllApplicantsProps {
+//   company_id: string;
+// }
 
 export default function AllApplicants() {
+  // export default function AllApplicants({ company_id }: AllApplicantsProps) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showFilters, setShowFilters] = React.useState(false);
-
   const [selectedRole, setSelectedRole] = React.useState<string>('');
   const [selectedStatus, setSelectedStatus] = React.useState<string>('');
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
+
+  const { user } = useAuthStore();
+
+  const company_id = user?.company?.id as string;
+
+  // New states for data fetching
+  const [applicationsData, setApplicationsData] = useState<
+    JobApplicationItem[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const statuses = ['Applied', 'Shortlisted', 'Rejected'];
 
@@ -110,14 +45,67 @@ export default function AllApplicants() {
     Rejected: 'bg-[#EF4444]',
   };
 
+  // Fetch applicants data
+  // Fetch applicants data
+  useEffect(() => {
+    const fetchApplicants = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await view_applicants_per_company(company_id);
+
+        if (response.success && response.data) {
+          console.log('Applications:', response.data.applications);
+          setApplicationsData(response.data.applications);
+        } else {
+          setError('Failed to fetch applicants');
+        }
+      } catch (err) {
+        console.error('Caught error:', err);
+        setError('An error occurred while fetching applicants');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (company_id) {
+      fetchApplicants();
+    }
+  }, [company_id]);
+
+  // Transform API data to match table format
+  const transformedData: Applicant[] = React.useMemo(() => {
+    return applicationsData.map((application) => ({
+      id: application.id,
+      name: `${application.user.firstname} ${application.user.lastname}`,
+      email: application.user.email,
+      applied_role: application.job.title,
+      status:
+        application.status === 'pending'
+          ? 'Applied'
+          : application.status === 'approved'
+            ? 'Shortlisted'
+            : 'Rejected',
+      applied_date: new Date(application.date_added).toLocaleDateString(
+        'en-US',
+        {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        },
+      ),
+    }));
+  }, [applicationsData]);
+
   const filteredData = React.useMemo(() => {
-    let filtered = applicantsData;
+    let filtered = transformedData;
 
     if (searchQuery) {
       filtered = filtered.filter(
         (applicant) =>
           applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          applicant.email.includes(searchQuery) ||
+          applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.applied_role
             .toLowerCase()
             .includes(searchQuery.toLowerCase()),
@@ -133,7 +121,42 @@ export default function AllApplicants() {
     }
 
     return filtered;
-  }, [searchQuery, selectedRole, selectedStatus]);
+  }, [transformedData, searchQuery, selectedRole, selectedStatus]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-screen px-6 py-4">
+        <div className="bg-white p-6 rounded-2xl">
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary-300" />
+            <span className="ml-2 text-tertiary-500">
+              Loading applicants...
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="w-full min-h-screen px-6 py-4">
+        <div className="bg-white p-6 rounded-2xl">
+          <div className="flex flex-col items-center justify-center py-12">
+            <p className="text-red-500 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-primary-300 text-white rounded-lg hover:bg-primary-400"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-screen px-6 py-4">
@@ -220,7 +243,13 @@ export default function AllApplicants() {
           </div>
         </div>
 
-        <DataTable columns={columns} data={filteredData} />
+        {filteredData.length === 0 ? (
+          <div className="text-center py-12 text-tertiary-500">
+            No applicants found
+          </div>
+        ) : (
+          <DataTable columns={columns} data={filteredData} />
+        )}
       </div>
     </div>
   );
