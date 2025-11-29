@@ -39,9 +39,7 @@ export const Modal: React.FC<ModalProps> = ({
           >
             {icon && (
               <div className="mb-4 rounded-full flex items-center justify-center">
-                <div className="text-primary-300 flex items-center justify-center text-4xl bg-primary-50 rounded-full w-16 h-16">
-                  {icon}
-                </div>
+                {icon}
               </div>
             )}
 

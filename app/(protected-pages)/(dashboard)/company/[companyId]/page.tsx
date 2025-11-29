@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import { Tabs } from '@/components/shared/ui/tabs';
 import AllApplicants from './all-applicants';
@@ -6,12 +5,12 @@ import Candidatelists from './candidate-lists';
 
 interface ApplicantsPageProps {
   params: {
-    id: string; // This is the company_id from the route
+    companyId: string;
   };
 }
 
-export default function ApplicantsPage({ params }: ApplicantsPageProps) {
-  const { id: company_id } = params;
+export default async function ApplicantsPage({ params }: ApplicantsPageProps) {
+  const { companyId: company_id } = await params;
 
   const tabsData = [
     {
