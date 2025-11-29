@@ -1,38 +1,38 @@
-name: CI for PRs with Preview Deployment
+# name: CI for PRs with Preview Deployment
 
-on:
-    pull_request:
+# on:
+#     pull_request:
 
-permissions:
-    contents: read
-    pull-requests: write
+# permissions:
+#     contents: read
+#     pull-requests: write
 
-jobs:
+# jobs:
 
-    ci:
-        runs-on: self-hosted
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v5
+#     ci:
+#         runs-on: self-hosted
+#         steps:
+#             - name: Checkout code
+#               uses: actions/checkout@v5
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20
+#             - name: Setup Node.js
+#               uses: actions/setup-node@v4
+#               with:
+#                   node-version: 20
 
-            - name: Cache pnpm store
-              uses: actions/cache@v4
-              with:
-                  path: ~/.pnpm-store
-                  key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-                  restore-keys: |
-                    pnpm-store-
+#             - name: Cache pnpm store
+#               uses: actions/cache@v4
+#               with:
+#                   path: ~/.pnpm-store
+#                   key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+#                   restore-keys: |
+#                     pnpm-store-
 
-            - name: Install dependencies
-              run: pnpm install
+#             - name: Install dependencies
+#               run: pnpm install
 
-            - name: Lint
-              run: pnpm lint
+#             - name: Lint
+#               run: pnpm lint
 
-            - name: Build app
-              run: pnpm build
+#             - name: Build app
+#               run: pnpm build
