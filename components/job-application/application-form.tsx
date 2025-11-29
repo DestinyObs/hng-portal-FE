@@ -29,9 +29,9 @@ const JobApplicationForm = ({ onNext }: JobApplicationFormProps) => {
   });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!e.target.files) return; // ✅ stops null
 
+    const files: FileList = e.target.files; // ✅ now it's guaranteed a FileList
     const file = files[0];
 
     if (file.type !== 'application/pdf') {
@@ -40,7 +40,7 @@ const JobApplicationForm = ({ onNext }: JobApplicationFormProps) => {
     }
 
     setSelectedFile(file);
-    setValue('resume', files, { shouldValidate: true }); // ✅ pass FileList instead of File
+    setValue('resume', files, { shouldValidate: true }); // ✅ no null, works fine
   };
 
   const removeFile = (): void => {

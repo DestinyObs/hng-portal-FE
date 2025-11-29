@@ -26,6 +26,7 @@ const JobApplicationPage = () => {
   const handleFormSubmit = (data: JobApplicationFormData) => {
     setFormData(data);
     setStep('preview');
+    console.log(data.resume instanceof FileList, data.resume?.length);
   };
 
   const handleFinalSubmit = () => {
@@ -54,7 +55,7 @@ const JobApplicationPage = () => {
 
     applyJob({
       cover_letter: formData.cover_letter,
-      resume: file, // ✅ Now it's a single File
+      resume: formData.resume[0], // first file from the list
       job_id: jobId,
     });
   };

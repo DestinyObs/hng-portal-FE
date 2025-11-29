@@ -12,6 +12,7 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
   onEdit,
 }) => {
   const { cover_letter, portfolioLink, resume } = data;
+  const file = resume instanceof FileList ? resume[0] : resume;
 
   return (
     <div className="w-full mx-auto bg-gray-50 p-4 space-y-6">
@@ -49,10 +50,10 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
             Attachment
           </p>
 
-          {resume ? (
+          {file ? (
             <div className="flex items-center gap-2 p-3 rounded-lg bg-gray-50">
               <Paperclip size={18} />
-              <span>{resume.name}</span>
+              <span>{file.name}</span> {/* ✅ Now name exists */}
             </div>
           ) : (
             <p className="text-gray-400">No resume uploaded.</p>
