@@ -1,19 +1,12 @@
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardTitle, CardHeader } from '@/components/ui/card';
-import React from 'react';
 import FeatureCard from './feature-card';
-import { motion } from 'motion/react';
 import { features } from '@/constants/landing-page';
 
 export default function Features() {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-    >
+    <div>
       <Card className="text-center bg-white gap-0" variant={'ghost'}>
         <CardTitle>
           <Badge
@@ -44,6 +37,6 @@ export default function Features() {
           <FeatureCard feature={feature} key={index} />
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }

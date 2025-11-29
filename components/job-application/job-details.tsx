@@ -1,10 +1,36 @@
-import { skills } from '@/constants/job-applications';
 import { Briefcase, Clock, DollarSign } from 'lucide-react';
 import React from 'react';
+import { useGetTalentJob } from '@/hooks/jobs';
+import { useParams } from 'next/navigation';
+import Loading from '@/app/loading';
+
+interface Job {
+  id: string;
+  title: string;
+  description: string;
+  acceptance_criteria: string;
+  salary: number;
+  created_at?: string;
+  work_type?: { id: string; name: string };
+  location?: string;
+  job_levels?: { id: string; name: string };
+  job_type?: { id: string; name: string };
+  category?: { id: string; name: string };
+  company?: { id: string; name: string };
+  country?: { id: string; name: string };
+  state?: { id: string; name: string };
+  track?: { id: string; name: string };
+  skills?: { id: string; name: string }[];
+}
 
 const JobApplicationDetails = () => {
+  const { id: jobId } = useParams();
+  const { data: response, isPending } = useGetTalentJob(jobId as string);
+  const job = response?.data as Job;
+  if (isPending) return <Loading />;
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+    <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6 ">
       {/* Job Details Section */}
       <div className="p-6 flex flex-col md:flex-row md:items-start md:space-x-6 border-b border-tertiary-50">
         {/* Main Job Details */}
@@ -13,26 +39,16 @@ const JobApplicationDetails = () => {
 
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="text-xl font-semibold mb-2">UI/UX Designer</h3>
-              <p className="text-sm text-tertiary-300">
-                Posted Yesterday • On site • Lagos, Nigeria
+              <h3 className="text-xl font-semibold mb-2">{job?.title}</h3>
+              <p className="text-sm text-gray-200">
+                Posted {job?.created_at} - {job?.job_type?.name} -{' '}
+                {job?.state?.name}, {job?.country?.name}
               </p>
             </div>
           </div>
 
-          <div className="space-y-3 mb-4 text-tertiary-300 text-sm">
-            <p>
-              Design and refine intuitive web interfaces that provide users with
-              a seamless and visually engaging experience.
-            </p>
-            <p>
-              Collaborate with developers and product teams to improve
-              usability, accessibility, and performance across desktop
-            </p>
-            <p>
-              and mobile platforms, ensuring consistent design standards and
-              user satisfaction.
-            </p>
+          <div className="space-y-3 mb-4 text-gray-200 text-sm">
+            <p>{job?.description}</p>
           </div>
 
           <a href="#" className="text-primary-300 text-sm underline">
@@ -45,21 +61,23 @@ const JobApplicationDetails = () => {
           <div className="flex items-center gap-3 p-3 rounded-lg">
             <Briefcase className="w-5 h-5 text-tertiary-100" />
             <div>
-              <p className="font-semibold text-sm">Entry Level</p>
+              <p className="font-semibold text-sm">{job?.job_levels?.name}</p>
               <p className="text-xs text-gray-600">Experience level</p>
             </div>
           </div>
+
           <div className="flex items-center gap-3 p-3 rounded-lg">
             <DollarSign className="w-5 h-5 text-tertiary-100" />
             <div>
-              <p className="font-semibold text-sm">₦125,0000</p>
+              <p className="font-semibold text-sm">{job?.salary}</p>
               <p className="text-xs text-gray-600">Project price</p>
             </div>
           </div>
+
           <div className="flex items-center gap-3 p-3 rounded-lg">
             <Clock className="w-5 h-5 text-tertiary-100" />
             <div>
-              <p className="font-semibold text-sm">Full time</p>
+              <p className="font-semibold text-sm">{job?.job_type?.name}</p>
               <p className="text-xs text-gray-600">Job type</p>
             </div>
           </div>
@@ -69,13 +87,14 @@ const JobApplicationDetails = () => {
       {/* Skills Section */}
       <div className="p-6">
         <h2 className="text-xl font-semibold mb-2">Skills and Expertise</h2>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {skills.map((skill, index) => (
+          {job?.skills?.map((skill, index) => (
             <div
               key={index}
               className="px-4 py-3 rounded-full border border-tertiary-50"
             >
-              <p className="text-sm">{skill}</p>
+              <p className="text-sm">{skill.name}</p>
             </div>
           ))}
         </div>
