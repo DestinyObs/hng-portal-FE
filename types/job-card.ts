@@ -143,6 +143,7 @@ export interface TalentJobsQueryParams {
   skills?: string[]; // Array of skill IDs
   page?: number;
   per_page?: number;
+  sort?: 'newest' | 'oldest';
 }
 
 export interface TalentApplication {

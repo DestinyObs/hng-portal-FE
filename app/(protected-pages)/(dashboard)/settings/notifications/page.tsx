@@ -1,15 +1,86 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useAuthStore } from '@/store/auth';
 
 interface CustomSwitchProps {
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   id?: string;
 }
-
+const getInitialSettings = (
+  role: string | undefined,
+): NotificationSetting[] => {
+  if (role === 'employer') {
+    return [
+      {
+        id: 'email',
+        title: 'Email Notifications',
+        description: 'Receive email updates about your account',
+        enabled: true,
+      },
+      {
+        id: 'job_posting_alerts',
+        title: 'Job Posting Alerts',
+        description: 'Stay notified about your active listings',
+        enabled: true,
+      },
+      {
+        id: 'application_status',
+        title: 'Application Status',
+        description: "Updates on candidates' applications",
+        enabled: true,
+      },
+      {
+        id: 'talent_messages',
+        title: 'Messages From Talent',
+        description: 'Get messages from candidates',
+        enabled: true,
+      },
+      {
+        id: 'promotions',
+        title: 'Promotions & Tips',
+        description: 'Get hiring tips and product updates',
+        enabled: false,
+      },
+    ];
+  } else {
+    return [
+      {
+        id: 'email',
+        title: 'Email Notifications',
+        description: 'Receive email updates about your account',
+        enabled: true,
+      },
+      {
+        id: 'job_matches',
+        title: 'Job Matches',
+        description: 'Get notified when jobs match your profile',
+        enabled: true,
+      },
+      {
+        id: 'application_status',
+        title: 'Application Status',
+        description: 'Updates on your job applications',
+        enabled: true,
+      },
+      {
+        id: 'company_messages',
+        title: 'Message From Companies',
+        description: 'When companies send you messages',
+        enabled: true,
+      },
+      {
+        id: 'promotions',
+        title: 'Promotions & Tips',
+        description: 'Career tips and promotional offers',
+        enabled: false,
+      },
+    ];
+  }
+};
 const CustomSwitch = ({ checked, onCheckedChange, id }: CustomSwitchProps) => {
   return (
     <button
@@ -41,38 +112,19 @@ interface NotificationSetting {
 }
 
 export default function NotificationsPage() {
-  const [settings, setSettings] = useState<NotificationSetting[]>([
-    {
-      id: 'email',
-      title: 'Email Notifications',
-      description: 'Receive email updates about your account',
-      enabled: true,
-    },
-    {
-      id: 'job_matches',
-      title: 'Job Matches',
-      description: 'Get notified when jobs match your profile',
-      enabled: true,
-    },
-    {
-      id: 'application_status',
-      title: 'Application Status',
-      description: 'Updates on your job applications',
-      enabled: true,
-    },
-    {
-      id: 'company_messages',
-      title: 'Message From Companies',
-      description: 'When companies send you messages',
-      enabled: true,
-    },
-    {
-      id: 'promotions',
-      title: 'Promotions & Tips',
-      description: 'Career tips and promotional offers',
-      enabled: false,
-    },
-  ]);
+  const { user } = useAuthStore();
+
+  const initialSettings = useMemo(
+    () => getInitialSettings(user?.current_role),
+    [user?.current_role],
+  );
+
+  const [settings, setSettings] =
+    useState<NotificationSetting[]>(initialSettings);
+
+  useEffect(() => {
+    setSettings(initialSettings);
+  }, [initialSettings]);
 
   const handleToggle = (id: string) => {
     setSettings((prev) =>

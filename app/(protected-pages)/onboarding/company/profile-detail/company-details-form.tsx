@@ -1,5 +1,4 @@
 'use client';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { CompanyDetailsSchema, companyDetailsSchema } from '../schema';
@@ -27,7 +26,6 @@ import { toast } from 'sonner';
 import CountryStateSelect from '@/components/shared/ui/country-state-select';
 
 export default function CompanyDetailsForm() {
-  const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
   const [showIndustryOther, setShowIndustryOther] = useState(false);
   const [showSizeOther, setShowSizeOther] = useState(false);
@@ -65,9 +63,6 @@ export default function CompanyDetailsForm() {
 
       if (result.success) {
         setOpenDialog(true);
-        toast.success('Company details saved successfully!', {
-          description: 'Your company profile is now complete.',
-        });
       } else {
         if (result.details?.errors) {
           // Show field-specific validation errors
@@ -97,9 +92,6 @@ export default function CompanyDetailsForm() {
     }
   };
 
-  const handleGoToDashboard = () => {
-    router.push('/company/dashboard');
-  };
 
   return (
     <Form {...form}>

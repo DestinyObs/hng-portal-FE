@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { User } from './types';
 
 export function formatTime(dateString: string | undefined): string {
   if (!dateString) {
@@ -60,3 +61,16 @@ export function getPageNumbers(
 
   return range;
 }
+
+export const getEssentialUserData = (user: User) => {
+  return {
+    id: user.id,
+    company_id: user.company?.id,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    current_role: user.current_role,
+    roles: user.roles,
+    email: user.email,
+    // Add any other essential fields you need
+  };
+};

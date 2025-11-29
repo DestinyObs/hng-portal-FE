@@ -36,8 +36,8 @@ export function DataTable<TData, TValue>({
   //   table.getState().pagination.
   return (
     <>
-      <Table>
-        <TableHeader>
+      <Table className="border-y border-[#E7E8E9] bg-[#FAFBFA]">
+        <TableHeader className="text-tertiary-500 font-semibold text-base">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -61,6 +61,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
+                className="border border-[#E7E8E9]"
               >
                 {/* <TableCell >01</TableCell> */}
                 {row.getVisibleCells().map((cell) => (
