@@ -25,10 +25,8 @@ interface Job {
 
 const JobApplicationDetails = () => {
   const { id: jobId } = useParams();
-  const { data: job, isPending } = useGetTalentJob(jobId as string) as {
-    data: Job;
-    isPending: boolean;
-  };
+  const { data: response, isPending } = useGetTalentJob(jobId as string);
+  const job = response?.data as Job;
   if (isPending) return <Loading />;
 
   return (

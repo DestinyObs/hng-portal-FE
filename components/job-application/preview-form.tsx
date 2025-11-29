@@ -65,7 +65,7 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
 
       {/* Action Buttons  */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="flex justify-between gap-4">
+        <div className="flex flex-col sm:flex-row justify-between gap-4">
           <Button
             onClick={() => setShowApplicationModal(true)}
             variant={'default'}
@@ -73,6 +73,7 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
           >
             Submit
           </Button>
+
           <Button
             variant="outline"
             className="border-primary-300 text-gray-500"
@@ -82,6 +83,7 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
           </Button>
         </div>
       </div>
+
       <Modal
         isOpen={showApplicationModal}
         onClose={() => setShowApplicationModal(false)}

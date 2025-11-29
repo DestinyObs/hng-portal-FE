@@ -14,6 +14,7 @@ import {
 } from '@/types/job-application-form';
 import { useState, ChangeEvent } from 'react';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const JobApplicationForm = ({
   onNext,
@@ -64,6 +65,8 @@ const JobApplicationForm = ({
   const onSubmit = (data: JobApplicationFormData) => {
     onNext(data);
   };
+
+  const router = useRouter();
 
   return (
     <div className="w-full mx-auto bg-gray-50 p-4 space-y-6">
@@ -162,14 +165,16 @@ const JobApplicationForm = ({
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-between">
-          <div className="flex justify-between gap-4">
+          <div className="flex flex-col sm:flex-row justify-between gap-4">
             <Button type="submit" variant="default" className="cursor-pointer">
               Preview & Submit
             </Button>
+
             <Button
               type="button"
               variant="outline"
               className="border-primary-300 text-gray-500"
+              onClick={() => router.push('/talent/dashboard')}
             >
               Cancel
             </Button>

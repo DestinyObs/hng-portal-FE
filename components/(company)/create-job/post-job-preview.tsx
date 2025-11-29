@@ -92,7 +92,7 @@ const PostJobPreview = () => {
       <PreviewJob postDetails={job} />
 
       <div className="flex flex-col sm:flex-row justify-between gap-4 py-2">
-        <div className={`flex justify-between ${dm_sans.className}`}>
+        <div className={`flex justify-between ${dm_sans.className} hidden`}>
           {/* add edit fxnality */}
           <div className="">
             <Button
