@@ -14,23 +14,6 @@ export interface Permissions {
   name: string;
   guard_name: string;
 }
-export interface User {
-  id: string;
-  firstname: string | null;
-  lastname: string | null;
-  othername: string | null;
-  current_role: string;
-  email: string;
-  email_verified_at: string | null;
-  phone: string | null;
-  dob: string | null;
-  status: string;
-  photo_url: string | null;
-  created_at: string;
-  updated_at: string;
-  roles: Role[];
-  company: Company | null;
-}
 
 export interface Role {
   id: number;
@@ -90,6 +73,81 @@ export interface RegisterResponseData {
   lastname: string;
   email: string;
   token: string;
+}
+
+export interface ArticleCard {
+  title: string;
+  image: string;
+  description: string;
+  cta: string;
+}
+
+export interface User {
+  id: string;
+  firstname: string | null;
+  lastname: string | null;
+  othername: string | null;
+  email: string;
+  email_verified_at: string | null;
+  phone: string | null;
+  dob: string | null;
+  photo_url: string | null;
+  address_id: string | null;
+  current_role: string;
+  status: string;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+  roles: Role[];
+  company: Company | null;
+  bio: Bio;
+}
+
+export interface Bio {
+  id: string;
+  user_id: string;
+  bio: string | null;
+  content: string | null;
+  country: string | null;
+  state: string | null;
+  links: string | null;
+  cv_id: string | null;
+  project_name: string | null;
+  project_url: string | null;
+  min_salary: number | null;
+  max_salary: number | null;
+  onboarding_status: string;
+  track_id: string | null;
+  is_verified: number;
+  current_role: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  user: User; // nested user object
+}
+
+export type Experience = string[];
+
+export type Preference = string[];
+
+export type Skill = string[];
+
+export interface ProfileResponse {
+  id: string;
+  firstname: string;
+  lastname: string;
+  othername: string | null;
+  email: string;
+  email_verification: boolean;
+  current_role: string;
+  company: string | null;
+  photo_url: string | null;
+  created_at: string;
+  updated_at: string;
+  skills: Skill[];
+  experiences: Experience[];
+  preferences: Preference[];
+  bio: Bio; // nested bio object
 }
 
 export interface UserProfileData {

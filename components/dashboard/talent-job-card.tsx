@@ -5,6 +5,7 @@ import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RawJob2 } from '@/types/job-card'; // Import RawJob
 import { useRouter } from 'next/navigation'; // Import useRouter
+import { usePathname } from 'next/navigation';
 
 interface TalentJobCardProps {
   job: RawJob2;
@@ -12,6 +13,7 @@ interface TalentJobCardProps {
 }
 
 const TalentJobCard = ({ job }: TalentJobCardProps) => {
+  const pathname = usePathname();
   // Removed onViewJob from destructuring
   const router = useRouter(); // Initialize useRouter
   const companyName = job.company?.name || 'N/A';
@@ -106,7 +108,7 @@ const TalentJobCard = ({ job }: TalentJobCardProps) => {
       {/* View Job button */}
       <div className="flex justify-end mt-auto">
         <Button
-          onClick={() => router.push(`/talent/job/${job.id}?modal=true`)}
+          onClick={() => router.push(`${pathname}?modal=true&id=${job.id}`)}
           variant="outlineGray"
           className="w-auto"
         >

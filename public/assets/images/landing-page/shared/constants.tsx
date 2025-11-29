@@ -24,10 +24,22 @@ export const LinkClasses =
   'font-medium text-xl text-gray-200 font-dm_sans hover:text-primary-blue transition';
 
 export const SocialLinks = [
-  { icon: FacebookIcon, href: '#', label: 'Facebook' },
-  { icon: TwitterIcon, href: '#', label: 'Twitter' },
-  { icon: LinkedInIcon, href: '#', label: 'LinkedIn' },
-  { icon: InstagramIcon, href: '#', label: 'Instagram' },
+  {
+    icon: FacebookIcon,
+    href: 'https://web.facebook.com/hngtech/',
+    label: 'Facebook',
+  },
+  { icon: TwitterIcon, href: 'https://x.com/hnginternship', label: 'Twitter' },
+  {
+    icon: LinkedInIcon,
+    href: 'https://www.linkedin.com/company/hng-internship/',
+    label: 'LinkedIn',
+  },
+  {
+    icon: InstagramIcon,
+    href: 'https://www.instagram.com/hngtech',
+    label: 'Instagram',
+  },
 ];
 
 export const FooterSections = [
@@ -49,6 +61,8 @@ export const FooterSections = [
     title: 'LEGAL',
     links: [
       { label: 'Privacy Policy', href: 'https://hng.tech/privacy' },
+      { label: 'Terms of Service', href: '/terms-of-service' },
+      { label: 'Privacy Policy', href: '/privacy-policy' },
       { label: 'Terms of Service', href: 'https://hng.tech/terms' },
       { label: 'Cookies', href: '#' },
     ],
@@ -59,9 +73,47 @@ export const FooterSections = [
     links: [
       { label: 'Blog', href: 'https://hng.tech/blog' },
       { label: 'Help Center', href: '#' },
-      { label: 'FAQs', href: '#' },
-      { label: 'Contact Support', href: 'mailto:support@hng.tech' },
+      { label: 'FAQs', href: '/faq' },
+      { label: 'Contact Us', href: '/contact-us' },
     ],
     className: 'lg:ml-20',
+  },
+];
+
+export const nextArticles = [
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Tech in 2025: A Saturated Space or No?',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
   },
 ];
