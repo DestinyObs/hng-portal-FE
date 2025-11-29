@@ -33,8 +33,8 @@ const Header = () => {
               <Image
                 src={Logo}
                 alt="HNG Connect Logo"
-                width={140}
-                height={450}
+                width={100}
+                height={300}
                 className="hidden md:block"
               />
               <Image
@@ -85,7 +85,7 @@ const Header = () => {
               <Button
                 asChild
                 variant="outline"
-                className="rounded-full w-[138px] h-14 hidden lg:flex"
+                className="rounded-full w-32 h-10 hidden lg:flex"
               >
                 <span>Login</span>
               </Button>
@@ -94,7 +94,7 @@ const Header = () => {
               <Button
                 asChild
                 variant="outline"
-                className="bg-[#D9ECFE] border-[#8CC6FC] border-2 rounded-full w-[138px] h-14 hidden lg:flex"
+                className="bg-[#D9ECFE] border-[#8CC6FC] border rounded-full w-32 h-10 hidden lg:flex"
               >
                 <span>Get Started</span>
               </Button>

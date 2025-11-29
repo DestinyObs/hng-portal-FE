@@ -4,14 +4,51 @@ import { JobApplicationFormData } from '@/types/job-application-form';
 import React, { useState } from 'react';
 import JobApplicationForm from './application-form';
 import JobApplicationPreview from './preview-form';
+import { useApplyForJob } from '@/hooks/jobs';
+import { useParams } from 'next/navigation';
+import { toast } from 'sonner';
 
 const JobApplicationPage = () => {
+  const params = useParams();
+  const jobId = params?.id;
+
   const [step, setStep] = useState<'form' | 'preview'>('form');
   const [formData, setFormData] = useState<JobApplicationFormData | null>(null);
+
+  const { applyJob, isPending, error } = useApplyForJob();
+  console.log(error);
+
+  if (!jobId) {
+    // Stop submission if jobId is missing
+    toast.error('Job ID is missing.');
+    return null;
+  }
 
   const handleFormSubmit = (data: JobApplicationFormData) => {
     setFormData(data);
     setStep('preview');
+  };
+
+  const handleFinalSubmit = () => {
+    if (!formData || !formData.resume) return;
+
+    const jobId = Array.isArray(params?.id) ? params.id[0] : params?.id;
+    if (!jobId) {
+      toast.error('Job ID is missing.');
+      return;
+    }
+
+    console.log('Submitting:', {
+      cover_letter: formData.cover_letter,
+      resume: formData.resume,
+      job_id: jobId,
+    });
+
+    applyJob({
+      cover_letter: formData.cover_letter,
+      resume: formData.resume as File,
+      job_id: jobId,
+    });
   };
 
   return step === 'form' ? (
@@ -19,8 +56,9 @@ const JobApplicationPage = () => {
   ) : (
     <JobApplicationPreview
       data={formData!}
-      onSubmit={() => {}}
+      onSubmit={handleFinalSubmit}
       onEdit={() => setStep('form')}
+      isSubmitting={isPending}
     />
   );
 };

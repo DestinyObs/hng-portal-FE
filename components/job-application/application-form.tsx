@@ -1,117 +1,65 @@
 'use client';
 
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Paperclip } from 'lucide-react';
-import TextEditor from '../shared/ui/text-editor';
-import Input from '../ui/input';
-import { Button } from '../ui/button';
-import JobApplicationDetails from './job-details';
-import {
-  formSchema,
-  JobApplicationFormData,
-  JobApplicationFormProps,
-} from '@/types/job-application-form';
+import { useState } from 'react';
+import { applyForJob } from '@/api/actions/applications';
 
-const JobApplicationForm = ({ onNext }: JobApplicationFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<JobApplicationFormData>({
-    resolver: zodResolver(formSchema),
-  });
+export default function JobApplicationForm({ jobId }: { jobId: string }) {
+  const [coverLetter, setCoverLetter] = useState('');
+  const [resume, setResume] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = (data: JobApplicationFormData) => {
-    onNext(data);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!resume) {
+      alert('Please select a resume file');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await applyForJob({
+        cover_letter: coverLetter,
+        resume: resume,
+        job_id: jobId,
+      });
+
+      alert('Application submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      alert('Failed to submit application');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="max-w-[1120px] mx-auto bg-gray-50 p-4 space-y-6">
-      <JobApplicationDetails />
-
-      <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6 mb-14">
-        {/* Cover Letter Section */}
-        <div className="py-3">
-          <h2 className="text-xl font-semibold mb-2">Cover Letter</h2>
-          <p className="text-sm text-gray-500 mb-4">
-            Provide any extra information to support your application
-          </p>
-
-          <div className="border border-input rounded-lg overflow-hidden">
-            <Controller
-              name="coverLetter"
-              control={control}
-              render={({ field }) => (
-                <TextEditor
-                  value={field.value ?? ''}
-                  onChange={field.onChange}
-                  placeholder="Describe the job role here..."
-                />
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Portfolio Link Section */}
-        <div className="py-3">
-          <label className="text-sm text-gray-500 mb-4">
-            Paste the link to your portfolio{' '}
-            <span className="text-gray-100">(Optional)</span>
-          </label>
-          <Input
-            {...register('portfolioLink')}
-            type="url"
-            placeholder="Link to your portfolio"
-          />
-          {errors.portfolioLink && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.portfolioLink.message}
-            </p>
-          )}
-        </div>
-
-        {/* Resume Upload Section */}
-        <div className="py-3">
-          <label className="block text-sm font-medium mb-3 text-gray-500">
-            Attach Resume
-          </label>
-          <Input
-            {...register('resume')}
-            type="file"
-            accept=".pdf,.doc,.docx"
-            className="hidden"
-            id="resume-upload"
-          />
-          <label
-            htmlFor="resume-upload"
-            className="inline-flex items-center gap-2 px-6 py-2.5 border-2 border-primary-300 text-primary-300  rounded-lg cursor-pointer hover:bg-blue-50 transition-colors font-medium"
-          >
-            <Paperclip /> Attach file
-          </label>
-        </div>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="coverLetter">Cover Letter</label>
+        <textarea
+          id="coverLetter"
+          value={coverLetter}
+          onChange={(e) => setCoverLetter(e.target.value)}
+          required
+        />
       </div>
-      {/* Action Buttons - fixed */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="flex justify-between gap-4">
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            variant={'default'}
-            className="cursor-pointer"
-          >
-            Submit
-          </Button>
-          <Button
-            variant="outline"
-            className="border-primary-300 text-gray-500"
-          >
-            Cancel
-          </Button>
-        </div>
+
+      <div>
+        <label htmlFor="resume">Resume (PDF)</label>
+        <input
+          id="resume"
+          type="file"
+          accept=".pdf"
+          onChange={(e) => setResume(e.target.files?.[0] || null)}
+          required
+        />
       </div>
-    </div>
+
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting...' : 'Submit Application'}
+      </button>
+    </form>
   );
-};
-
-export default JobApplicationForm;
+}

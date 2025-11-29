@@ -21,7 +21,7 @@ export const NavLinks = [
 ];
 
 export const LinkClasses =
-  'font-medium text-xl text-gray-200 font-dm_sans hover:text-primary-blue transition';
+  'text-sm text-gray-200 font-dm_sans hover:text-primary-blue transition';
 
 export const SocialLinks = [
   {

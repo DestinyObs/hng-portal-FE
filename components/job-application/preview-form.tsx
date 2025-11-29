@@ -6,16 +6,15 @@ import JobApplicationDetails from './job-details';
 import { Button } from '../ui/button';
 import { PreviewProps } from '@/types/job-application-form';
 
-// The preview page receives the form data as props
 const JobApplicationPreview: React.FC<PreviewProps> = ({
   data,
   onSubmit,
   onEdit,
 }) => {
-  const { coverLetter, portfolioLink, resume } = data;
+  const { cover_letter, portfolioLink, resume } = data;
 
   return (
-    <div className="max-w-[1120px] mx-auto bg-gray-50 p-4 space-y-6">
+    <div className="w-full mx-auto bg-gray-50 p-4 space-y-6">
       <JobApplicationDetails />
 
       <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6 mb-14">
@@ -23,8 +22,8 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
         <div className="py-3">
           <h2 className="text-xl font-semibold mb-2">Cover Letter</h2>
 
-          <div className="border border-input rounded-lg p-4 bg-gray-50 min-h-[180px] whitespace-pre-line">
-            {coverLetter || 'No cover letter provided.'}
+          <div className="border border-input rounded-lg p-4 bg-gray-50 min-h-[180px] whitespace-pre-line wrap-break-word overflow-auto">
+            {cover_letter || 'No cover letter provided.'}
           </div>
         </div>
 
@@ -50,10 +49,10 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
             Attachment
           </p>
 
-          {resume && resume.length > 0 ? (
+          {resume ? (
             <div className="flex items-center gap-2 p-3 rounded-lg bg-gray-50">
               <Paperclip size={18} />
-              <span>{resume[0].name}</span>
+              <span>{resume.name}</span>
             </div>
           ) : (
             <p className="text-gray-400">No resume uploaded.</p>
