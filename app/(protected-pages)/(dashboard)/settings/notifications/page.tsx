@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useAuthStore } from '@/store/auth';
@@ -114,15 +114,18 @@ interface NotificationSetting {
 export default function NotificationsPage() {
   const { user } = useAuthStore();
 
-  const [settings, setSettings] = useState<NotificationSetting[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const initialSettings = useMemo(
+    () => getInitialSettings(user?.current_role),
+    [user?.current_role],
+  );
+
+  const [settings, setSettings] =
+    useState<NotificationSetting[]>(initialSettings);
 
   useEffect(() => {
-    if (!isInitialized) {
-      setSettings(getInitialSettings(user?.current_role));
-      setIsInitialized(true);
-    }
-  }, [user?.current_role, isInitialized]);
+    setSettings(initialSettings);
+  }, [initialSettings]);
+
   const handleToggle = (id: string) => {
     setSettings((prev) =>
       prev.map((setting) =>

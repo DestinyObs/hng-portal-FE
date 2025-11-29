@@ -6,7 +6,7 @@ import {
   CommandItem,
   CommandInput,
 } from '@/components/ui/command';
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,25 +25,31 @@ export default function SkillsAndExperiencePage() {
   const [openDialog, setOpenDialog] = useState(false);
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
-  //user profile data
   const { data } = useGetProfileData();
 
-  //skillss available from BE
   const { data: skillsRes } = useSkills();
 
-  //skills the user already has saved in BE
   const userSkills = useMemo(() => data?.skills || [], [data?.skills]);
+  const userExperiences = useMemo(
+    () => data?.experiences || [],
+    [data?.experiences],
+  );
 
-  //local state skills (Saved in BE + newly added)
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [skillsInitialized, setSkillsInitialized] = useState(false);
+  const [skills, setSkills] = useState<Skill[]>(userSkills);
+  const [experiences, setExperiences] = useState<Experience[]>(userExperiences);
 
   useEffect(() => {
-    if (userSkills.length > 0 && !skillsInitialized) {
-      setSkills(userSkills);
-      setSkillsInitialized(true);
-    }
-  }, [userSkills, skillsInitialized]);
+    setSkills(userSkills);
+  }, [userSkills]);
+
+  useEffect(() => {
+    setExperiences(userExperiences);
+  }, [userExperiences]);
+
+  useEffect(() => {
+    console.log(skillsRes);
+  }, [skillsRes]);
+
   const [skillInput, setSkillInput] = useState('');
 
   const handleSaveChanges = async () => {
@@ -54,42 +60,27 @@ export default function SkillsAndExperiencePage() {
         await queryClient.invalidateQueries({
           queryKey: ['profile', user?.id],
         });
-        // Show success toast/message
         console.log('Skills updated successfully');
       } else {
-        // Show error toast/message
         console.error('Error:', result.error);
       }
     } catch (error) {
       console.error('Error', error);
     }
   };
+
   const handleOpenModal = () => {
     setOpenDialog((prev) => !prev);
   };
 
-  //experiences from BE
-  const userExperiences = useMemo(
-    () => data?.experiences || [],
-    [data?.experiences],
-  );
-
-  //local state for experiences (can be extended with newly added ones)
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [experiencesInitialized, setExperiencesInitialized] = useState(false);
-
-  useEffect(() => {
-    if (userExperiences.length > 0 && !experiencesInitialized) {
-      setExperiences(userExperiences);
-      setExperiencesInitialized(true);
-    }
-  }, [userExperiences, experiencesInitialized]);
   const handleRemoveSkill = (skillToRemove: Skill) => {
     setSkills(skills.filter((skill) => skill.id !== skillToRemove.id));
   };
+
   const handleReset = () => {
     setSkills(userSkills);
   };
+
   const handleRemoveExperience = (id: string) => {
     setExperiences(experiences.filter((exp) => exp.id !== id));
   };
@@ -107,12 +98,10 @@ export default function SkillsAndExperiencePage() {
 
       <Card className="flex-1 w-full bg-white border-[#E8E8E8] shadow-sm">
         <CardContent className="p-6 max-w-[1056px]">
-          {/* SKILLS SECTION */}
           <div className="space-y-4 w-full mb-8">
             <label className="text-sm text-[#1A1A1A] font-medium">Skills</label>
 
             <div className="relative">
-              {/* Dropdown shows when typing */}
               {skillInput.length > 0 ? (
                 <div className="absolute z-20 top-0 left-0 w-full bg-white border border-gray-200 rounded-lg shadow-md">
                   <Command shouldFilter={false}>
@@ -171,7 +160,6 @@ export default function SkillsAndExperiencePage() {
               )}
             </div>
 
-            {/* Selected SKILLS Badges */}
             <div className="flex flex-wrap gap-2 pt-2">
               {skills?.map((skill: Skill) => (
                 <SkillsBadge
@@ -281,7 +269,6 @@ export default function SkillsAndExperiencePage() {
         <WorkExperienceForm
           onSuccess={() => {
             handleOpenModal();
-            // Refetch experiences after adding
             if (data) {
               queryClient.invalidateQueries({
                 queryKey: ['profile'],
