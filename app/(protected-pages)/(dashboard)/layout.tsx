@@ -27,7 +27,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         {/* Sidebar */}
         {!isSettingsPage && !isJobDetailsPage && <Sidebar />}
         {/* Main content */}
-        <main className="flex-1 h-full">{children}</main>
+        <main className="flex-1 h-full min-h-screen">{children}</main>
       </div>
 
       <JobModal />

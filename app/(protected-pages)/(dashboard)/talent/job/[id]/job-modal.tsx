@@ -7,7 +7,9 @@ import { formatNumbers } from '@/constants/constants';
 import { useGetTalentJob } from '@/hooks/jobs';
 import { JobDetailsResponse } from '@/types/talent-jobs';
 import { Heart, ChevronLeft, ExpandIcon, Verified } from 'lucide-react';
-import {  useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
 
 export const JobModal = () => {
   const searchParams = useSearchParams();
@@ -22,6 +24,8 @@ export const JobModal = () => {
 
   if (!isModalOpen) return;
   if (isPending) return <Loading />;
+  console.log(job);
+
   return (
     <div className="fixed inset-0 z-50 sm:flex items-center justify-end bg-tertiary-500/60">
       <div className="bg-white w-full max-w-[664px] overflow-y-auto h-screen p-6 py-12 space-y-8">
@@ -36,7 +40,7 @@ export const JobModal = () => {
           {/* route to the full job page */}
           <button
             onClick={() => router.push(`/talent/job/${id}`)}
-            className="flex items-center gap-1.5 cursor-pointer"
+            className="flex items-center gap-1.5 cursor-pointer hover:text-tertiary-75"
           >
             <ExpandIcon className="w-3 h-3 bg-[#737373] text-white rounded-sm" />
             <p className="text-title">Open in a new window</p>
@@ -44,24 +48,25 @@ export const JobModal = () => {
         </div>
 
         {/* info */}
-        <div className=" p-8 border-[0.5px] border-tertiary-75 rounded-xl space-y-5">
+        <div className=" p-8 border-[0.5px] border-tertiary-75 rounded-xl space-y-5 overflow-x-hidden">
           <div className="flex items-center gap-3">
             {/* company logo */}
             <div className="relative w-14 h-14 img">
-              {/* {job?.company.logo_url ? (
+              {job?.company.logo_url ? (
                 <Image
                   fill
                   className="rounded-2xl"
                   src={job?.company.logo_url}
                   alt={''}
                 />
-              ) : ( */}
+              ) : (
                 <PlaceholderProfile
                   radius={'16px'}
                   size={'100%'}
+                  fontSize={25}
                   name={job?.company.name || ''}
                 />
-              {/* )} */}
+              )}
             </div>
             {/* jobe title & company */}
             <div className="">
@@ -70,13 +75,15 @@ export const JobModal = () => {
               </h2>
               <p className="text-xl font-semibold text-tertiary-700 flex items-center gap-1">
                 {job?.company.name}{' '}
-                <Verified fill="#00AEFF" color="white" size={13} />
+                {job?.company?.is_verified === 1 && (
+                  <Verified fill="#00AEFF" color="white" size={13} />
+                )}
               </p>
             </div>
           </div>
           {/* description */}
           <p className="text-tertiary-200 text-base leading-relaxed">
-            {job?.description}
+            <ReactMarkdown>{job?.description}</ReactMarkdown>
           </p>
 
           {/* Skills */}
@@ -114,7 +121,13 @@ export const JobModal = () => {
 
           {/* Actions */}
           <div className=" space-y-6 mt-4">
-            <Button size={'xs'}>Start Application</Button>
+            <Button
+              onClick={() => router.push(`/talent/job/${id}/apply`)}
+              disabled={job?.is_applied}
+              size={'xs'}
+            >
+              Start Application
+            </Button>
             <Button size={'xs'} variant="outline">
               <Heart /> Save job
             </Button>

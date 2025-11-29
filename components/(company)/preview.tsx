@@ -4,6 +4,8 @@ import { Dot } from 'lucide-react';
 import { DM_Sans } from 'next/font/google';
 import { Job } from '@/types/job-card';
 import PlaceholderProfile from '../dashboard/placeholder-profile';
+import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 
 export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
@@ -14,20 +16,20 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <div className="flex flex-col gap-2">
           {/* company-logo */}
           <div className="relative w-28 h-28 img">
-            {/* {postDetails?.companyLogo ? (
+            {postDetails?.companyLogo ? (
               <Image
                 src={postDetails?.companyLogo}
                 alt="profile"
                 fill
                 className="rounded-full object-cover"
               />
-            ) : ( */}
-            <PlaceholderProfile
-              radius={'50%'}
-              size={'100%'}
-              name={postDetails.company}
-            />
-            {/* )} */}
+            ) : (
+              <PlaceholderProfile
+                radius={'50%'}
+                size={'100%'}
+                name={postDetails.company}
+              />
+            )}
           </div>
           <h2 className="text-[32px] font-bold text-gray-800 ">
             {postDetails?.title}
@@ -56,9 +58,9 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         <h3 className="text-xl font-semibold text-tertiary-500 ">
           Job Description
         </h3>
-        <p className="text-tertiary-200 text-[16px] wrap-anywhere">
-          {postDetails?.description}
-        </p>
+        <div className="text-tertiary-200 text-[16px] wrap-anywhere">
+          <ReactMarkdown>{postDetails?.description}</ReactMarkdown>
+        </div>
       </div>
 
       {/* Skills and Expertise */}
@@ -85,6 +87,7 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
           Acceptance Criteria
         </h3>
         <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className} wrap-anywhere">
+          <ReactMarkdown>{postDetails?.acceptance_criteria}</ReactMarkdown>
           {postDetails?.acceptance_criteria}
         </div>
       </div>
