@@ -10,6 +10,7 @@ export interface ModalProps {
   message: string;
   primaryButton?: ButtonConfig;
   secondaryButton?: ButtonConfig;
+  icon?: React.ReactNode;
 }
 export interface ConfirmationModalProps {
   openDialog: boolean;

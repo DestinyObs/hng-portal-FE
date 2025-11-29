@@ -85,3 +85,69 @@ export interface RawJob {
     name: string;
   }[];
 }
+
+export interface RawJob2 {
+  id: string;
+  is_saved: boolean;
+  title: string;
+  description: string;
+  acceptance_criteria: string;
+  state_id: string;
+  country_id: string;
+  company_id: string;
+  salary?: string;
+  track_id?: string;
+  work_mode_id?: string;
+  category_id?: string;
+  job_type_id?: string;
+  job_level_id?: string;
+  publication_status?: string;
+  status?: string;
+  deleted_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  company?: {
+    name: string;
+    logo_url?: string;
+  };
+  skills?: {
+    id: string;
+    name: string;
+  }[];
+  track?: {
+    name: string;
+  };
+  job_type?: {
+    name: string;
+  };
+  work_mode?: {
+    name: string;
+  };
+  job_levels?: {
+    name: string;
+  }[];
+  states?: {
+    name: string;
+  }[];
+  countries?: {
+    name: string;
+  }[];
+}
+
+export interface TalentJobsQueryParams {
+  work_mode?: string;
+  job_type?: string;
+  job_level?: string;
+  location?: string; // This could be state_id or country_id
+  search?: string; // For general search in title/description
+  skills?: string[]; // Array of skill IDs
+  page?: number;
+  per_page?: number;
+}
+
+export interface TalentApplication {
+  id: string;
+  job_id: string;
+  status: string;
+  // Add other properties as needed
+}

@@ -1,19 +1,25 @@
+'use client';
 import {
   FooterSections,
   SocialLinks,
 } from '@/public/assets/images/landing-page/shared/constants';
 import FooterImage from '@/public/assets/images/landing-page/shared/footerImage.png';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
+  const pathName = usePathname();
+  const isHidden = pathName === '/privacy-policy';
   return (
-    <footer className="mt-10 lg:mt-20" role="contentinfo">
+    <footer
+      className={` ${isHidden ? 'mt-0 lg:mt-0' : 'mt-10 lg:mt-20"'}  role="contentinfo`}
+    >
       <Image
         src={FooterImage}
         alt="Footer decorative image"
         width={1200}
         height={400}
-        className="w-full"
+        className={`w-full ${isHidden ? 'hidden h-0' : ''}`}
       />
       <div className="bg-tertiary-300">
         <div className="lg:max-w-[1200px] mx-auto px-4 sm:px-8 md:px-10 xl:px-0 pt-20 py-10 md:py-14 lg:py-16">
@@ -29,6 +35,7 @@ const Footer = () => {
                       <li key={link.label}>
                         <a
                           href={link.href}
+                          target="_blank"
                           className="text-gray-75 hover:text-primary-blue transition text-base lg:text-sm font-dm_sans focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 rounded"
                         >
                           {link.label}
@@ -44,7 +51,7 @@ const Footer = () => {
           <div className="mt-16 lg:mt-20">
             <div className="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-9 sm:gap-0">
               <p className="text-tertiary-75 text-sm font-dm_sans mt-4 md:mt-0">
-                © 2025 HNG Portal. All rights reserved.
+                © 2025 HNG Connect. All rights reserved.
               </p>
 
               <div

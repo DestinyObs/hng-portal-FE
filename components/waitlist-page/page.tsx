@@ -175,11 +175,11 @@ export default function WaitlistPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <header className="w-full mx-auto border-b bg-white max-w-[1440px]">
+      <header className="w-full mx-auto border-b bg-white ">
         <div className="flex justify-between items-center px-6 md:px-10 lg:px-[60px] py-6">
           <Image
             src="/images/hng-logo.png"
-            alt="HNG Portal Logo"
+            alt="HNG Connect Logo"
             width={120}
             height={40}
             className="object-contain"
@@ -211,13 +211,13 @@ export default function WaitlistPage() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-12 max-w-[1440px] mx-auto">
           <div className="text-center lg:text-left px-6 lg:px-[60px]">
             <h1 className="text-3xl lg:text-4xl lg:text-h2 font-bold leading-tight mb-4">
-              Join The HNG Portal
+              Join The HNG Connect
               <br />
               Waitlist Party Today.
             </h1>
 
             <p className="text-foreground max-w-lg mb-8 mx-auto lg:mx-0 text-body-1">
-              HNG Portal connects HNG interns both past and present, and
+              HNG Connect connects HNG interns both past and present, and
               companies in one dynamic ecosystem turning job seeking into real
               opportunities.
             </p>
@@ -392,7 +392,7 @@ export default function WaitlistPage() {
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-foreground px-6 md:px-10 lg:px-[60px]">
           <Image
             src="/images/hng-logo.png"
-            alt="HNG Portal Logo"
+            alt="HNG Connect Logo"
             width={120}
             height={40}
           />
@@ -403,7 +403,7 @@ export default function WaitlistPage() {
               <a href="#">Privacy Policy</a>
               <a href="#">Contact</a>
             </div> */}
-            <span>© 2025 HNG Portal</span>
+            <span>© 2025 HNG Connect</span>
           </div>
         </div>
       </footer>

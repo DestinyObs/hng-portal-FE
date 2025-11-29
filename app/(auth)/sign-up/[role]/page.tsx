@@ -15,14 +15,35 @@ import { TalentSignUpForm } from '../_components/(talent)/talent-form';
 import { ArrowLeft } from 'lucide-react';
 import { HngLogo } from '@/public/assets/auth/icons/hng-logo';
 import { notFound, useParams } from 'next/navigation';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 export default function SignUpRolePage() {
+  const [isLoading, setIsLoading] = useState(false);
   const params = useParams();
   const role = params.role as string;
 
   if (role !== 'talent' && role !== 'company') {
     notFound();
   }
+
+  const handleGoogleSignIn = async () => {
+    if (!role) {
+      alert('Please select a role');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await signIn('google', {
+        callbackUrl: `/authenticate/google?role=${role}`,
+      });
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Card className="w-full max-w-2xl mx-auto border-0 shadow-none py-0">
@@ -47,7 +68,7 @@ export default function SignUpRolePage() {
           Join thousands of users already on our platform
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-0 mx-auto min-w-[500px]">
+      <CardContent className="px-0 mx-auto md:min-w-[500px]">
         {role === 'talent' && <TalentSignUpForm role="talent" />}
         {role === 'company' && <CompanySignUpForm role="company" />}
 
@@ -64,9 +85,10 @@ export default function SignUpRolePage() {
           variant="outline"
           className="w-full border-gray-100/30 text-black"
           size={'lg'}
+          onClick={handleGoogleSignIn}
         >
           <GoogleColoredIcon className="mr-2 h-4 w-4" />
-          Sign up with Google
+          {isLoading ? 'Signing in...' : 'Sign up with Google'}
         </Button>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">

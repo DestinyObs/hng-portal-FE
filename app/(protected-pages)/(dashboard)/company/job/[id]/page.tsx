@@ -12,13 +12,12 @@ import { useParams } from 'next/navigation';
 const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 
 const Page = () => {
-  const { id } = useParams(); // Get :id from URL
-  const { user } = useAuthStore(); // Get logged-in company user
+  const { id } = useParams();
+  const { user } = useAuthStore();
 
   const companyId = user?.company?.id;
   const { changeStatus, isPending: IsChanging } = useUpdateStatus();
   const { removeJob, isPending: isRemoving } = useDelete();
-  // Fetch job by company + job id
   const { data: job, isPending } = useGetJob(companyId, id as string);
   const rawJob = job as RawJob;
 
@@ -40,7 +39,7 @@ const Page = () => {
     location: `${rawJob?.states?.[0]?.name || ''}, ${rawJob?.countries?.[0]?.name || ''}`,
     posted: rawJob?.created_at,
     onsiteOrRemote: rawJob?.work_mode?.name,
-    applyLink: `https://example.com/apply/${rawJob?.id}`, // replace with actual
+    applyLink: `https://example.com/apply/${rawJob?.id}`,
   };
 
   if (isPending) return <Loading />;

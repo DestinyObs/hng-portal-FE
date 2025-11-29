@@ -1,20 +1,10 @@
+import { logos } from '@/constants/landing-page';
 import Image from 'next/image';
 
 export default function LogoCarousel() {
-  const logos = [
-    'ebanqo.svg',
-    'figma.svg',
-    'i4g.svg',
-    'neukleos.svg',
-    'oracle.svg',
-    'paystack.svg',
-    'rapidriver.svg',
-    'upperlink.svg',
-  ];
-
   return (
     <div className="w-full py-12">
-      <h2 className="text-center text-[10px] md:text-[24px] font-semibold mb-2 text-[#757575]">
+      <h2 className="text-center text-[10px] md:text-[24px] font-semibold mb-5 text-tertiary-500">
         Trusted by Leading Brands and Startups
       </h2>
       <div className="mx-auto w-full max-w-[1440px] flex overflow-x-auto [&::-webkit-scrollbar]:hidden">
