@@ -19,5 +19,6 @@ export const publicRoutes = [
   '/terms-of-service',
   '/contact-us',
   '/privacy-policy',
+  '/squeeze-page',
   // Add other public pages
 ];

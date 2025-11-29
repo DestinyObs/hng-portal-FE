@@ -232,7 +232,6 @@ export default function FiltersSidebar({
     selectedStates,
     selectedCategories,
     selectedTracks,
-    onFilterChange,
   ]);
 
   const renderFilterGroup = (

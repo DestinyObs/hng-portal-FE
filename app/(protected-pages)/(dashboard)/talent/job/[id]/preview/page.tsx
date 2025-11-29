@@ -11,6 +11,7 @@ const Page = () => {
     portfolioLink: 'https://myportfolio.com',
     resume: undefined as unknown as FileList, // or a FileList if selected
   });
+  console.log(setFormData);
 
   return (
     <div className="max-w-[1120px] mx-auto px-4">

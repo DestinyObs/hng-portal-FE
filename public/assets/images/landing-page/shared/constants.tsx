@@ -77,3 +77,41 @@ export const FooterSections = [
     className: 'lg:ml-20',
   },
 ];
+
+export const nextArticles = [
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Tech in 2025: A Saturated Space or No?',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+  {
+    title: 'Understanding the Right Talent For The Jobs',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Convallis nunc eget egestas arcu enim sem. Blandit ut non tellus cras sit ullamcorper neque faucibus. Aliquet tellus venenatis tristique bibendum lectus.',
+    cta: 'See more',
+    image: '/images/blogImg.jpg',
+  },
+];
