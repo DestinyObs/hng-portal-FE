@@ -27,7 +27,7 @@ export default function JobsPage() {
       {isLoading ? (
         <Loading />
       ) : jobs && jobs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 py-4 sm:py-6">
           {/*  Job Listing cards */}
           {jobs.map((job) => (
             <JobCard key={job.id} job={job} />

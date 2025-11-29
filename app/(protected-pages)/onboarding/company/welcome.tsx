@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 const Welcome = () => {
   const navigate = useRouter();
-const{skipToDashboard} = useSkipToDashboard()
+  const { skipToDashboard } = useSkipToDashboard();
   return (
     <div className="w-[90%] mx-auto md:w-3/5 lg:w-1/2 min-h-screen h-full flex justify-center items-center">
       <section className="text-center flex flex-col items-center justify-center w-full">
