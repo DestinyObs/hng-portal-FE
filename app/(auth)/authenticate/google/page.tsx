@@ -87,7 +87,7 @@ export default function AuthCallback() {
     };
 
     handleBackendAuth();
-  }, [status, searchParams, mutate, session?.accessToken]);
+  }, [status, searchParams, mutate, session?.accessToken, isNewUser]);
 
   if (error) {
     if (error === 'Role is required for new user signup.') {

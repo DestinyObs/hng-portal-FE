@@ -11,6 +11,7 @@ import { newPost } from '@/store/create-post';
 import { toast } from 'sonner';
 import { JobDraftPayload } from '@/validations/create-post.schema';
 import { useRouter } from 'next/navigation';
+import { APIResponse } from '@/types/api-response';
 
 export const useGetAllJobs = <T>(
   companyId: string | undefined,
@@ -47,12 +48,12 @@ export const useGetJob = (
 
 export const useGetTalentJob = <T>(
   jobId: string | undefined,
-): UseQueryResult<T> => {
+): UseQueryResult<APIResponse<T>> => {
   return useQuery({
     queryKey: ['get-job', jobId],
     queryFn: async () => {
-      const res = await makeAuthenticatedRequest(`/talent/jobs/${jobId}`);
-      return res?.data as T;
+      const res = await makeAuthenticatedRequest<T>(`/talent/jobs/${jobId}`);
+      return res; // Return the full APIResponse
     },
     enabled: !!jobId,
   });

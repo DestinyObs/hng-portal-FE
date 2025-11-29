@@ -1,6 +1,5 @@
 import JobApplicationPage from '@/components/job-application/application-page';
 import { ChevronLeft } from 'lucide-react';
-import React from 'react';
 
 const page = () => {
   return (

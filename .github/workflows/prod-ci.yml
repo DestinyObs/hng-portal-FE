@@ -26,4 +26,5 @@ jobs:
         run: pnpm lint
         
       - name: Build app
+
         run: pnpm build
