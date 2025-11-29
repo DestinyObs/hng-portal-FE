@@ -13,7 +13,6 @@ import { useMutation } from '@tanstack/react-query';
 import { talent_onboarding_api } from '@/api/actions/talent-onboarding';
 import { toast } from 'sonner';
 import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
-import clsx from 'clsx';
 
 export default function TrackSelection() {
   const [selectedTrack, setSelectedTrack] = useState<string>('');
@@ -68,7 +67,7 @@ export default function TrackSelection() {
         <>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4 mb-6 md:gap-5 md:gap-y-8">
             {data?.map((track: Tracks) => {
-              const Icon = track.icons;
+              // const Icon = track.icons;
               const isSelected = selectedTrack === track.id;
 
               return (
@@ -115,12 +114,12 @@ export default function TrackSelection() {
                   <div
                     className={`w-11 h-11 rounded-lg ${track.color} flex items-center justify-center mb-4`}
                   >
-                    <Icon
+                    {/* <Icon
                       className={clsx(
                         'w-5 h-5',
                         track.id === 'mobile' ? 'rotate-180' : '',
                       )}
-                    />
+                    /> */}
                   </div>
 
                   <h3 className="font-semibold text-[#343330] md:mb-2 text-base md:text-2xl">
