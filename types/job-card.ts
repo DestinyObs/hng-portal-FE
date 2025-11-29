@@ -135,12 +135,12 @@ export interface RawJob2 {
 }
 
 export interface TalentJobsQueryParams {
-  work_mode?: string;
-  job_type?: string;
-  job_level?: string;
-  location?: string; // This could be state_id or country_id
-  search?: string; // For general search in title/description
-  skills?: string[]; // Array of skill IDs
+  work_mode?: string[];
+  job_type?: string[];
+  job_level?: string[];
+  location?: string[];
+  search?: string[];
+  skills?: string[];
   page?: number;
   per_page?: number;
   sort?: 'newest' | 'oldest';
