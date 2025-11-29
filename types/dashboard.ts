@@ -1,8 +1,6 @@
 export type DasbhoardNavLinkProps = {
-  navLinks: {
-    title: string;
-    href: string;
-  }[];
+  title: string;
+  value: string;
 };
 
 export type DasbhoardCardProps = {

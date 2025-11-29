@@ -24,14 +24,10 @@ export default function FindJobsPage() {
     isLoading: isLoadingJobs,
     isError: isErrorJobs,
     error: errorJobs,
-  } = useQuery<APIResponse<RawJob2[]>, Error>({
-    queryKey: [
-      'talentFindJobs',
-      { ...queryParams, ...(searchQuery && { search: searchQuery }) },
-    ],
-    queryFn: ({ queryKey }) => {
-      const [, params] = queryKey;
-      return getTalentJobs(params as TalentJobsQueryParams);
+  } = useQuery({
+    queryKey: ['talentFindJobs', { ...queryParams, search: searchQuery }],
+    queryFn: () => {
+      return getTalentJobs(queryParams);
     },
   });
 
@@ -78,8 +74,19 @@ export default function FindJobsPage() {
   }, []);
 
   const handleFilterChange = useCallback(
-    (newFilters: Partial<TalentJobsQueryParams>) => {
-      setQueryParams((prev) => ({ ...prev, ...newFilters, page: 1 })); // Reset to first page on new filters
+    (newFilters: Omit<TalentJobsQueryParams, 'page' | 'per_page' | 'sort'>) => {
+      const flatParams = Object.entries(newFilters).reduce<
+        Record<string, string>
+      >((acc, [key, values]) => {
+        acc[key] = values.join(',');
+        return acc;
+      }, {});
+
+      setQueryParams((prev) => ({
+        ...prev,
+        ...flatParams,
+        page: 1, // Reset to first page on new filters
+      }));
     },
     [],
   );

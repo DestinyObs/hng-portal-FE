@@ -44,7 +44,7 @@ export const COMPANY_DASHBOARD_CARDS = [
     description: 'Active Jobs',
     color: 'var(--color-accent-3-dark)',
     iconBg: 'var(--color-accent-3)',
-    count: 2,
+    count: 0,
   },
   {
     title: 'Total Applicants',
@@ -263,7 +263,7 @@ export const cities = [
 ];
 
 export const companyDashboardNavLinks = [
-  { title: 'Active Jobs', href: '/active' },
-  { title: 'Closed Jobs', href: '/closed' },
-  { title: 'Drafts', href: '/drafts' },
+  { title: 'Active Jobs', value: '/active' },
+  { title: 'Closed Jobs', value: '/closed' },
+  { title: 'Drafts', value: '/drafts' },
 ];
