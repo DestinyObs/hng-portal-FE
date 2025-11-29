@@ -12,7 +12,7 @@ export const companySignUpSchema = z.object({
     .min(8, { message: 'Password must contain at least 8 characters' }),
   firstname: z.string().optional(),
   lastname: z.string().optional(),
-  role: z.literal('company'),
+  role: z.string(),
 });
 
 export const talentSignUpSchema = z.object({
@@ -26,7 +26,7 @@ export const talentSignUpSchema = z.object({
   password: z
     .string()
     .min(8, { message: 'Password must contain at least 8 characters' }),
-  role: z.literal('talent'),
+  role: z.string(),
 });
 
 export type TalentSignUpFormValues = z.infer<typeof talentSignUpSchema>;
