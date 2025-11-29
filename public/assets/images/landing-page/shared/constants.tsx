@@ -21,7 +21,7 @@ export const NavLinks = [
 ];
 
 export const LinkClasses =
-  'font-medium text-xl text-gray-200 font-dm_sans hover:text-primary-blue transition';
+  'text-sm text-gray-200 font-dm_sans hover:text-primary-blue transition';
 
 export const SocialLinks = [
   {
@@ -61,8 +61,6 @@ export const FooterSections = [
     title: 'LEGAL',
     links: [
       { label: 'Privacy Policy', href: 'https://hng.tech/privacy' },
-      { label: 'Terms of Service', href: '/terms-of-service' },
-      { label: 'Privacy Policy', href: '/privacy-policy' },
       { label: 'Terms of Service', href: 'https://hng.tech/terms' },
       { label: 'Cookies', href: '#' },
     ],

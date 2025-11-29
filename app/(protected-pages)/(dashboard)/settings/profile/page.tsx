@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useTracks } from '@/hooks/lookups';
-import { UserProfileData } from '@/lib/types';
 import { Country, State } from 'country-state-city';
 import Loading from '@/app/loading';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   checks:
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, Linux, X64, hngconnect-fe, not4hng-fe, frontend-server]
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -28,3 +28,4 @@ jobs:
       - name: Build app
 
         run: pnpm build
+
