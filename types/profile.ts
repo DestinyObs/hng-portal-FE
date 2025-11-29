@@ -33,7 +33,6 @@ export interface BaseUser {
   updated_at: string;
   deleted_at: string | null;
   roles: UserRole[];
-  permissions: any[]; // usually an empty array
 }
 
 // Bio section
@@ -62,15 +61,14 @@ export interface UserBio {
   created_at: string;
   updated_at: string;
   user: BaseUser;
-  media: any[]; // shown as empty array
 }
 
 // Main user data structure returned by API
 export interface UserProfileData extends BaseUser {
   bio: UserBio | null;
-  skills: any[];       // empty array but can type later
-  experiences: any[];  // empty array but can type later
-  portfolios: any[];   // empty array but can type later
+  skills: { id: string; name: string }[];
+  experiences: { id: string; name: string }[];
+  portfolios: { id: string; name: string }[];
 }
 
 // Final API response
