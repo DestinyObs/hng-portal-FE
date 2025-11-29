@@ -5,12 +5,12 @@ import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RawJob2 } from '@/types/job-card'; // Import RawJob
 import { useRouter } from 'next/navigation'; // Import useRouter
-import { useMutation, useQueryClient } from '@tanstack/react-query'; // Import useMutation and useQueryClient
+import { usePathname } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
-import { APIResponse } from '@/types/api-response';
-import { SuccessResponse } from '@/types/api-response';
-import PlaceholderProfile from './placeholder-profile';
+import { APIResponse, SuccessResponse } from '@/types/api-response';
+import PlaceholderProfile from '../dashboard/placeholder-profile';
 
 interface TalentJobCardProps {
   job: RawJob2;
@@ -18,6 +18,7 @@ interface TalentJobCardProps {
 }
 
 const TalentJobCard = ({ job }: TalentJobCardProps) => {
+  const pathname = usePathname();
   // Removed onViewJob from destructuring
   const router = useRouter(); // Initialize useRouter
   const queryClient = useQueryClient();
@@ -123,7 +124,7 @@ const TalentJobCard = ({ job }: TalentJobCardProps) => {
       {/* View Job button */}
       <div className="flex justify-end mt-auto">
         <Button
-          onClick={() => router.push(`/talent/job/${job.id}?modal=true`)}
+          onClick={() => router.push(`${pathname}?modal=true&id=${job.id}`)}
           variant="outlineGray"
           className="w-auto"
         >

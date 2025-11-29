@@ -1,6 +1,4 @@
 'use client';
-
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image'; // Import Image component
 import Input from '@/components/ui/input';
@@ -8,8 +6,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
 export default function ContactUsPage() {
-  const router = useRouter();
-
   return (
     <div className="bg-white text-gray-800">
       {/* Hero Section */}

@@ -6,8 +6,8 @@ export interface JobDetailsResponse {
   salary: number;
   created_at: string;
   is_published: string;
-  is_saved: boolean;
   is_applied: boolean;
+  is_saved: boolean;
   status: string;
 
   category: Category;
@@ -37,6 +37,7 @@ export interface Company {
   logo_url?: string | null;
   created_at?: string;
   updated_at?: string;
+  is_verified: number;
 }
 
 export interface Country {

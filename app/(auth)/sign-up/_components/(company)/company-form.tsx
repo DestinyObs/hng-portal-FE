@@ -28,7 +28,7 @@ import { useAuthStore } from '@/store/auth';
 import { APIResponse } from '@/types/api-response';
 import { RegisterType, UserData } from '@/lib/types';
 
-export function CompanySignUpForm({ role }: { role: 'talent' | 'company' }) {
+export function CompanySignUpForm({ role }: { role: 'company' }) {
   const router = useRouter();
   const setEmail = useAuthStore((state) => state.setEmail);
 

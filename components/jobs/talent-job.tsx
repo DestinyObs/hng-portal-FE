@@ -5,14 +5,16 @@ import { useGetTalentJob } from '@/hooks/jobs';
 import Loading from '@/app/loading';
 import { Button } from '../ui/button';
 import { ChevronLeft, Heart } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedInIcon,
-  TwitterIcon,
+  WhiteFacebookIcon,
+  WhiteInstagramIcon,
+  WhiteTwitterIcon,
+  WhiteWhatsappIcon,
 } from '@/public/assets/images/landing-page/shared/icons';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { formatNumbers } from '@/constants/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
@@ -70,7 +72,9 @@ const TalentJob = ({ id }: { id: string }) => {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`https://takeda.emerj.net/talent/jobs/${id}`);
+    navigator.clipboard.writeText(
+      `https://staging.connect.hng.tech/talent/jobs/${id}`,
+    );
     setIsCopied(true);
     setTimeout(() => {
       setIsCopied(false);
@@ -99,10 +103,8 @@ const TalentJob = ({ id }: { id: string }) => {
             <h3 className="text-xl font-semibold text-tertiary-500">
               About the company
             </h3>
-            <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] wrap-anywhere">
-              {' '}
-              {/* Removed dm_sans.className */}
-              {job?.company?.description} {/* Add optional chaining */}
+            <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className} wrap-anywhere">
+              <ReactMarkdown>{job.company.description}</ReactMarkdown>
             </div>
             {/* button to view company profile... dont add till a page like that exist  */}
           </div>
@@ -113,7 +115,7 @@ const TalentJob = ({ id }: { id: string }) => {
             {/* Salary */}
             <div className="border-b border-tertiary-50 pb-5">
               <p className="text-2xl font-semibold text-primary-blue text-[28px]">
-                ₦{job?.salary} {/* Add optional chaining */}
+                ₦{formatNumbers(job.salary)}
               </p>
               <p className="text-sm font-semibold text-gray-400 mt-1 text-[16px]">
                 Salary
@@ -121,10 +123,8 @@ const TalentJob = ({ id }: { id: string }) => {
             </div>
 
             {/* Apply Button */}
-            <div className=" space-y-3">
-              <Button disabled={job?.is_applied || false} size={'xs'}>
-                {' '}
-                {/* Add optional chaining */}
+            <div className="md:max-w-[315px] space-y-3">
+              <Button disabled={job?.is_applied} size={'xs'}>
                 Apply Now
               </Button>
 
@@ -145,20 +145,18 @@ const TalentJob = ({ id }: { id: string }) => {
               </Button>
             </div>
 
-            {/* Share */}
+            {/* Share -change the icon */}
             <div className="space-y-4">
               <p className="font-semibold text-title">Share This Job</p>
               <div className="links flex gap-7">
-                <a href="https://instagram.com" target="_blank">
-                  <InstagramIcon />{' '}
-                </a>
                 <a
-                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                    `https://takeda.emerj.net/talent/jobs/${id}`,
-                  )}&text=${encodeURIComponent(job?.title ?? '')}`}
+                  href={`https://wa.me/?text=${encodeURIComponent(
+                    `Check out this job: https://takeda.emerj.net/talent/jobs/${id}`,
+                  )}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <TwitterIcon />{' '}
+                  <WhiteWhatsappIcon />{' '}
                 </a>
                 <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
@@ -166,15 +164,18 @@ const TalentJob = ({ id }: { id: string }) => {
                   )}`}
                   target="_blank"
                 >
-                  <FacebookIcon />{' '}
+                  <WhiteFacebookIcon />{' '}
+                </a>
+                <a href="https://instagram.com" target="_blank">
+                  <WhiteInstagramIcon />{' '}
                 </a>
                 <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
                     `https://takeda.emerj.net/talent/jobs/${id}`,
-                  )}`}
+                  )}&text=${encodeURIComponent(job?.title ?? '')}`}
                   target="_blank"
                 >
-                  <LinkedInIcon />{' '}
+                  <WhiteTwitterIcon />{' '}
                 </a>
               </div>
             </div>
@@ -185,9 +186,9 @@ const TalentJob = ({ id }: { id: string }) => {
 
             <div className="w-full flex items-center justify-between p-4 border border-tertiary-50 rounded-lg">
               <a
-                href={`https://takeda.emerj.net/talent/jobs/${id}`}
+                href={`https://staging.connect.hng.tech/talent/jobs/${id}`}
                 target="_blank"
-                className="text-base text-primary-600 truncate block whitespace-pre-wrap"
+                className="text-base text-primary-600 wrap-anywhere"
               >
                 https://connect.hng.tech/talent/jobs
               </a>

@@ -3,20 +3,22 @@
 import Loading from '@/app/loading';
 import PlaceholderProfile from '@/components/dashboard/placeholder-profile';
 import { Button } from '@/components/ui/button';
+import { formatNumbers } from '@/constants/constants';
 import { useGetTalentJob } from '@/hooks/jobs';
 import { JobDetailsResponse } from '@/types/talent-jobs';
 import { Heart, ChevronLeft, ExpandIcon, Verified } from 'lucide-react';
 import Image from 'next/image';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
 import { APIResponse, SuccessResponse } from '@/types/api-response';
 
 export const JobModal = () => {
-  const { id } = useParams();
   const searchParams = useSearchParams();
   const modalParam = searchParams.get('modal');
+  const id = searchParams.get('id');
   const isModalOpen = modalParam === 'true';
   const { data: jobResponse, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
@@ -44,6 +46,8 @@ export const JobModal = () => {
 
   if (!isModalOpen) return;
   if (isPending) return <Loading />;
+  console.log(job);
+
   return (
     <div className="fixed inset-0 z-50 sm:flex items-center justify-end bg-tertiary-500/60">
       <div className="bg-white w-full max-w-[664px] overflow-y-auto h-screen p-6 py-12 space-y-8">
@@ -58,7 +62,7 @@ export const JobModal = () => {
           {/* route to the full job page */}
           <button
             onClick={() => router.push(`/talent/job/${id}`)}
-            className="flex items-center gap-1.5 cursor-pointer"
+            className="flex items-center gap-1.5 cursor-pointer hover:text-tertiary-75"
           >
             <ExpandIcon className="w-3 h-3 bg-[#737373] text-white rounded-sm" />
             <p className="text-title">Open in a new window</p>
@@ -66,7 +70,7 @@ export const JobModal = () => {
         </div>
 
         {/* info */}
-        <div className=" p-8 border-[0.5px] border-tertiary-75 rounded-xl space-y-5">
+        <div className=" p-8 border-[0.5px] border-tertiary-75 rounded-xl space-y-5 overflow-x-hidden">
           <div className="flex items-center gap-3">
             {/* company logo */}
             <div className="relative w-14 h-14 img">
@@ -81,7 +85,8 @@ export const JobModal = () => {
                 <PlaceholderProfile
                   radius={'16px'}
                   size={'100%'}
-                  name={job?.company?.name || ''} // Add optional chaining
+                  fontSize={25}
+                  name={job?.company.name || ''}
                 />
               )}
             </div>
@@ -91,14 +96,16 @@ export const JobModal = () => {
                 {job?.title}
               </h2>
               <p className="text-xl font-semibold text-tertiary-700 flex items-center gap-1">
-                {job?.company?.name}{' '}
-                <Verified fill="#00AEFF" color="white" size={13} />
+                {job?.company.name}{' '}
+                {job?.company?.is_verified === 1 && (
+                  <Verified fill="#00AEFF" color="white" size={13} />
+                )}
               </p>
             </div>
           </div>
           {/* description */}
           <p className="text-tertiary-200 text-base leading-relaxed">
-            {job?.description}
+            <ReactMarkdown>{job?.description}</ReactMarkdown>
           </p>
 
           {/* Skills */}
@@ -132,19 +139,20 @@ export const JobModal = () => {
           {/* Salary */}
           <div className=" ">
             <p className="text-xl font-bold text-tertiary-500">
-              ₦{job?.salary} per Month
+              ₦{formatNumbers(job?.salary || 0)} per Month
             </p>
           </div>
 
           {/* Actions */}
           <div className=" space-y-6 mt-4">
-            <Button size={'xs'}>Start Application</Button>
             <Button
+              onClick={() => router.push(`/talent/job/${id}/apply`)}
+              disabled={job?.is_applied}
               size={'xs'}
-              variant="outline"
-              onClick={() => a_saveJob()}
-              disabled={isSaving}
             >
+              Start Application
+            </Button>
+            <Button size={'xs'} variant="outline">
               <Heart /> Save job
             </Button>
           </div>
