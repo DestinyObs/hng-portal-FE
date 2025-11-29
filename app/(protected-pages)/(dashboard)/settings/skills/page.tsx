@@ -4,9 +4,9 @@ import {
   CommandList,
   CommandGroup,
   CommandItem,
-  CommandInput
+  CommandInput,
 } from '@/components/ui/command';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -32,20 +32,18 @@ export default function SkillsAndExperiencePage() {
   const { data: skillsRes } = useSkills();
 
   //skills the user already has saved in BE
-  const userSkills = data?.skills || [];
+  const userSkills = useMemo(() => data?.skills || [], [data?.skills]);
 
   //local state skills (Saved in BE + newly added)
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [skillsInitialized, setSkillsInitialized] = useState(false);
 
-  // load backend → local state
   useEffect(() => {
-    if (userSkills) {
+    if (userSkills.length > 0 && !skillsInitialized) {
       setSkills(userSkills);
+      setSkillsInitialized(true);
     }
-  }, [userSkills]);
-  useEffect(() => {
-    console.log(skillsRes);
-  }, [skillsRes]);
+  }, [userSkills, skillsInitialized]);
   const [skillInput, setSkillInput] = useState('');
 
   const handleSaveChanges = async () => {
@@ -71,24 +69,27 @@ export default function SkillsAndExperiencePage() {
   };
 
   //experiences from BE
-  const userExperiences = data?.experiences || [];
+  const userExperiences = useMemo(
+    () => data?.experiences || [],
+    [data?.experiences],
+  );
 
   //local state for experiences (can be extended with newly added ones)
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [experiencesInitialized, setExperiencesInitialized] = useState(false);
 
-  //load backend → local state
   useEffect(() => {
-    if (userExperiences) {
+    if (userExperiences.length > 0 && !experiencesInitialized) {
       setExperiences(userExperiences);
+      setExperiencesInitialized(true);
     }
-  }, [userExperiences]);
-
+  }, [userExperiences, experiencesInitialized]);
   const handleRemoveSkill = (skillToRemove: Skill) => {
     setSkills(skills.filter((skill) => skill.id !== skillToRemove.id));
   };
-const handleReset = () => {
+  const handleReset = () => {
     setSkills(userSkills);
-  }
+  };
   const handleRemoveExperience = (id: string) => {
     setExperiences(experiences.filter((exp) => exp.id !== id));
   };

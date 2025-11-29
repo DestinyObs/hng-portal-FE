@@ -114,13 +114,15 @@ interface NotificationSetting {
 export default function NotificationsPage() {
   const { user } = useAuthStore();
 
-  const [settings, setSettings] = useState<NotificationSetting[]>(() =>
-    getInitialSettings(user?.current_role),
-  );
+  const [settings, setSettings] = useState<NotificationSetting[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    setSettings(getInitialSettings(user?.current_role));
-  }, [user?.current_role]);
+    if (!isInitialized) {
+      setSettings(getInitialSettings(user?.current_role));
+      setIsInitialized(true);
+    }
+  }, [user?.current_role, isInitialized]);
   const handleToggle = (id: string) => {
     setSettings((prev) =>
       prev.map((setting) =>
