@@ -7,15 +7,23 @@ import { usePathname } from 'next/navigation';
 
 import { Card, CardContent } from '@/components/ui/card';
 
-import { SETTINGS_SIDEBAR_LINKS } from '@/constants/settings';
+import {
+  TALENT_SETTINGS_SIDEBAR_LINKS,
+  EMPLOYER_SETTINGS_SIDEBAR_LINKS,
+} from '@/constants/settings';
+import { useAuthStore } from '@/store/auth';
 
 export default function SettingsSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { user } = useAuthStore();
 
-  const activeLink =
-    SETTINGS_SIDEBAR_LINKS.find((link) => link.href === pathname) ||
-    SETTINGS_SIDEBAR_LINKS[0];
+  const links =
+    user?.current_role === 'employer'
+      ? EMPLOYER_SETTINGS_SIDEBAR_LINKS
+      : TALENT_SETTINGS_SIDEBAR_LINKS;
+
+  const activeLink = links.find((link) => link.href === pathname) || links[0];
 
   const getLinkStyles = (path: string) => {
     const isActive = pathname === path;
@@ -41,7 +49,7 @@ export default function SettingsSidebar() {
 
         {isOpen && (
           <div className="absolute top-full left-0 w-full mt-2 bg-white border border-[#E8E8E8] rounded-xl shadow-lg overflow-hidden py-2">
-            {SETTINGS_SIDEBAR_LINKS.map((link) => (
+            {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -62,7 +70,7 @@ export default function SettingsSidebar() {
       <Card className="hidden lg:block w-full bg-white shadow-sm border-none h-fit">
         <CardContent className="p-2">
           <div className="flex flex-col gap-2">
-            {SETTINGS_SIDEBAR_LINKS.map((link) => (
+            {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
