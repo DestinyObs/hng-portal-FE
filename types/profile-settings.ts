@@ -26,7 +26,7 @@ export interface Role {
 export interface Media {
   // Empty array in the response, so defining a minimal structure
   // Add properties as they appear in actual data
-  [key: string]: any;
+  [key: string]: string;
 }
 
 export interface Experience {
@@ -70,7 +70,7 @@ export interface User {
   updated_at: string;
   deleted_at: string | null;
   roles: Role[];
-  permissions: any[];
+  permissions: [];
 }
 
 export interface Bio {
@@ -81,7 +81,7 @@ export interface Bio {
   max_salary: number | null;
   track_id: string | null;
   is_verified: number;
-  links: any | null;
+  links: string | null;
   cv_id: string | null;
   current_role: string;
   bio: string | null;

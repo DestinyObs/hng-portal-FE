@@ -10,7 +10,77 @@ interface CustomSwitchProps {
   onCheckedChange: (checked: boolean) => void;
   id?: string;
 }
-
+const getInitialSettings = (
+  role: string | undefined,
+): NotificationSetting[] => {
+  if (role === 'employer') {
+    return [
+      {
+        id: 'email',
+        title: 'Email Notifications',
+        description: 'Receive email updates about your account',
+        enabled: true,
+      },
+      {
+        id: 'job_posting_alerts',
+        title: 'Job Posting Alerts',
+        description: 'Stay notified about your active listings',
+        enabled: true,
+      },
+      {
+        id: 'application_status',
+        title: 'Application Status',
+        description: "Updates on candidates' applications",
+        enabled: true,
+      },
+      {
+        id: 'talent_messages',
+        title: 'Messages From Talent',
+        description: 'Get messages from candidates',
+        enabled: true,
+      },
+      {
+        id: 'promotions',
+        title: 'Promotions & Tips',
+        description: 'Get hiring tips and product updates',
+        enabled: false,
+      },
+    ];
+  } else {
+    return [
+      {
+        id: 'email',
+        title: 'Email Notifications',
+        description: 'Receive email updates about your account',
+        enabled: true,
+      },
+      {
+        id: 'job_matches',
+        title: 'Job Matches',
+        description: 'Get notified when jobs match your profile',
+        enabled: true,
+      },
+      {
+        id: 'application_status',
+        title: 'Application Status',
+        description: 'Updates on your job applications',
+        enabled: true,
+      },
+      {
+        id: 'company_messages',
+        title: 'Message From Companies',
+        description: 'When companies send you messages',
+        enabled: true,
+      },
+      {
+        id: 'promotions',
+        title: 'Promotions & Tips',
+        description: 'Career tips and promotional offers',
+        enabled: false,
+      },
+    ];
+  }
+};
 const CustomSwitch = ({ checked, onCheckedChange, id }: CustomSwitchProps) => {
   return (
     <button
@@ -42,85 +112,15 @@ interface NotificationSetting {
 }
 
 export default function NotificationsPage() {
-  const { user } = useAuthStore()
+  const { user } = useAuthStore();
 
-  const getInitialSettings = (): NotificationSetting[] => {
-    if (user?.current_role === 'employer') {
-      return [
-        {
-          id: 'email',
-          title: 'Email Notifications',
-          description: 'Receive email updates about your account',
-          enabled: true,
-        },
-        {
-          id: 'job_posting_alerts',
-          title: 'Job Posting Alerts',
-          description: 'Stay notified about your active listings',
-          enabled: true,
-        },
-        {
-          id: 'application_status',
-          title: 'Application Status',
-          description: "Updates on candidates' applications",
-          enabled: true,
-        },
-        {
-          id: 'talent_messages',
-          title: 'Messages From Talent',
-          description: 'Get messages from candidates',
-          enabled: true,
-        },
-        {
-          id: 'promotions',
-          title: 'Promotions & Tips',
-          description: 'Get hiring tips and product updates',
-          enabled: false,
-        },
-      ];
-    } else {
-      return [
-        {
-          id: 'email',
-          title: 'Email Notifications',
-          description: 'Receive email updates about your account',
-          enabled: true,
-        },
-        {
-          id: 'job_matches',
-          title: 'Job Matches',
-          description: 'Get notified when jobs match your profile',
-          enabled: true,
-        },
-        {
-          id: 'application_status',
-          title: 'Application Status',
-          description: 'Updates on your job applications',
-          enabled: true,
-        },
-        {
-          id: 'company_messages',
-          title: 'Message From Companies',
-          description: 'When companies send you messages',
-          enabled: true,
-        },
-        {
-          id: 'promotions',
-          title: 'Promotions & Tips',
-          description: 'Career tips and promotional offers',
-          enabled: false,
-        },
-      ];
-    }
-  };
-
-  const [settings, setSettings] =
-    useState<NotificationSetting[]>(getInitialSettings());
+  const [settings, setSettings] = useState<NotificationSetting[]>(() =>
+    getInitialSettings(user?.current_role),
+  );
 
   useEffect(() => {
-    setSettings(getInitialSettings());
+    setSettings(getInitialSettings(user?.current_role));
   }, [user?.current_role]);
-
   const handleToggle = (id: string) => {
     setSettings((prev) =>
       prev.map((setting) =>

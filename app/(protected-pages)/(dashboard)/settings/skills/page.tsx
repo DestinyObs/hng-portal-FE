@@ -125,17 +125,17 @@ const handleReset = () => {
                     <CommandList className="max-h-48 overflow-y-auto">
                       <CommandGroup heading="Available Skills">
                         {skillsRes
-                          ?.filter((skill: any) =>
+                          ?.filter((skill: Skill) =>
                             skill.name
                               .toLowerCase()
                               .includes(skillInput.toLowerCase()),
                           )
-                          .map((skill: any) => (
+                          .map((skill: Skill) => (
                             <CommandItem
                               key={skill.id}
                               onSelect={() => {
                                 if (
-                                  !skills.some((s: any) => s.id === skill.id)
+                                  !skills.some((s: Skill) => s.id === skill.id)
                                 ) {
                                   setSkills([...skills, skill]);
                                 }
@@ -146,7 +146,7 @@ const handleReset = () => {
                             </CommandItem>
                           ))}
 
-                        {skillsRes?.filter((s: any) =>
+                        {skillsRes?.filter((s: Skill) =>
                           s.name
                             .toLowerCase()
                             .includes(skillInput.toLowerCase()),
@@ -172,7 +172,7 @@ const handleReset = () => {
 
             {/* Selected SKILLS Badges */}
             <div className="flex flex-wrap gap-2 pt-2">
-              {skills?.map((skill: any) => (
+              {skills?.map((skill: Skill) => (
                 <SkillsBadge
                   key={skill.id}
                   skill={skill.name}

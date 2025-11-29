@@ -1,7 +1,5 @@
-import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import React from 'react';
-import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
 interface ModalProps {
   openDialog: boolean;
   setOpenDialog: (open: boolean) => void;
