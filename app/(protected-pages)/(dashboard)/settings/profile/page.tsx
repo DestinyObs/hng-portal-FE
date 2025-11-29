@@ -56,11 +56,11 @@ export default function ProfilePage() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      professionalTitle: '',
+      professionalTitle: 'UI/UX Designer',
       bio: '',
       experience: '',
-      country: '',
-      state: '',
+      country: 'Nigeria',
+      state: 'Lagos',
       availability: 'available',
       jobTypes: [],
       track_id: '',

@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useGetUserProfile } from '@/hooks/profile';
-import { UserProfileData } from '@/lib/types';
 import { useSkills, useTracks } from '@/hooks/lookups';
 import { Country, State } from 'country-state-city';
 import Loading from '@/app/loading';
+import { UserProfileData } from '@/types/profile';
 
 const MOCK_PROFILE = {
   name: 'Okorie Esther',
@@ -50,14 +50,14 @@ export default function ProfilePage() {
   // const { data: skills } = useSkills();
 
   const trackName =
-    tracks?.find((track) => track.id === profile?.track_id?.toString())?.name ??
+    tracks?.find((track) => track.id === profile?.bio?.track_id?.toString())?.name ??
     MOCK_PROFILE.name;
 
   const countryName =
-    Country.getCountryByCode(profile?.country ?? '')?.name ?? 'Nigeria';
+    Country.getCountryByCode(profile?.bio?.country ?? '')?.name ?? 'Nigeria';
 
   const stateName =
-    State.getStateByCodeAndCountry(profile?.state ?? '', profile?.country ?? '')
+    State.getStateByCodeAndCountry(profile?.bio?.state ?? '', profile?.bio?.country ?? '')
       ?.name || 'Lagos';
 
   if (isLoading || tracksLoading) return <Loading />;
@@ -82,7 +82,7 @@ export default function ProfilePage() {
       <div className="relative h-48 w-full max-w-[804px] rounded-t-xl bg-primary-300">
         <div className="absolute -bottom-12 left-6 h-40 w-40 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
           <Image
-            src={profile?.user?.photo_url || MOCK_PROFILE?.avatar}
+            src={profile?.bio?.user?.photo_url || MOCK_PROFILE?.avatar}
             alt="Profile"
             fill
             className="object-cover"
@@ -116,7 +116,7 @@ export default function ProfilePage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
             <div>
               <h2 className="text-2xl font-semibold text-black">
-                {profile?.user?.firstname} {profile?.user?.lastname}
+                {profile?.bio?.user?.firstname} {profile?.bio?.user?.lastname}
               </h2>
               <p className="text-base text-black">{trackName}</p>
               <p className="text-sm text-gray-600">
@@ -142,7 +142,7 @@ export default function ProfilePage() {
               <p>
                 Portfolio:{' '}
                 <a
-                  href={profile?.project_url || ' '}
+                  href={profile?.bio?.project_url || ' '}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary-300 hover:underline"
@@ -154,7 +154,7 @@ export default function ProfilePage() {
               <p>
                 Resume:{' '}
                 <a
-                  href={profile?.links || ' '}
+                  href={profile?.bio?.project_file_url || ' '}
                   download
                   className="text-primary-300 hover:underline"
                 >
@@ -168,7 +168,7 @@ export default function ProfilePage() {
           <div className="mb-10">
             <h3 className="text-2xl font-semibold text-black mb-4">Bio</h3>
             <p className="text-base text-black whitespace-pre-line">
-              {profile?.bio ?? MOCK_PROFILE.bio}
+              {profile?.bio?.bio ?? MOCK_PROFILE.bio}
             </p>
           </div>
 
