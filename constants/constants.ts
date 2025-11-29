@@ -128,6 +128,9 @@ export const content2 = [
   },
 ];
 
+export const formatNumbers = (value: number): string =>
+  new Intl.NumberFormat('en-US').format(value);
+
 export const squeeze_benefits = [
   {
     id: '1',
