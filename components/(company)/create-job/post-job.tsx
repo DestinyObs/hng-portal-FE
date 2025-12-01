@@ -25,6 +25,7 @@ const getInitialFormData = (data: JobFormData | undefined): JobFormData2 => ({
   price: data?.price ?? '',
   state_id: data?.state_id ?? '',
   country_id: data?.country_id ?? '',
+  company_id: data?.company_id ?? '',
 });
 
 export default function PostJob({ id }: { id?: string }) {

@@ -213,7 +213,6 @@ export const useDraftJob = () => {
 
 export const useApplyForJob = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const {
     mutate: applyJob,

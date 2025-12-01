@@ -153,6 +153,7 @@ export default function JobDetailsStep2({
 
       toast.success('Your job has been saved to draft successfully');
       reset();
+      router.push('/company/dashboard');
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
