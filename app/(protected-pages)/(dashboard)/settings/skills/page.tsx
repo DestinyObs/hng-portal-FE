@@ -46,10 +46,6 @@ export default function SkillsAndExperiencePage() {
     setExperiences(userExperiences);
   }, [userExperiences]);
 
-  useEffect(() => {
-    console.log(skillsRes);
-  }, [skillsRes]);
-
   const [skillInput, setSkillInput] = useState('');
 
   const handleSaveChanges = async () => {
