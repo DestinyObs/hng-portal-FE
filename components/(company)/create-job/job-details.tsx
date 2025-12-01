@@ -30,6 +30,7 @@ import { useCategories, useJobLevel, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { draftPost } from '@/api/actions/create-post';
+import { useRouter } from 'next/navigation';
 
 export default function JobDetails({
   initialData,
@@ -38,6 +39,7 @@ export default function JobDetails({
   id,
 }: JobDetailsProps) {
   const [isDrafting, setIsDrafting] = useState(false);
+  const router = useRouter();
 
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
@@ -119,6 +121,7 @@ export default function JobDetails({
       description: formData.description,
       skills: formData.skills as string[],
       acceptance_criteria: formData.acceptance_criteria,
+      company_id: initialData.company_id,
     };
     // onUpdate(formDataUpdate);
     try {
@@ -131,7 +134,7 @@ export default function JobDetails({
       }
 
       toast.success('Your job has been saved to draft successfully');
-      // reset();
+      router.push('/company/dashboard');
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

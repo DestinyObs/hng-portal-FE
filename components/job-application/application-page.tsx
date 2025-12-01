@@ -83,7 +83,7 @@ const JobApplicationPage = () => {
         isOpen={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
         title="Application Sent Successfully!"
-        message="Great work your application has been successfully submitted to BrightLabs."
+        message="Great work your application has been successfully submitted."
         icon={
           <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#D1FADF] rounded-full w-16 h-16">
             <CircleCheck size={48} className="text-[#039855]" />

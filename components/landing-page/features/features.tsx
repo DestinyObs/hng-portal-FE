@@ -32,7 +32,7 @@ export default function Features() {
         </CardContent>
       </Card>
 
-      <div className="w-[90%] max-w-[1200] flex  mx-auto lg:flex-wrap  gap-8 not-lg:overflow-x-scroll [&::-webkit-scrollbar]:hidden mb-[60px] justify-center">
+      <div className="w-[90%] flex  mx-auto lg:flex-wrap  gap-8 not-lg:overflow-x-scroll [&::-webkit-scrollbar]:hidden mb-[60px] lg:justify-center">
         {features.map((feature, index) => (
           <FeatureCard feature={feature} key={index} />
         ))}
