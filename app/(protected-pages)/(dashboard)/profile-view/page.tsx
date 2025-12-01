@@ -70,7 +70,7 @@ export default function ProfilePage() {
       {/* Back */}
       <div className="flex px-6 justify-start">
         <Link
-          href="/dashboard"
+          href="/talent/dashboard"
           className="text-sm text-gray-500 hover:underline py-4"
         >
           ← Back to Dashboard
