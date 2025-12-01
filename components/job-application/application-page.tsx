@@ -100,6 +100,7 @@ const JobApplicationPage = () => {
           label: 'View Job Details',
           onClick: () => {
             setShowSuccessModal(false);
+            router.push(`/talent/job/${jobId}`);
           },
         }}
       />
