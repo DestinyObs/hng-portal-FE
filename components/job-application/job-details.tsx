@@ -1,8 +1,10 @@
-import { Briefcase, Clock, DollarSign } from 'lucide-react';
 import React from 'react';
 import { useGetTalentJob } from '@/hooks/jobs';
 import { useParams } from 'next/navigation';
 import Loading from '@/app/loading';
+import BookMark from '@/public/assets/apply-for-jobs/icons/book-mark';
+import MoneyIcon from '@/public/assets/apply-for-jobs/icons/money';
+import JobTypeIcon from '@/public/assets/apply-for-jobs/icons/job-type';
 
 interface Job {
   id: string;
@@ -35,11 +37,13 @@ const JobApplicationDetails = () => {
       <div className="p-6 flex flex-col md:flex-row md:items-start md:space-x-6 border-b border-tertiary-50">
         {/* Main Job Details */}
         <div className="flex-1">
-          <h2 className="text-xl font-semibold mb-4">Job Details</h2>
+          <h2 className="text-xl font-bold mb-4">Job Details</h2>
 
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="text-xl font-semibold mb-2">{job?.title}</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gray-500">
+                {job?.title}
+              </h3>
               <p className="text-sm text-gray-200">
                 Posted {job?.created_at} - {job?.job_type?.name} -{' '}
                 {job?.state?.name}, {job?.country?.name}
@@ -47,7 +51,7 @@ const JobApplicationDetails = () => {
             </div>
           </div>
 
-          <div className="space-y-3 mb-4 text-gray-200 text-sm">
+          <div className="space-y-3 mb-4 text-gray-200 text-[16px]">
             <p>{job?.description}</p>
           </div>
 
@@ -59,26 +63,26 @@ const JobApplicationDetails = () => {
         {/* Job Info Cards */}
         <div className="mt-6 md:mt-0 md:w-1/3 grid grid-cols-1 gap-4 border-l border-tertiary-50">
           <div className="flex items-center gap-3 p-3 rounded-lg">
-            <Briefcase className="w-5 h-5 text-tertiary-100" />
+            <BookMark className="w-5.5 h-5.5 text-tertiary-100" />
             <div>
               <p className="font-semibold text-sm">{job?.job_levels?.name}</p>
-              <p className="text-xs text-gray-600">Experience level</p>
+              <p className="text-xs text-[#686868]">Experience level</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-lg">
-            <DollarSign className="w-5 h-5 text-tertiary-100" />
+            <MoneyIcon className="w-5.5 h-5.5 text-tertiary-100" />
             <div>
               <p className="font-semibold text-sm">{job?.salary}</p>
-              <p className="text-xs text-gray-600">Project price</p>
+              <p className="text-xs text-[#686868]">Project price</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-lg">
-            <Clock className="w-5 h-5 text-tertiary-100" />
+            <JobTypeIcon className="w-5.5 h-5.5 text-tertiary-100" />
             <div>
               <p className="font-semibold text-sm">{job?.job_type?.name}</p>
-              <p className="text-xs text-gray-600">Job type</p>
+              <p className="text-xs text-[#686868]">Job type</p>
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@ const DashboardHeader = () => {
     },
     {
       label: isCompany ? 'TALENTS' : 'MY APPLICATIONS',
-      href: isCompany ? '/company/applicants' : '/talent/applicants',
+      href: isCompany ? '/company/applicants' : '/talent/applications',
       active: false,
     },
   ];

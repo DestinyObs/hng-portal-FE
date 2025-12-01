@@ -7,6 +7,7 @@ export interface JobFormData {
   skills: { id: string; name: string }[];
   acceptance_criteria: string;
   job_level_id: string;
+  company_id: string;
 
   // Step 2
   track_id?: string;
@@ -37,6 +38,7 @@ export interface JobFormData2 {
   country?: string;
   state_id: string;
   country_id: string;
+  company_id: string;
 }
 
 export interface JobDetailsProps {

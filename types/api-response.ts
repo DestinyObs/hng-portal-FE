@@ -1,4 +1,14 @@
-import { RawJob2 } from './job-card';
+import { TalentJob } from './job-card';
+
+export interface Pagination {
+  current_page: number;
+  from: number;
+  has_more_pages: boolean;
+  last_page: number;
+  per_page: number;
+  to: number;
+  total: number;
+}
 
 export type APIResponse<T> = {
   success: boolean | 'true' | 'false';
@@ -6,8 +16,7 @@ export type APIResponse<T> = {
   status: number;
   data: T;
   errors?: Record<string, string[]>;
-  total?: number;
-  last_page?: number;
+  pagination?: Pagination;
 };
 
 export interface SuccessResponse {
