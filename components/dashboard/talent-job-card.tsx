@@ -14,21 +14,23 @@ import PlaceholderProfile from '../dashboard/placeholder-profile';
 
 interface TalentJobCardProps {
   job: RawJob2;
-  // onViewJob: (jobId: string) => void; // Removed as per new instruction
 }
 
 const TalentJobCard = ({ job }: TalentJobCardProps) => {
   const pathname = usePathname();
-  // Removed onViewJob from destructuring
   const router = useRouter(); // Initialize useRouter
   const queryClient = useQueryClient();
   const companyName = job.company?.name || 'N/A';
-  const jobLevel = job.job_levels?.[0]?.name || 'N/A';
+  const jobLevel = job.job_levels?.name || 'N/A';
   const workMode = job.work_mode?.name || 'N/A';
   const jobType = job.job_type?.name || 'N/A';
-  const location =
-    (job.states?.[0]?.name ? `${job.states[0].name}, ` : '') +
-    (job.countries?.[0]?.name || 'N/A');
+  const location = [job.state?.name, job.country?.name]
+    .filter(Boolean)
+    .join(', ');
+
+  const details = [workMode, jobLevel, jobType, location]
+    .filter(Boolean)
+    .join(' • ');
 
   const effectiveLogoUrl =
     job.company?.logo_url &&
@@ -60,7 +62,7 @@ const TalentJobCard = ({ job }: TalentJobCardProps) => {
         <div className="flex items-center gap-3">
           {effectiveLogoUrl ? (
             <Image
-              src={effectiveLogoUrl}
+              src={effectiveLogoUrl!}
               alt={companyName}
               width={48}
               height={48}
@@ -73,7 +75,6 @@ const TalentJobCard = ({ job }: TalentJobCardProps) => {
             <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>
             <p className="text-sm text-gray-600 flex items-center">
               {companyName}
-              {/* Removed isVerified as it's not directly available in RawJob */}
             </p>
           </div>
         </div>
@@ -102,18 +103,10 @@ const TalentJobCard = ({ job }: TalentJobCardProps) => {
         {job.salary ? `₦ ${job.salary}` : 'Salary not specified'} per Month
       </p>
 
-      <p className="text-sm text-gray-700 mb-3">
-        {[workMode, jobLevel, jobType, location]
-          .filter((item) => item !== 'N/A')
-          .join(' • ')}
-      </p>
-
-      {/* Posted Date */}
-      <p className="text-xs text-gray-500 mb-4">
-        Posted:{' '}
-        {job.created_at
-          ? new Date(job.created_at).toLocaleDateString('en-GB')
-          : 'N/A'}
+      {/* Combined Details */}
+      <p className="text-sm text-gray-700 mb-4">
+        Posted: {job.created_at || 'N/A'}
+        {details ? ` • ${details}` : ''}
       </p>
 
       {/* Description */}

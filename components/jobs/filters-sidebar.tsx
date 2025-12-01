@@ -150,55 +150,52 @@ export default function FiltersSidebar({
         | 'track',
       isChecked: boolean,
     ) => {
-      const updateState = (
-        prev: string[],
-        setter: React.Dispatch<React.SetStateAction<string[]>>,
-      ) => {
-        const newState = isChecked
-          ? [...prev, slug]
-          : prev.filter((item) => item !== slug);
-        setter(newState);
-      };
-
       switch (type) {
         case 'workMode':
-          updateState(selectedWorkModes, setSelectedWorkModes);
+          setSelectedWorkModes((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         case 'jobType':
-          updateState(selectedJobTypes, setSelectedJobTypes);
+          setSelectedJobTypes((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         case 'jobLevel':
-          updateState(selectedJobLevels, setSelectedJobLevels);
+          setSelectedJobLevels((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         case 'skill':
-          updateState(selectedSkills, setSelectedSkills);
+          setSelectedSkills((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         case 'country':
-          updateState(selectedCountries, setSelectedCountries);
+          setSelectedCountries((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         case 'state':
-          updateState(selectedStates, setSelectedStates);
+          setSelectedStates((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         case 'category':
-          updateState(selectedCategories, setSelectedCategories);
+          setSelectedCategories((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         case 'track':
-          updateState(selectedTracks, setSelectedTracks);
+          setSelectedTracks((prev) =>
+            isChecked ? [...prev, slug] : prev.filter((item) => item !== slug),
+          );
           break;
         default:
           break;
       }
     },
-    [
-      selectedWorkModes,
-      selectedJobTypes,
-      selectedJobLevels,
-      selectedSkills,
-      selectedCountries,
-      selectedStates,
-      selectedCategories,
-      selectedTracks,
-    ],
+    [], // Removed individual selected states from dependencies to prevent stale closures.
   );
 
   const clearAllFilters = useCallback(() => {
@@ -210,6 +207,36 @@ export default function FiltersSidebar({
     setSelectedStates([]);
     setSelectedCategories([]);
     setSelectedTracks([]);
+    onFilterChange({}); // Notify parent about clearing all filters
+  }, [onFilterChange]);
+
+  const clearFilterGroup = useCallback((type: string) => {
+    switch (type) {
+      case 'Work Mode':
+        setSelectedWorkModes([]);
+        break;
+      case 'Job Type':
+        setSelectedJobTypes([]);
+        break;
+      case 'Job Level':
+        setSelectedJobLevels([]);
+        break;
+      case 'Skills':
+        setSelectedSkills([]);
+        break;
+      case 'Country':
+        setSelectedCountries([]);
+        break;
+      case 'State':
+        setSelectedStates([]);
+        break;
+      case 'Category':
+        setSelectedCategories([]);
+        break;
+      case 'Track':
+        setSelectedTracks([]);
+        break;
+    }
   }, []);
 
   useEffect(() => {
@@ -243,6 +270,7 @@ export default function FiltersSidebar({
     handleToggle: (slug: string, isChecked: boolean) => void,
     isLoading: boolean,
     isError: boolean,
+    onClearGroup: (type: string) => void, // New prop
   ) => {
     if (isLoading) {
       return (
@@ -265,10 +293,7 @@ export default function FiltersSidebar({
         <div className="mb-4 flex items-center justify-between">
           <h4 className="font-medium text-(--color-gray-500)">{title}</h4>
           <button
-            onClick={() => {
-              // Assuming handleToggle with false for all selected items
-              selectedItems.forEach((item) => handleToggle(item, false));
-            }}
+            onClick={() => onClearGroup(title)} // Use onClearGroup
             className="text-xs text-(--color-gray-100) hover:text-(--color-gray-200) transition"
           >
             Clear
@@ -322,6 +347,7 @@ export default function FiltersSidebar({
             handleCheckboxChange(slug, 'workMode', isChecked),
           isLoadingWorkModes,
           isErrorWorkModes,
+          clearFilterGroup, // Pass new prop
         )}
         {renderFilterGroup(
           'Job Type',
@@ -330,6 +356,7 @@ export default function FiltersSidebar({
           (slug, isChecked) => handleCheckboxChange(slug, 'jobType', isChecked),
           isLoadingJobTypes,
           isErrorJobTypes,
+          clearFilterGroup, // Pass new prop
         )}
         {renderFilterGroup(
           'Job Level',
@@ -339,6 +366,7 @@ export default function FiltersSidebar({
             handleCheckboxChange(slug, 'jobLevel', isChecked),
           isLoadingJobLevels,
           isErrorJobLevels,
+          clearFilterGroup, // Pass new prop
         )}
         {renderFilterGroup(
           'Skills',
@@ -347,6 +375,7 @@ export default function FiltersSidebar({
           (slug, isChecked) => handleCheckboxChange(slug, 'skill', isChecked),
           isLoadingSkills,
           isErrorSkills,
+          clearFilterGroup, // Pass new prop
         )}
         {renderFilterGroup(
           'Country',
@@ -355,6 +384,7 @@ export default function FiltersSidebar({
           (slug, isChecked) => handleCheckboxChange(slug, 'country', isChecked),
           isLoadingCountries,
           isErrorCountries,
+          clearFilterGroup, // Pass new prop
         )}
         {renderFilterGroup(
           'State',
@@ -363,6 +393,7 @@ export default function FiltersSidebar({
           (slug, isChecked) => handleCheckboxChange(slug, 'state', isChecked),
           isLoadingStates,
           isErrorStates,
+          clearFilterGroup, // Pass new prop
         )}
         {renderFilterGroup(
           'Category',
@@ -372,6 +403,7 @@ export default function FiltersSidebar({
             handleCheckboxChange(slug, 'category', isChecked),
           isLoadingCategories,
           isErrorCategories,
+          clearFilterGroup, // Pass new prop
         )}
         {renderFilterGroup(
           'Track',
@@ -380,6 +412,7 @@ export default function FiltersSidebar({
           (slug, isChecked) => handleCheckboxChange(slug, 'track', isChecked),
           isLoadingTracks,
           isErrorTracks,
+          clearFilterGroup, // Pass new prop
         )}
       </div>
     </aside>

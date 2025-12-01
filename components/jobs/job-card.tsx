@@ -21,10 +21,10 @@ export default function JobCard({ job }: JobCardProps) {
   const companyName = job.company?.name || 'N/A';
   const jobType = job.job_type?.name || 'N/A';
   const workMode = job.work_mode?.name || 'N/A';
-  const jobLevel = job.job_levels?.[0]?.name || 'N/A'; // Assuming job_levels is an array and we take the first
-  const location =
-    (job.states?.[0]?.name ? `${job.states[0].name}, ` : '') +
-    (job.countries?.[0]?.name || 'N/A');
+  const jobLevel = job.job_levels?.name || 'N/A'; // Corrected access to job_levels
+  const location = [job.state?.name, job.country?.name]
+    .filter(Boolean)
+    .join(', ');
 
   const effectiveLogoUrl =
     job.company?.logo_url &&
@@ -59,7 +59,7 @@ export default function JobCard({ job }: JobCardProps) {
         <div className="flex items-center gap-4">
           {effectiveLogoUrl ? (
             <Image
-              src={effectiveLogoUrl}
+              src={effectiveLogoUrl!}
               alt={companyName}
               width={56}
               height={56}
@@ -121,7 +121,7 @@ export default function JobCard({ job }: JobCardProps) {
 
       <div className="flex flex-col gap-2">
         <div className="text-sm text-(--color-gray-100)">
-          Posted: {job.created_at?.split('T')[0]} • {workMode} • {jobType} •{' '}
+          Posted: {job.created_at || 'N/A'} • {workMode} • {jobType} •{' '}
           {jobLevel} • {location}
         </div>
         <div className="text-2xl font-bold text-(--color-gray-500)">

@@ -9,9 +9,23 @@ import { APIResponse, SuccessResponse } from '@/types/api-response';
 export const getTalentJobs = async (
   params?: TalentJobsQueryParams,
 ): Promise<APIResponse<RawJob2[]>> => {
+  const stringParams: Record<string, string> = {};
+  if (params) {
+    for (const [key, value] of Object.entries(params)) {
+      // Ensure value is not undefined or null before converting to string
+      if (value !== undefined && value !== null) {
+        // Skip empty strings to avoid sending empty params like "search="
+        const stringValue = String(value);
+        if (stringValue) {
+          stringParams[key] = stringValue;
+        }
+      }
+    }
+  }
+
   return makeAuthenticatedRequest<RawJob2[]>('/talent/jobs', {
     method: 'GET',
-    params: params as Record<string, string>,
+    params: stringParams,
   });
 };
 
