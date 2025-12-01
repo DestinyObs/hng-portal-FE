@@ -77,16 +77,16 @@ export interface RawJob {
   };
   job_levels?: {
     name: string;
-  }[];
-  states?: {
+  };
+  state?: {
     name: string;
-  }[];
-  countries?: {
+  };
+  country?: {
     name: string;
-  }[];
+  };
 }
 
-export interface RawJob2 {
+export interface TalentJob {
   id: string;
   is_saved: boolean;
   title: string;
@@ -125,13 +125,13 @@ export interface RawJob2 {
   };
   job_levels?: {
     name: string;
-  }[];
-  states?: {
+  };
+  state?: {
     name: string;
-  }[];
-  countries?: {
+  };
+  country?: {
     name: string;
-  }[];
+  };
 }
 
 export interface TalentJobsQueryParams {
@@ -139,16 +139,37 @@ export interface TalentJobsQueryParams {
   job_type?: string[];
   job_level?: string[];
   location?: string[];
-  search?: string[];
   skills?: string[];
   page?: number;
   per_page?: number;
   sort?: 'newest' | 'oldest';
 }
 
+export type ApplicationStatus =
+  | 'Shortlisted'
+  | 'Hired'
+  | 'Applied'
+  | 'Interviewed'
+  | 'Rejected';
+
 export interface TalentApplication {
   id: string;
-  job_id: string;
-  status: string;
-  // Add other properties as needed
+  status: ApplicationStatus;
+  created_at: string;
+  job: {
+    id: string;
+    title: string;
+    description: string;
+    skills: { name: string }[];
+    job_type: { name: string };
+    work_mode: { name: string };
+    salary: string;
+    job_level: { name: string };
+    country: { name: string };
+    state: { name: string };
+    company: {
+      name: string;
+      logo_url: string;
+    };
+  };
 }
