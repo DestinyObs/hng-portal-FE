@@ -71,14 +71,14 @@ export const testimonials = [
       'HNG Connect gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
     image: '/images/customer4.jpg',
   },
-  // {
-  //   name: 'Samuel O.',
-  //   country: 'Nigeria',
-  //   userType: 'Hiring Manager',
-  //   testimonial:
-  //     'HNG Connect enabled us to quickly find qualified candidates, saving us hours that would have been spent sifting through irrelevant CVs. The platform’s filtering and assessment tools are impressively precise.',
-  //   image: '/images/customer5.jpg',
-  // },
+  {
+    name: 'Samuel O.',
+    country: 'Nigeria',
+    userType: 'Hiring Manager',
+    testimonial:
+      'HNG Connect enabled us to quickly find qualified candidates, saving us hours that would have been spent sifting through irrelevant CVs. The platform’s filtering and assessment tools are impressively precise.',
+    image: '/images/customer5.jpg',
+  },
   // {
   //   name: 'Nelo A.',
   //   country: 'United Kingdom',
