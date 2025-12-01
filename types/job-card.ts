@@ -86,7 +86,7 @@ export interface RawJob {
   };
 }
 
-export interface RawJob2 {
+export interface TalentJob {
   id: string;
   is_saved: boolean;
   title: string;

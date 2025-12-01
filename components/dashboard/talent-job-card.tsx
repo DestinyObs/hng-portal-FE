@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import { TalentJob } from '@/types/job-card'; // Import RawJob
 import { useRouter } from 'next/navigation'; // Import useRouter
 import { usePathname } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -13,7 +13,7 @@ import { APIResponse, SuccessResponse } from '@/types/api-response';
 import PlaceholderProfile from '../dashboard/placeholder-profile';
 
 interface TalentJobCardProps {
-  job: RawJob2;
+  job: TalentJob;
 }
 
 const TalentJobCard = ({ job }: TalentJobCardProps) => {

@@ -7,11 +7,14 @@ import JobCard from './job-card';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { getTalentJobs, getSavedJobs } from '@/api/actions/talent';
-import { RawJob2, TalentJobsQueryParams } from '@/types/job-card';
+import { TalentJob, TalentJobsQueryParams } from '@/types/job-card';
 import { toast } from 'sonner';
+import { APIResponse } from '@/types/api-response';
 
 export default function FindJobsPage() {
-  const [queryParams, setQueryParams] = useState<TalentJobsQueryParams>({
+  const [queryParams, setQueryParams] = useState<
+    Omit<TalentJobsQueryParams, 'search'>
+  >({
     page: 1,
     per_page: 10,
   });
@@ -22,7 +25,7 @@ export default function FindJobsPage() {
     isLoading: isLoadingJobs,
     isError: isErrorJobs,
     error: errorJobs,
-  } = useQuery({
+  } = useQuery<APIResponse<TalentJob[]>, Error>({
     queryKey: ['talentFindJobs', queryParams],
     queryFn: () => getTalentJobs(queryParams),
   });
@@ -32,7 +35,7 @@ export default function FindJobsPage() {
     isLoading: isLoadingSavedJobs,
     isError: isErrorSavedJobs,
     error: errorSavedJobs,
-  } = useQuery<RawJob2[], Error>({
+  } = useQuery<TalentJob[], Error>({
     queryKey: ['savedJobs'],
     queryFn: async () => {
       const response = await getSavedJobs();
@@ -43,9 +46,9 @@ export default function FindJobsPage() {
     },
   });
 
-  const jobs: RawJob2[] = jobsData?.data || [];
+  const jobs: TalentJob[] = jobsData?.data || [];
   const totalJobsCount = jobsData?.pagination?.total || 0;
-  const savedJobs: RawJob2[] = savedJobsData || [];
+  const savedJobs: TalentJob[] = savedJobsData || [];
   const savedJobsCount = savedJobs.length;
 
   const totalPages = jobsData?.pagination?.last_page || 1;
@@ -61,21 +64,19 @@ export default function FindJobsPage() {
     setQueryParams((prev) => ({ ...prev, page }));
   }, []);
 
-  // const handleSearch = useCallback((query: string) => {
-  //   setQueryParams((prev) => ({ ...prev, search: query, page: 1 }));
-  // }, []);
-
   const handleFilterChange = useCallback(
-    (newFilters: Omit<TalentJobsQueryParams, 'page' | 'per_page' | 'sort'>) => {
+    (
+      newFilters: Omit<
+        TalentJobsQueryParams,
+        'page' | 'per_page' | 'sort' | 'search'
+      >,
+    ) => {
       setQueryParams((prev) => {
-        // Base parameters to preserve
         const preservedParams = {
           page: 1,
           per_page: prev.per_page,
-          search: prev.search,
         };
 
-        // Flatten the array values from the sidebar into comma-separated strings
         const flatFilters = Object.entries(newFilters).reduce<
           Record<string, string>
         >((acc, [key, value]) => {
@@ -85,7 +86,6 @@ export default function FindJobsPage() {
           return acc;
         }, {});
 
-        // Return a new object, ensuring old filter keys are removed if not in newFilters
         return { ...preservedParams, ...flatFilters };
       });
     },

@@ -26,8 +26,8 @@ const Page = () => {
     title: rawJob?.title || '',
     description: rawJob?.description || '',
     acceptance_criteria: rawJob?.acceptance_criteria || '',
-    state: rawJob?.states?.[0]?.name || '',
-    country: rawJob?.countries?.[0]?.name || '',
+    state: rawJob?.state?.name || '',
+    country: rawJob?.country?.name || '',
     company: rawJob?.company?.name || '',
     companyLogo: rawJob?.company?.logo_url || '',
     price: rawJob?.price,
@@ -35,8 +35,10 @@ const Page = () => {
     job_type: rawJob?.job_type?.name || '',
     work_mode: rawJob?.work_mode?.name || '',
     skills: rawJob?.skills?.map((skill: { name: string }) => skill.name) || [],
-    level: rawJob?.job_levels?.[0]?.name,
-    location: `${rawJob?.states?.[0]?.name || ''}, ${rawJob?.countries?.[0]?.name || ''}`,
+    level: rawJob?.job_levels?.name,
+    location: [rawJob?.state?.name, rawJob?.country?.name]
+      .filter(Boolean)
+      .join(', '),
     posted: rawJob?.created_at,
     onsiteOrRemote: rawJob?.work_mode?.name,
     applyLink: `https://example.com/apply/${rawJob?.id}`,

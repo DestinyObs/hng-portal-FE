@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Heart } from 'lucide-react';
-import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import { TalentJob } from '@/types/job-card'; // Import RawJob
 import { useRouter } from 'next/navigation'; // Import useRouter
 import { useMutation, useQueryClient } from '@tanstack/react-query'; // Import useMutation and useQueryClient
 import { saveJob } from '@/api/actions/talent';
@@ -10,7 +10,7 @@ import { SuccessResponse } from '@/types/api-response';
 import PlaceholderProfile from '../dashboard/placeholder-profile';
 
 export interface JobCardProps {
-  job: RawJob2;
+  job: TalentJob;
   // onViewJob: (jobId: string) => void; // Removed as per new instruction
 }
 
