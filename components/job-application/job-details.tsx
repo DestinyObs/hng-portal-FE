@@ -1,11 +1,10 @@
 import React from 'react';
 import { useGetTalentJob } from '@/hooks/jobs';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/app/loading';
 import BookMark from '@/public/assets/apply-for-jobs/icons/book-mark';
 import MoneyIcon from '@/public/assets/apply-for-jobs/icons/money';
 import JobTypeIcon from '@/public/assets/apply-for-jobs/icons/job-type';
-import Link from 'next/link';
 
 interface Job {
   id: string;
@@ -28,6 +27,7 @@ interface Job {
 
 const JobApplicationDetails = () => {
   const { id: jobId } = useParams();
+  const router = useRouter();
   const { data: response, isPending } = useGetTalentJob(jobId as string);
   const job = response?.data as Job;
   if (isPending) return <Loading />;
@@ -56,12 +56,16 @@ const JobApplicationDetails = () => {
             <p>{job?.description}</p>
           </div>
 
-          <Link
-            href={`/talent/job/${jobId}`}
-            className="text-primary-300 text-sm underline"
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(`/talent/job/${jobId}`);
+            }}
+            className="text-primary-300 text-sm underline cursor-pointer"
           >
             View job posting
-          </Link>
+          </a>
         </div>
 
         {/* Job Info Cards */}

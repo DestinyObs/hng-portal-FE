@@ -369,7 +369,7 @@ export default function JobDetailsStep2({
               disabled={isSubmitting}
               className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
             >
-              {isSubmitting ? 'loading' : id ? 'edit post' : 'finish'}
+              {isSubmitting ? 'loading' : id ? 'Save Edit' : 'Finish'}
             </Button>
           </div>
         </div>
