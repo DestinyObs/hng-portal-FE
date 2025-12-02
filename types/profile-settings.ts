@@ -47,8 +47,8 @@ export interface Portfolio {
   user_id: string;
   title: string;
   description: string | null;
-  url: string | null;
-  image_url: string | null;
+  banner_url: string | null;
+  link: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -151,16 +151,16 @@ export interface AddWorkExperienceResponse {
 export interface AddPortfolioRequest {
   title: string;
   description?: string | null;
-  url: string;
-  image_url?: string | null;
+  link?: string;
+  banner_url?: string | null;
 }
 
 // Request types for updating portfolio
 export interface UpdatePortfolioRequest {
   title?: string;
   description?: string | null;
-  url?: string;
-  image_url?: string | null;
+  link?: string;
+  banner_url?: string | null;
 }
 
 // Response types for portfolio

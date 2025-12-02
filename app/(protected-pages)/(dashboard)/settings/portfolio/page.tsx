@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
@@ -14,9 +14,14 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export default function PortfolioPage() {
   const [openDialog, setOpenDialog] = useState(false);
-  const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(null);
+  const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(
+    null,
+  );
   const queryClient = useQueryClient();
   const { data } = useGetProfileData();
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   // Portfolios from BE
   const portfolios = data?.portfolios || [];
@@ -58,8 +63,7 @@ export default function PortfolioPage() {
             <h4 className="text-base font-medium text-[#1A1A1A]">Projects</h4>
             <Button
               variant="outline"
-              size="xs"
-              className="text-[#181818] border-[#E8E8E8] gap-1"
+              className="w-auto text-[#181818] border-[#E8E8E8] gap-1"
               onClick={handleOpenModal}
             >
               <Plus className="w-3 h-3" /> Add Project
@@ -80,9 +84,9 @@ export default function PortfolioPage() {
                   className="border border-[#E8EAEB] rounded-xl overflow-hidden hover:shadow-md transition-shadow bg-white flex flex-col"
                 >
                   <div className="relative w-full h-48 bg-primary-50">
-                    {portfolio.image_url ? (
+                    {portfolio.banner_url ? (
                       <Image
-                        src={portfolio.image_url}
+                        src={portfolio.banner_url}
                         alt={portfolio.title}
                         fill
                         className="object-cover"
@@ -103,9 +107,9 @@ export default function PortfolioPage() {
                     </p>
 
                     <div className="flex items-center justify-between pt-2 mt-auto border-t border-gray-50">
-                      {portfolio.url && (
+                      {portfolio.link && (
                         <Link
-                          href={portfolio.url}
+                          href={portfolio.link}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 text-primary-300 text-base font-medium hover:underline"
