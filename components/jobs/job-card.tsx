@@ -66,7 +66,11 @@ export default function JobCard({ job }: JobCardProps) {
               className="rounded-xl object-cover"
             />
           ) : (
-            <PlaceholderProfile name={companyName} size={56} fontSize="24px" />
+            <PlaceholderProfile
+              name={companyName}
+              size={56}
+              className="text-[24px]"
+            />
           )}
 
           <div className="space-y-1">
