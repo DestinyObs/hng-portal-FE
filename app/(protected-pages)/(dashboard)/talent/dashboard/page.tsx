@@ -15,6 +15,7 @@ import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import { useState } from 'react';
 import { SortByDropdown } from '@/components/dashboard/sort-by-dropdown';
+import DashboardSidebar from '@/components/dashboard/sidebar';
 
 const TalentDashboardPage = () => {
   const { user } = useAuthStore();
@@ -146,6 +147,8 @@ const TalentDashboardPage = () => {
             );
           })}
         </div>
+
+        <DashboardSidebar className="flex mb-5 lg:hidden" />
 
         {/* Recommended Jobs */}
         <div className="flex items-center justify-between">

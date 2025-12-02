@@ -64,7 +64,11 @@ const ApplicationCard = ({ application }: ApplicationCardProps) => {
               className="rounded-md"
             />
           ) : (
-            <PlaceholderProfile name={companyName} size={48} fontSize="20px" />
+            <PlaceholderProfile
+              name={companyName}
+              size={48}
+              className="text-[20px]"
+            />
           )}
           <div>
             <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>

@@ -13,6 +13,7 @@ import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
 
 import { COMPANY_DASHBOARD_CARDS } from '@/constants/dashboard';
 import { JobCardProps } from '@/types/job-card';
+import DashboardSidebar from '@/components/dashboard/sidebar';
 
 export default function CompanyDashboardPage() {
   const { user } = useAuthStore();
@@ -59,6 +60,7 @@ export default function CompanyDashboardPage() {
             <DashboardCard key={index} card={card} />
           ))}
         </div>
+        <DashboardSidebar className="flex mb-5 lg:hidden" />
         <div className="flex items-center justify-between font-dm_sans">
           <span className="font-ag text-xl sm:text-2xl text-tertiary-200 font-bold leading-6 sm:leading-7">
             Active Jobs

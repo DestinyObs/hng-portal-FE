@@ -95,7 +95,7 @@ export const JobModal = () => {
                 <PlaceholderProfile
                   radius={'16px'}
                   size={'100%'}
-                  fontSize={25}
+                  className="text-[25px]"
                   name={job?.company?.name || ''}
                 />
               )}

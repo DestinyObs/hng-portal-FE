@@ -70,14 +70,30 @@ export default function BasicInformation() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormData) => talent_onboarding_api(data),
-    onSuccess: () => {
-      toast.success('Basic information saved');
-      setTabs('track');
-      navigate.push('/onboarding/talent?page=track');
+    onSuccess: (res) => {
+      if (res.success && res.data) {
+        toast.success(res.message);
+        setTabs('track');
+        navigate.push('/onboarding/talent?page=track');
+      } else {
+        const errorMessage = res.message || 'An unknown error occurred.';
+
+        if (res.status === 401) {
+          toast.error('Validation Failed, please check your input');
+        } else {
+          if (res.errors) {
+            const errorString = Object.values(res.errors).flat().join(' ');
+            toast.error(errorString);
+          } else {
+            toast.error(errorMessage);
+          }
+        }
+      }
     },
-    onError: (err) => {
-      console.error('Error onboarding:', err);
-      toast.error(err.message);
+    onError: () => {
+      toast.error(
+        'An error occured, please verify your information and try again',
+      );
     },
   });
 
