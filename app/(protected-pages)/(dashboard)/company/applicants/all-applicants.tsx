@@ -56,7 +56,6 @@ export default function AllApplicants() {
         const response = await view_applicants_per_company(company_id);
 
         if (response.success && response.data) {
-          console.log('Applications:', response.data.applications);
           setApplicationsData(response.data.applications);
         } else {
           setError('Failed to fetch applicants');

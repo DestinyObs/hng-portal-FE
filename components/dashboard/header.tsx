@@ -16,7 +16,7 @@ import PlaceholderProfile from './placeholder-profile';
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useAuthStore();
+  const { user, clearAuth } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isCompany = user?.current_role === 'employer';
@@ -65,7 +65,7 @@ const DashboardHeader = () => {
     onSuccess: (response: APIResponse<SuccessResponse | null>) => {
       if (response.success) {
         toast.success('Logged out successfully!');
-        localStorage.removeItem('auth-store');
+        clearAuth();
         router.push('/sign-in');
       } else {
         let errorMessage = response.message || 'Failed to log out.';
