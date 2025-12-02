@@ -11,9 +11,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/store/auth';
 
 export default function JobCard({ job }: { job: JobCardProps }) {
   const navigate = useRouter();
+  const { user } = useAuthStore();
 
   // view job posting handler
   const viewJobHandler = () => navigate.push(`/company/job/${job?.id}`);
@@ -78,7 +80,9 @@ export default function JobCard({ job }: { job: JobCardProps }) {
             size="xs"
             variant="default"
             className="px-2.5 py-2 text-sm sm:text-xs"
-            onClick={() => navigate.push('/company/applicants')}
+            onClick={() =>
+              navigate.push(`/company/${user?.company?.id}/job/${job.id}`)
+            }
           >
             View Applicants
           </Button>

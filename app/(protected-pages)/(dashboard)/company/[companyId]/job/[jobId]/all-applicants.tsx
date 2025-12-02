@@ -5,13 +5,17 @@ import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
 import { columns, Applicant } from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
 import { JobApplicationItem } from '@/types/view-job-applicants';
-import { view_applicants_per_company } from '@/api/actions/view-applicants';
+import { view_applicants_per_job } from '@/api/actions/view-applicants';
 
 interface AllApplicantsProps {
   company_id: string;
+  job_id: string;
 }
 
-export default function AllApplicants({ company_id }: AllApplicantsProps) {
+export default function AllApplicants({
+  company_id,
+  job_id,
+}: AllApplicantsProps) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedRole, setSelectedRole] = React.useState<string>('');
@@ -47,10 +51,9 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
         setIsLoading(true);
         setError(null);
 
-        const response = await view_applicants_per_company(company_id);
+        const response = await view_applicants_per_job(company_id, job_id);
 
         if (response.success && response.data) {
-          console.log('Applications:', response.data.applications);
           setApplicationsData(response.data.applications);
         } else {
           setError('Failed to fetch applicants');
@@ -66,7 +69,7 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
     if (company_id) {
       fetchApplicants();
     }
-  }, [company_id]);
+  }, [company_id, job_id]);
 
   // Transform API data to match table format
   const transformedData: Applicant[] = React.useMemo(() => {
@@ -74,7 +77,7 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
       id: application.id,
       name: `${application.user.firstname} ${application.user.lastname}`,
       email: application.user.email,
-      applied_role: application.job.title,
+      applied_role: 'application.job.title',
       status:
         application.status === 'pending'
           ? 'Applied'
@@ -120,7 +123,7 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
   // Loading state
   if (isLoading) {
     return (
-      <div className="w-full min-h-screen px-6 py-4">
+      <div className="w-full min-h-screen py-4">
         <div className="bg-white p-6 rounded-2xl">
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-primary-300" />
@@ -136,7 +139,7 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
   // Error state
   if (error) {
     return (
-      <div className="w-full min-h-screen px-6 py-4">
+      <div className="w-full min-h-screen py-4">
         <div className="bg-white p-6 rounded-2xl">
           <div className="flex flex-col items-center justify-center py-12">
             <p className="text-red-500 mb-4">{error}</p>
@@ -153,31 +156,31 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
   }
 
   return (
-    <div className="w-full min-h-screen px-6 py-4">
-      <div className="bg-white p-6 rounded-2xl">
-        <div className="flex items-center justify-between gap-3 mb-4">
+    <div className="w-full min-h-screen py-4">
+      <div className="bg-white py-6 px-4 rounded-2xl">
+        <div className="flex flex-col lg:items-center lg:justify-between lg:flex-row gap-3 mb-4">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-tertiary-100" />
             <input
               type="text"
               placeholder="Search"
-              className="w-full pl-10 pr-4 py-2 border border-tertiary-50 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-transparent"
+              className="w-64 pl-10 pr-4 py-2 border border-tertiary-50 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-transparent md:w-72 lg:w-96"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col-reverse gap-4 md:flex-row">
             {showFilters && (
               <div className="relative">
-                <div className="flex gap-5 items-center cursor-pointer">
+                <div className="flex gap-2 lg:gap-5 items-center cursor-pointer">
                   <button
                     onClick={() =>
                       setOpenDropdown(
                         openDropdown === 'status' ? null : 'status',
                       )
                     }
-                    className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-tertiary-50 justify-between cursor-pointer"
+                    className="flex items-center gap-2 px-1.5 py-2 text-sm rounded-lg bg-tertiary-50 justify-between cursor-pointer"
                   >
                     <span className="text-tertiary-500 font-medium">
                       {selectedStatus || 'Job Status'}
@@ -229,7 +232,7 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
                   setSelectedStatus('');
                 }
               }}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-[#344054] border border-tertiary-50 rounded-lg cursor-pointer"
+              className="w-fit flex items-center gap-2 px-3 py-2 text-sm text-[#344054] border border-tertiary-50 rounded-lg cursor-pointer"
             >
               <ListFilter className="w-4 h-4 text-tertiary-100" />
               {showFilters ? 'Remove Filters' : 'Filters'}
@@ -239,10 +242,12 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
 
         {filteredData.length === 0 ? (
           <div className="text-center py-12 text-tertiary-500">
-            No applicants found
+            No applicant found
           </div>
         ) : (
-          <DataTable columns={columns} data={filteredData} />
+          <section className="w-72 md:w-160 lg:w-full">
+            <DataTable columns={columns} data={filteredData} />
+          </section>
         )}
       </div>
     </div>
