@@ -7,9 +7,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'via.placeholder.com',
       },
+
       {
         protocol: 'https',
         hostname: 'staging.connect.hng.tech',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.staging.connect.hng.tech',
       },
     ],
   },

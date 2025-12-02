@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { JobDetailsResponse } from '@/types/talent-jobs';
 import { PreviewJob } from '../(company)/preview';
 import { useGetTalentJob } from '@/hooks/jobs';
@@ -28,10 +29,20 @@ const TalentJob = ({ id }: { id: string }) => {
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [isSaved, setIsSaved] = useState(job?.is_saved || false);
+
+  React.useEffect(() => {
+    setIsSaved(job?.is_saved || false);
+  }, [job?.is_saved]);
 
   const { mutate: a_saveJob, isPending: isSaving } = useMutation({
     mutationKey: ['saveJob', id],
     mutationFn: () => saveJob(id),
+    onMutate: () => {
+      // Optimistic toggle
+      setIsSaved((prev) => !prev);
+    },
+
     onSuccess: (response: APIResponse<SuccessResponse>) => {
       if (response.success) {
         toast.success(response.message || 'Job bookmark updated!');
@@ -41,10 +52,12 @@ const TalentJob = ({ id }: { id: string }) => {
         queryClient.invalidateQueries({ queryKey: ['talentJobs'] });
       } else {
         toast.error(response.message || 'Failed to save job.');
+        setIsSaved(job?.is_saved || false);
       }
     },
     onError: (error: Error) => {
       toast.error(error.message || 'A network error occurred.');
+      setIsSaved(job?.is_saved || false);
     },
   });
 
@@ -140,9 +153,7 @@ const TalentJob = ({ id }: { id: string }) => {
                 size={'xs'}
               >
                 <Heart
-                  className={`mr-2 ${
-                    job?.is_saved ? 'fill-red-500 text-red-500' : ''
-                  }`}
+                  className={`mr-2 ${isSaved ? 'fill-[#00AEFF] text-[#00AEFF]' : ''}`}
                 />
                 {job?.is_saved ? 'Saved' : 'Save job'}
               </Button>

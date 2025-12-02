@@ -54,7 +54,7 @@ export default function SignUpPage() {
                 className={`w-full cursor-pointer hover:bg-primary-50 transition-colors h-full ${userType === 'talent' ? 'border-primary-blue bg-primary-blue/5' : ''}`}
               >
                 <CardContent className=" flex items-center justify-between">
-                  <div className="flex-grow">
+                  <div className="grow">
                     <h3
                       className={`font-bold text-lg ${userType === 'talent' ? 'text-primary-blue' : ''}`}
                     >
@@ -84,7 +84,7 @@ export default function SignUpPage() {
                 className={`w-full cursor-pointer hover:bg-primary-50 transition-colors h-full ${userType === 'company' ? 'border-primary-blue bg-primary-blue/5' : ''}`}
               >
                 <CardContent className=" flex items-center justify-between">
-                  <div className="flex-grow">
+                  <div className="grow">
                     <h3
                       className={`font-bold text-lg ${userType === 'company' ? 'text-primary-blue' : ''}`}
                     >

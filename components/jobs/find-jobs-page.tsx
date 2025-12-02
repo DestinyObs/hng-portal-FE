@@ -128,7 +128,7 @@ export default function FindJobsPage() {
             <aside className="hidden lg:block w-80 shrink-0">
               <div className="sticky top-8">
                 <h2 className="mb-6 text-lg font-semibold text-(--color-gray-500)">
-                  Filters
+                  Sort available jobs
                 </h2>
                 <FiltersSidebar onFilterChange={handleFilterChange} />
               </div>

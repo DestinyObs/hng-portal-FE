@@ -27,12 +27,13 @@ const JobApplicationForm = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     control,
     setValue,
   } = useForm<JobApplicationFormData>({
     resolver: zodResolver(formSchema),
     defaultValues,
+    mode: 'onChange',
   });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -166,7 +167,13 @@ const JobApplicationForm = ({
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-between">
           <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <Button type="submit" variant="default" className="cursor-pointer">
+            <Button
+              type="submit"
+              variant="default"
+              className={`cursor-pointer ${
+                !isValid ? 'bg-gray-100 hover:bg-gray-100 opacity-30' : ''
+              }`}
+            >
               Preview & Submit
             </Button>
 

@@ -27,7 +27,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       >
         {/* Sidebar */}
         {!isSettingsPage && !isJobDetailsPage && !isSidebarHidden && (
-          <Sidebar />
+          <Sidebar className="hidden w-72 lg:flex" />
         )}
         {/* Main content */}
         <main className="flex-1 h-full min-h-screen">{children}</main>
