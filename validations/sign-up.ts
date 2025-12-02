@@ -46,6 +46,7 @@ export const talentSignUpSchema = z.object({
     .regex(/[^A-Za-z0-9]/, {
       message: 'Password must contain at least one special character',
     }),
+  role: z.string(),
 });
 
 export type TalentSignUpFormValues = z.infer<typeof talentSignUpSchema>;
