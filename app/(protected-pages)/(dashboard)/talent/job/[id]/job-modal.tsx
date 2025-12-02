@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
 import { APIResponse, SuccessResponse } from '@/types/api-response';
+import React from 'react';
 
 export const JobModal = () => {
   const searchParams = useSearchParams();
@@ -23,30 +24,41 @@ export const JobModal = () => {
   const { data: jobResponse, isPending } = useGetTalentJob<JobDetailsResponse>(
     id as string,
   );
-  const job = jobResponse?.data; // Access the data property
+  const job = jobResponse?.data;
   const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const [isSaved, setIsSaved] = React.useState(job?.is_saved || false);
 
   const { mutate: a_saveJob, isPending: isSaving } = useMutation({
     mutationKey: ['saveJob', job?.id],
     mutationFn: () => saveJob(job!.id),
+    onMutate: () => {
+      // Optimistic update
+      setIsSaved((prev) => !prev);
+    },
     onSuccess: (response: APIResponse<SuccessResponse>) => {
       if (response.success) {
         toast.success('Job saved successfully!');
-        queryClient.invalidateQueries({ queryKey: ['savedJobs'] }); // Invalidate saved jobs query to refetch
+        queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
+        queryClient.invalidateQueries({ queryKey: ['talentJobs'] });
       } else {
         toast.error(response.message || 'Failed to save job.');
+        setIsSaved(job?.is_saved || false); // revert on failure
       }
     },
     onError: (error: Error) => {
       toast.error(error.message || 'A network error occurred.');
+      setIsSaved(job?.is_saved || false); // revert on error
     },
   });
 
-  const router = useRouter();
+  React.useEffect(() => {
+    setIsSaved(job?.is_saved || false); // sync with query data when loaded
+  }, [job?.is_saved]);
 
-  if (!isModalOpen) return;
+  if (!isModalOpen) return null;
   if (isPending) return <Loading />;
-  console.log(job);
 
   return (
     <div className="fixed inset-0 z-50 sm:flex items-center justify-end bg-tertiary-500/60">
@@ -59,7 +71,6 @@ export const JobModal = () => {
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          {/* route to the full job page */}
           <button
             onClick={() => router.push(`/talent/job/${id}`)}
             className="flex items-center gap-1.5 cursor-pointer hover:text-tertiary-75"
@@ -69,29 +80,27 @@ export const JobModal = () => {
           </button>
         </div>
 
-        {/* info */}
-        <div className=" p-8 border-[0.5px] border-tertiary-75 rounded-xl space-y-5 overflow-x-hidden">
+        {/* Info */}
+        <div className="p-8 border-[0.5px] border-tertiary-75 rounded-xl space-y-5 overflow-x-hidden">
           <div className="flex items-center gap-3">
-            {/* company logo */}
             <div className="relative w-14 h-14 img">
-              {job?.company?.logo_url ? ( // Add optional chaining
+              {job?.company?.logo_url ? (
                 <Image
                   fill
                   className="rounded-2xl"
-                  src={job?.company?.logo_url} // Add optional chaining
-                  alt={''}
+                  src={job.company.logo_url}
+                  alt={job.company.name || ''}
                 />
               ) : (
                 <PlaceholderProfile
                   radius={'16px'}
                   size={'100%'}
                   fontSize={25}
-                  name={job?.company.name || ''}
+                  name={job?.company?.name || ''}
                 />
               )}
             </div>
-            {/* jobe title & company */}
-            <div className="">
+            <div>
               <h2 className="text-2xl font-bold text-tertiary-700">
                 {job?.title}
               </h2>
@@ -103,48 +112,41 @@ export const JobModal = () => {
               </p>
             </div>
           </div>
-          {/* description */}
+
+          {/* Description */}
           <div className="text-tertiary-200 text-base leading-relaxed">
             <ReactMarkdown>{job?.description}</ReactMarkdown>
           </div>
 
           {/* Skills */}
           <ul className="flex justify-start flex-wrap gap-3 text-gray-600 font-light">
-            {job?.skills &&
-              job.skills.map((item) => (
-                <li
-                  className="border border-[#EAF0ED] text-sm py-1.5 px-3 p rounded-full"
-                  key={item.id}
-                >
-                  {item.name}
-                </li>
-              ))}
+            {job?.skills?.map((item) => (
+              <li
+                className="border border-[#EAF0ED] text-sm py-1.5 px-3 p rounded-full"
+                key={item.id}
+              >
+                {item.name}
+              </li>
+            ))}
           </ul>
 
-          {/* time posted - work-mode - job_level - freelance - lagos, nigeria */}
-          <div className="other info text-sm text-tertiary-200">
-            {/* time posted */}
+          {/* Time & Job Info */}
+          <div className="text-sm text-tertiary-200">
             <span>Posted: {job?.created_at} - </span>
-            {/* job type */}
-            <span>{job?.job_type?.name} - </span> {/* Add optional chaining */}
-            {/* job - level */}
-            <span>{job?.job_levels?.name} - </span>{' '}
-            {/* Add optional chaining */}
+            <span>{job?.job_type?.name} - </span>
+            <span>{job?.job_levels?.name} - </span>
             <span>
               {job?.state?.name}, {job?.country?.name}
-            </span>{' '}
-            {/* Add optional chaining */}
+            </span>
           </div>
 
           {/* Salary */}
-          <div className=" ">
-            <p className="text-xl font-bold text-tertiary-500">
-              ₦{formatNumbers(job?.salary || 0)} per Month
-            </p>
-          </div>
+          <p className="text-xl font-bold text-tertiary-500">
+            ₦{formatNumbers(job?.salary || 0)} per Month
+          </p>
 
           {/* Actions */}
-          <div className=" space-y-6 mt-4">
+          <div className="space-y-6 mt-4">
             <Button
               onClick={() => router.push(`/talent/job/${id}/apply`)}
               disabled={job?.is_applied}
@@ -157,8 +159,14 @@ export const JobModal = () => {
               variant="outline"
               onClick={() => a_saveJob()}
               disabled={isSaving}
+              className="flex items-center gap-2"
             >
-              <Heart /> Save job
+              <Heart
+                size={16}
+                fill={isSaved ? '#00AEFF' : 'none'}
+                color={isSaved ? '#00AEFF' : '#00AEFF'}
+              />
+              {isSaved ? 'Saved' : 'Save job'}
             </Button>
           </div>
         </div>

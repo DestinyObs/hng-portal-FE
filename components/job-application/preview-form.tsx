@@ -64,7 +64,13 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
       </div>
 
       {/* Action Buttons  */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-between">
+      <div className="flex flex-col sm:flex-row max-w-4xl justify-between">
+        <div className="flex justify-between">
+          <Button variant="outline" className="border-[#E7E7E7] text-[#344054]">
+            Cancel
+          </Button>
+        </div>
+
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           <Button
             onClick={() => setShowApplicationModal(true)}
