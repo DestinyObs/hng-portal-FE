@@ -1,69 +1,69 @@
-"use client";
+'use client';
 
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-// import { CompanyProfileData } from "@/types/profile"; 
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+// import { CompanyProfileData } from "@/types/profile";
 
 interface CompanyProfileProps {
   // profile: CompanyProfileData | null | undefined;
-  profile: any;
+  // profile: any;
   isOwnProfile?: boolean;
 }
 
 const MOCK_COMPANY = {
-  logo: "/assets/dashboard/company_logo.png",
-  name: "Nexo Labs",
-  tagline: "Innovating for the future",
-  website: "nexolabs.com",
-  employees: "10 employees",
-  location: "Lagos, Nigeria",
+  logo: '/assets/dashboard/company_logo.png',
+  name: 'Nexo Labs',
+  tagline: 'Innovating for the future',
+  website: 'nexolabs.com',
+  employees: '10 employees',
+  location: 'Lagos, Nigeria',
   about:
-    "Our company helps organisations improve operations through clear processes and reliable digital solutions. We focus on efficiency, accuracy and measurable outcomes.",
-  techStack: ["React", "Node.js", "AWS", "Python"],
+    'Our company helps organisations improve operations through clear processes and reliable digital solutions. We focus on efficiency, accuracy and measurable outcomes.',
+  techStack: ['React', 'Node.js', 'AWS', 'Python'],
   sections: [
     {
       id: 1,
-      title: "What We Do",
+      title: 'What We Do',
       bullets: [
-        "We design products that solve defined problems.",
-        "We deliver services that support daily workflows.",
-        "We provide tools that improve decision making.",
-        "We support teams with training and guidance.",
+        'We design products that solve defined problems.',
+        'We deliver services that support daily workflows.',
+        'We provide tools that improve decision making.',
+        'We support teams with training and guidance.',
       ],
     },
     {
       id: 2,
-      title: "Value Proposition",
+      title: 'Value Proposition',
       bullets: [
-        "Faster workflows reduce delays.",
-        "Standardised processes lower errors.",
-        "Data dashboards help you track progress.",
-        "Support teams respond quickly with direct solutions.",
+        'Faster workflows reduce delays.',
+        'Standardised processes lower errors.',
+        'Data dashboards help you track progress.',
+        'Support teams respond quickly with direct solutions.',
       ],
     },
     {
       id: 3,
-      title: "Why Talents Should Work With Us",
+      title: 'Why Talents Should Work With Us',
       bullets: [
-        "Strong track record across multiple sectors.",
-        "Practical solutions built around user needs.",
-        "Transparent communication throughout each stage.",
-        "Measurable results within agreed timelines.",
+        'Strong track record across multiple sectors.',
+        'Practical solutions built around user needs.',
+        'Transparent communication throughout each stage.',
+        'Measurable results within agreed timelines.',
       ],
     },
   ],
 };
 
 export function CompanyProfileDisplay({
-  profile,
+  // profile,
   isOwnProfile = false,
 }: CompanyProfileProps) {
   // const data = profile ?? MOCK_COMPANY;
 
-  const data = MOCK_COMPANY; 
+  const data = MOCK_COMPANY;
 
   return (
     <div className="w-full max-w-4xl mx-auto p-8">
@@ -107,9 +107,7 @@ export function CompanyProfileDisplay({
           {/* HEADER */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
             <div>
-              <h2 className="text-2xl font-semibold text-black">
-                {data.name}
-              </h2>
+              <h2 className="text-2xl font-semibold text-black">{data.name}</h2>
               <p className="text-base text-black">{data.tagline}</p>
 
               <div className="flex flex-col gap-1 mt-1">
@@ -122,7 +120,7 @@ export function CompanyProfileDisplay({
             <div className="text-sm text-gray-700 text-right">
               <p className="font-semibold text-black">Company Links</p>
               <p>
-                Website:{" "}
+                Website:{' '}
                 <a
                   href={`https://${data.website}`}
                   target="_blank"
@@ -147,9 +145,7 @@ export function CompanyProfileDisplay({
 
           {/* DETAILS / SECTIONS */}
           <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-6">
-              Details
-            </h3>
+            <h3 className="text-2xl font-semibold text-black mb-6">Details</h3>
 
             {data.sections.length === 0 ? (
               <p className="text-gray-500 text-sm">No details added yet.</p>
@@ -180,7 +176,9 @@ export function CompanyProfileDisplay({
 
             <div className="flex flex-wrap gap-2">
               {data.techStack.length === 0 ? (
-                <p className="text-gray-500 text-sm">No tech stack added yet.</p>
+                <p className="text-gray-500 text-sm">
+                  No tech stack added yet.
+                </p>
               ) : (
                 data.techStack.map((tech, idx) => (
                   <span

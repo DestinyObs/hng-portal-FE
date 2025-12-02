@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
-import Loading from "@/app/loading";
-import { useGetUserProfile } from "@/hooks/profile";
-import { useTracks } from "@/hooks/lookups";
-import { UserProfileData } from "@/types/profile";
-import { TalentProfileView } from "@/components/dashboard/talent-profile-view";
+import Loading from '@/app/loading';
+import { useGetUserProfile } from '@/hooks/profile';
+import { useTracks } from '@/hooks/lookups';
+import { UserProfileData } from '@/types/profile';
+import { TalentProfileView } from '@/components/dashboard/talent-profile-view';
 import { CompanyProfileDisplay } from '@/components/dashboard/company-profile-view';
 
 export default function ProfilePage() {
-  const { data, isLoading } = useGetUserProfile<any>();
+  const { data, isLoading } = useGetUserProfile<UserProfileData>();
   const { data: tracks, isLoading: tracksLoading } = useTracks();
   if (isLoading || tracksLoading) return <Loading />;
   if (!data) return <div>No profile found</div>;
@@ -32,14 +32,11 @@ export default function ProfilePage() {
       {/* Conditional Rendering */}
       {isCompany ? (
         <CompanyProfileDisplay
-            profile={data}
-            isOwnProfile={true}
+          // profile={data}
+          isOwnProfile={true}
         />
       ) : (
-        <TalentProfileView
-            profile={data}
-            tracks={tracks}
-        />
+        <TalentProfileView profile={data} tracks={tracks} />
       )}
     </div>
   );
