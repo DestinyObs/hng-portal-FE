@@ -71,7 +71,7 @@ export default function Candidatelists() {
           applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.email.includes(searchQuery) ||
           applicant.applied_role
-            .toLowerCase()
+            ?.toLowerCase()
             .includes(searchQuery.toLowerCase()),
       );
     }

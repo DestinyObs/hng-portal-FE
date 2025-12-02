@@ -101,7 +101,7 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
           applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.applied_role
-            .toLowerCase()
+            ?.toLowerCase()
             .includes(searchQuery.toLowerCase()),
       );
     }
