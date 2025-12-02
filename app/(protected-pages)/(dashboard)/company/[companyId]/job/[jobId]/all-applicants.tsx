@@ -158,7 +158,7 @@ export default function AllApplicants({
   return (
     <div className="w-full min-h-screen py-4">
       <div className="bg-white py-6 px-4 rounded-2xl">
-        <div className="flex flex-col lg:items-center lg:justify-between lg:flex-row gap-3 mb-4">
+        <div className="flex flex-col md:items-center md:justify-between md:flex-row gap-3 mb-4">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-tertiary-100" />
             <input
@@ -245,7 +245,7 @@ export default function AllApplicants({
             No applicant found
           </div>
         ) : (
-          <section className="w-72 md:w-160 lg:w-full">
+          <section className="w-72 md:w-170 lg:w-full">
             <DataTable columns={columns} data={filteredData} />
           </section>
         )}
