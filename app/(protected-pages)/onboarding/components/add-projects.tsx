@@ -63,7 +63,7 @@ export default function AddPortfolioProjects() {
   } = useForm<PortfolioFormData>({
     resolver: zodResolver(portfolioSchema),
     defaultValues: {
-      projects: [{ name: '', url: '', file: undefined }],
+      projects: [{ name: '', url: 'https://', file: undefined }],
     },
   });
 
@@ -74,9 +74,24 @@ export default function AddPortfolioProjects() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: talent_onboarding_api,
-    onSuccess: () => {
-      setTabs('profile');
-      setOpenConfirmModal(true);
+    onSuccess: (res) => {
+      if (res.success && res.data.data) {
+        setTabs('profile');
+        setOpenConfirmModal(true);
+      } else {
+        const errorMessage = res.message || 'An unknown error occurred.';
+
+        if (res.status === 401) {
+          toast.error('Validation Failed, please check your input');
+        } else {
+          if (res.errors) {
+            const errorString = Object.values(res.errors).flat().join(' ');
+            toast.error(errorString);
+          } else {
+            toast.error(errorMessage);
+          }
+        }
+      }
     },
     onError: () => {
       toast.error('Failed to upload portfolio');
@@ -87,8 +102,16 @@ export default function AddPortfolioProjects() {
     const formData = new FormData();
 
     data.projects.forEach((project, index) => {
+      let formattedUrl = project.url.trim();
+      if (
+        !formattedUrl.startsWith('http://') &&
+        !formattedUrl.startsWith('https://')
+      ) {
+        formattedUrl = 'https://' + formattedUrl;
+      }
+
       formData.append(`projects[${index}][name]`, project.name);
-      formData.append(`projects[${index}][url]`, project.url);
+      formData.append(`projects[${index}][url]`, formattedUrl);
 
       if (project.file && project.file.length > 0) {
         formData.append(
