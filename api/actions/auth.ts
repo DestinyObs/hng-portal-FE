@@ -15,7 +15,6 @@ export const siginWithGoogle = async () => {
 };
 import { SuccessResponse } from '@/types/api-response';
 import { GoogleAuthRequest } from '@/types/auth';
-import { getEssentialUserData } from '@/lib/utils';
 
 export const login = async (formData: LoginType) => {
   const res = await makePublicRequest<UserData, LoginType>('/auth/login', {
