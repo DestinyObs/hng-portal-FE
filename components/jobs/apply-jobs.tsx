@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import JobsPageBackIcon from '../icons/jobs-page-back-icon';
 import FindJobsNewWindow from '../icons/find-jobs-new-window';
 import Link from 'next/link';
-import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import { TalentJob } from '@/types/job-card'; // Import TalentJob
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
@@ -14,7 +14,7 @@ import { APIResponse } from '@/types/api-response';
 import { SuccessResponse } from '@/types/api-response';
 
 interface ApplyJobsModalProps {
-  job: RawJob2;
+  job: TalentJob;
   onClose: () => void;
 }
 
@@ -55,10 +55,10 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
   const companyName = job.company?.name || 'N/A';
   const jobType = job.job_type?.name || 'N/A';
   const workMode = job.work_mode?.name || 'N/A';
-  const jobLevel = job.job_levels?.[0]?.name || 'N/A';
-  const location =
-    (job.states?.[0]?.name ? `${job.states[0].name}, ` : '') +
-    (job.countries?.[0]?.name || 'N/A');
+  const jobLevel = job.job_levels?.name || 'N/A';
+  const location = [job.state?.name, job.country?.name]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <div className="fixed inset-0 z-50 flex">
@@ -166,8 +166,8 @@ export default function ApplyJobs({ job, onClose }: ApplyJobsModalProps) {
 
             <div className="mb-6">
               <p className="text-xs text-(--color-gray-100)">
-                Posted: {job.created_at?.split('T')[0]} • {workMode} • {jobType}{' '}
-                • {jobLevel} • {location}
+                Posted: {job.created_at || 'N/A'} • {workMode} • {jobType} •{' '}
+                {jobLevel} • {location}
               </p>
             </div>
 

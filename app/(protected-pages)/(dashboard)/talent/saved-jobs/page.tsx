@@ -5,7 +5,7 @@ import JobCard from '@/components/jobs/job-card';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
 import { getSavedJobs } from '@/api/actions/talent'; // Import getSavedJobs
-import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import { TalentJob } from '@/types/job-card'; // Import RawJob
 import { toast } from 'sonner';
 
 export default function SavedJobsPage() {
@@ -19,7 +19,7 @@ export default function SavedJobsPage() {
     queryFn: getSavedJobs,
   });
 
-  const jobs: RawJob2[] = jobsData?.data || [];
+  const jobs: TalentJob[] = jobsData?.data || [];
 
   if (isError) {
     toast.error(error?.message || 'Failed to fetch saved jobs.');

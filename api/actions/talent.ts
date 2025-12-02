@@ -1,6 +1,6 @@
 import { makeAuthenticatedRequest } from '../config.server';
 import {
-  RawJob2,
+  TalentJob,
   TalentJobsQueryParams,
   TalentApplication,
 } from '@/types/job-card';
@@ -8,15 +8,29 @@ import { APIResponse, SuccessResponse } from '@/types/api-response';
 
 export const getTalentJobs = async (
   params?: TalentJobsQueryParams,
-): Promise<APIResponse<RawJob2[]>> => {
-  return makeAuthenticatedRequest<RawJob2[]>('/talent/jobs', {
+): Promise<APIResponse<TalentJob[]>> => {
+  const stringParams: Record<string, string> = {};
+  if (params) {
+    for (const [key, value] of Object.entries(params)) {
+      // Ensure value is not undefined or null before converting to string
+      if (value !== undefined && value !== null) {
+        // Skip empty strings to avoid sending empty params like "search="
+        const stringValue = String(value);
+        if (stringValue) {
+          stringParams[key] = stringValue;
+        }
+      }
+    }
+  }
+
+  return makeAuthenticatedRequest<TalentJob[]>('/talent/jobs', {
     method: 'GET',
-    params: params as Record<string, string>,
+    params: stringParams,
   });
 };
 
-export const getSavedJobs = async (): Promise<APIResponse<RawJob2[]>> => {
-  return makeAuthenticatedRequest<RawJob2[]>('/talent/jobs/bookmark', {
+export const getSavedJobs = async (): Promise<APIResponse<TalentJob[]>> => {
+  return makeAuthenticatedRequest<TalentJob[]>('/talent/jobs/bookmark', {
     method: 'GET',
   });
 };

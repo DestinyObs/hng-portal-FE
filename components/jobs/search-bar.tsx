@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -8,9 +8,21 @@ interface SearchBarProps {
 export default function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState('');
 
+  useEffect(() => {
+    // Set up a timer to call onSearch after 500ms of inactivity
+    const timer = setTimeout(() => {
+      onSearch(query);
+    }, 500); // 500ms debounce delay
+
+    // Cleanup function to clear the timer if the user keeps typing
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [query, onSearch]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(query);
+    onSearch(query); // Trigger search immediately on pressing Enter
   };
 
   return (

@@ -9,6 +9,7 @@ import { useSkills, useTracks } from '@/hooks/lookups';
 import { Country, State } from 'country-state-city';
 import Loading from '@/app/loading';
 import { UserProfileData } from '@/types/profile';
+import { useAuthStore } from '@/store/auth';
 
 const MOCK_PROFILE = {
   name: '',
@@ -48,6 +49,8 @@ export default function ProfilePage() {
   const { data: profile, isLoading } = useGetUserProfile<UserProfileData>();
   const { data: tracks, isLoading: tracksLoading } = useTracks();
   // const { data: skills } = useSkills();
+  const { user } = useAuthStore();
+  const isCompany = user?.current_role === 'employer';
 
   const trackName =
     tracks?.find((track) => track.id === profile?.bio?.track_id?.toString())
@@ -70,7 +73,7 @@ export default function ProfilePage() {
       {/* Back */}
       <div className="flex px-6 justify-start">
         <Link
-          href="/dashboard"
+          href={isCompany ? '/company/dashboard' : '/talent/dashboard'}
           className="text-sm text-gray-500 hover:underline py-4"
         >
           ← Back to Dashboard
