@@ -75,7 +75,7 @@ export default function AddPortfolioProjects() {
   const { mutate, isPending } = useMutation({
     mutationFn: talent_onboarding_api,
     onSuccess: (res) => {
-      if (res.success && res.data.data) {
+      if (res.success && res.data) {
         setTabs('profile');
         setOpenConfirmModal(true);
       } else {
