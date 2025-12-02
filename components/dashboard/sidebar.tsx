@@ -70,9 +70,9 @@ const DashboardSidebar = () => {
               <Link href={'/profile-view'}>View Profile</Link>
             </Button>
           )}
-          <Button size={'sm'} className="text-base" variant={'outlineGray'}>
+          {/* <Button size={'sm'} className="text-base" variant={'outlineGray'}>
             Request Verification
-          </Button>
+          </Button> */}
         </div>
       </div>
 

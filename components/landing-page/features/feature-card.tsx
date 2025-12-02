@@ -12,6 +12,10 @@ export default function FeatureCard({ feature }: FeatureCardProps) {
       variant={'ghost'}
       className="bg-[#ECF0F3] text-center flex flex-col items-center justify-center  flex-1 shrink  min-w-[300px] md:max-w-[580px] md:min-w-[500px] not-md:min-h-[400px] max-w-full"
     >
+      <Card
+        variant={'ghost'}
+        className="bg-[#ECF0F3] text-center flex flex-col items-center justify-center shrink-0 w-full max-w-[90vw] md:max-w-[580px] md:min-w-[500px]"
+      ></Card>
       <CardContent>
         <Image
           src={`/assets/images/landing-page/${feature.image}`}
