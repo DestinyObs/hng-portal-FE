@@ -106,7 +106,7 @@ export default function SubscribeSection() {
             <p className="text-sm text-white/80 m-2 mt-4 text-center sm:text-left">
               By subscribing you agree to our{' '}
               <a
-                href="#"
+                href="/privacy-policy"
                 className="underline hover:text-white transition-colors"
               >
                 privacy policy

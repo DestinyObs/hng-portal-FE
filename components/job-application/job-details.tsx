@@ -5,6 +5,7 @@ import Loading from '@/app/loading';
 import BookMark from '@/public/assets/apply-for-jobs/icons/book-mark';
 import MoneyIcon from '@/public/assets/apply-for-jobs/icons/money';
 import JobTypeIcon from '@/public/assets/apply-for-jobs/icons/job-type';
+import Link from 'next/link';
 
 interface Job {
   id: string;
@@ -55,9 +56,12 @@ const JobApplicationDetails = () => {
             <p>{job?.description}</p>
           </div>
 
-          <a href="#" className="text-primary-300 text-sm underline">
+          <Link
+            href={`/talent/job/${jobId}`}
+            className="text-primary-300 text-sm underline"
+          >
             View job posting
-          </a>
+          </Link>
         </div>
 
         {/* Job Info Cards */}

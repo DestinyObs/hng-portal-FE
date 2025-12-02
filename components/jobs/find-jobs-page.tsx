@@ -127,9 +127,9 @@ export default function FindJobsPage() {
           <div className="flex gap-8 lg:gap-10 items-start">
             <aside className="hidden lg:block w-80 shrink-0">
               <div className="sticky top-8">
-                <h2 className="mb-6 text-lg font-semibold text-(--color-gray-500)">
+                {/* <h2 className="mb-6 text-lg font-semibold text-(--color-gray-500)">
                   Filters
-                </h2>
+                </h2> */}
                 <FiltersSidebar onFilterChange={handleFilterChange} />
               </div>
             </aside>
