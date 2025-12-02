@@ -11,8 +11,6 @@ const DashboardSidebar = () => {
   const { user } = useAuthStore();
   const role = user?.current_role;
 
-  console.log(user);
-
   return (
     <aside className="w-72 hidden lg:flex flex-col gap-5">
       {/* profile-card */}
