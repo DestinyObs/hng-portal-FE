@@ -106,7 +106,7 @@ export default function AllApplicants() {
           applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.applied_role
-            .toLowerCase()
+            ?.toLowerCase()
             .includes(searchQuery.toLowerCase()),
       );
     }
