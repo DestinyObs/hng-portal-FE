@@ -69,7 +69,11 @@ const TalentJobCard = ({ job }: TalentJobCardProps) => {
               className="rounded-md"
             />
           ) : (
-            <PlaceholderProfile name={companyName} size={48} fontSize="20px" />
+            <PlaceholderProfile
+              name={companyName}
+              size={48}
+              className="font-[20px]"
+            />
           )}
           <div>
             <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>

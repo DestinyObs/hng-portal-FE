@@ -67,7 +67,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
           <Button
             size="xs"
             variant={'outlineGray'}
-            className="px-4 py-2 text-sm sm:text-xs"
+            className="px-2.5 py-2 text-sm sm:text-xs"
             onClick={viewJobHandler}
           >
             View Job Posting
@@ -77,7 +77,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
           <Button
             size="xs"
             variant="default"
-            className="px-4 py-2 text-sm sm:text-xs"
+            className="px-2.5 py-2 text-sm sm:text-xs"
             onClick={() => navigate.push('/company/applicants')}
           >
             View Applicants
