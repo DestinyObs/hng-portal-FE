@@ -77,7 +77,7 @@ export default function AllApplicants({
       id: application.id,
       name: `${application.user.firstname} ${application.user.lastname}`,
       email: application.user.email,
-      applied_role: 'application.job.title',
+      // applied_role: 'application.job.title',
       status:
         application.status === 'pending'
           ? 'Applied'
@@ -104,7 +104,7 @@ export default function AllApplicants({
           applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.applied_role
-            .toLowerCase()
+            ?.toLowerCase()
             .includes(searchQuery.toLowerCase()),
       );
     }

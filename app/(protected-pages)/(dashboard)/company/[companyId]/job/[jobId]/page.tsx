@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tabs } from '@/components/shared/ui/tabs';
 import AllApplicants from './all-applicants';
-import Candidatelists from './candidate-lists';
 
 interface ApplicantsPageProps {
   params: {
@@ -19,11 +18,11 @@ export default async function ApplicantsPage({ params }: ApplicantsPageProps) {
       tabsName: 'All Applicants',
       TabView: () => <AllApplicants company_id={company_id} job_id={job_id} />,
     },
-    {
-      value: 'lists',
-      tabsName: 'Candidates List',
-      TabView: () => <Candidatelists />,
-    },
+    // {
+    //   value: 'lists',
+    //   tabsName: 'Candidates List',
+    //   TabView: () => <Candidatelists />,
+    // },
   ];
 
   return (
