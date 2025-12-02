@@ -175,7 +175,7 @@ const DashboardHeader = () => {
                     <Link href={'/profile-view'}>
                       <PlaceholderProfile
                         size={'100%'}
-                        fontSize={'1rem'}
+                        className="text-base"
                         name={
                           isCompany
                             ? (user?.company?.name ?? '')

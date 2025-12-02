@@ -6,15 +6,14 @@ import { Progress } from '../ui/progress';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 import PlaceholderProfile from './placeholder-profile';
+import clsx from 'clsx';
 
-const DashboardSidebar = () => {
+const DashboardSidebar = ({ className }: { className?: string }) => {
   const { user } = useAuthStore();
   const role = user?.current_role;
 
-  console.log(user);
-
   return (
-    <aside className="w-72 hidden lg:flex flex-col gap-5">
+    <aside className={clsx('flex-col gap-5', className)}>
       {/* profile-card */}
       <div className="border border-tertiary-50 profilecard flex justify-center items-center gap-2 bg-white rounded-md flex-col py-6 px-3">
         {/* user profile image */}
@@ -37,6 +36,7 @@ const DashboardSidebar = () => {
             <PlaceholderProfile
               radius={'50%'}
               size={'100%'}
+              className="text-5xl"
               name={
                 role === 'employer' && user?.company?.name
                   ? user?.company?.name
