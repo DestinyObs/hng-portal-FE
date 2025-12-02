@@ -8,7 +8,7 @@ import {
   getSavedJobs,
   getTalentApplications,
 } from '@/api/actions/talent'; // Import getTalentJobs, getSavedJobs, getTalentApplications
-import { RawJob2, TalentApplication } from '@/types/job-card'; // Import RawJob and TalentApplication
+import { TalentJob, TalentApplication } from '@/types/job-card'; // Import RawJob and TalentApplication
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT_DASHBOARD_CARDS
@@ -25,7 +25,7 @@ const TalentDashboardPage = () => {
     isLoading: isLoadingJobs,
     isError: isErrorJobs,
     error: errorJobs,
-  } = useQuery<RawJob2[], Error>({
+  } = useQuery<TalentJob[], Error>({
     // Explicitly type TData and TError
     queryKey: ['talentJobs', sortOrder],
     queryFn: async () => {
@@ -43,7 +43,7 @@ const TalentDashboardPage = () => {
     isLoading: isLoadingSavedJobs,
     isError: isErrorSavedJobs,
     error: errorSavedJobs,
-  } = useQuery<RawJob2[], Error>({
+  } = useQuery<TalentJob[], Error>({
     // Explicitly type TData and TError
     queryKey: ['savedJobs'],
     queryFn: async () => {

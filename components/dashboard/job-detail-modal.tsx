@@ -10,7 +10,7 @@ import {
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { X, Heart } from 'lucide-react';
-import { RawJob2 } from '@/types/job-card'; // Import RawJob
+import { TalentJob } from '@/types/job-card'; // Import TalentJob
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { saveJob } from '@/api/actions/talent';
 import { toast } from 'sonner';
@@ -19,7 +19,7 @@ import { APIResponse, SuccessResponse } from '@/types/api-response';
 interface JobDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  job: RawJob2 | null; // Use RawJob
+  job: TalentJob | null; // Use TalentJob
 }
 
 const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
@@ -46,12 +46,12 @@ const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
   }
 
   const companyName = job.company?.name || 'N/A';
-  const jobLevel = job.job_levels?.[0]?.name || 'N/A';
+  const jobLevel = job.job_levels?.name || 'N/A';
   const workMode = job.work_mode?.name || 'N/A';
   const jobType = job.job_type?.name || 'N/A';
-  const location =
-    (job.states?.[0]?.name ? `${job.states[0].name}, ` : '') +
-    (job.countries?.[0]?.name || 'N/A');
+  const location = [job.state?.name, job.country?.name]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -113,9 +113,8 @@ const JobDetailModal = ({ isOpen, onClose, job }: JobDetailModalProps) => {
 
           {/* Metadata Line */}
           <div className="text-sm text-gray-500">
-            Posted: {job.created_at ? job.created_at.split('T')[0] : 'N/A'}{' '}
-            &mdash; {workMode} &mdash; {jobType} &mdash; {jobLevel} &mdash;{' '}
-            {location}
+            Posted: {job.created_at || 'N/A'} &mdash; {workMode} &mdash;{' '}
+            {jobType} &mdash; {jobLevel} &mdash; {location}
           </div>
 
           <p className="text-xl font-bold text-gray-900">

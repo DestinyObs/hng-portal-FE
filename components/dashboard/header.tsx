@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -20,6 +20,26 @@ const DashboardHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isCompany = user?.current_role === 'employer';
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    if (isProfileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileOpen]);
 
   const dashboardLinks = [
     {
@@ -34,7 +54,7 @@ const DashboardHeader = () => {
     },
     {
       label: isCompany ? 'TALENTS' : 'MY APPLICATIONS',
-      href: isCompany ? '/company/applicants' : '/talent/applicants',
+      href: isCompany ? '/company/applications' : '/talent/applications',
       active: false,
     },
   ];
@@ -64,6 +84,11 @@ const DashboardHeader = () => {
     a_logout();
   };
 
+  // Handler to close dropdown when navigating to profile
+  const handleProfileClick = () => {
+    setIsProfileOpen(false);
+  };
+
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className=" px-4 xl:px-24 py-6">
@@ -83,7 +108,7 @@ const DashboardHeader = () => {
             </div>
           </Link>
 
-          <ul className="hidden md:flex items-center w-[233px] h-6 gap-6">
+          <ul className="hidden md:flex items-center h-6 gap-6">
             {dashboardLinks.map((item) => (
               <li key={item.label} className="shrink-0">
                 <Link
@@ -101,7 +126,7 @@ const DashboardHeader = () => {
           </ul>
 
           <div className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-5 text-gray-100">
+            {/* <div className="flex items-center gap-5 text-gray-100">
               <button className="hover:text-primary-blue transition">
                 <Image
                   src="/images/message-icon.png"
@@ -118,14 +143,14 @@ const DashboardHeader = () => {
                   height={20}
                 />
               </button>
-            </div>
+            </div> */}
 
-            <div className="relative">
-              <button
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-2 pl-2 focus:outline-none"
-              >
-                <div className="w-9 h-9 rounded-full overflow-hidden">
+            <div className="relative" ref={profileDropdownRef}>
+              <button className="flex items-center gap-4 pl-2 focus:outline-none">
+                <div
+                  className="w-9 h-9 rounded-full overflow-hidden"
+                  onClick={handleProfileClick}
+                >
                   {user?.company?.logo_url && isCompany ? (
                     <Link href={'/profile-view'}>
                       <Image
@@ -162,8 +187,9 @@ const DashboardHeader = () => {
                 </div>
 
                 <ChevronDown
-                  size={16}
-                  className={`text-gray-100 transition-transform duration-200 ${
+                  size={24}
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className={`text-gray-100 transition-transform duration-200 cursor-pointer ${
                     isProfileOpen ? 'rotate-180' : ''
                   }`}
                 />
@@ -182,14 +208,15 @@ const DashboardHeader = () => {
                   <div className="flex flex-col gap-4 pl-6">
                     <Link
                       href="/settings"
-                      className="text-sm font-medium text-black transition-colors text-left"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="text-sm font-medium text-black transition-colors text-left cursor-pointer"
                     >
                       Settings
                     </Link>
                     <button
                       onClick={handleLogout}
                       disabled={isLoggingOut}
-                      className="text-sm font-medium text-primary-error transition-colors text-left disabled:opacity-50"
+                      className="text-sm font-medium text-primary-error transition-colors text-left disabled:opacity-50 cursor-pointer"
                     >
                       {isLoggingOut ? 'Logging out...' : 'Log out'}
                     </button>

@@ -57,7 +57,7 @@ export default function SignInPage() {
         onClick={handleGoogleSignIn}
       >
         <GoogleColoredIcon className="mr-2 h-4 w-4" />
-        {isLoading ? 'Signing in...' : 'Sign up with Google'}
+        {isLoading ? 'Signing in...' : 'Sign in with Google'}
       </Button>
 
       <p className="mt-6 text-center text-sm text-muted-foreground">

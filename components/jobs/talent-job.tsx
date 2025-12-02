@@ -124,8 +124,12 @@ const TalentJob = ({ id }: { id: string }) => {
 
             {/* Apply Button */}
             <div className="md:max-w-[315px] space-y-3">
-              <Button disabled={job?.is_applied} size={'xs'}>
-                Apply Now
+              <Button
+                disabled={job?.is_applied}
+                size={'xs'}
+                onClick={() => router.push(`/talent/job/${id}/apply`)}
+              >
+                {job?.is_applied ? 'Already Applied' : 'Apply Now'}
               </Button>
 
               {/* Save Job */}
@@ -137,11 +141,10 @@ const TalentJob = ({ id }: { id: string }) => {
               >
                 <Heart
                   className={`mr-2 ${
-                    job?.is_saved ? 'fill-red-500 text-red-500' : '' // Add optional chaining
+                    job?.is_saved ? 'fill-red-500 text-red-500' : ''
                   }`}
-                />{' '}
-                {job?.is_saved ? 'Saved' : 'Save job'}{' '}
-                {/* Add optional chaining */}
+                />
+                {job?.is_saved ? 'Saved' : 'Save job'}
               </Button>
             </div>
 
