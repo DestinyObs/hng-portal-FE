@@ -259,7 +259,7 @@ const DashboardHeader = () => {
                 </button>
               </li>
 
-              <div className="flex gap-4 py-2">
+              {/* <div className="flex gap-4 py-2">
                 <Image
                   src="/images/message-icon.png"
                   width={20}
@@ -272,7 +272,7 @@ const DashboardHeader = () => {
                   height={20}
                   alt="Notifications"
                 />
-              </div>
+              </div> */}
             </ul>
           </div>
         )}
