@@ -10,9 +10,11 @@ import {
   NavLinks,
 } from '@/public/assets/images/landing-page/shared/constants';
 import Logo from '@/public/assets/images/landing-page/shared/logo.png';
+import { useAuthStore } from '@/store/auth';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
@@ -80,26 +82,45 @@ const Header = () => {
             ))}
           </ul>
 
-          <div className="flex items-center gap-2">
-            <Link href="/sign-in" passHref>
+          {user ? (
+            <Link
+              href={
+                user.current_role === 'talent'
+                  ? '/talent/dashboard'
+                  : '/company/dashboard'
+              }
+              passHref
+            >
               <Button
                 asChild
                 variant="outline"
-                className="rounded-full w-32 h-10 hidden lg:flex"
+                className="rounded-full h-10 hidden lg:flex"
               >
-                <span>Login</span>
+                <span>Back to Dashboard</span>
               </Button>
             </Link>
-            <Link href="/sign-up" passHref>
-              <Button
-                asChild
-                variant="outline"
-                className="bg-[#D9ECFE] border-[#8CC6FC] border rounded-full w-32 h-10 hidden lg:flex"
-              >
-                <span>Get Started</span>
-              </Button>
-            </Link>
-          </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link href="/sign-in" passHref>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full w-32 h-10 hidden lg:flex"
+                >
+                  <span>Login</span>
+                </Button>
+              </Link>
+              <Link href="/sign-up" passHref>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-[#D9ECFE] border-[#8CC6FC] border rounded-full w-32 h-10 hidden lg:flex"
+                >
+                  <span>Get Started</span>
+                </Button>
+              </Link>
+            </div>
+          )}
         </nav>
 
         <div
@@ -129,27 +150,46 @@ const Header = () => {
                 </li>
               ))}
               <li>
-                <div className="flex items-center justify-center gap-4">
-                  <Link href="/sign-in" passHref>
+                {user ? (
+                  <Link
+                    href={
+                      user.current_role === 'talent'
+                        ? '/talent/dashboard'
+                        : '/company/dashboard'
+                    }
+                    passHref
+                  >
                     <Button
                       asChild
                       variant="outline"
-                      className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                      className="rounded-full h-10 hidden lg:flex"
                     >
-                      <span>Login</span>
+                      <span>Back to Dashboard</span>
                     </Button>
                   </Link>
+                ) : (
+                  <div className="flex items-center justify-center gap-4">
+                    <Link href="/sign-in" passHref>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                      >
+                        <span>Login</span>
+                      </Button>
+                    </Link>
 
-                  <Link href="/sign-up" passHref>
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
-                    >
-                      <span>Get Started</span>
-                    </Button>
-                  </Link>
-                </div>
+                    <Link href="/sign-up" passHref>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="bg-white border-primary-300 border-2 rounded-full w-[138px] h-14"
+                      >
+                        <span>Get Started</span>
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </li>
             </ul>
           </nav>

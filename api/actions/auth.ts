@@ -7,12 +7,8 @@ import {
   makeOtpRequest,
 } from '../config.server';
 import { cookies } from 'next/headers';
-import { signIn } from '@/auth';
 import { ChangePasswordFormValues } from '@/validations/change-password';
 
-export const siginWithGoogle = async () => {
-  return await signIn('google', { redirectTo: '/dashboard' });
-};
 import { SuccessResponse } from '@/types/api-response';
 import { GoogleAuthRequest } from '@/types/auth';
 import { getEssentialUserData } from '@/lib/utils';
@@ -24,7 +20,7 @@ export const login = async (formData: LoginType) => {
   });
 
   if (res.success) {
-    // const user = getEssentialUserData(res.data.user);
+    const user = getEssentialUserData(res.data.user);
     (await cookies()).set('token', res.data?.token as string, {
       httpOnly: true,
       secure: true,
@@ -32,7 +28,7 @@ export const login = async (formData: LoginType) => {
       path: '/',
     });
 
-    (await cookies()).set('user', JSON.stringify(res.data.user), {
+    (await cookies()).set('user', JSON.stringify(user), {
       httpOnly: false,
       sameSite: 'strict',
       path: '/',
@@ -57,7 +53,7 @@ export async function google_signin(formData: GoogleAuthRequest) {
 
     if (response.ok) {
       const data = await response.json();
-      // const user = getEssentialUserData(data.data.user);
+      const user = getEssentialUserData(data.data.user);
       (await cookies()).set('token', data?.data?.token as string, {
         httpOnly: true,
         secure: true,
@@ -66,7 +62,7 @@ export async function google_signin(formData: GoogleAuthRequest) {
       });
 
       if (formData.isNewUser === false) {
-        (await cookies()).set('user', JSON.stringify(data.data.user), {
+        (await cookies()).set('user', JSON.stringify(user), {
           httpOnly: false,
           sameSite: 'strict',
           path: '/',

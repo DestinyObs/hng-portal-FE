@@ -6,11 +6,13 @@ interface AuthState {
   email: string | null;
   user_id: string | null;
   user: User | null;
+  hydrated: boolean;
+
   setEmail: (email: string) => void;
+  clearEmail: () => void;
   setId: (id: string) => void;
   setData: (data: User) => void;
-  clearEmail: () => void;
-  hydrated: boolean;
+  clearAuth: () => void; // NEW
 }
 
 export const useAuthStore = create(
@@ -18,12 +20,23 @@ export const useAuthStore = create(
     (set) => ({
       email: null,
       user_id: null,
-      hydrated: false,
       user: null,
+      hydrated: false,
+
       setEmail: (email) => set({ email }),
       clearEmail: () => set({ email: null }),
       setId: (id) => set({ user_id: id }),
       setData: (data) => set({ user: data }),
+
+      clearAuth: () => {
+        set({
+          email: null,
+          user_id: null,
+          user: null,
+        });
+        const storageKey = 'auth-store';
+        localStorage.removeItem(storageKey);
+      },
     }),
     {
       name: 'auth-store',
