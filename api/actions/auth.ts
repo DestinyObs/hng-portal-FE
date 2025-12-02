@@ -185,19 +185,22 @@ export const requestOtpForUnauthenticatedUser = async (formData: {
 };
 
 export const logout = async () => {
-  const res = await makeAuthenticatedRequest<SuccessResponse, null>(
-    '/auth/logout',
-    {
-      method: 'POST',
-    },
-  );
-  if (res.status === 401) {
-    (await cookies()).delete('user');
-    (await cookies()).delete('token');
-  }
-  if (res.success) {
-    (await cookies()).delete('user');
-    (await cookies()).delete('token');
-  }
-  return res;
+  await makeAuthenticatedRequest<SuccessResponse, null>('/auth/logout', {
+    method: 'POST',
+  });
+
+  (await cookies()).set('token', '', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    path: '/',
+  });
+
+  (await cookies()).set('user', '', {
+    httpOnly: false,
+    sameSite: 'strict',
+    path: '/',
+  });
+
+  return Response.json({ success: true });
 };

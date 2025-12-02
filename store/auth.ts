@@ -8,7 +8,7 @@ interface AuthState {
   user: User | null;
   setEmail: (email: string) => void;
   setId: (id: string) => void;
-  setData: (data: User) => void;
+  setData: (data: User | null) => void;
   clearEmail: () => void;
   hydrated: boolean;
 }
