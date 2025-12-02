@@ -399,10 +399,10 @@ export default function WaitlistPage() {
 
           <div className="flex flex-row flex-wrap items-center gap-4 text-foreground justify-center md:justify-start">
             {' '}
-            {/* <div className="flex gap-4">
+            <div className="flex gap-4">
               <a href="#">Privacy Policy</a>
               <a href="#">Contact</a>
-            </div> */}
+            </div>
             <span>© 2025 HNG Connect</span>
           </div>
         </div>

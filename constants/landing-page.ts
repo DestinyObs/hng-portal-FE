@@ -48,7 +48,7 @@ export const testimonials = [
     image: '/images/customer1.jpg',
   },
   {
-    name: 'Samuel O.',
+    name: 'Cynthia O.',
     country: 'Nigeria',
     userType: 'Hiring Manager',
     testimonial:
@@ -69,32 +69,32 @@ export const testimonials = [
     userType: 'Product Designer',
     testimonial:
       'HNG Connect gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
-    image: '/images/customer1.jpg',
+    image: '/images/customer4.jpg',
   },
   {
     name: 'Samuel O.',
     country: 'Nigeria',
     userType: 'Hiring Manager',
     testimonial:
-      'HNG Connect helped us find qualified candidates without spending hours reviewing irrelevant CVs. The platform’s filters and assessments are incredibly accurate.',
-    image: '/images/customer2.png',
+      'HNG Connect enabled us to quickly find qualified candidates, saving us hours that would have been spent sifting through irrelevant CVs. The platform’s filtering and assessment tools are impressively precise.',
+    image: '/images/customer5.jpg',
   },
-  {
-    name: 'Nelo A.',
-    country: 'United Kingdom',
-    userType: 'Tech Lead',
-    testimonial:
-      'The talent pool on HNG Connect is impressive. The developers we interviewed were well-prepared, responsive, and possessed the exact skills we were looking for.',
-    image: '/images/customer3.png',
-  },
-  {
-    name: 'Emmanuel O.',
-    country: 'Nigeria',
-    userType: 'Product Designer',
-    testimonial:
-      'HNG Connect gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
-    image: '/images/customer1.jpg',
-  },
+  // {
+  //   name: 'Nelo A.',
+  //   country: 'United Kingdom',
+  //   userType: 'Tech Lead',
+  //   testimonial:
+  //     'The talent pool on HNG Connect is impressive. The developers we interviewed were well-prepared, responsive, and possessed the exact skills we were looking for.',
+  //   image: '/images/customer3.png',
+  // },
+  // {
+  //   name: 'Emmanuel O.',
+  //   country: 'Nigeria',
+  //   userType: 'Product Designer',
+  //   testimonial:
+  //     'HNG Connect gave me visibility to companies I never had access to before. I landed interviews quickly, and the platform made the entire process easier.',
+  //   image: '/images/customer1.jpg',
+  // },
 ];
 
 export const faq = [
