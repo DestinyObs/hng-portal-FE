@@ -24,8 +24,6 @@ export default function MyApplicationsPage() {
     },
   });
 
-  console.log('Applications Data:', applications); // Added console log
-
   if (isError) {
     toast.error(error.message || 'Failed to fetch your applications.');
   }

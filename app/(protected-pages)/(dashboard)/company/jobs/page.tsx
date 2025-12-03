@@ -1,41 +1,48 @@
-'use client';
+// 'use client';
 
-import { useAuthStore } from '@/store/auth';
-import { useGetAllJobs } from '@/hooks/jobs';
+// import { useAuthStore } from '@/store/auth';
+// import { useGetAllJobs } from '@/hooks/jobs';
 
-import Loading from '@/app/loading';
-import JobCard from '@/components/dashboard/job-card';
-import DashboardNav from '@/components/dashboard/dashoard-nav';
-import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
+// import Loading from '@/app/loading';
+// import JobCard from '@/components/dashboard/job-card';
+// import DashboardNav from '@/components/dashboard/dashoard-nav';
+// import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
 
-import { companyDashboardNavLinks } from '@/constants/dashboard';
-import { JobCardProps } from '@/types/job-card';
+// import { companyDashboardNavLinks } from '@/constants/dashboard';
+// import { JobCardProps } from '@/types/job-card';
 
-export default function JobsPage() {
-  const { user } = useAuthStore();
-  const id = user?.company?.id;
-  // console.log(user?.company);
-  const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
-    id,
-  );
-  // console.log(allJobs);
-  const jobs = allJobs?.data;
+// export default function JobsPage() {
+//   const { user } = useAuthStore();
+//   const id = user?.company?.id;
+//   // console.log(user?.company);
+//   const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
+//     id,
+//   );
+//   // console.log(allJobs);
+//   const jobs = allJobs?.data;
+//   console.log(allJobs, 'from jobs page');
 
-  return (
-    <div>
-      <DashboardNav tabs={companyDashboardNavLinks} />
-      {isLoading ? (
-        <Loading />
-      ) : jobs && jobs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 py-4 sm:py-6">
-          {/*  Job Listing cards */}
-          {jobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-      ) : (
-        <DashboardEmptyState />
-      )}
-    </div>
-  );
+//   return (
+//     <div>
+//       <DashboardNav tabs={companyDashboardNavLinks} />
+//       {isLoading ? (
+//         <Loading />
+//       ) : jobs && jobs.length > 0 ? (
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 py-4 sm:py-6">
+//           {/*  Job Listing cards */}
+//           {jobs.map((job) => (
+//             <JobCard key={job.id} job={job} />
+//           ))}
+//         </div>
+//       ) : (
+//         <DashboardEmptyState />
+//       )}
+//     </div>
+//   );
+// }
+
+import { redirect } from 'next/navigation';
+
+export default function Page() {
+  redirect('/company/jobs/active');
 }

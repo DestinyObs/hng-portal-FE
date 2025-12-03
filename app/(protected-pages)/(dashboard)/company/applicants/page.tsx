@@ -27,7 +27,7 @@ export default async function ApplicantsPage() {
   ];
 
   return (
-    <div className="w-full min-h-screen px-6 py-4">
+    <div className="w-full min-h-screen py-4">
       <Tabs tabs={tabsData} variant="ghost" />
     </div>
   );

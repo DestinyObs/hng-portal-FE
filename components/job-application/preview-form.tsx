@@ -6,6 +6,7 @@ import JobApplicationDetails from './job-details';
 import { Button } from '../ui/button';
 import { PreviewProps } from '@/types/job-application-form';
 import { Modal } from '../dashboard/modal';
+import { useRouter } from 'next/navigation';
 
 const JobApplicationPreview: React.FC<PreviewProps> = ({
   data,
@@ -15,6 +16,7 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
   const { cover_letter, portfolioLink, resume } = data;
   const file = resume instanceof FileList ? resume[0] : resume;
   const [showApplicationModal, setShowApplicationModal] = useState(false);
+  const router = useRouter();
 
   return (
     <div className="w-full mx-auto bg-gray-50 p-4 space-y-6">
@@ -25,7 +27,10 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
         <div className="py-3">
           <h2 className="text-xl font-semibold mb-2">Cover Letter</h2>
 
-          <div className="border border-input rounded-lg p-4 bg-gray-50 min-h-[180px] whitespace-pre-line wrap-break-word overflow-auto">
+          <div
+            className="border border-input rounded-lg p-4 bg-gray-50 min-h-[180px]
+                  whitespace-pre-line wrap-break-word break-all w-full overflow-hidden"
+          >
             {cover_letter || 'No cover letter provided.'}
           </div>
         </div>
@@ -66,7 +71,11 @@ const JobApplicationPreview: React.FC<PreviewProps> = ({
       {/* Action Buttons  */}
       <div className="flex flex-col sm:flex-row max-w-4xl justify-between">
         <div className="flex justify-between">
-          <Button variant="outline" className="border-[#E7E7E7] text-[#344054]">
+          <Button
+            variant="outline"
+            className="border-[#E7E7E7] text-[#344054] "
+            onClick={() => router.push('/talent/dashboard')}
+          >
             Cancel
           </Button>
         </div>

@@ -15,10 +15,26 @@ import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import { useState } from 'react';
 import { SortByDropdown } from '@/components/dashboard/sort-by-dropdown';
+import DashboardSidebar from '@/components/dashboard/sidebar';
 
 const TalentDashboardPage = () => {
   const { user } = useAuthStore();
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
+
+  // Check if user is returning or first-time
+  const [isReturningUser] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hasVisitedDashboard = localStorage.getItem(
+        'hasVisitedTalentDashboard',
+      );
+      if (!hasVisitedDashboard) {
+        localStorage.setItem('hasVisitedTalentDashboard', 'true');
+        return false;
+      }
+      return true;
+    }
+    return false;
+  });
 
   const {
     data: jobs,
@@ -104,7 +120,8 @@ const TalentDashboardPage = () => {
         {/* Welcome Header */}
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            Welcome back, {user?.firstname || 'Esther'}!
+            {isReturningUser ? 'Welcome back' : 'Welcome'},{' '}
+            {user?.firstname || 'Esther'}!
           </h1>
           <p className="text-gray-600">
             You&apos;re almost there. Complete your profile to unlock better job
@@ -130,6 +147,8 @@ const TalentDashboardPage = () => {
             );
           })}
         </div>
+
+        <DashboardSidebar className="flex mb-5 lg:hidden" />
 
         {/* Recommended Jobs */}
         <div className="flex items-center justify-between">

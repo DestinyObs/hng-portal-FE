@@ -52,8 +52,8 @@ const DashboardHeader = () => {
       active: false,
     },
     {
-      label: isCompany ? 'TALENTS' : 'MY APPLICATIONS',
-      href: isCompany ? '/company/applications' : '/talent/applications',
+      label: isCompany ? 'APPLICANTS' : 'MY APPLICATIONS',
+      href: isCompany ? '/company/applicants' : '/talent/applications',
       active: false,
     },
   ];
@@ -169,7 +169,7 @@ const DashboardHeader = () => {
                     <Link href={'/profile-view'}>
                       <PlaceholderProfile
                         size={'100%'}
-                        fontSize={'1rem'}
+                        className="text-base"
                         name={
                           isCompany
                             ? (user?.company?.name ?? '')
@@ -253,7 +253,7 @@ const DashboardHeader = () => {
                 </button>
               </li>
 
-              <div className="flex gap-4 py-2">
+              {/* <div className="flex gap-4 py-2">
                 <Image
                   src="/images/message-icon.png"
                   width={20}
@@ -266,7 +266,7 @@ const DashboardHeader = () => {
                   height={20}
                   alt="Notifications"
                 />
-              </div>
+              </div> */}
             </ul>
           </div>
         )}

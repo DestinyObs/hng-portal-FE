@@ -32,10 +32,30 @@ export default function TrackSelection() {
   const { mutate, isPending } = useMutation({
     mutationKey: ['select_track_onboarding'],
     mutationFn: talent_onboarding_api,
-    onSuccess: () => {
-      toast.success('Skills saved!');
-      navigate.push('/onboarding/talent?page=portfolio');
-      setTabs('portfolio');
+    onSuccess: (res) => {
+      if (res.success && res.data) {
+        toast.success('Tracks saved!');
+        navigate.push('/onboarding/talent?page=portfolio');
+        setTabs('portfolio');
+      } else {
+        const errorMessage = res.message || 'An unknown error occurred.';
+
+        if (res.status === 401) {
+          toast.error('Validation Failed, please check your input');
+        } else {
+          if (res.errors) {
+            const errorString = Object.values(res.errors).flat().join(' ');
+            toast.error(errorString);
+          } else {
+            toast.error(errorMessage);
+          }
+        }
+      }
+    },
+    onError: () => {
+      toast.error(
+        'Something went wrong, please check your input and try again',
+      );
     },
   });
 

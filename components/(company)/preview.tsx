@@ -88,7 +88,6 @@ export const PreviewJob = ({ postDetails }: { postDetails: Job }) => {
         </h3>
         <div className="list-disc list-inside text-tertiary-200 space-y-1 text-[16px] ${dm_sans.className} wrap-anywhere">
           <ReactMarkdown>{postDetails?.acceptance_criteria}</ReactMarkdown>
-          {postDetails?.acceptance_criteria}
         </div>
       </div>
     </div>

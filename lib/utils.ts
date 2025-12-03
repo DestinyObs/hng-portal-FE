@@ -63,14 +63,30 @@ export function getPageNumbers(
 }
 
 export const getEssentialUserData = (user: User) => {
+  const {
+    firstname,
+    lastname,
+    current_role,
+    roles,
+    email,
+    company,
+    id,
+    bio,
+    photo_url,
+    phone,
+  } = user;
+
   return {
-    id: user.id,
-    company_id: user.company?.id,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    current_role: user.current_role,
-    roles: user.roles,
-    email: user.email,
+    id,
+    company,
+    firstname,
+    lastname,
+    current_role,
+    roles,
+    email,
+    bio,
+    photo_url,
+    phone,
     // Add any other essential fields you need
   };
 };
