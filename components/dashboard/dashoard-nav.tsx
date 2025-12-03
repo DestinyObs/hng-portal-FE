@@ -4,17 +4,20 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 import { DasbhoardNavLinkProps } from '@/types/dashboard';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardNav({
   tabs,
 }: {
   tabs: DasbhoardNavLinkProps[];
 }) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<DasbhoardNavLinkProps>(tabs[0]);
 
   //on change tab
   const onTabChange = (tab: DasbhoardNavLinkProps) => {
     setActiveTab(tab);
+    router.push(`/company/jobs/${tab.value}`);
   };
 
   return (

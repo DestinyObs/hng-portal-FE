@@ -13,12 +13,14 @@ interface TalentProfileViewProps {
   tracks?: { id: string; name: string }[] | undefined;
 }
 
-export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
-
-  const trackName = tracks?.find((t) => t.id === profile?.bio?.track_id?.toString())?.name ?? "Not Specified";
-
-  const countryName = Country.getCountryByCode(profile?.bio?.country ?? '')?.name || "";
-  const stateName = State.getStateByCodeAndCountry(profile?.bio?.state ?? '', profile?.bio?.country ?? '')?.name || "";
+export function TalentProfileView({ profile }: TalentProfileViewProps) {
+  const countryName =
+    Country.getCountryByCode(profile?.bio?.country ?? '')?.name || '';
+  const stateName =
+    State.getStateByCodeAndCountry(
+      profile?.bio?.state ?? '',
+      profile?.bio?.country ?? '',
+    )?.name || '';
   return (
     <div className="w-full max-w-4xl mx-auto p-8">
       {/* Banner */}
@@ -26,9 +28,9 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
         <div className="absolute -bottom-12 left-6 h-40 w-40 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
           <Image
             src={
-              profile?.bio?.user?.photo_url || 
-              profile?.photo_url || 
-              "/assets/dashboard-settings/images/avatar.png"
+              profile?.bio?.user?.photo_url ||
+              profile?.photo_url ||
+              '/assets/dashboard-settings/images/avatar.png'
             }
             alt="Profile"
             fill
@@ -71,7 +73,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
               <p className="text-sm text-gray-700">
                 <span className="font-semibold">Work Experience: </span>
 
-                {profile?.bio?.experience || "N/A"}
+                {profile?.bio?.experience || 'N/A'}
               </p>
 
               {/* <div className="flex items-center gap-2 mt-2">
@@ -118,7 +120,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
           <div className="mb-10">
             <h3 className="text-2xl font-semibold text-black mb-4">Bio</h3>
             <p className="text-base text-black whitespace-pre-line">
-              {profile?.bio?.bio ?? "No bio added yet."}
+              {profile?.bio?.bio ?? 'No bio added yet.'}
             </p>
           </div>
 
@@ -151,7 +153,6 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
                 ))}
               </div>
             )}
-
           </div>
 
           {/* SKILLS */}
@@ -171,7 +172,6 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
                   </span>
                 ))
               )}
-
             </div>
           </div>
         </CardContent>

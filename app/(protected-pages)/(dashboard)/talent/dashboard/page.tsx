@@ -56,7 +56,6 @@ const TalentDashboardPage = () => {
 
   const {
     data: savedJobs,
-    isLoading: isLoadingSavedJobs,
     isError: isErrorSavedJobs,
     error: errorSavedJobs,
   } = useQuery<TalentJob[], Error>({
@@ -74,7 +73,6 @@ const TalentDashboardPage = () => {
 
   const {
     data: applications,
-    isLoading: isLoadingApplications,
     isError: isErrorApplications,
     error: errorApplications,
   } = useQuery<TalentApplication[], Error>({

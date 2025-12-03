@@ -1,6 +1,4 @@
 'use client';
-
-import { useState, useCallback } from 'react'; // Import useCallback
 import JobCard from '@/components/jobs/job-card';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
