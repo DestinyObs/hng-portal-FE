@@ -127,10 +127,11 @@ export default function PortfolioPage() {
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => handleEditPortfolio(portfolio)}
-                          className="text-[#00AEFF] text-base font-medium hover:text-blue-600"
+                          className="text-[#00AEFF] text-base font-medium hover:text-primary-300 cursor-pointer"
                         >
                           Edit
                         </button>
+                        {/*
                         <button
                           onClick={() => {
                             // TODO: Implement delete functionality
@@ -139,7 +140,7 @@ export default function PortfolioPage() {
                           className="text-[#FF3B30] text-base font-medium hover:text-red-700"
                         >
                           Remove
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>

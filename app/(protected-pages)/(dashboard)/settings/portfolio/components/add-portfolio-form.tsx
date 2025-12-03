@@ -21,6 +21,7 @@ import {
 } from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
 import { Portfolio } from '@/types/profile-settings';
+import { toast } from 'sonner';
 
 // Zod schema for validation
 const portfolioSchema = z.object({
@@ -58,9 +59,6 @@ export default function AddPortfolioForm({
       banner_url: portfolio?.banner_url || '',
     },
   });
-  useEffect(() => {
-    console.log(imageFile);
-  }, [imageFile]);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -94,6 +92,9 @@ export default function AddPortfolioForm({
       }
 
       if (result.success) {
+        toast.success(
+          `Portfolio project ${isEditing ? 'updated' : 'added'} successfully!`,
+        );
         await queryClient.invalidateQueries({ queryKey: ['profile'] });
         form.reset();
         setImagePreview(null);
@@ -103,6 +104,9 @@ export default function AddPortfolioForm({
       console.error(error);
     } finally {
       setIsSubmitting(false);
+      if (onSuccess) {
+        onSuccess();
+      }
     }
   }
 
