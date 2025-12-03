@@ -25,7 +25,7 @@ export interface BaseUser {
   email_verified_at: string | null;
   phone: string | null;
   dob: string | null;
-  current_role: string;
+  current_role: 'employer' | 'talent';
   status: string;
   address_id: string | null;
   photo_url: string | null;

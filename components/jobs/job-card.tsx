@@ -102,7 +102,7 @@ export default function JobCard({ job }: JobCardProps) {
         </button>
       </div>
 
-      <p className="mb-6 text-(--color-gray-100) text-sm leading-relaxed">
+      <p className="mb-6 text-(--color-gray-100) text-sm leading-relaxed wrap-break-word whitespace-pre-wrap">
         {job.description}
       </p>
 

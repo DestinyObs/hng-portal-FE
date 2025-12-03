@@ -1,15 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-
 import { useAuthStore } from '@/store/auth';
 import { useGetAllJobs } from '@/hooks/jobs';
-
 import Loading from '@/app/loading';
 import JobCard from '@/components/dashboard/job-card';
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
-
 import { COMPANY_DASHBOARD_CARDS } from '@/constants/dashboard';
 import { JobCardProps } from '@/types/job-card';
 import DashboardSidebar from '@/components/dashboard/sidebar';
@@ -19,17 +17,34 @@ export default function CompanyDashboardPage() {
   //extract current user id
   const id = user?.company?.id;
 
+  // Check if user is returning or first-time
+  const [isReturningUser] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hasVisitedDashboard = localStorage.getItem(
+        'hasVisitedCompanyDashboard',
+      );
+      if (!hasVisitedDashboard) {
+        localStorage.setItem('hasVisitedCompanyDashboard', 'true');
+        return false;
+      }
+      return true;
+    }
+    return false;
+  });
+
   //Get all jobs
   const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
     id,
   );
   const jobs = allJobs?.data;
+
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col gap-8 sm:gap-6">
         <div className="flex flex-col gap-1 items-center sm:items-start">
           <h1 className="text-[#232323] text-2xl font-bold leading-8">
-            Welcome back, {user?.company?.name}
+            {isReturningUser ? 'Welcome back' : 'Welcome'},{' '}
+            {user?.company?.name}
           </h1>
           <p className="text-base font-normal leading-6 text-[#5E5C5C]">
             Your hiring dashboard is ready. Complete your profile to attract

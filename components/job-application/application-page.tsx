@@ -8,7 +8,7 @@ import { useApplyForJob } from '@/hooks/jobs';
 import { useParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Modal } from '../dashboard/modal';
-import { CircleCheck } from 'lucide-react';
+import { ChevronLeft, CircleCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const JobApplicationPage = () => {
@@ -40,12 +40,13 @@ const JobApplicationPage = () => {
   };
 
   const handleFinalSubmit = () => {
-    if (
-      !formData?.resume ||
-      !(formData.resume instanceof FileList) ||
-      formData.resume.length === 0
-    ) {
+    if (!formData?.resume || formData.resume.length === 0) {
       toast.error('Resume is required.');
+      return;
+    }
+
+    if (!(formData.resume instanceof FileList)) {
+      toast.error('Resume should be of .pdf type only');
       return;
     }
 
@@ -64,6 +65,15 @@ const JobApplicationPage = () => {
 
   return (
     <>
+      {/* Back button */}
+      <button
+        className="inline-flex items-center text-left text-primary-blue font-semibold p-6 cursor-pointer"
+        onClick={() => router.back()}
+      >
+        <ChevronLeft className="mr-2" />
+        Back
+      </button>
+
       {step === 'form' ? (
         <JobApplicationForm
           onNext={handleFormSubmit}
