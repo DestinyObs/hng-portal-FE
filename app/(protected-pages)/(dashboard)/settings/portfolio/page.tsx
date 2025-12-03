@@ -19,10 +19,6 @@ export default function PortfolioPage() {
   );
   const queryClient = useQueryClient();
   const { data } = useGetProfileData();
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   // Portfolios from BE
   const portfolios = data?.portfolios || [];
 
