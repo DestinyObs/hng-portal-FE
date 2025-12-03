@@ -1,15 +1,11 @@
 'use client';
-
 import Link from 'next/link';
-
 import { useAuthStore } from '@/store/auth';
-import { useGetAllJobs } from '@/hooks/jobs';
-
+import { useGetAllJobs, useGetDashboardAnalytics } from '@/hooks/jobs';
 import Loading from '@/app/loading';
 import JobCard from '@/components/dashboard/job-card';
 import DashboardCard from '@/components/dashboard/dashboard-card';
 import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
-
 import { COMPANY_DASHBOARD_CARDS } from '@/constants/dashboard';
 import { JobCardProps } from '@/types/job-card';
 
@@ -17,7 +13,6 @@ export default function CompanyDashboardPage() {
   const { user } = useAuthStore();
   //extract current user id
   const id = user?.company?.id;
-
   //Get all jobs
   const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
     id,
