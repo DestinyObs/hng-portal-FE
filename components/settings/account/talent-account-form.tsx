@@ -124,6 +124,7 @@ export default function TalentAccountForm() {
                       <FormControl>
                         <Input
                           placeholder="John"
+                          disabled
                           {...field}
                           className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                         />
@@ -143,6 +144,7 @@ export default function TalentAccountForm() {
                       <FormControl>
                         <Input
                           placeholder="Doe"
+                          disabled
                           {...field}
                           className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                         />
@@ -178,7 +180,7 @@ export default function TalentAccountForm() {
                 )}
               />
 
-              <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
+              {/*<div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -196,6 +198,7 @@ export default function TalentAccountForm() {
                   {isSubmitting ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
+             */}
             </form>
           </Form>
         </CardContent>
