@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
-import { useGetAllJobs, useGetDashboardAnalytics } from '@/hooks/jobs';
+import { useGetAllJobs } from '@/hooks/jobs';
 import Loading from '@/app/loading';
 import JobCard from '@/components/dashboard/job-card';
 import DashboardCard from '@/components/dashboard/dashboard-card';

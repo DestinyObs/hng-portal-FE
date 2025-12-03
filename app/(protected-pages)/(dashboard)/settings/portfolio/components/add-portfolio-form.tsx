@@ -15,10 +15,12 @@ import {
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { addPortfolio, updatePortfolio } from '@/api/actions/user-profile-settings';
+import {
+  addPortfolio,
+  updatePortfolio,
+} from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
 import { Portfolio } from '@/types/profile-settings';
-import Image from 'next/image';
 
 // Zod schema for validation
 const portfolioSchema = z.object({
@@ -35,7 +37,10 @@ interface PortfolioFormProps {
   portfolio?: Portfolio | null;
 }
 
-export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioFormProps) {
+export default function AddPortfolioForm({
+  onSuccess,
+  portfolio,
+}: PortfolioFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(
     portfolio?.image_url || null,
@@ -173,7 +178,6 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
                   <Textarea
                     placeholder="Full-stack e-commerce solution with React, Node.js..."
                     {...field}
-                  
                     className="mt-2 w-full p-3 resize-none rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200 min-h-32"
                   />
                 </FormControl>
@@ -232,4 +236,3 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
     </div>
   );
 }
-

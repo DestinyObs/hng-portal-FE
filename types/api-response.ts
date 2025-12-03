@@ -1,5 +1,3 @@
-import { TalentJob } from './job-card';
-
 export interface Pagination {
   current_page: number;
   from: number;

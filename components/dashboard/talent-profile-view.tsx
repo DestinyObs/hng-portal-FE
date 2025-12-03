@@ -13,11 +13,7 @@ interface TalentProfileViewProps {
   tracks?: { id: string; name: string }[] | undefined;
 }
 
-export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
-  const trackName =
-    tracks?.find((t) => t.id === profile?.bio?.track_id?.toString())?.name ??
-    'Not Specified';
-
+export function TalentProfileView({ profile }: TalentProfileViewProps) {
   const countryName =
     Country.getCountryByCode(profile?.bio?.country ?? '')?.name || '';
   const stateName =

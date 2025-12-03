@@ -22,6 +22,7 @@ const formatPostedDate = (dateString?: string): string => {
     }
     return 'N/A';
   } catch (error) {
+    console.error(error);
     return 'N/A';
   }
 };
