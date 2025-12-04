@@ -24,16 +24,14 @@ export interface Role {
 }
 
 export interface Media {
-  // Empty array in the response, so defining a minimal structure
-  // Add properties as they appear in actual data
   [key: string]: string;
 }
 
 export interface Experience {
   id: string;
   user_id: string;
-  company: string;
-  position: string;
+  company_name: string;
+  job_title: string;
   start_date: string;
   end_date: string | null;
   is_current: boolean;
@@ -134,8 +132,8 @@ export interface UpdateProfileResponse {
 // Request types for adding work experience
 export interface AddWorkExperienceRequest {
   company_name: string;
-  start_date: string; // MM/DD/YYYY format
-  end_date: string | null; // MM/DD/YYYY format or null for present
+  start_date: string; // YYYY/MM/DD format
+  end_date: string | null; // YYYY/MM/DD format or null for present
   job_title: string;
   description: string;
 }

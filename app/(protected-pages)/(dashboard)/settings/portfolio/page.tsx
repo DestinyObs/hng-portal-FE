@@ -1,24 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
+import { Plus, AlertTriangle } from 'lucide-react';
 import { useGetProfileData } from '@/hooks/profile-settings';
 import { Portfolio } from '@/types/profile-settings';
 import Modal from '@/components/shared/ui/modal';
 import AddPortfolioForm from './components/add-portfolio-form';
 import { useQueryClient } from '@tanstack/react-query';
+import { deletePortfolio } from '@/api/actions/user-profile-settings';
+import { Modal as ConfirmationModal } from '@/components/dashboard/modal';
+import { toast } from 'sonner';
 
 export default function PortfolioPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(
     null,
   );
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [portfolioToDelete, setPortfolioToDelete] = useState<Portfolio | null>(
+    null,
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
-  const { data } = useGetProfileData();
+  const { data, isLoading } = useGetProfileData();
   // Portfolios from BE
   const portfolios = data?.portfolios || [];
 
@@ -43,6 +51,64 @@ export default function PortfolioPage() {
       queryKey: ['profile'],
     });
   };
+
+  const handleDeleteClick = (portfolio: Portfolio) => {
+    setPortfolioToDelete(portfolio);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!portfolioToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await deletePortfolio(portfolioToDelete.id);
+      if (result.success) {
+        toast.success('Portfolio deleted successfully');
+        queryClient.invalidateQueries({
+          queryKey: ['profile'],
+        });
+        setDeleteConfirmationOpen(false);
+        setPortfolioToDelete(null);
+      } else {
+        const errorMessage =
+          typeof result.error === 'string'
+            ? result.error
+            : result.error?.message || 'Failed to delete portfolio';
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting the portfolio');
+      console.error('Error deleting portfolio:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteConfirmationOpen(false);
+    setPortfolioToDelete(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full py-6 justify-center px-4 lg:px-0">
+        <div className="w-full mb-6 space-y-1">
+          <h3 className="text-2xl font-bold text-[#232323]">Portfolio</h3>
+          <p className="font-normal text-base text-black-200">
+            Showcase your best work
+          </p>
+        </div>
+        <Card className="flex-1 w-full bg-white-50 border-[#E8E8E8]">
+          <CardContent className="px-6 max-w-[1056px]">
+            <div className="flex items-center justify-center py-12">
+              <p className="text-[#92959C] text-base">Loading...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full py-6 justify-center px-4 lg:px-0">
@@ -127,16 +193,13 @@ export default function PortfolioPage() {
                         >
                           Edit
                         </button>
-                        {/*
+
                         <button
-                          onClick={() => {
-                            // TODO: Implement delete functionality
-                            console.log('Delete portfolio:', portfolio.id);
-                          }}
+                          onClick={() => handleDeleteClick(portfolio)}
                           className="text-[#FF3B30] text-base font-medium hover:text-red-700"
                         >
                           Remove
-                        </button> */}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -153,6 +216,22 @@ export default function PortfolioPage() {
           onSuccess={handleSuccess}
         />
       </Modal>
+
+      <ConfirmationModal
+        isOpen={deleteConfirmationOpen}
+        onClose={handleCancelDelete}
+        title="Delete Portfolio"
+        message={`Are you sure you want to delete "${portfolioToDelete?.title}"? This action cannot be undone.`}
+        icon={<AlertTriangle className="w-12 h-12 text-red-500" />}
+        primaryButton={{
+          label: isDeleting ? 'Deleting...' : 'Delete',
+          onClick: handleConfirmDelete,
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: handleCancelDelete,
+        }}
+      />
     </div>
   );
 }

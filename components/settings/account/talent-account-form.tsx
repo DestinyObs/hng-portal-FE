@@ -20,6 +20,7 @@ import { useGetProfileData } from '@/hooks/profile-settings';
 import { updateUserProfile } from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -28,7 +29,7 @@ const formSchema = z.object({
 });
 
 export default function TalentAccountForm() {
-  const { data } = useGetProfileData();
+  const { data, isLoading } = useGetProfileData();
   const queryClient = useQueryClient();
   const { user, setData } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,11 +75,12 @@ export default function TalentAccountForm() {
             lastname: values.lastName,
           });
         }
+        toast.success('Profile updated successfully');
       } else {
-        console.error('Error:', result.error);
+        toast.error('Failed to update profile');
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      toast.error('An error occurred while updating your profile');
     } finally {
       setIsSubmitting(false);
     }
@@ -92,6 +94,28 @@ export default function TalentAccountForm() {
         email: data.bio.user.email,
       });
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="w-full py-6 justify-center px-4 lg:px-0">
+        <div className="w-full mb-4 space-y-1 text-center md:text-left">
+          <h3 className="text-2xl font-bold text-[#232323]">
+            Account Information
+          </h3>
+          <p className="font-normal text-base text-black-200">
+            Manage your personal account details
+          </p>
+        </div>
+        <Card className="flex-1 w-full bg-white border-[#E8E8E8] shadow-sm">
+          <CardContent className="p-6 max-w-[1056px]">
+            <div className="flex items-center justify-center py-12">
+              <p className="text-[#92959C] text-base">Loading...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -119,12 +143,11 @@ export default function TalentAccountForm() {
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="text-sm text-[#1A1A1A]">
-                        First Name <span className="text-[#FF3B30]">*</span>
+                        First Name
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="John"
-                          disabled
                           {...field}
                           className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                         />
@@ -139,12 +162,11 @@ export default function TalentAccountForm() {
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="text-sm text-[#1A1A1A]">
-                        Last Name <span className="text-[#FF3B30]">*</span>
+                        Last Name
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Doe"
-                          disabled
                           {...field}
                           className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200"
                         />
@@ -180,7 +202,7 @@ export default function TalentAccountForm() {
                 )}
               />
 
-              {/*<div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
+              <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -198,7 +220,6 @@ export default function TalentAccountForm() {
                   {isSubmitting ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
-             */}
             </form>
           </Form>
         </CardContent>
