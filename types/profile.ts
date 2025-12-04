@@ -99,7 +99,9 @@ export interface CompanyMedia {
   preview_url: string;
 }
 
-export interface CompanyOwner extends BaseUser {}
+export interface CompanyOwner extends BaseUser {
+  _placeholder?: string;
+}
 
 export interface CompanyProfileData {
   id: string;
