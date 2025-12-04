@@ -8,15 +8,16 @@ import { useRouter, usePathname } from 'next/navigation';
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { logout } from '@/api/actions/auth';
-import { APIResponse, SuccessResponse } from '@/types/api-response';
 import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 import { useAuthStore } from '@/store/auth';
 import PlaceholderProfile from './placeholder-profile';
+import { useGetProfileData } from '@/hooks/profile-settings';
 
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, clearAuth } = useAuthStore();
+  const { user, setData } = useAuthStore();
+  const { data } = useGetProfileData();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isCompany = user?.current_role === 'employer';
@@ -62,21 +63,16 @@ const DashboardHeader = () => {
   const { mutate: a_logout, isPending: isLoggingOut } = useMutation({
     mutationKey: ['logout'],
     mutationFn: logout,
-    onSuccess: (response: APIResponse<SuccessResponse | null>) => {
-      if (response.success) {
-        toast.success('Logged out successfully!');
-        clearAuth();
-        router.push('/sign-in');
-      } else {
-        let errorMessage = response.message || 'Failed to log out.';
-        if (response.errors) {
-          errorMessage = Object.values(response.errors).flat().join(' ');
-        }
-        toast.error(errorMessage);
-      }
+    onSuccess: () => {
+      toast.success('Logged out successfully!');
+      localStorage.removeItem('auth-store');
+      setData(null);
+      router.push('/sign-in');
     },
-    onError: (error: Error) => {
-      toast.error(error.message || 'A network or unexpected error occurred.');
+    onError: () => {
+      toast.success('Logged out successfully!');
+      setData(null);
+      router.push('/sign-in');
     },
   });
 
@@ -161,10 +157,10 @@ const DashboardHeader = () => {
                         className="object-cover w-full h-full"
                       />
                     </Link>
-                  ) : user?.photo_url && !isCompany ? (
+                  ) : data?.photo_url && !isCompany ? (
                     <Link href={'/profile-view'}>
                       <Image
-                        src={user.photo_url}
+                        src={data?.photo_url}
                         alt="Profile"
                         width={40}
                         height={40}

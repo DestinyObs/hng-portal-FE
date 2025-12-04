@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -15,17 +15,20 @@ import {
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { addPortfolio, updatePortfolio } from '@/api/actions/user-profile-settings';
+import {
+  addPortfolio,
+  updatePortfolio,
+} from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
 import { Portfolio } from '@/types/profile-settings';
-import Image from 'next/image';
+import { toast } from 'sonner';
 
 // Zod schema for validation
 const portfolioSchema = z.object({
   title: z.string().min(1, 'Project title is required'),
   description: z.string().optional(),
-  url: z.url('Please enter a valid URL').min(1, 'Project URL is required'),
-  image_url: z.string().optional(),
+  link: z.url('Please enter a valid URL').min(1, 'Project URL is required'),
+  banner_url: z.string().optional(),
 });
 
 type PortfolioFormValues = z.infer<typeof portfolioSchema>;
@@ -35,10 +38,13 @@ interface PortfolioFormProps {
   portfolio?: Portfolio | null;
 }
 
-export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioFormProps) {
+export default function AddPortfolioForm({
+  onSuccess,
+  portfolio,
+}: PortfolioFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    portfolio?.image_url || null,
+    portfolio?.banner_url || null,
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
@@ -49,11 +55,10 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
     defaultValues: {
       title: portfolio?.title || '',
       description: portfolio?.description || '',
-      url: portfolio?.url || '',
-      image_url: portfolio?.image_url || '',
+      link: portfolio?.link || '',
+      banner_url: portfolio?.banner_url || '',
     },
   });
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -65,42 +70,43 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
       reader.readAsDataURL(file);
     }
   };
-
   async function onSubmit(data: PortfolioFormValues) {
     setIsSubmitting(true);
 
-    try {
-      const payload = {
-        title: data.title,
-        description: data.description || null,
-        url: data.url,
-        image_url: imagePreview || data.image_url || null,
-      };
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('description', data.description || '');
+    formData.append('link', data.link || '');
 
+    if (imageFile) {
+      formData.append('banner_image', imageFile);
+    }
+
+    try {
       let result;
+
       if (isEditing && portfolio) {
-        result = await updatePortfolio(portfolio.id, payload);
+        result = await updatePortfolio(portfolio.id, formData);
       } else {
-        result = await addPortfolio(payload);
+        result = await addPortfolio(formData);
       }
 
       if (result.success) {
-        // Invalidate profile queries to refresh portfolios
-        await queryClient.invalidateQueries({
-          queryKey: ['profile'],
-        });
-
-        // Reset form
+        toast.success(
+          `Portfolio project ${isEditing ? 'updated' : 'added'} successfully!`,
+        );
+        await queryClient.invalidateQueries({ queryKey: ['profile'] });
         form.reset();
         setImagePreview(null);
         setImageFile(null);
-      } else {
-        console.error('Error saving portfolio:', result.error);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error(error);
     } finally {
       setIsSubmitting(false);
+      if (onSuccess) {
+        onSuccess();
+      }
     }
   }
 
@@ -142,7 +148,7 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
 
           <FormField
             control={form.control}
-            name="url"
+            name="link"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="text-sm text-[#1A1A1A]">
@@ -173,7 +179,6 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
                   <Textarea
                     placeholder="Full-stack e-commerce solution with React, Node.js..."
                     {...field}
-                  
                     className="mt-2 w-full p-3 resize-none rounded-lg border border-[#E7E8E9] focus:outline-none focus:border-black text-black transition placeholder:text-black-200 min-h-32"
                   />
                 </FormControl>
@@ -232,4 +237,3 @@ export default function AddPortfolioForm({ onSuccess, portfolio }: PortfolioForm
     </div>
   );
 }
-

@@ -24,16 +24,14 @@ export interface Role {
 }
 
 export interface Media {
-  // Empty array in the response, so defining a minimal structure
-  // Add properties as they appear in actual data
   [key: string]: string;
 }
 
 export interface Experience {
   id: string;
   user_id: string;
-  company: string;
-  position: string;
+  company_name: string;
+  job_title: string;
   start_date: string;
   end_date: string | null;
   is_current: boolean;
@@ -47,8 +45,8 @@ export interface Portfolio {
   user_id: string;
   title: string;
   description: string | null;
-  url: string | null;
-  image_url: string | null;
+  banner_url: string | null;
+  link: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -134,8 +132,8 @@ export interface UpdateProfileResponse {
 // Request types for adding work experience
 export interface AddWorkExperienceRequest {
   company_name: string;
-  start_date: string; // MM/DD/YYYY format
-  end_date: string | null; // MM/DD/YYYY format or null for present
+  start_date: string; // YYYY/MM/DD format
+  end_date: string | null; // YYYY/MM/DD format or null for present
   job_title: string;
   description: string;
 }
@@ -151,16 +149,16 @@ export interface AddWorkExperienceResponse {
 export interface AddPortfolioRequest {
   title: string;
   description?: string | null;
-  url: string;
-  image_url?: string | null;
+  link?: string;
+  banner_url?: string | null;
 }
 
 // Request types for updating portfolio
 export interface UpdatePortfolioRequest {
   title?: string;
   description?: string | null;
-  url?: string;
-  image_url?: string | null;
+  link?: string;
+  banner_url?: string | null;
 }
 
 // Response types for portfolio

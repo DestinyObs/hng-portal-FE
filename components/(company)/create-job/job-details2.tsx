@@ -22,13 +22,7 @@ import {
   jobDetailsStep2Schema,
   JobPostPayload,
 } from '@/validations/create-post.schema';
-import {
-  useCountries,
-  useJobTypes,
-  useStates,
-  useTracks,
-  useWorkModes,
-} from '@/hooks/lookups';
+import { useJobTypes, useTracks, useWorkModes } from '@/hooks/lookups';
 import { draftPost } from '@/api/actions/create-post';
 import { toast } from 'sonner';
 import Loading from '@/app/loading';
@@ -38,6 +32,7 @@ import { usePostStore } from '@/store/create-post';
 import { useState } from 'react';
 import { useEditPost } from '@/hooks/posts';
 import { Modal } from '@/components/dashboard/modal';
+import { Country, State } from 'country-state-city';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
@@ -56,41 +51,36 @@ export default function JobDetailsStep2({
   const [isDrafting, setIsDrafting] = useState(false);
   const { data: tracks, isLoading: tracksLoading } = useTracks();
   const { data: workModes, isLoading: workModesLoading } = useWorkModes();
-  const { data: countries, isLoading: countriesLoading } = useCountries();
-  const { data: states, isLoading: statesLoading } = useStates();
   const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
   const { user } = useAuthStore();
   const { setNewPost } = usePostStore();
   const { editpost } = useEditPost(id!);
   const [showEditModal, setShowEditModal] = useState(false);
   const [payload, setPayload] = useState<JobPostPayload | null>(null);
+  const countries = Country.getAllCountries();
 
-  // console.log(initialData);
-
-  const isLoading =
-    tracksLoading ||
-    workModesLoading ||
-    countriesLoading ||
-    statesLoading ||
-    jobTypesLoading;
+  const isLoading = tracksLoading || workModesLoading || jobTypesLoading;
 
   const {
     control,
     handleSubmit,
     reset,
     getValues,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<JobDetailsStep2FormData>({
     resolver: zodResolver(jobDetailsStep2Schema),
     defaultValues: {
       track_id: initialData.track_id || '',
       job_type_id: initialData.job_type_id || '',
-      state_id: initialData.state_id || '',
-      country_id: initialData.country_id || '',
+      state: initialData.state || '',
+      country: initialData.country || '',
       work_mode_id: initialData.work_mode_id,
     },
     mode: 'onChange',
   });
+
+  const states = State.getStatesOfCountry(watch('country') || '');
 
   const onSubmit = async (data: JobDetailsStep2FormData) => {
     onUpdate(data);
@@ -99,8 +89,8 @@ export default function JobDetailsStep2({
       title: initialData.title || ' ',
       description: initialData.description || ' ',
       acceptance_criteria: initialData.acceptance_criteria || ' ',
-      state_id: data.state_id || ' ',
-      country_id: data.country_id || ' ',
+      state: data.state || ' ',
+      country: data.country || ' ',
       price: initialData.price || ' ',
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
@@ -131,8 +121,8 @@ export default function JobDetailsStep2({
       title: initialData.title || ' ',
       description: initialData.description || ' ',
       acceptance_criteria: initialData.acceptance_criteria || ' ',
-      state_id: data.state_id || ' ',
-      country_id: data.country_id || ' ',
+      state: data.state || ' ',
+      country: data.country || ' ',
       price: initialData.price || ' ',
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
@@ -282,26 +272,7 @@ export default function JobDetailsStep2({
             <label className="text-sm font-semibold">Job Location</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Controller
-                name="state_id"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full border-input bg-white">
-                      <SelectValue placeholder="State" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {states &&
-                        states.map((location: { id: string; name: string }) => (
-                          <SelectItem key={location.id} value={location.id}>
-                            {location.name}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              <Controller
-                name="country_id"
+                name="country"
                 control={control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
@@ -310,13 +281,34 @@ export default function JobDetailsStep2({
                     </SelectTrigger>
                     <SelectContent>
                       {countries &&
-                        countries.map(
-                          (location: { id: string; name: string }) => (
-                            <SelectItem key={location.id} value={location.id}>
-                              {location.name}
-                            </SelectItem>
-                          ),
-                        )}
+                        countries.map((country) => (
+                          <SelectItem
+                            key={country.isoCode}
+                            value={country.isoCode}
+                          >
+                            {country.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+
+              <Controller
+                name="state"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full border-input bg-white">
+                      <SelectValue placeholder="State" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {states &&
+                        states.map((state) => (
+                          <SelectItem key={state.name} value={state.isoCode}>
+                            {state.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 )}

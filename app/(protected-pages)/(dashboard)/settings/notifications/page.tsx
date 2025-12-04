@@ -172,7 +172,7 @@ export default function NotificationsPage() {
               </div>
             ))}
           </div>
-
+          {/* 
           <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
             <Button
               type="button"
@@ -187,7 +187,7 @@ export default function NotificationsPage() {
             >
               Save Changes
             </Button>
-          </div>
+          </div>*/}
         </CardContent>
       </Card>
     </div>

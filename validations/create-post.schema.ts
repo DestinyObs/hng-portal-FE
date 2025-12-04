@@ -24,8 +24,8 @@ export const jobDetailsStep2Schema = z.object({
   track_id: z.string().min(1, 'HNG Track is required'),
   job_type_id: z.string().min(1, 'Job Type is required'),
   work_mode_id: z.string().min(1, 'Candidate Location is required'),
-  state_id: z.string().optional(),
-  country_id: z.string().optional(),
+  state: z.string().optional(),
+  country: z.string().optional(),
 });
 
 export type JobDetailsStep2FormData = z.infer<typeof jobDetailsStep2Schema>;
@@ -35,8 +35,8 @@ export type JobPostPayload = {
   title: string;
   description: string;
   acceptance_criteria: string;
-  state_id: string;
-  country_id: string;
+  state: string;
+  country: string;
   price: string;
   track_id: string;
   category_id: string;
@@ -51,8 +51,8 @@ export type JobPostPayload2 = {
   title: string;
   description: string;
   acceptance_criteria: string;
-  state_id: string;
-  country_id: string;
+  state: string;
+  country: string;
   price: string;
   track_id: string;
   category_id: string;
@@ -65,8 +65,8 @@ export type JobDraftPayload = {
   title?: string;
   description?: string;
   acceptance_criteria?: string;
-  state_id?: string;
-  country_id?: string;
+  state?: string;
+  country?: string;
   price?: string;
   track_id?: string;
   category_id?: string;

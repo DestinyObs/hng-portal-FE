@@ -5,25 +5,23 @@ import { useGetAllJobs } from '@/hooks/jobs';
 
 import Loading from '@/app/loading';
 import JobCard from '@/components/dashboard/job-card';
-import DashboardNav from '@/components/dashboard/dashoard-nav';
 import DashboardEmptyState from '@/components/dashboard/dashboard-empty-state';
 
-import { companyDashboardNavLinks } from '@/constants/dashboard';
 import { JobCardProps } from '@/types/job-card';
 
 export default function DraftsJobsPage() {
   const { user } = useAuthStore();
   const id = user?.company?.id;
-  // console.log(user?.company);
   const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
     id,
   );
-  // console.log(allJobs);
-  const jobs = allJobs?.data;
+  const jobs = allJobs?.data.filter(
+    (job) => job.status?.toLowerCase() === 'draft',
+  );
+  console.log(allJobs?.data);
 
   return (
     <div>
-      <DashboardNav tabs={companyDashboardNavLinks} />
       {isLoading ? (
         <Loading />
       ) : jobs && jobs.length > 0 ? (

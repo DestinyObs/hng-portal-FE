@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT_DASHBOARD_CARDS
 import DashboardCard from '@/components/dashboard/dashboard-card';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SortByDropdown } from '@/components/dashboard/sort-by-dropdown';
 import DashboardSidebar from '@/components/dashboard/sidebar';
 
@@ -35,7 +35,6 @@ const TalentDashboardPage = () => {
     }
     return false;
   });
-
   const {
     data: jobs,
     isLoading: isLoadingJobs,
@@ -56,7 +55,6 @@ const TalentDashboardPage = () => {
 
   const {
     data: savedJobs,
-    isLoading: isLoadingSavedJobs,
     isError: isErrorSavedJobs,
     error: errorSavedJobs,
   } = useQuery<TalentJob[], Error>({
@@ -74,7 +72,6 @@ const TalentDashboardPage = () => {
 
   const {
     data: applications,
-    isLoading: isLoadingApplications,
     isError: isErrorApplications,
     error: errorApplications,
   } = useQuery<TalentApplication[], Error>({

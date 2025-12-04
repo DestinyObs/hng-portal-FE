@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
-
 import Input from '@/components/ui/input';
 import {
   CompanyForgotPasswordFormValues,
