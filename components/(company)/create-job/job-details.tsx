@@ -114,6 +114,10 @@ export default function JobDetails({
   const handleSaveDraft = async () => {
     setIsDrafting(true);
     const data = getValues();
+    if (!data.title) {
+      toast.error('Title is required');
+      return;
+    }
     const formData = {
       company_id: user?.company?.id || '',
       category_id: data.category_id,
