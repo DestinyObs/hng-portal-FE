@@ -78,12 +78,8 @@ export interface RawJob {
   job_levels?: {
     name: string;
   };
-  state?: {
-    name: string;
-  };
-  country?: {
-    name: string;
-  };
+  state?: string;
+  country?: string;
 }
 
 export interface TalentJob {

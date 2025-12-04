@@ -87,14 +87,3 @@ export const useWorkModes = () => {
     },
   });
 };
-
-export const useCountries = () => {
-  return useQuery({
-    queryKey: ['countries'],
-    queryFn: async () => {
-      const res = await publicFetch('lookups/countries');
-      if (!res.success) throw new Error(res.message);
-      return res.data || [];
-    },
-  });
-};

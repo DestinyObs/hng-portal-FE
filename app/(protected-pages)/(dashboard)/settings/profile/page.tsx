@@ -635,7 +635,7 @@ export default function ProfilePage() {
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
                                   {State.getStatesOfCountry(
-                                    form.getValues('country') || '',
+                                    form.watch('country') || '',
                                   ).map((s) => (
                                     <SelectItem
                                       key={s.isoCode}
