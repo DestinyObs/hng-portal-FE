@@ -147,8 +147,8 @@ export const updatePost = async (
     job_type_id: formData.job_type_id,
     work_mode_id: formData.work_mode_id,
     price: formData.price,
-    state_id: formData.state_id,
-    country_id: formData.country_id,
+    state_id: formData.state,
+    country_id: formData.country,
   };
 
   // console.log('🔍 Clean payload being sent:', JSON.stringify(cleanPayload, null, 2));

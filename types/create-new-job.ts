@@ -21,7 +21,6 @@ export interface JobFormData {
 }
 export interface JobFormData2 {
   // Step 1
-
   category_id: string;
   title: string;
   description: string;
