@@ -6,8 +6,8 @@ export type newPost = {
   title: string;
   description: string;
   acceptance_criteria: string;
-  state_id: string;
-  country_id: string;
+  state: string;
+  country: string;
   price: string;
   track_id: string;
   category_id: string;
