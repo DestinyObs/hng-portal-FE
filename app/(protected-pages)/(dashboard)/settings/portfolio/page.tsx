@@ -74,7 +74,7 @@ export default function PortfolioPage() {
         const errorMessage =
           typeof result.error === 'string'
             ? result.error
-            : result.error?.message || 'Failed to delete portfolio';
+            : 'Failed to delete portfolio';
         toast.error(errorMessage);
       }
     } catch (error) {
