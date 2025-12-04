@@ -48,17 +48,6 @@ export const useSkills = () => {
   });
 };
 
-export const useStates = () => {
-  return useQuery({
-    queryKey: ['states'],
-    queryFn: async () => {
-      const res = await publicFetch('lookups/states');
-      if (!res.success) throw new Error(res.message);
-      return res.data || [];
-    },
-  });
-};
-
 export const useTracks = () => {
   return useQuery<Tracks[], Error, MergedTracksData[]>({
     queryKey: ['tracks'],
@@ -83,17 +72,6 @@ export const useWorkModes = () => {
     queryKey: ['work-modes'],
     queryFn: async () => {
       const res = await publicFetch('lookups/work-modes');
-      if (!res.success) throw new Error(res.message);
-      return res.data || [];
-    },
-  });
-};
-
-export const useCountries = () => {
-  return useQuery({
-    queryKey: ['countries'],
-    queryFn: async () => {
-      const res = await publicFetch('lookups/countries');
       if (!res.success) throw new Error(res.message);
       return res.data || [];
     },

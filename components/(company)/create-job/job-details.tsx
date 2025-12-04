@@ -1,5 +1,4 @@
 'use client';
-
 import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -24,13 +23,13 @@ import Input from '@/components/ui/input';
 import {
   JobDetailsFormData,
   jobDetailsSchema,
-  JobPostPayload2,
 } from '@/validations/create-post.schema';
 import { useCategories, useJobLevel, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { draftPost } from '@/api/actions/create-post';
 import { useRouter } from 'next/navigation';
+import { draftPost } from '@/api/actions/create-post';
+import { useAuthStore } from '@/store/auth';
 
 export default function JobDetails({
   initialData,
@@ -40,7 +39,7 @@ export default function JobDetails({
 }: JobDetailsProps) {
   const [isDrafting, setIsDrafting] = useState(false);
   const router = useRouter();
-
+  const { user } = useAuthStore();
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
@@ -56,6 +55,7 @@ export default function JobDetails({
     setValue,
     handleSubmit,
     getValues,
+    reset,
     formState: { errors },
   } = useForm<JobDetailsFormData>({
     resolver: zodResolver(jobDetailsSchema),
@@ -79,7 +79,6 @@ export default function JobDetails({
   const handleAddSkill = (skill: { id: string; name: string }): void => {
     if (skill && !skills.includes(skill.id) && skills.length < 5) {
       setSelectedSkills([...selectedSkills, skill]);
-      // i want set value to store the id
       setValue('skills', [...skills, skill.id], { shouldValidate: true });
     } else {
     }
@@ -114,19 +113,24 @@ export default function JobDetails({
 
   const handleSaveDraft = async () => {
     setIsDrafting(true);
-    const formData = getValues();
-    const formDataUpdate: Partial<JobPostPayload2> = {
-      category_id: formData.category_id,
-      title: formData.title,
-      description: formData.description,
-      skills: formData.skills as string[],
-      acceptance_criteria: formData.acceptance_criteria,
-      company_id: initialData.company_id,
+    const data = getValues();
+    if (!data.title) {
+      toast.error('Title is required');
+      return;
+    }
+    const formData = {
+      company_id: user?.company?.id || '',
+      category_id: data.category_id,
+      title: data.title,
+      description: data.description,
+      skills: data.skills,
+      price: data.price,
+      acceptance_criteria: data.acceptance_criteria,
+      job_level_id: data.job_level_id,
     };
-    // onUpdate(formDataUpdate);
+
     try {
-      const response = await draftPost(formDataUpdate);
-      // console.log(response);
+      const response = await draftPost(formData);
 
       if (response && !response?.success) {
         toast.error(response.message);
@@ -134,6 +138,7 @@ export default function JobDetails({
       }
 
       toast.success('Your job has been saved to draft successfully');
+      reset();
       router.push('/company/dashboard');
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -410,6 +415,7 @@ export default function JobDetails({
                   onClick={handleSaveDraft}
                   disabled={isDrafting}
                   className="border-[#E7E7E7]"
+                  type="button"
                 >
                   {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
                 </Button>
