@@ -75,3 +75,57 @@ export interface UserProfileData extends BaseUser {
 export interface UserProfileResponse {
   data: UserProfileData;
 }
+
+export interface CompanyMedia {
+  id: number;
+  model_type: string;
+  model_id: string;
+  uuid: string;
+  collection_name: string;
+  name: string;
+  file_name: string;
+  mime_type: string;
+  disk: string;
+  conversions_disk: string;
+  size: number;
+  manipulations: string | null;
+  custom_properties: string | null;
+  generated_conversions: string | null;
+  responsive_images: string | null;
+  order_column: number;
+  created_at: string;
+  updated_at: string;
+  original_url: string;
+  preview_url: string;
+}
+
+export interface CompanyOwner extends BaseUser {}
+
+export interface CompanyProfileData {
+  id: string;
+  user_id: string;
+  name: string;
+  slug: string;
+  description: string;
+  logo_url: string;
+  industry: string;
+  company_size: string;
+  state: string;
+  country: string;
+  website_url: string;
+  is_verified: number;
+  official_email: string;
+  onboarding_status: string;
+  status: string;
+  tagline: string | null;
+  value_proposition: string | null;
+  why_talents_should_work_with_us: string | null;
+  created_at: string;
+  updated_at: string;
+  user: CompanyOwner;
+  media: string | null;
+}
+
+export interface CompanyProfileResponse {
+  data: CompanyProfileData;
+}

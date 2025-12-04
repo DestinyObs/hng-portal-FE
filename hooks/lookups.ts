@@ -20,8 +20,6 @@ export const useJobLevel = () => {
     queryFn: async () => {
       const res = await publicFetch('lookups/job-levels');
       if (!res.success) throw new Error(res.message);
-      console.log(res);
-
       return res.data || [];
     },
   });
@@ -59,7 +57,7 @@ export const useStates = () => {
   });
 };
 
-export const useTracks = () => {
+export const useTracks = (enabled: boolean = true) => {
   return useQuery<Tracks[], Error, MergedTracksData[]>({
     queryKey: ['tracks'],
     queryFn: async () => {
@@ -75,6 +73,7 @@ export const useTracks = () => {
         description: TRACKS[index % TRACKS.length].description,
       }));
     },
+    enabled,
   });
 };
 

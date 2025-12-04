@@ -15,12 +15,12 @@ interface TalentProfileViewProps {
 
 export function TalentProfileView({ profile }: TalentProfileViewProps) {
   const countryName =
-    Country.getCountryByCode(profile?.bio?.country ?? '')?.name || '';
+    (profile?.bio?.country && Country.getCountryByCode(profile.bio.country)?.name) || '';
   const stateName =
-    State.getStateByCodeAndCountry(
-      profile?.bio?.state ?? '',
-      profile?.bio?.country ?? '',
-    )?.name || '';
+    (profile?.bio?.state && profile?.bio?.country && State.getStateByCodeAndCountry(
+      profile.bio.state,
+      profile.bio.country,
+    )?.name) || '';
   return (
     <div className="w-full max-w-4xl mx-auto p-8">
       {/* Banner */}
@@ -30,11 +30,12 @@ export function TalentProfileView({ profile }: TalentProfileViewProps) {
             src={
               profile?.bio?.user?.photo_url ||
               profile?.photo_url ||
-              '/assets/dashboard-settings/images/avatar.png'
+              '/images/portraitPlaceholder.png'
             }
             alt="Profile"
             fill
             className="object-cover"
+            unoptimized
           />
         </div>
       </div>
@@ -60,7 +61,6 @@ export function TalentProfileView({ profile }: TalentProfileViewProps) {
         </CardHeader>
 
         <CardContent className="p-6 pt-0">
-          {/* Profile Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
             <div>
               <h2 className="text-2xl font-semibold text-black">
@@ -70,10 +70,10 @@ export function TalentProfileView({ profile }: TalentProfileViewProps) {
               <p className="text-sm text-gray-600">
                 {[stateName, countryName].filter(Boolean).join(', ')}
               </p>
+
               <p className="text-sm text-gray-700">
                 <span className="font-semibold">Work Experience: </span>
-
-                {profile?.bio?.experience || 'N/A'}
+                {profile?.bio?.experience ? `${profile?.bio?.experience}` : ' Years of experience: - '}
               </p>
 
               {/* <div className="flex items-center gap-2 mt-2">
@@ -130,11 +130,11 @@ export function TalentProfileView({ profile }: TalentProfileViewProps) {
               Experience
             </h3>
 
-            {profile?.experiences.length === 0 ? (
+            {!profile?.experiences || profile.experiences.length === 0 ? (
               <p className="text-gray-500 text-sm">No experience added yet.</p>
             ) : (
               <div className="space-y-6">
-                {profile?.experiences?.map((job) => (
+                {profile.experiences.map((job) => (
                   <div key={job.id}>
                     {/* <p className="text-sm text-gray-500 mb-1">{job.name}</p> */}
                     <p className="text-base font-semibold text-black">
@@ -160,10 +160,10 @@ export function TalentProfileView({ profile }: TalentProfileViewProps) {
             <h3 className="text-2xl font-semibold text-black mb-4">Skills</h3>
 
             <div className="flex flex-wrap gap-2">
-              {profile?.skills?.length === 0 ? (
+              {!profile?.skills || profile.skills.length === 0 ? (
                 <p className="text-gray-500 text-sm">No skills added yet.</p>
               ) : (
-                profile?.skills?.map((skill) => (
+                profile.skills.map((skill) => (
                   <span
                     key={skill.id}
                     className="px-3 py-1 bg-white border border-[#EAF0ED] text-sm text-black rounded-2xl"
