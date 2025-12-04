@@ -21,6 +21,7 @@ import { updateUserProfile } from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -110,7 +111,7 @@ export default function TalentAccountForm() {
         <Card className="flex-1 w-full bg-white border-[#E8E8E8] shadow-sm">
           <CardContent className="p-6 max-w-[1056px]">
             <div className="flex items-center justify-center py-12">
-              <p className="text-[#92959C] text-base">Loading...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-primary-300" />
             </div>
           </CardContent>
         </Card>

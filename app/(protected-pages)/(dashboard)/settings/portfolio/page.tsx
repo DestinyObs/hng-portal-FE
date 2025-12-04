@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Plus, AlertTriangle } from 'lucide-react';
+import { Plus, AlertTriangle, Loader2 } from 'lucide-react';
 import { useGetProfileData } from '@/hooks/profile-settings';
 import { Portfolio } from '@/types/profile-settings';
 import Modal from '@/components/shared/ui/modal';
@@ -102,7 +102,7 @@ export default function PortfolioPage() {
         <Card className="flex-1 w-full bg-white-50 border-[#E8E8E8]">
           <CardContent className="px-6 max-w-[1056px]">
             <div className="flex items-center justify-center py-12">
-              <p className="text-[#92959C] text-base">Loading...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-primary-300" />
             </div>
           </CardContent>
         </Card>

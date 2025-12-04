@@ -10,7 +10,7 @@ import { useMemo, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, AlertTriangle } from 'lucide-react';
+import { Plus, AlertTriangle, Loader2 } from 'lucide-react';
 import SkillsBadge from '@/components/settings/skills/skills-badge';
 import { useGetProfileData } from '@/hooks/profile-settings';
 import { useSkills } from '@/hooks/lookups';
@@ -154,7 +154,7 @@ export default function SkillsAndExperiencePage() {
         <Card className="flex-1 w-full bg-white border-[#E8E8E8] shadow-sm">
           <CardContent className="p-6 max-w-[1056px]">
             <div className="flex items-center justify-center py-12">
-              <p className="text-[#92959C] text-base">Loading...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-primary-300" />
             </div>
           </CardContent>
         </Card>
