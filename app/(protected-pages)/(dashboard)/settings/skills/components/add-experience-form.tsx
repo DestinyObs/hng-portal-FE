@@ -158,13 +158,9 @@ export default function WorkExperienceForm({
           onSuccess();
         }
       } else {
-        const errorMessage =
-          typeof result.error === 'string'
-            ? result.error
-            : result.error?.message ||
-              (experience
-                ? 'Failed to update work experience'
-                : 'Failed to add work experience');
+        const errorMessage = experience
+          ? 'Failed to update work experience'
+          : 'Failed to add work experience';
         toast.error(errorMessage);
       }
     } catch (error) {
