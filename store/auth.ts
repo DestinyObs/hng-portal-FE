@@ -11,8 +11,7 @@ interface AuthState {
   setEmail: (email: string) => void;
   clearEmail: () => void;
   setId: (id: string) => void;
-  setData: (data: User) => void;
-  clearAuth: () => void; // NEW
+  setData: (data: User | null) => void;
 }
 
 export const useAuthStore = create(

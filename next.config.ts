@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
 
       {
         protocol: 'https',
-        hostname: 'staging.connect.hng.tech',
+        hostname: 'api.connect.hng.tech',
       },
       {
         protocol: 'https',

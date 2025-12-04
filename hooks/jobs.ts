@@ -244,3 +244,15 @@ export const useApplyForJob = () => {
     error,
   };
 };
+
+export const useGetDashboardAnalytics = <T>(): UseQueryResult<T> => {
+  return useQuery<T>({
+    queryKey: ['get-dashboard-analytics'],
+    queryFn: async () => {
+      const res = await makeAuthenticatedRequest(`employer/dashboard`);
+      // console.log(res);
+
+      return res?.data as T;
+    },
+  });
+};

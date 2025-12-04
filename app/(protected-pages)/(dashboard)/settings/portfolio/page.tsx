@@ -5,19 +5,28 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
+import { Plus, AlertTriangle, Loader2 } from 'lucide-react';
 import { useGetProfileData } from '@/hooks/profile-settings';
 import { Portfolio } from '@/types/profile-settings';
 import Modal from '@/components/shared/ui/modal';
 import AddPortfolioForm from './components/add-portfolio-form';
 import { useQueryClient } from '@tanstack/react-query';
+import { deletePortfolio } from '@/api/actions/user-profile-settings';
+import { Modal as ConfirmationModal } from '@/components/dashboard/modal';
+import { toast } from 'sonner';
 
 export default function PortfolioPage() {
   const [openDialog, setOpenDialog] = useState(false);
-  const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(null);
+  const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(
+    null,
+  );
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [portfolioToDelete, setPortfolioToDelete] = useState<Portfolio | null>(
+    null,
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
-  const { data } = useGetProfileData();
-
+  const { data, isLoading } = useGetProfileData();
   // Portfolios from BE
   const portfolios = data?.portfolios || [];
 
@@ -43,6 +52,64 @@ export default function PortfolioPage() {
     });
   };
 
+  const handleDeleteClick = (portfolio: Portfolio) => {
+    setPortfolioToDelete(portfolio);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!portfolioToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await deletePortfolio(portfolioToDelete.id);
+      if (result.success) {
+        toast.success('Portfolio deleted successfully');
+        queryClient.invalidateQueries({
+          queryKey: ['profile'],
+        });
+        setDeleteConfirmationOpen(false);
+        setPortfolioToDelete(null);
+      } else {
+        const errorMessage =
+          typeof result.error === 'string'
+            ? result.error
+            : 'Failed to delete portfolio';
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting the portfolio');
+      console.error('Error deleting portfolio:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteConfirmationOpen(false);
+    setPortfolioToDelete(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full py-6 justify-center px-4 lg:px-0">
+        <div className="w-full mb-6 space-y-1">
+          <h3 className="text-2xl font-bold text-[#232323]">Portfolio</h3>
+          <p className="font-normal text-base text-black-200">
+            Showcase your best work
+          </p>
+        </div>
+        <Card className="flex-1 w-full bg-white-50 border-[#E8E8E8]">
+          <CardContent className="px-6 max-w-[1056px]">
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary-300" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full py-6 justify-center px-4 lg:px-0">
       <div className="w-full mb-6 space-y-1">
@@ -58,8 +125,7 @@ export default function PortfolioPage() {
             <h4 className="text-base font-medium text-[#1A1A1A]">Projects</h4>
             <Button
               variant="outline"
-              size="xs"
-              className="text-[#181818] border-[#E8E8E8] gap-1"
+              className="w-auto text-[#181818] border-[#E8E8E8] gap-1"
               onClick={handleOpenModal}
             >
               <Plus className="w-3 h-3" /> Add Project
@@ -80,9 +146,9 @@ export default function PortfolioPage() {
                   className="border border-[#E8EAEB] rounded-xl overflow-hidden hover:shadow-md transition-shadow bg-white flex flex-col"
                 >
                   <div className="relative w-full h-48 bg-primary-50">
-                    {portfolio.image_url ? (
+                    {portfolio.banner_url ? (
                       <Image
-                        src={portfolio.image_url}
+                        src={portfolio.banner_url}
                         alt={portfolio.title}
                         fill
                         className="object-cover"
@@ -103,9 +169,9 @@ export default function PortfolioPage() {
                     </p>
 
                     <div className="flex items-center justify-between pt-2 mt-auto border-t border-gray-50">
-                      {portfolio.url && (
+                      {portfolio.link && (
                         <Link
-                          href={portfolio.url}
+                          href={portfolio.link}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 text-primary-300 text-base font-medium hover:underline"
@@ -123,15 +189,13 @@ export default function PortfolioPage() {
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => handleEditPortfolio(portfolio)}
-                          className="text-[#00AEFF] text-base font-medium hover:text-blue-600"
+                          className="text-[#00AEFF] text-base font-medium hover:text-primary-300 cursor-pointer"
                         >
                           Edit
                         </button>
+
                         <button
-                          onClick={() => {
-                            // TODO: Implement delete functionality
-                            console.log('Delete portfolio:', portfolio.id);
-                          }}
+                          onClick={() => handleDeleteClick(portfolio)}
                           className="text-[#FF3B30] text-base font-medium hover:text-red-700"
                         >
                           Remove
@@ -152,6 +216,22 @@ export default function PortfolioPage() {
           onSuccess={handleSuccess}
         />
       </Modal>
+
+      <ConfirmationModal
+        isOpen={deleteConfirmationOpen}
+        onClose={handleCancelDelete}
+        title="Delete Portfolio"
+        message={`Are you sure you want to delete "${portfolioToDelete?.title}"? This action cannot be undone.`}
+        icon={<AlertTriangle className="w-12 h-12 text-red-500" />}
+        primaryButton={{
+          label: isDeleting ? 'Deleting...' : 'Delete',
+          onClick: handleConfirmDelete,
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: handleCancelDelete,
+        }}
+      />
     </div>
   );
 }

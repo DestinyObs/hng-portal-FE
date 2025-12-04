@@ -4,11 +4,9 @@ import { PreviewJob } from '../preview';
 import { useAuthStore } from '@/store/auth';
 import { useState } from 'react';
 import {
-  useCountries,
   useJobLevel,
   useJobTypes,
   useSkills,
-  useStates,
   useWorkModes,
 } from '@/hooks/lookups';
 import { DM_Sans } from 'next/font/google';
@@ -17,6 +15,7 @@ const dm_sans = DM_Sans({ subsets: ['latin'], variable: '--font-dm_sans' });
 import { Modal } from '@/components/dashboard/modal';
 import { useCreateJob, useDraftJob } from '@/hooks/jobs';
 import { Mail } from 'lucide-react';
+import { Country, State } from 'country-state-city';
 
 const PostJobPreview = () => {
   const { newPost } = usePostStore();
@@ -26,8 +25,8 @@ const PostJobPreview = () => {
   const [showPublishModal, setShowPublishModal] = useState(false);
 
   const { data: work_modes } = useWorkModes();
-  const { data: countries } = useCountries();
-  const { data: states } = useStates();
+  const countries = Country.getAllCountries();
+  const states = State.getStatesOfCountry(newPost?.company_id);
   const { data: JOBTYPES } = useJobTypes();
   const { data: skillsRef } = useSkills();
   const { data: jobLevel } = useJobLevel();
@@ -38,11 +37,9 @@ const PostJobPreview = () => {
       (item: { id: string; name: string }) => item.id === newPost?.work_mode_id,
     );
   const state =
-    states &&
-    states.find((item: { id: string }) => item.id === newPost?.state_id);
+    states && states.find((item) => item.isoCode === newPost?.state);
   const country =
-    countries &&
-    countries.find((item: { id: string }) => item.id === newPost?.country_id);
+    countries && countries.find((item) => item.isoCode === newPost?.country);
   const skills =
     newPost?.skills &&
     newPost.skills.map((skillId) => {

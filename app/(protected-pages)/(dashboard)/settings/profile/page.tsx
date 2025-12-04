@@ -12,10 +12,10 @@ import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
+import TextEditor from '@/components/shared/ui/text-editor';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,30 +29,37 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import Loading from '@/app/loading';
+import { toast } from 'sonner';
 
 import { useAuthStore } from '@/store/auth';
 import { useTracks } from '@/hooks/lookups';
-import { useGetUserProfile, useUpdateUserProfile } from '@/hooks/profile';
-// import {useUpdateCompanyProfile } from '@/hooks/profile';
-import { UserProfileData } from '@/types/profile';
+import {
+  useGetUserProfile,
+  useUpdateUserProfile,
+  useGetCompanyProfile,
+  useUpdateCompanyProfile,
+} from '@/hooks/profile';
+import { UserProfileData, CompanyProfileData } from '@/types/profile';
 
 const talentDefaultData = {
-    track_id: '',
-    experience: '',
-    country: '',
-    state: '',
-    availability: '',
-    jobTypes: [],
-}
+  track_id: '',
+  bio: '',
+  experience: '',
+  country: '',
+  state: '',
+  availability: '',
+  jobTypes: [],
+};
 
-const companyDefaultData ={ 
-    industry: '',
-    tagline: '',
-    bio: '',
-    value_proposition: '',
-    why_work_here: '',
-    company_size: '',
-}
+const companyDefaultData = {
+  industry: '',
+  tagline: '',
+  value_proposition: '',
+  why_work_here: '',
+  company_size: '',
+  country: '',
+  state: '',
+};
 
 const sharedSchema = {
   photo_url: z.union([z.string(), z.instanceof(File), z.null()]).optional(),
@@ -61,13 +68,13 @@ const sharedSchema = {
 const talentSchema = z.object({
   ...sharedSchema,
   role: z.literal('talent'),
-  track_id: z.string().min(1, 'Professional title is required'),
-  bio: z.string().min(1, 'Short bio is required'),
-  experience: z.string().min(1, 'Experience is required'),
-  country: z.string().min(1, 'Country is required'),
-  state: z.string().min(1, 'State is required '),
-  availability: z.string().min(1, 'Select'),
-  jobTypes: z.array(z.string()).optional(), 
+  track_id: z.string().optional(),
+  bio: z.string().optional(),
+  experience: z.string().optional(),
+  country: z.string().optional(),
+  state: z.string().optional(),
+  availability: z.string().optional(),
+  jobTypes: z.array(z.string()).optional(),
 });
 
 const companySchema = z.object({
@@ -78,81 +85,117 @@ const companySchema = z.object({
   bio: z.string().min(1, 'Company description is required'),
   value_proposition: z.string().min(1, 'Value proposition is required'),
   why_work_here: z.string().min(1, 'This section is required'),
-  company_size: z.string().min(1, 'Company size is required'),
+  company_size: z
+    .string()
+    .min(1, 'Company size is required')
+    .regex(
+      /^\d+(-\d+)?$/,
+      'Must be a number (e.g., 50) or a range (e.g., 100-500)',
+    ),
+  country: z.string().optional(),
+  state: z.string().optional(),
 });
 
 const formSchema = z.discriminatedUnion('role', [talentSchema, companySchema]);
 type FormValues = z.infer<typeof formSchema>;
 
 export default function ProfilePage() {
-  const { data: profile, isLoading } = useGetUserProfile<UserProfileData>();
   const { user } = useAuthStore();
+  const isCompany = user?.current_role === 'employer';
+  const { data: talentProfile, isLoading: talentLoading } =
+    useGetUserProfile<UserProfileData>(!isCompany);
+  const { data: companyProfile, isLoading: companyLoading } =
+    useGetCompanyProfile<CompanyProfileData>(isCompany);
   const { updateProfile, isPending } = useUpdateUserProfile();
-  // const { updateCompanyProfile, isPending: isCompanyPending } = useUpdateCompanyProfile();
-  const isCompanyPending = false;
-  const { data: tracks, isLoading: tracksLoading } = useTracks();
+  const { updateCompanyProfile, isPending: isCompanyPending } =
+    useUpdateCompanyProfile();
+  const { data: tracks, isLoading: tracksLoading } = useTracks(!isCompany);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const isCompany = profile?.current_role === 'employer';
+  const isLoading =
+    (isCompany ? companyLoading : talentLoading) ||
+    (!isCompany && tracksLoading);
+  // const profile = isCompany ? companyProfile : talentProfile;
 
-  console.log ("This", profile)
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      role: profile?.current_role || 'talent',
-      photo_url: profile?.photo_url || user?.photo_url || '',
+      role: (user?.current_role as 'talent' | 'employer') || 'talent',
+      photo_url: '',
       ...(isCompany ? companyDefaultData : talentDefaultData),
     },
   });
 
   useEffect(() => {
-    if (profile) {
+    if (isCompany && companyProfile) {
       form.reset({
-        role: profile?.current_role,
-        photo_url: profile.photo_url || profile.bio?.user?.photo_url || user?.photo_url || '',
-        // Talent Data
-        track_id: profile.bio?.track_id || '',
-        experience: profile.bio?.experience || '',
-        country: profile.bio?.country || '',
-        state: profile.bio?.state || '',
-        availability: profile.bio?.status || '',
-        jobTypes: profile.bio?.job_type_preference ? profile.bio.job_type_preference.split(',') : [],
-        // Company Data
-        industry:'',
-        tagline: '',
-        bio: '',
-        value_proposition: '',
-        why_work_here: '',
-        company_size: '',
+        role: 'employer' as const,
+        photo_url: companyProfile.logo_url || user?.photo_url || '',
+        industry: companyProfile.industry || '',
+        tagline: companyProfile.tagline || '',
+        bio: companyProfile.description || '',
+        value_proposition: companyProfile.value_proposition || '',
+        why_work_here: companyProfile.why_talents_should_work_with_us || '',
+        company_size: companyProfile.company_size || '',
+        country: companyProfile.country || '',
+        state: companyProfile.state || '',
       });
-
+    } else if (!isCompany && talentProfile) {
+      form.reset({
+        role: 'talent' as const,
+        photo_url:
+          talentProfile.photo_url ||
+          talentProfile.bio?.user?.photo_url ||
+          user?.photo_url ||
+          '',
+        // Talent Data
+        track_id: talentProfile.bio?.track_id || '',
+        bio: talentProfile.bio?.bio || '',
+        experience: talentProfile.bio?.experience || '',
+        country: talentProfile.bio?.country || '',
+        state: talentProfile.bio?.state || '',
+        availability: talentProfile.bio?.status || '',
+        jobTypes: talentProfile.bio?.job_type_preference
+          ? talentProfile.bio.job_type_preference.split(',')
+          : [],
+      });
     }
-  }, [profile, profile?.current_role, form, user]);
+  }, [talentProfile, companyProfile, isCompany, form, user]);
 
   const onSubmit = (values: FormValues) => {
-    console.log("This is me ", profile)
-    const formData = new FormData();
-    
-    Object.entries(values).forEach(([key, value]) => {
-      if (key !== 'photo_url' && value) {
-        if (Array.isArray(value)) {
-          formData.append(key, value.join(','));
-        } else {
-          formData.append(key, String(value));
+    try {
+      const formData = new FormData();
+
+      const fieldMapping: Record<string, string> = isCompany
+        ? {
+            bio: 'description',
+            why_work_here: 'why_talents_should_work_with_us',
+          }
+        : {};
+
+      Object.entries(values).forEach(([key, value]) => {
+        if (key !== 'photo_url' && key !== 'role' && value) {
+          const fieldName = fieldMapping[key] || key;
+
+          if (Array.isArray(value)) {
+            formData.append(fieldName, value.join(','));
+          } else {
+            formData.append(fieldName, String(value));
+          }
         }
+      });
+
+      if (imageFile) {
+        formData.append(isCompany ? 'logo' : 'profile_image', imageFile);
       }
-    });
 
-    if (imageFile) {
-      formData.append('profile_image', imageFile);
-    }
-
-    if (isCompany) {
-      console.log('Form Data:', formData)
-      // updateCompanyProfile(formData);
-    } else {
-      console.log('Form Data:', formData)
-      updateProfile(formData);
+      if (isCompany) {
+        updateCompanyProfile(formData);
+      } else {
+        updateProfile(formData);
+      }
+    } catch (error) {
+      toast.error('Failed to submit form. Please try again.');
     }
   };
 
@@ -163,6 +206,50 @@ export default function ProfilePage() {
 
   if (tracksLoading || isLoading) return <Loading />;
 
+  const AutoListEditor = ({
+    value,
+    onChange,
+    placeholder,
+  }: {
+    value: string;
+    onChange: (val: string) => void;
+    placeholder: string;
+  }) => {
+    return (
+      <TextEditor
+        value={value || '- '}
+        onChange={(val) => {
+          const input = val ?? '';
+          const prevInput = value ?? '';
+
+          if (!input.trim()) {
+            onChange('- ');
+            return;
+          }
+
+          if (input.length > prevInput.length && input.endsWith('\n')) {
+            onChange(input + '- ');
+            return;
+          }
+
+          if (input.length - prevInput.length > 1) {
+            const trimmed = input.trimStart();
+            const hasBulletStart = /^[-*+]\s/.test(trimmed);
+            if (!hasBulletStart) {
+              onChange('- ' + trimmed);
+            } else {
+              onChange(input);
+            }
+            return;
+          }
+
+          onChange(input);
+        }}
+        placeholder={placeholder}
+        className="min-h-[200px] border border-[#E7E8E9] rounded-lg overflow-hidden"
+      />
+    );
+  };
   return (
     <div className="w-full py-6 justify-center px-4 lg:px-0">
       <div className="w-full mb-4 space-y-1 text-center md:text-left">
@@ -192,10 +279,14 @@ export default function ProfilePage() {
                   <FormItem className="flex flex-col items-center md:flex-row md:items-center gap-4 md:gap-6 mb-2">
                     <div className="relative w-24 h-24 shrink-0">
                       <Image
-                        src={field.value as string || '/images/portraitPlaceholder.png'}
+                        src={
+                          (field.value as string) ||
+                          '/images/portraitPlaceholder.png'
+                        }
                         alt="Profile"
                         fill
-                        className="rounded-full object-cover border border-gray-200"
+                        className="rounded-full object-cover shadow-sm"
+                        unoptimized
                       />
                     </div>
                     <FormControl>
@@ -208,7 +299,7 @@ export default function ProfilePage() {
                           onChange={(event) => {
                             const file = event.target.files?.[0];
                             if (!file) return;
-                            setImageFile(file); 
+                            setImageFile(file);
                             const url = URL.createObjectURL(file);
                             field.onChange(url);
                           }}
@@ -219,9 +310,11 @@ export default function ProfilePage() {
                           onClick={() => fileInputRef.current?.click()}
                           className="flex items-center gap-2 text-black border-[#E7E8E9] rounded-lg hover:bg-gray-50 w-auto"
                         >
-                          <img
+                          <Image
                             src="/assets/dashboard-settings/icons/upload.png"
                             alt="Upload"
+                            width={16}
+                            height={16}
                             className="w-4 h-4"
                           />
                           Upload New Photo
@@ -242,10 +335,14 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Industry <span className="text-[#FF3B30]">*</span>
+                          Industry
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. Fintech, Healthcare" {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]" />
+                          <Input
+                            placeholder="e.g. Fintech, Healthcare"
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -256,9 +353,15 @@ export default function ProfilePage() {
                     name="tagline"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm text-[#1A1A1A]">Tagline</FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          Tagline
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="Connecting skills to jobs." {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]" />
+                          <Input
+                            placeholder="Connecting skills to jobs."
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -269,9 +372,16 @@ export default function ProfilePage() {
                     name="bio"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm text-[#1A1A1A]">About Company <span className="text-[#FF3B30]">*</span></FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          About Company
+                        </FormLabel>
                         <FormControl>
-                          <Textarea rows={4} placeholder="Write a short description of your company" {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] resize-none" />
+                          <Textarea
+                            rows={4}
+                            placeholder="Write a short description of your company"
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] resize-none"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -282,9 +392,15 @@ export default function ProfilePage() {
                     name="value_proposition"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm text-[#1A1A1A]">Value Proposition <span className="text-[#FF3B30]">*</span></FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          Value Proposition
+                        </FormLabel>
                         <FormControl>
-                          <Textarea rows={4} placeholder="Description of value proposition" {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] resize-none" />
+                          <AutoListEditor
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="List your value propositions..."
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -295,9 +411,15 @@ export default function ProfilePage() {
                     name="why_work_here"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm text-[#1A1A1A]">Why talents should work with us <span className="text-[#FF3B30]">*</span></FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          Why talents should work with us
+                        </FormLabel>
                         <FormControl>
-                          <Textarea rows={4} placeholder="Description of what makes your company attractive" {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] resize-none" />
+                          <AutoListEditor
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="List reasons to work here..."
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -308,14 +430,89 @@ export default function ProfilePage() {
                     name="company_size"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm text-[#1A1A1A]">Company size <span className="text-[#FF3B30]">*</span></FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          Company size
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="11-50" {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]" />
+                          <Input
+                            placeholder="11-50"
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  <div className="flex gap-6 w-full">
+                    <div className="flex-1 space-y-2">
+                      <label className="text-sm text-[#1A1A1A]">Country</label>
+                      <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
+                                  <SelectValue placeholder="Select country" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                  {Country.getAllCountries().map((c) => (
+                                    <SelectItem
+                                      key={c.isoCode}
+                                      value={c.isoCode}
+                                    >
+                                      {c.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <label className="text-sm text-[#1A1A1A]">State</label>
+                      <FormField
+                        control={form.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                disabled={!selectedCountry}
+                              >
+                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
+                                  <SelectValue placeholder="Select state" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                  {State.getStatesOfCountry(
+                                    form.getValues('country') || '',
+                                  ).map((s) => (
+                                    <SelectItem
+                                      key={s.isoCode}
+                                      value={s.isoCode}
+                                    >
+                                      {s.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
                 </>
               )}
 
@@ -327,12 +524,23 @@ export default function ProfilePage() {
                     name="track_id"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel className="text-sm text-[#1A1A1A]">Professional Title <span className="text-[#FF3B30]">*</span></FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          Professional Title
+                        </FormLabel>
                         <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"><SelectValue placeholder="Choose a track" /></SelectTrigger>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]">
+                              <SelectValue placeholder="Choose a track" />
+                            </SelectTrigger>
                             <SelectContent>
-                              {tracks?.map((track) => (<SelectItem key={track.id} value={track.id}>{track.name}</SelectItem>))}
+                              {tracks?.map((track) => (
+                                <SelectItem key={track.id} value={track.id}>
+                                  {track.name}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </FormControl>
@@ -345,50 +553,109 @@ export default function ProfilePage() {
                     name="bio"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm text-[#1A1A1A]">Short Bio <span className="text-[#FF3B30]">*</span></FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          Short Bio
+                        </FormLabel>
                         <FormControl>
-                          <Textarea rows={6} placeholder="Tell us about yourself" {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] resize-none" />
+                          <Textarea
+                            rows={6}
+                            placeholder="Tell us about yourself"
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9] resize-none"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="experience"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm text-[#1A1A1A]">Experience <span className="text-[#FF3B30]">*</span></FormLabel>
+                        <FormLabel className="text-sm text-[#1A1A1A]">
+                          Experience
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="0-1 year" {...field} className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]" />
+                          <Input
+                            placeholder="0-1 year"
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  
+
                   <div className="flex gap-6 w-full">
                     <div className="flex-1 space-y-2">
-                        <label className="text-sm text-[#1A1A1A]">Country <span className="text-[#FF3B30]">*</span></label>
-                        <FormField control={form.control} name="country" render={({ field }) => (
-                            <FormItem><FormControl>
-                                <Select value={field.value} onValueChange={field.onChange}>
-                                    <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]"><SelectValue placeholder="Select country" /></SelectTrigger>
-                                    <SelectContent className="max-h-[200px]">{Country.getAllCountries().map((c) => <SelectItem key={c.isoCode} value={c.isoCode}>{c.name}</SelectItem>)}</SelectContent>
-                                </Select>
-                            </FormControl><FormMessage /></FormItem>
-                        )} />
+                      <label className="text-sm text-[#1A1A1A]">Country</label>
+                      <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
+                                  <SelectValue placeholder="Select country" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                  {Country.getAllCountries().map((c) => (
+                                    <SelectItem
+                                      key={c.isoCode}
+                                      value={c.isoCode}
+                                    >
+                                      {c.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                     <div className="flex-1 space-y-2">
-                        <label className="text-sm text-[#1A1A1A]">State <span className="text-[#FF3B30]">*</span></label>
-                         <FormField control={form.control} name="state" render={({ field }) => (
-                            <FormItem><FormControl>
-                                <Select value={field.value} onValueChange={field.onChange} disabled={!selectedCountry}>
-                                    <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]"><SelectValue placeholder="Select state" /></SelectTrigger>
-                                    <SelectContent className="max-h-[200px]">{State.getStatesOfCountry(form.getValues('country') || '').map((s) => <SelectItem key={s.isoCode} value={s.isoCode}>{s.name}</SelectItem>)}</SelectContent>
-                                </Select>
-                            </FormControl><FormMessage /></FormItem>
-                        )} />
+                      <label className="text-sm text-[#1A1A1A]">State</label>
+                      <FormField
+                        control={form.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                disabled={!selectedCountry}
+                              >
+                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
+                                  <SelectValue placeholder="Select state" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                  {State.getStatesOfCountry(
+                                    form.watch('country') || '',
+                                  ).map((s) => (
+                                    <SelectItem
+                                      key={s.isoCode}
+                                      value={s.isoCode}
+                                    >
+                                      {s.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </div>
 
@@ -398,16 +665,30 @@ export default function ProfilePage() {
                       name="availability"
                       render={({ field }) => (
                         <FormItem className="flex-1 space-y-4">
-                          <FormLabel className="text-sm text-[#1A1A1A]">Availability Status <span className="text-[#FF3B30]">*</span></FormLabel>
+                          <FormLabel className="text-sm text-[#1A1A1A]">
+                            Availability Status
+                          </FormLabel>
                           <FormControl>
-                            <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="space-y-3 mt-4">
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="space-y-3 mt-4"
+                            >
                               <FormItem className="flex items-center gap-3 space-y-0">
-                                <FormControl><RadioGroupItem value="active" /></FormControl>
-                                <FormLabel className="text-black text-sm font-medium cursor-pointer">Available for work</FormLabel>
+                                <FormControl>
+                                  <RadioGroupItem value="active" />
+                                </FormControl>
+                                <FormLabel className="text-black text-sm font-medium cursor-pointer">
+                                  Available for work
+                                </FormLabel>
                               </FormItem>
                               <FormItem className="flex items-center gap-3 space-y-0">
-                                <FormControl><RadioGroupItem value="inactive" /></FormControl>
-                                <FormLabel className="text-black text-sm font-medium cursor-pointer">Not Looking</FormLabel>
+                                <FormControl>
+                                  <RadioGroupItem value="inactive" />
+                                </FormControl>
+                                <FormLabel className="text-black text-sm font-medium cursor-pointer">
+                                  Not Looking
+                                </FormLabel>
                               </FormItem>
                             </RadioGroup>
                           </FormControl>
@@ -420,22 +701,36 @@ export default function ProfilePage() {
                       name="jobTypes"
                       render={({ field }) => (
                         <FormItem className="flex-1 space-y-4">
-                          <FormLabel className="text-sm text-[#1A1A1A]">Job Type Preference <span className="text-[#FF3B30]">*</span></FormLabel>
+                          <FormLabel className="text-sm text-[#1A1A1A]">
+                            Job Type Preference
+                          </FormLabel>
                           <FormControl>
                             <div className="space-y-3 mt-4">
                               {['remote', 'hybrid', 'onsite'].map((item) => (
-                                <FormItem key={item} className="flex items-center gap-3 space-y-0">
+                                <FormItem
+                                  key={item}
+                                  className="flex items-center gap-3 space-y-0"
+                                >
                                   <FormControl>
                                     <Checkbox
                                       checked={field.value?.includes(item)}
                                       onCheckedChange={(checked) => {
                                         return checked
-                                          ? field.onChange([...(field.value || []), item])
-                                          : field.onChange((field.value || []).filter((value) => value !== item));
+                                          ? field.onChange([
+                                              ...(field.value || []),
+                                              item,
+                                            ])
+                                          : field.onChange(
+                                              (field.value || []).filter(
+                                                (value) => value !== item,
+                                              ),
+                                            );
                                       }}
                                     />
                                   </FormControl>
-                                  <FormLabel className="text-black text-sm font-medium cursor-pointer capitalize">{item}</FormLabel>
+                                  <FormLabel className="text-black text-sm font-medium cursor-pointer capitalize">
+                                    {item}
+                                  </FormLabel>
                                 </FormItem>
                               ))}
                             </div>
@@ -449,8 +744,20 @@ export default function ProfilePage() {
               )}
 
               <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
-                <Button type="button" variant="outline" onClick={handleCancel} disabled={isPending || isCompanyPending} className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl">Cancel</Button>
-                <Button type="submit" disabled={isPending || isCompanyPending} className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancel}
+                  disabled={isPending || isCompanyPending}
+                  className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isPending || isCompanyPending}
+                  className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl"
+                >
                   {isPending || isCompanyPending ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>

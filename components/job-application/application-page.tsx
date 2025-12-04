@@ -40,12 +40,13 @@ const JobApplicationPage = () => {
   };
 
   const handleFinalSubmit = () => {
-    if (
-      !formData?.resume ||
-      !(formData.resume instanceof FileList) ||
-      formData.resume.length === 0
-    ) {
+    if (!formData?.resume || formData.resume.length === 0) {
       toast.error('Resume is required.');
+      return;
+    }
+
+    if (!(formData.resume instanceof FileList)) {
+      toast.error('Resume should be of .pdf type only');
       return;
     }
 

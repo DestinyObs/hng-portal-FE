@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useDelete, useGetJob, useUpdateStatus } from '@/hooks/jobs';
 import { useAuthStore } from '@/store/auth';
 import { Job, RawJob } from '@/types/job-card';
+import { Country, State } from 'country-state-city';
 import { DM_Sans } from 'next/font/google';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -20,14 +21,25 @@ const Page = () => {
   const { removeJob, isPending: isRemoving } = useDelete();
   const { data: job, isPending } = useGetJob(companyId, id as string);
   const rawJob = job as RawJob;
+  const countries = Country.getAllCountries();
+  const states = State.getStatesOfCountry(rawJob?.country);
+  console.log(rawJob);
+
+  const stateObj = states?.find((item) => item.isoCode === rawJob.state);
+  const state = stateObj?.name || '';
+
+  const countryObj = countries?.find(
+    (item) => item.isoCode === rawJob?.country,
+  );
+  const country = countryObj?.name || '';
 
   const fetchedJob: Job = {
     id: rawJob?.id || '',
     title: rawJob?.title || '',
     description: rawJob?.description || '',
     acceptance_criteria: rawJob?.acceptance_criteria || '',
-    state: rawJob?.state?.name || '',
-    country: rawJob?.country?.name || '',
+    state: state || '',
+    country: country || '',
     company: rawJob?.company?.name || '',
     companyLogo: rawJob?.company?.logo_url || '',
     price: rawJob?.price,
@@ -36,9 +48,7 @@ const Page = () => {
     work_mode: rawJob?.work_mode?.name || '',
     skills: rawJob?.skills?.map((skill: { name: string }) => skill.name) || [],
     level: rawJob?.job_levels?.name,
-    location: [rawJob?.state?.name, rawJob?.country?.name]
-      .filter(Boolean)
-      .join(', '),
+    location: [rawJob?.state, rawJob?.country].filter(Boolean).join(', '),
     posted: rawJob?.created_at,
     onsiteOrRemote: rawJob?.work_mode?.name,
     applyLink: `https://example.com/apply/${rawJob?.id}`,

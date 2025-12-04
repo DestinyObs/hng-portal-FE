@@ -19,8 +19,10 @@ import Image from 'next/image';
 import DocumentUploadIcon from '@/public/assets/auth/icons/document-upload';
 import { saveCompanyOnboarding } from '@/api/actions/onboarding';
 import { toast } from 'sonner';
+import { useAuthStore } from '@/store/auth';
 
 export default function UserIdentityForm() {
+  const { user } = useAuthStore();
   const route = useRouter();
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +31,7 @@ export default function UserIdentityForm() {
     resolver: zodResolver(userIdentitySchema),
     mode: 'onChange',
     defaultValues: {
-      companyName: '',
+      companyName: user?.company?.name || '',
       description: '',
     },
   });
@@ -49,7 +51,6 @@ export default function UserIdentityForm() {
   };
 
   const handleCompleteLater = () => {
-    console.log('Complete later clicked');
     route.push('/dashboard');
   };
 
