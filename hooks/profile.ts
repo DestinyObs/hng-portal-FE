@@ -3,7 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeAuthenticatedRequest } from '@/api/config.server';
 import { toast } from 'sonner';
 
-export const useGetUserProfile = <T>(enabled: boolean = true): UseQueryResult<T> => {
+export const useGetUserProfile = <T>(
+  enabled: boolean = true,
+): UseQueryResult<T> => {
   return useQuery<T>({
     queryKey: ['get-user-profile'],
     queryFn: async () => {
@@ -31,6 +33,7 @@ export const useUpdateUserProfile = <T, V = unknown>() => {
     onSuccess: () => {
       toast.success('Profile updated successfully!');
       queryClient.invalidateQueries({ queryKey: ['get-user-profile'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
 
     onError: (error) => {
@@ -40,7 +43,9 @@ export const useUpdateUserProfile = <T, V = unknown>() => {
   return { updateProfile, isPending };
 };
 
-export const useGetCompanyProfile = <T>(enabled: boolean = true): UseQueryResult<T> => {
+export const useGetCompanyProfile = <T>(
+  enabled: boolean = true,
+): UseQueryResult<T> => {
   return useQuery<T>({
     queryKey: ['get-company-profile'],
     queryFn: async () => {
