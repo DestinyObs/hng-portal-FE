@@ -33,7 +33,12 @@ import { toast } from 'sonner';
 
 import { useAuthStore } from '@/store/auth';
 import { useTracks } from '@/hooks/lookups';
-import { useGetUserProfile, useUpdateUserProfile, useGetCompanyProfile, useUpdateCompanyProfile } from '@/hooks/profile';
+import {
+  useGetUserProfile,
+  useUpdateUserProfile,
+  useGetCompanyProfile,
+  useUpdateCompanyProfile,
+} from '@/hooks/profile';
 import { UserProfileData, CompanyProfileData } from '@/types/profile';
 
 const talentDefaultData = {
@@ -63,12 +68,12 @@ const sharedSchema = {
 const talentSchema = z.object({
   ...sharedSchema,
   role: z.literal('talent'),
-  track_id: z.string().min(1, 'Professional title is required'),
-  bio: z.string().min(1, 'Short bio is required'),
-  experience: z.string().min(1, 'Experience is required'),
+  track_id: z.string().optional(),
+  bio: z.string().optional(),
+  experience: z.string().optional(),
   country: z.string().optional(),
   state: z.string().optional(),
-  availability: z.string().min(1, 'Select'),
+  availability: z.string().optional(),
   jobTypes: z.array(z.string()).optional(),
 });
 
@@ -80,7 +85,13 @@ const companySchema = z.object({
   bio: z.string().min(1, 'Company description is required'),
   value_proposition: z.string().min(1, 'Value proposition is required'),
   why_work_here: z.string().min(1, 'This section is required'),
-  company_size: z.string().min(1, 'Company size is required') .regex( /^\d+(-\d+)?$/, "Must be a number (e.g., 50) or a range (e.g., 100-500)" ),
+  company_size: z
+    .string()
+    .min(1, 'Company size is required')
+    .regex(
+      /^\d+(-\d+)?$/,
+      'Must be a number (e.g., 50) or a range (e.g., 100-500)',
+    ),
   country: z.string().optional(),
   state: z.string().optional(),
 });
@@ -91,14 +102,19 @@ type FormValues = z.infer<typeof formSchema>;
 export default function ProfilePage() {
   const { user } = useAuthStore();
   const isCompany = user?.current_role === 'employer';
-  const { data: talentProfile, isLoading: talentLoading } = useGetUserProfile<UserProfileData>(!isCompany);
-  const { data: companyProfile, isLoading: companyLoading } = useGetCompanyProfile<CompanyProfileData>(isCompany);
+  const { data: talentProfile, isLoading: talentLoading } =
+    useGetUserProfile<UserProfileData>(!isCompany);
+  const { data: companyProfile, isLoading: companyLoading } =
+    useGetCompanyProfile<CompanyProfileData>(isCompany);
   const { updateProfile, isPending } = useUpdateUserProfile();
-  const { updateCompanyProfile, isPending: isCompanyPending } = useUpdateCompanyProfile();
+  const { updateCompanyProfile, isPending: isCompanyPending } =
+    useUpdateCompanyProfile();
   const { data: tracks, isLoading: tracksLoading } = useTracks(!isCompany);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const isLoading = (isCompany ? companyLoading : talentLoading) || (!isCompany && tracksLoading);
+  const isLoading =
+    (isCompany ? companyLoading : talentLoading) ||
+    (!isCompany && tracksLoading);
   // const profile = isCompany ? companyProfile : talentProfile;
 
   const form = useForm<FormValues>({
@@ -193,7 +209,7 @@ export default function ProfilePage() {
   const AutoListEditor = ({
     value,
     onChange,
-    placeholder
+    placeholder,
   }: {
     value: string;
     onChange: (val: string) => void;
@@ -269,7 +285,7 @@ export default function ProfilePage() {
                         }
                         alt="Profile"
                         fill
-                        className="rounded-full object-cover border border-gray-200"
+                        className="rounded-full object-cover shadow-sm"
                         unoptimized
                       />
                     </div>
@@ -294,13 +310,13 @@ export default function ProfilePage() {
                           onClick={() => fileInputRef.current?.click()}
                           className="flex items-center gap-2 text-black border-[#E7E8E9] rounded-lg hover:bg-gray-50 w-auto"
                         >
-                        <Image
-                          src="/assets/dashboard-settings/icons/upload.png"
-                          alt="Upload"
-                          width={16}
-                          height={16}
-                          className="w-4 h-4"
-                        />
+                          <Image
+                            src="/assets/dashboard-settings/icons/upload.png"
+                            alt="Upload"
+                            width={16}
+                            height={16}
+                            className="w-4 h-4"
+                          />
                           Upload New Photo
                         </Button>
                       </div>
@@ -319,7 +335,7 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Industry <span className="text-[#FF3B30]">*</span>
+                          Industry
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -357,8 +373,7 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          About Company{' '}
-                          <span className="text-[#FF3B30]">*</span>
+                          About Company
                         </FormLabel>
                         <FormControl>
                           <Textarea
@@ -378,7 +393,7 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Value Proposition <span className="text-[#FF3B30]">*</span>
+                          Value Proposition
                         </FormLabel>
                         <FormControl>
                           <AutoListEditor
@@ -397,8 +412,7 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Why talents should work with us{' '}
-                          <span className="text-[#FF3B30]">*</span>
+                          Why talents should work with us
                         </FormLabel>
                         <FormControl>
                           <AutoListEditor
@@ -417,7 +431,7 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Company size <span className="text-[#FF3B30]">*</span>
+                          Company size
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -432,9 +446,7 @@ export default function ProfilePage() {
                   />
                   <div className="flex gap-6 w-full">
                     <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">
-                        Country <span className="text-[#FF3B30]">*</span>
-                      </label>
+                      <label className="text-sm text-[#1A1A1A]">Country</label>
                       <FormField
                         control={form.control}
                         name="country"
@@ -466,9 +478,7 @@ export default function ProfilePage() {
                       />
                     </div>
                     <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">
-                        State <span className="text-[#FF3B30]">*</span>
-                      </label>
+                      <label className="text-sm text-[#1A1A1A]">State</label>
                       <FormField
                         control={form.control}
                         name="state"
@@ -502,7 +512,7 @@ export default function ProfilePage() {
                         )}
                       />
                     </div>
-                  </div>                
+                  </div>
                 </>
               )}
 
@@ -515,8 +525,7 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Professional Title{' '}
-                          <span className="text-[#FF3B30]">*</span>
+                          Professional Title
                         </FormLabel>
                         <FormControl>
                           <Select
@@ -545,7 +554,7 @@ export default function ProfilePage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Short Bio <span className="text-[#FF3B30]">*</span>
+                          Short Bio
                         </FormLabel>
                         <FormControl>
                           <Textarea
@@ -559,14 +568,14 @@ export default function ProfilePage() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="experience"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm text-[#1A1A1A]">
-                          Experience <span className="text-[#FF3B30]">*</span>
+                          Experience
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -582,9 +591,7 @@ export default function ProfilePage() {
 
                   <div className="flex gap-6 w-full">
                     <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">
-                        Country <span className="text-[#FF3B30]">*</span>
-                      </label>
+                      <label className="text-sm text-[#1A1A1A]">Country</label>
                       <FormField
                         control={form.control}
                         name="country"
@@ -616,9 +623,7 @@ export default function ProfilePage() {
                       />
                     </div>
                     <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">
-                        State <span className="text-[#FF3B30]">*</span>
-                      </label>
+                      <label className="text-sm text-[#1A1A1A]">State</label>
                       <FormField
                         control={form.control}
                         name="state"
@@ -661,8 +666,7 @@ export default function ProfilePage() {
                       render={({ field }) => (
                         <FormItem className="flex-1 space-y-4">
                           <FormLabel className="text-sm text-[#1A1A1A]">
-                            Availability Status{' '}
-                            <span className="text-[#FF3B30]">*</span>
+                            Availability Status
                           </FormLabel>
                           <FormControl>
                             <RadioGroup
@@ -698,8 +702,7 @@ export default function ProfilePage() {
                       render={({ field }) => (
                         <FormItem className="flex-1 space-y-4">
                           <FormLabel className="text-sm text-[#1A1A1A]">
-                            Job Type Preference{' '}
-                            <span className="text-[#FF3B30]">*</span>
+                            Job Type Preference
                           </FormLabel>
                           <FormControl>
                             <div className="space-y-3 mt-4">
