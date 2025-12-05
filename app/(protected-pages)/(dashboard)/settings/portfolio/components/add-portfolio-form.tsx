@@ -43,9 +43,6 @@ export default function AddPortfolioForm({
   portfolio,
 }: PortfolioFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    portfolio?.banner_url || null,
-  );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const isEditing = !!portfolio;
@@ -64,9 +61,6 @@ export default function AddPortfolioForm({
     if (file) {
       setImageFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
       reader.readAsDataURL(file);
     }
   };
@@ -97,11 +91,12 @@ export default function AddPortfolioForm({
         );
         await queryClient.invalidateQueries({ queryKey: ['profile'] });
         form.reset();
-        setImagePreview(null);
         setImageFile(null);
       }
     } catch (error) {
-      console.error(error);
+      toast.error(
+        `Failed to ${isEditing ? 'update' : 'add'} portfolio project. Please try again.`,
+      );
     } finally {
       setIsSubmitting(false);
       if (onSuccess) {
@@ -207,7 +202,6 @@ export default function AddPortfolioForm({
               variant="outline"
               onClick={() => {
                 form.reset();
-                setImagePreview(null);
                 setImageFile(null);
                 if (onSuccess) {
                   onSuccess();
