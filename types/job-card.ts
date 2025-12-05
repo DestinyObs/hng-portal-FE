@@ -25,7 +25,7 @@ export interface Job {
   track?: string;
   job_type: string;
   work_mode: string;
-  price?: string;
+  price?: number;
   state?: string;
   country?: string;
   company: string;
