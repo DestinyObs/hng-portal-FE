@@ -80,33 +80,51 @@ const Page = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          {/* edit job */}
-          <div className="">
-            <Button
-              size={'sm'}
-              variant="outlineGray"
-              className={`${dm_sans.className}`}
-              asChild
-            >
-              <Link href={`/company/job/${id}/edit-job`}>Edit Job</Link>
-            </Button>
-          </div>
-          {/* close job  */}
-          <div className="">
-            <Button
-              onClick={() =>
-                changeStatus({
-                  company_id: companyId || '',
-                  job_id: (id as string) || '',
-                  status: 'inactive',
-                })
-              }
-              size={'sm'}
-              className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
-            >
-              {!IsChanging ? 'close job' : 'closing...'}
-            </Button>
-          </div>
+          {rawJob.status === 'draft' ? (
+            <>
+              <div className="">
+                <Button
+                  asChild
+                  size={'sm'}
+                  className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+                >
+                  <Link href={`/company/job/${id}/edit-job`}>
+                    Continue Editing Draft
+                  </Link>
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* edit job */}
+              <div className="">
+                <Button
+                  size={'sm'}
+                  variant="outlineGray"
+                  className={`${dm_sans.className}`}
+                  asChild
+                >
+                  <Link href={`/company/job/${id}/edit-job`}>Edit Job</Link>
+                </Button>
+              </div>
+              {/* close job  */}
+              <div className="">
+                <Button
+                  onClick={() =>
+                    changeStatus({
+                      company_id: companyId || '',
+                      job_id: (id as string) || '',
+                      status: 'inactive',
+                    })
+                  }
+                  size={'sm'}
+                  className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+                >
+                  {!IsChanging ? 'close job' : 'closing...'}
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -40,10 +40,17 @@ export default function CompanyDashboardPage() {
   });
 
   //Get all jobs
+  // const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
+  //   id,
+  // );
+  // const jobs = allJobs?.data;
+
   const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
     id,
   );
-  const jobs = allJobs?.data;
+  const jobs = allJobs?.data.filter(
+    (job) => job.status?.toLowerCase() === 'active',
+  );
 
   // Fetch company dashboard stats
   const {

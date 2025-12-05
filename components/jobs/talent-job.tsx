@@ -72,12 +72,12 @@ const TalentJob = ({ id }: { id: string }) => {
     track: job?.track?.name || '', // Add optional chaining
     job_type: job?.job_type?.name || '', // Add optional chaining
     work_mode: job?.job_levels?.name || '', // Add optional chaining
-    price: job?.salary?.toString() || '', // Add optional chaining
+    price: job?.salary, // Add optional chaining
     state: job?.state?.name || '', // Add optional chaining
     country: job?.country?.name || '', // Add optional chaining
     company: job?.company?.name || '', // Add optional chaining
     companyLogo: job?.company?.logo_url || '', // Add optional chaining
-    salary: job?.salary?.toString() || '', // Add optional chaining
+    salary: job?.salary, // Add optional chaining
     location: job?.country?.name || '', // Add optional chaining
     workType: job?.job_type?.name || '', // Add optional chaining
     level: job?.job_levels?.name || '', // Add optional chaining

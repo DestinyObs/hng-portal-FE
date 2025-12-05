@@ -4,12 +4,7 @@ export const jobDetailsSchema = z.object({
   category_id: z.string().optional(),
   title: z.string().min(1, 'Job title is required'),
   description: z.string().min(50, 'Description must be at least 50 characters'),
-  price: z
-    .string()
-    .min(1, 'Salary is required')
-    .refine((val) => /^[0-9,.]+$/.test(val), {
-      message: 'Salary can only contain numbers, commas, and dots',
-    }),
+  price: z.number('Salary is required'),
 
   skills: z
     .array(z.string())
@@ -43,7 +38,7 @@ export type JobPostPayload = {
   acceptance_criteria: string;
   state: string;
   country: string;
-  price: string;
+  price: number;
   track_id: string;
   category_id: string;
   job_type_id: string;
@@ -59,7 +54,7 @@ export type JobPostPayload2 = {
   acceptance_criteria: string;
   state: string;
   country: string;
-  price: string;
+  price: number;
   track_id: string;
   category_id: string;
   job_type_id: string;
@@ -73,10 +68,11 @@ export type JobDraftPayload = {
   acceptance_criteria?: string;
   state?: string;
   country?: string;
-  price?: string;
+  price?: number;
   track_id?: string;
   category_id?: string;
   job_type_id?: string;
+  job_level_id?: string;
   work_mode_id?: string;
-  skills?: string[];
+  skills?: { id: string; name: string }[] | string[];
 };
