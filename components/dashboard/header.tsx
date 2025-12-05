@@ -12,17 +12,19 @@ import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 import { useAuthStore } from '@/store/auth';
 import PlaceholderProfile from './placeholder-profile';
 import { useGetProfileData } from '@/hooks/profile-settings';
+import { useGetCompanyProfile } from '@/hooks/profile';
+import { CompanyProfileData } from '@/types/profile';
 
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { user, setData } = useAuthStore();
-  const { data } = useGetProfileData();
+  const { data: talent_profile } = useGetProfileData();
+  const { data: company_profile } = useGetCompanyProfile<CompanyProfileData>();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isCompany = user?.current_role === 'employer';
   const profileDropdownRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -147,20 +149,20 @@ const DashboardHeader = () => {
                   className="w-9 h-9 rounded-full overflow-hidden"
                   onClick={handleProfileClick}
                 >
-                  {user?.company?.logo_url && isCompany ? (
+                  {company_profile?.logo_url && isCompany ? (
                     <Link href={'/profile-view'}>
                       <Image
-                        src={user?.company?.logo_url}
+                        src={company_profile?.logo_url}
                         alt="Profile"
                         width={40}
                         height={40}
                         className="object-cover w-full h-full"
                       />
                     </Link>
-                  ) : data?.photo_url && !isCompany ? (
+                  ) : talent_profile?.photo_url && !isCompany ? (
                     <Link href={'/profile-view'}>
                       <Image
-                        src={data?.photo_url}
+                        src={talent_profile?.photo_url}
                         alt="Profile"
                         width={40}
                         height={40}

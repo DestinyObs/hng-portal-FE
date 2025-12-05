@@ -80,16 +80,16 @@ const talentSchema = z.object({
 const companySchema = z.object({
   ...sharedSchema,
   role: z.literal('employer'),
-  industry: z.string().min(1, 'Industry is required'),
+  industry: z.string().optional(),
   tagline: z.string().optional(),
-  bio: z.string().min(1, 'Company description is required'),
-  value_proposition: z.string().min(1, 'Value proposition is required'),
-  why_work_here: z.string().min(1, 'This section is required'),
+  bio: z.string().optional(),
+  value_proposition: z.string().optional(),
+  why_work_here: z.string().optional(),
   company_size: z
     .string()
-    .min(1, 'Company size is required')
-    .regex(
-      /^\d+(-\d+)?$/,
+    .optional()
+    .refine(
+      (val) => !val || val === '' || /^\d+(-\d+)?$/.test(val),
       'Must be a number (e.g., 50) or a range (e.g., 100-500)',
     ),
   country: z.string().optional(),
@@ -190,9 +190,6 @@ export default function ProfilePage() {
       form.reset(resetData);
     }
   }, [talentProfile, companyProfile, isCompany, form, user, tracks]);
-  useEffect(() => {
-    console.log(talentProfile);
-  }, [talentProfile]);
   const onSubmit = (values: FormValues) => {
     try {
       const formData = new FormData();
@@ -220,10 +217,6 @@ export default function ProfilePage() {
           }
         }
       });
-      console.log('FormData entries:', formData);
-      for (const pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-      }
 
       if (imageFile) {
         formData.append(isCompany ? 'logo' : 'profile_image', imageFile);
@@ -252,7 +245,7 @@ export default function ProfilePage() {
     onChange,
     placeholder,
   }: {
-    value: string;
+    value: string | undefined;
     onChange: (val: string) => void;
     placeholder: string;
   }) => {
@@ -468,7 +461,7 @@ export default function ProfilePage() {
                         </FormLabel>
                         <FormControl>
                           <AutoListEditor
-                            value={field.value}
+                            value={field.value ?? undefined}
                             onChange={field.onChange}
                             placeholder="List your value propositions..."
                           />
@@ -487,7 +480,7 @@ export default function ProfilePage() {
                         </FormLabel>
                         <FormControl>
                           <AutoListEditor
-                            value={field.value}
+                            value={field.value ?? undefined}
                             onChange={field.onChange}
                             placeholder="List reasons to work here..."
                           />
