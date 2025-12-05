@@ -22,16 +22,17 @@ const getInitialFormData = (data: JobFormData | undefined): JobFormData2 => ({
   track_id: data?.track_id ?? '',
   job_type_id: data?.job_type_id ?? '',
   work_mode_id: data?.work_mode_id ?? '',
-  price: data?.price ?? '',
+  price: data?.price ?? 0,
   state_id: data?.state_id ?? '',
   country_id: data?.country_id ?? '',
   company_id: data?.company_id ?? '',
+  state: data?.state ?? '',
+  country: data?.country ?? '',
 });
 
 export default function PostJob({ id }: { id?: string }) {
   const { data, isPending } = usePost(id || '');
   const [currentStep, setCurrentStep] = useState(1);
-  // console.log('API Data:', data);
 
   // Compute form data whenever data changes
   const initialFormData = useMemo(

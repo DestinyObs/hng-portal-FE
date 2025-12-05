@@ -9,7 +9,16 @@ export async function getServerCookies() {
   const user = cookieStore.get('user')?.value;
 
   let parsedUser = null;
-  if (user) parsedUser = JSON.parse(user);
+  if (user) {
+    try {
+      parsedUser = JSON.parse(user);
+    } catch (error) {
+      // If JSON parsing fails (corrupted cookie), log and return null
+      // This prevents unhandled errors in server components
+      console.error('Failed to parse user cookie:', error);
+      parsedUser = null;
+    }
+  }
 
   return { token, user: parsedUser };
 }

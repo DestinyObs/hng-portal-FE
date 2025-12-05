@@ -43,9 +43,6 @@ export default function AddPortfolioForm({
   portfolio,
 }: PortfolioFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    portfolio?.banner_url || null,
-  );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const isEditing = !!portfolio;
@@ -64,9 +61,6 @@ export default function AddPortfolioForm({
     if (file) {
       setImageFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
       reader.readAsDataURL(file);
     }
   };
@@ -97,11 +91,34 @@ export default function AddPortfolioForm({
         );
         await queryClient.invalidateQueries({ queryKey: ['profile'] });
         form.reset();
-        setImagePreview(null);
         setImageFile(null);
+      } else {
+        // Handle error from result
+        let errorMessage = `Failed to ${isEditing ? 'update' : 'add'} portfolio project. Please try again.`;
+        if (result.error) {
+          if (typeof result.error === 'string') {
+            errorMessage = result.error;
+          } else if (
+            typeof result.error === 'object' &&
+            result.error !== null
+          ) {
+            // Handle Record<string, string[]> format
+            const errorString = Object.values(
+              result.error as Record<string, string[]>,
+            )
+              .flat()
+              .join(' ');
+            errorMessage = errorString || errorMessage;
+          }
+        }
+        toast.error(errorMessage);
       }
     } catch (error) {
-      console.error(error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : `Failed to ${isEditing ? 'update' : 'add'} portfolio project. Please try again.`;
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
       if (onSuccess) {
@@ -207,7 +224,6 @@ export default function AddPortfolioForm({
               variant="outline"
               onClick={() => {
                 form.reset();
-                setImagePreview(null);
                 setImageFile(null);
                 if (onSuccess) {
                   onSuccess();

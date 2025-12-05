@@ -63,6 +63,7 @@ export default function JobDetailsStep2({
   const { setNewPost } = usePostStore();
   const { editpost } = useEditPost(id!);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditDraftModal, setShowEditDraftModal] = useState(false);
   const [payload, setPayload] = useState<JobPostPayload | null>(null);
   const countries = Country.getAllCountries();
 
@@ -98,7 +99,7 @@ export default function JobDetailsStep2({
       acceptance_criteria: initialData.acceptance_criteria || ' ',
       state: data.state || ' ',
       country: data.country || ' ',
-      price: initialData.price || ' ',
+      price: initialData.price || 0,
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
       job_type_id: data.job_type_id || ' ',
@@ -106,11 +107,8 @@ export default function JobDetailsStep2({
       work_mode_id: data.work_mode_id || ' ',
       skills: (initialData.skills as string[]) || [],
     };
-    // console.log(formData);
 
     if (id) {
-      // console.log(formData)
-
       setPayload(formData);
 
       setShowEditModal(true);
@@ -130,7 +128,7 @@ export default function JobDetailsStep2({
       acceptance_criteria: initialData.acceptance_criteria || ' ',
       state: data.state || ' ',
       country: data.country || ' ',
-      price: initialData.price || ' ',
+      price: initialData.price,
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
       job_level_id: initialData.job_level_id ?? '',
@@ -158,6 +156,37 @@ export default function JobDetailsStep2({
     } finally {
       setIsDrafting(false);
     }
+  };
+
+  const handleEditDraft = async () => {
+    const data = getValues();
+
+    const formData = {
+      company_id: user?.company?.id || '',
+      title: initialData.title || ' ',
+      description: initialData.description || ' ',
+      acceptance_criteria: initialData.acceptance_criteria || ' ',
+      state: data.state || ' ',
+      country: data.country || ' ',
+      price: initialData.price,
+      track_id: data.track_id || ' ',
+      category_id: initialData.category_id || ' ',
+      job_level_id: initialData.job_level_id ?? '',
+      job_type_id: data.job_type_id || ' ',
+      work_mode_id: data.work_mode_id || ' ',
+      skills: (initialData.skills as string[]) || [],
+    };
+
+    console.log(formData);
+
+    if (formData) {
+      editpost(formData, {
+        onSuccess: () => {
+          router.push('/company/jobs/drafts');
+        },
+      });
+    }
+    setShowEditModal(false);
   };
 
   if (isLoading) return <Loading />;
@@ -424,10 +453,36 @@ export default function JobDetailsStep2({
           label: 'Save Edit',
           onClick: () => {
             if (payload) {
-              editpost(payload);
+              editpost(payload, {
+                onSuccess: () => {
+                  router.push('/company/dashboard');
+                },
+              });
             }
             setShowEditModal(false);
           },
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: () => setShowEditModal(false),
+        }}
+      />
+
+      {/* Edit Draft Modal */}
+      <Modal
+        isOpen={showEditDraftModal}
+        onClose={() => setShowEditModal(false)}
+        title="Do you want to save the edited post?"
+        message="This job description will be updated."
+        icon={
+          <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#FEF0C7] rounded-full w-16 h-16">
+            {' '}
+            <OctagonAlert size={48} className="text-[#E3822A]" />
+          </div>
+        }
+        primaryButton={{
+          label: 'Save Edit',
+          onClick: handleEditDraft,
         }}
         secondaryButton={{
           label: 'Cancel',

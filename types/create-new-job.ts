@@ -13,7 +13,7 @@ export interface JobFormData {
   track_id?: string;
   job_type_id?: string;
   work_mode_id?: string;
-  price?: string;
+  price?: number;
   state?: string;
   country?: string;
   state_id: string;
@@ -32,7 +32,7 @@ export interface JobFormData2 {
   track_id?: string;
   job_type_id?: string;
   work_mode_id?: string;
-  price?: string;
+  price?: number;
   state?: string;
   country?: string;
   state_id: string;

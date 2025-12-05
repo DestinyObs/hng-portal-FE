@@ -1,7 +1,10 @@
 import { updatePost } from '@/api/actions/create-post';
 import { makeAuthenticatedRequest } from '@/api/config.server';
 import { useAuthStore } from '@/store/auth';
-import { JobPostPayload } from '@/validations/create-post.schema';
+import {
+  JobDraftPayload,
+  JobPostPayload,
+} from '@/validations/create-post.schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -30,17 +33,29 @@ export const useEditPost = (jobId: string) => {
 
   const { mutate: editpost, isPending } = useMutation({
     mutationKey: ['put', jobId],
-    mutationFn: (formData: JobPostPayload) => {
+    mutationFn: (formData: JobDraftPayload) => {
       if (!companyId) throw new Error('Company ID is required');
       return updatePost(companyId, jobId, formData);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (response && !response.success) {
+        const errorMessage = response.message || 'Failed to update job';
+        if (response.errors) {
+          const errorString = Object.values(response.errors).flat().join(' ');
+          toast.error(errorString || errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
       toast.success('Job updated successfully!');
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
-      router.push('/company/dashboard');
+      queryClient.invalidateQueries({
+        queryKey: ['get-job', companyId, jobId],
+      });
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to update job');
+      toast.error(error.message || 'An unexpected error occurred');
     },
   });
 

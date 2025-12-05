@@ -30,6 +30,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { draftPost } from '@/api/actions/create-post';
 import { useAuthStore } from '@/store/auth';
+import { useQueryClient } from '@tanstack/react-query';
 import { useGetJob } from '@/hooks/jobs';
 import { RawJob } from '@/types/job-card';
 import { useEditPost } from '@/hooks/posts';
@@ -52,6 +53,8 @@ export default function JobDetails({
   const [showEditModal, setShowEditModal] = useState(false);
   const [isDrafting, setIsDrafting] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
@@ -78,7 +81,7 @@ export default function JobDetails({
       description: initialData.description || '',
       skills: initialSkills,
       price: initialData.price,
-      acceptance_criteria: initialData.acceptance_criteria || '',
+      acceptance_criteria: initialData.acceptance_criteria,
     },
     mode: 'onChange',
   });
@@ -151,6 +154,8 @@ export default function JobDetails({
       }
 
       toast.success('Your job has been saved to draft successfully');
+      queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
+
       reset();
       router.push('/company/dashboard');
     } catch (error: unknown) {
@@ -170,26 +175,31 @@ export default function JobDetails({
     }
     const formData = {
       company_id: user?.company?.id || '',
-      category_id: data.category_id || '',
+      category_id: data.category_id,
       title: data.title,
       description: data.description,
       skills: data.skills,
       price: data.price,
-      acceptance_criteria: data.acceptance_criteria,
       job_level_id: data.job_level_id,
-      state: '',
-      country: '',
-      track_id: '',
-      job_type_id: '',
-      work_mode_id: '',
+      ...(data.acceptance_criteria &&
+        data.acceptance_criteria.length >= 50 && {
+          acceptance_criteria: data.acceptance_criteria,
+        }),
     };
 
+    console.log(formData);
+
     if (formData) {
-      editpost(formData);
+      editpost(formData, {
+        onSuccess: () => {
+          router.push('/company/jobs/drafts');
+        },
+      });
     }
     setShowEditModal(false);
   };
-  if (isfetching) return <Loading />;
+
+  if (isfetching && id) return <Loading />;
 
   return (
     <div className="space-y-6 ">
@@ -266,9 +276,9 @@ export default function JobDetails({
                 </Select>
               )}
             />
-            {errors.category_id && (
+            {errors.job_level_id && (
               <p className="text-xs text-red-500">
-                {errors.category_id.message}
+                {errors.job_level_id.message}
               </p>
             )}
           </div>
@@ -336,14 +346,15 @@ export default function JobDetails({
               render={({ field }) => (
                 <Input
                   id="price"
-                  type="text"
+                  type="number"
                   placeholder="What is the salary?"
                   {...field}
                 />
               )}
             />
-            {errors.title && (
-              <p className="text-xs text-red-500">{errors.title.message}</p>
+
+            {errors.price && (
+              <p className="text-xs text-red-500">{errors.price.message}</p>
             )}
           </div>
           {/* Skills Section */}
@@ -360,11 +371,20 @@ export default function JobDetails({
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  const input = e.currentTarget;
-                  handleAddSkill(input);
-                  input.value = '';
+                  const value = e.currentTarget.value.trim();
+
+                  if (!value) return;
+
+                  const newSkill = {
+                    id: value.toLowerCase().replace(/\s+/g, '-'),
+                    name: value,
+                  };
+
+                  handleAddSkill(newSkill);
+                  e.currentTarget.value = '';
                 }
               }}
+              disabled
             />
 
             {/* Selected Skills */}
@@ -445,13 +465,14 @@ export default function JobDetails({
                 variant="outline"
                 disabled={isDrafting}
                 className="border-[#E7E7E7] text-[#344054]"
+                onClick={() => router.back()}
               >
                 Cancel
               </Button>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              {job.status === 'draft' ? (
+              {id && job.status === 'draft' ? (
                 <div className="">
                   <Button
                     variant="outlineGray"

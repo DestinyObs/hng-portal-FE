@@ -8,7 +8,7 @@ export type newPost = {
   acceptance_criteria: string;
   state: string;
   country: string;
-  price: string;
+  price: number;
   track_id: string;
   category_id: string;
   job_type_id: string;

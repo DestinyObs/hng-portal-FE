@@ -152,8 +152,9 @@ export const JobModal = () => {
               disabled={job?.is_applied}
               size={'xs'}
             >
-              Start Application
+              {job?.is_applied ? 'Already Applied' : 'Start Application'}
             </Button>
+
             <Button
               size={'xs'}
               variant="outline"
