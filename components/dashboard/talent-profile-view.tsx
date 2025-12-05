@@ -27,7 +27,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
   const trackName =
     tracks?.find((track) => track.id === profile?.bio?.track_id)?.name || '';
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-2 md:px-4 md:py-4">
+    <div className="w-full max-w-4xl mx-auto px-1 py-1 md:px-4 md:py-4">
       {/* Banner */}
       <div className="relative h-32 sm:h-40 md:h-48 w-full max-w-[804px] rounded-t-xl bg-primary-300">
         <div className="absolute -bottom-10 sm:-bottom-12 left-4 sm:left-6 h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
@@ -47,7 +47,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
 
       {/* Main Card */}
       <Card className="max-w-[804px] rounded-t-none">
-        <CardHeader className="p-4 pb-0 flex justify-end items-start">
+        <CardHeader className="p-2 md:p-4 pb-0 flex justify-end items-start">
           <Link href="/settings/profile" className="inline-block">
             <Button
               variant="outline"
@@ -65,13 +65,13 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
           </Link>
         </CardHeader>
 
-        <CardContent className="p-6 pt-0">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
+        <CardContent className="p-2 md:p-6 pt-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6 md:mb-10">
             <div>
-              <h2 className="text-2xl font-semibold text-black">
+              <h2 className="text-xl md:text-2xl font-semibold text-black">
                 {profile?.bio?.user?.firstname} {profile?.bio?.user?.lastname}
               </h2>
-              <p className="text-base text-black">{trackName}</p>
+              <p className="text-sm md:text-base text-black">{trackName}</p>
               <p className="text-sm text-gray-600">
                 {[stateName, countryName].filter(Boolean).join(', ')}
               </p>
@@ -119,16 +119,18 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
           </div>
 
           {/* BIO */}
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-4">Bio</h3>
-            <p className="text-base text-black whitespace-pre-line">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
+              Bio
+            </h3>
+            <p className="text-sm md:text-base text-black whitespace-pre-line">
               {profile?.bio?.bio ?? 'No bio added yet.'}
             </p>
           </div>
 
           {/* EXPERIENCE */}
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-6">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-4 md:mb-6">
               Experience
             </h3>
 
@@ -192,7 +194,9 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
 
           {/* SKILLS */}
           <div>
-            <h3 className="text-2xl font-semibold text-black mb-4">Skills</h3>
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
+              Skills
+            </h3>
 
             <div className="flex flex-wrap gap-2">
               {!profile?.skills || profile.skills.length === 0 ? (

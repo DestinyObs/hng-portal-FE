@@ -36,7 +36,7 @@ export function CompanyProfileDisplay({ profile }: CompanyProfileViewProps) {
   const valueProp = cleanList(profile.value_proposition);
   const whyWorkHere = cleanList(profile.why_talents_should_work_with_us);
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-2 md:px-4 md:py-4">
+    <div className="w-full max-w-4xl mx-auto px-1 py-1 md:px-4 md:py-4">
       {/* Banner */}
       <div className="relative h-32 sm:h-40 md:h-48 w-full max-w-[804px] rounded-t-xl bg-primary-300">
         <div className="absolute -bottom-10 sm:-bottom-12 left-4 sm:left-6 h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
@@ -70,13 +70,13 @@ export function CompanyProfileDisplay({ profile }: CompanyProfileViewProps) {
           </Link>
         </CardHeader>
 
-        <CardContent className="p-6 pt-0">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
+        <CardContent className="p-3 md:p-6 pt-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6 md:mb-10">
             <div>
-              <h2 className="text-2xl font-semibold text-black">
+              <h2 className="text-xl md:text-2xl font-semibold text-black">
                 {profile.name}
               </h2>
-              <p className="text-base text-black">
+              <p className="text-sm md:text-base text-black">
                 {profile.tagline || 'No tagline provided'}
               </p>
               <p>
@@ -103,20 +103,20 @@ export function CompanyProfileDisplay({ profile }: CompanyProfileViewProps) {
           </div>
 
           {/* ABOUT */}
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-4">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
               About Company
             </h3>
-            <p className="text-base text-black whitespace-pre-line">
+            <p className="text-sm md:text-base text-black whitespace-pre-line">
               {profile.description || 'No company description added yet.'}
             </p>
           </div>
 
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-4">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
               Value Proposition
             </h3>
-            <div className="text-base text-black">
+            <div className="text-sm md:text-base text-black">
               {valueProp ? (
                 <ReactMarkdown
                   components={{
@@ -135,11 +135,11 @@ export function CompanyProfileDisplay({ profile }: CompanyProfileViewProps) {
           </div>
 
           {/* WHY TALENTS SHOULD WORK WITH US */}
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-4">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
               Why Talents Should Work With Us
             </h3>
-            <div className="text-base text-black">
+            <div className="text-sm md:text-base text-black">
               {whyWorkHere ? (
                 <ReactMarkdown
                   components={{
@@ -159,7 +159,9 @@ export function CompanyProfileDisplay({ profile }: CompanyProfileViewProps) {
 
           {/* INDUSTRY */}
           <div>
-            <h3 className="text-2xl font-semibold text-black mb-4">Industry</h3>
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
+              Industry
+            </h3>
             <div className="flex flex-wrap gap-2">
               {profile.industry ? (
                 <span className="px-3 py-1 bg-white border border-[#EAF0ED] text-sm text-black rounded-2xl">
