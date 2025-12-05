@@ -20,10 +20,14 @@ export default function ApplicantsPageClient() {
 
   // Auto-apply job filter from URL on first load
   useEffect(() => {
-    if (urlJobId) {
+    if (!urlJobId) return;
+
+    // Micro-task to safely update state
+    const timeout = setTimeout(() => {
       setPreSelectedJobId(urlJobId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, 0);
+
+    return () => clearTimeout(timeout);
   }, [urlJobId]);
 
   const columns = createColumns(company_id!);
