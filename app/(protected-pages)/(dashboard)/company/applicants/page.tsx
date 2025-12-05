@@ -1,5 +1,5 @@
-import ApplicantsPageClient from './applicants-page-client';
 import { Suspense } from 'react';
+import ApplicantsPageClient from './applicants-page-client';
 
 export const metadata = {
   title: 'All Applicants',
@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function ApplicantsPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<div>Loading applicants...</div>}>
       <ApplicantsPageClient />
     </Suspense>
   );
