@@ -5,8 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -16,13 +16,18 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
-import { changePassword } from '@/api/actions/auth';
+import { makeAuthenticatedRequest } from '@/api/config.server';
+import { useAuthStore } from '@/store/auth';
 import {
   changePasswordSchema,
   ChangePasswordFormValues,
 } from '@/validations/change-password';
 
 export default function SecurityPage() {
+  const router = useRouter();
+  const { user } = useAuthStore();
+  const isCompany = user?.current_role === 'employer';
+
   const form = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -31,13 +36,25 @@ export default function SecurityPage() {
       password_confirmation: '',
     },
   });
+  const changePasswordFn = async (data: ChangePasswordFormValues) => {
+    const endpoint = isCompany
+      ? '/employer/settings/profile/change-password'
+      : '/talent/profile/change-password';
+    return await makeAuthenticatedRequest(endpoint, {
+      method: 'PUT',
+      body: data,
+    });
+  };
 
   const { mutate: a_changePassword, isPending } = useMutation({
-    mutationFn: changePassword,
+    mutationFn: changePasswordFn,
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response.message || 'Password changed successfully');
         form.reset();
+        setTimeout(() => {
+          router.push('/profile-view');
+        }, 1000);
       } else {
         if (response.errors) {
           Object.entries(response.errors).forEach(([key, messages]) => {
@@ -150,6 +167,7 @@ export default function SecurityPage() {
                   type="button"
                   variant="outline"
                   onClick={() => form.reset()}
+                  disabled={isPending}
                   className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl"
                 >
                   Cancel
@@ -157,13 +175,9 @@ export default function SecurityPage() {
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-white bg-primary-blue hover:bg-blue-600 rounded-2xl"
+                  className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isPending ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    'Save Changes'
-                  )}
+                  {isPending ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </form>

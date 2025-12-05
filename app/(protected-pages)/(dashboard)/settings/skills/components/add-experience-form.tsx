@@ -21,7 +21,6 @@ import {
   updateWorkExperience,
 } from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '@/store/auth';
 import { Experience } from '@/types/profile-settings';
 import { toast } from 'sonner';
 import { useEffect } from 'react';
@@ -79,7 +78,7 @@ export default function WorkExperienceForm({
 }: WorkExperienceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
-  const { user } = useAuthStore();
+  // const { user } = useAuthStore();
 
   const form = useForm<WorkExperienceFormValues>({
     resolver: zodResolver(workExperienceSchema),
