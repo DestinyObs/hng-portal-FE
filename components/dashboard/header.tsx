@@ -16,7 +16,7 @@ import { useGetProfileData } from '@/hooks/profile-settings';
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, setData } = useAuthStore();
+  const { user, setData, clearAuth } = useAuthStore();
   const { data } = useGetProfileData();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -65,7 +65,7 @@ const DashboardHeader = () => {
     mutationFn: logout,
     onSuccess: () => {
       toast.success('Logged out successfully!');
-      localStorage.removeItem('auth-store');
+      clearAuth();
       setData(null);
       router.push('/sign-in');
     },

@@ -12,6 +12,8 @@ interface AuthState {
   clearEmail: () => void;
   setId: (id: string) => void;
   setData: (data: User | null) => void;
+
+  clearAuth: () => void;
 }
 
 export const useAuthStore = create(
@@ -33,8 +35,7 @@ export const useAuthStore = create(
           user_id: null,
           user: null,
         });
-        const storageKey = 'auth-store';
-        localStorage.removeItem(storageKey);
+        localStorage.clear();
       },
     }),
     {
