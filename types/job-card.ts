@@ -30,7 +30,7 @@ export interface Job {
   country?: string;
   company: string;
   companyLogo?: string;
-  salary?: string;
+  salary?: number;
   location?: string;
   workType?: string;
   level?: string;
@@ -47,7 +47,7 @@ export interface RawJob {
   state_id: string;
   country_id: string;
   company_id: string;
-  price?: string;
+  price?: number;
   track_id?: string;
   work_mode_id?: string;
   category_id?: string;
@@ -91,7 +91,7 @@ export interface TalentJob {
   state_id: string;
   country_id: string;
   company_id: string;
-  salary?: string;
+  salary?: number;
   track_id?: string;
   work_mode_id?: string;
   category_id?: string;
@@ -159,7 +159,7 @@ export interface TalentApplication {
     skills: { name: string }[];
     job_type: { name: string };
     work_mode: { name: string };
-    salary: string;
+    salary: number;
     job_level: { name: string };
     country: { name: string };
     state: { name: string };
