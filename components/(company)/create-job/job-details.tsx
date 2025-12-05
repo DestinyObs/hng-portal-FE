@@ -20,9 +20,7 @@ import { OctagonAlert, X } from 'lucide-react';
 import type { JobDetailsProps, JobFormData2 } from '@/types/create-new-job';
 import TextEditor from '@/components/shared/ui/text-editor';
 import Input from '@/components/ui/input';
-import {
-  jobDetailsSchema,
-} from '@/validations/create-post.schema';
+import { jobDetailsSchema } from '@/validations/create-post.schema';
 import { useCategories, useJobLevel, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -108,7 +106,7 @@ export default function JobDetails({
     setSelectedSkills(selectedSkills.filter((s) => s.id !== skillToRemove.id));
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: Partial<JobFormData2>) => {
     const formDataUpdate: Partial<JobFormData2> = {
       category_id: data.category_id,
       title: data.title,
@@ -140,12 +138,12 @@ export default function JobDetails({
       job_level_id: data.job_level_id,
     };
 
-      const response = draftJob(formData, {
-        onSuccess: ()=> {
-            reset();
-      router.push('/company/jobs/drafts');
-        }
-      });
+    draftJob(formData, {
+      onSuccess: () => {
+        reset();
+        router.push('/company/jobs/drafts');
+      },
+    });
   };
 
   const handleEditDraft = async () => {
