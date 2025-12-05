@@ -90,84 +90,130 @@ export const createFetchUtil = (config: FetchConfig) => {
     endpoint: string,
     options: FetchOptions<TRequestBody> = {},
   ): Promise<TResponse> {
-    const {
-      method = 'GET',
-      headers = {},
-      body,
-      params,
-      ...restOptions
-    } = options;
-    const normalizedApiUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
-    const normalizedEndpoint = endpoint.startsWith('/')
-      ? endpoint.slice(1)
-      : endpoint;
-    const url = new URL(normalizedEndpoint, normalizedApiUrl);
-    // console.log(`${method} request to URL: ${url.toString()}`);
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        url.searchParams.append(key, value);
-        console.log(`${method} request to URL: ${url.toString()}`);
-      });
-    }
-    const mergedHeaders: Record<string, string> = {
-      ...defaultHeaders,
-      ...headers,
-    };
-    const fetchOptions: RequestInit = {
-      method,
-      headers: mergedHeaders,
-      ...restOptions,
-    };
-    if (body instanceof FormData) {
-      // Let the browser set the Content-Type + boundary
-      fetchOptions.body = body;
-      // :no_entry_symbol: Remove JSON content-type if present
-      if (mergedHeaders['Content-Type']) {
-        delete mergedHeaders['Content-Type'];
+    try {
+      const {
+        method = 'GET',
+        headers = {},
+        body,
+        params,
+        ...restOptions
+      } = options;
+      const normalizedApiUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
+      const normalizedEndpoint = endpoint.startsWith('/')
+        ? endpoint.slice(1)
+        : endpoint;
+      const url = new URL(normalizedEndpoint, normalizedApiUrl);
+      // console.log(`${method} request to URL: ${url.toString()}`);
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          url.searchParams.append(key, value);
+          console.log(`${method} request to URL: ${url.toString()}`);
+        });
       }
-    } else if (body !== undefined && body !== null) {
-      mergedHeaders['Content-Type'] = 'application/json';
-      fetchOptions.body = JSON.stringify(body);
-    }
-    const response = await fetch(url.toString(), fetchOptions);
-    let responseBody: unknown;
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-      responseBody = await response.json();
-    } else {
-      responseBody = await response.text();
-    }
-    if (!response.ok) {
-      console.error(
-        `fetchUtil - HTTP ${response.status} error for ${url.toString()}:`,
-        {
-          status: response.status,
-          statusText: response.statusText,
-          responseBody,
-        },
-      );
-      // --- Custom error message extraction logic ---
-      let customErrorMessage = `Error: ${response.status}`;
-      if (typeof responseBody === 'object' && responseBody !== null) {
-        const errorBody = responseBody as ErrorResponseBody;
-        if (errorBody.message) {
-          customErrorMessage = errorBody.message;
-        } else if (errorBody.errors) {
-          // Handle validation errors or multiple error messages
-          const errorMessages = Object.values(errorBody.errors)
-            .flat()
-            .filter((msg) => typeof msg === 'string')
-            .join('; ');
-          if (errorMessages) {
-            customErrorMessage = errorMessages;
-          }
+      const mergedHeaders: Record<string, string> = {
+        ...defaultHeaders,
+        ...headers,
+      };
+      const fetchOptions: RequestInit = {
+        method,
+        headers: mergedHeaders,
+        ...restOptions,
+      };
+      if (body instanceof FormData) {
+        // Let the browser set the Content-Type + boundary
+        fetchOptions.body = body;
+        // :no_entry_symbol: Remove JSON content-type if present
+        if (mergedHeaders['Content-Type']) {
+          delete mergedHeaders['Content-Type'];
         }
-      } else if (typeof responseBody === 'string' && responseBody.length > 0) {
-        customErrorMessage = responseBody;
+      } else if (body !== undefined && body !== null) {
+        mergedHeaders['Content-Type'] = 'application/json';
+        fetchOptions.body = JSON.stringify(body);
       }
-      throw new Error(customErrorMessage); // Re-throw with custom message
+      const response = await fetch(url.toString(), fetchOptions);
+      let responseBody: unknown;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        responseBody = await response.json();
+      } else {
+        responseBody = await response.text();
+      }
+
+      if (!response.ok) {
+        console.error(
+          `fetchUtil - HTTP ${response.status} error for ${url.toString()}:`,
+          {
+            status: response.status,
+            statusText: response.statusText,
+            responseBody,
+          },
+        );
+
+        // Check if responseBody is already an APIResponse-like structure
+        if (
+          typeof responseBody === 'object' &&
+          responseBody !== null &&
+          'success' in responseBody &&
+          'message' in responseBody &&
+          'status' in responseBody
+        ) {
+          // Backend already returned a structured error response, return it as-is
+          return responseBody as TResponse;
+        }
+
+        // Extract error message from response body if not already structured
+        let errorMessage = `Error: ${response.status}`;
+        let errors: Record<string, string[]> | undefined;
+
+        if (typeof responseBody === 'object' && responseBody !== null) {
+          const errorBody = responseBody as ErrorResponseBody;
+          if (errorBody.message) {
+            errorMessage = errorBody.message;
+          } else if (errorBody.errors) {
+            errors = errorBody.errors;
+            // Create a combined message from validation errors
+            const errorMessages = Object.values(errorBody.errors)
+              .flat()
+              .filter((msg) => typeof msg === 'string')
+              .join('; ');
+            if (errorMessages) {
+              errorMessage = errorMessages;
+            }
+          }
+        } else if (
+          typeof responseBody === 'string' &&
+          responseBody.length > 0
+        ) {
+          errorMessage = responseBody;
+        }
+
+        // Return structured error response instead of throwing
+        // This allows server actions to handle errors gracefully
+        return {
+          success: false,
+          message: errorMessage,
+          status: response.status,
+          errors: errors,
+          data: null,
+        } as TResponse;
+      }
+
+      return responseBody as TResponse;
+    } catch (error) {
+      // Handle network errors, timeouts, JSON parsing errors, etc.
+      console.error(`fetchUtil - Network error for ${endpoint}:`, error);
+
+      // Return structured error response for network failures
+      return {
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Network error occurred. Please check your connection and try again.',
+        status: 0,
+        data: null,
+      } as TResponse;
     }
-    return responseBody as TResponse;
   };
 };
 /**

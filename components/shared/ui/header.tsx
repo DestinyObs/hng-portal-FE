@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../../ui/button';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store/auth';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -60,24 +61,81 @@ const Header = () => {
 
           <ul className="items-center gap-10 hidden lg:flex">
             {NavLinks.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className={`${LinkClasses} flex items-center gap-2 group`}
-                >
-                  <span className="group-hover:text-primary-blue cursor-pointer transition-colors duration-300">
-                    {item.icon}
-                  </span>
-                  <p
-                    className={`group-hover:text-primary-blue transition-all duration-300 ${
-                      item.active
-                        ? 'border-b-2 border-black group-hover:border-primary-blue'
-                        : ''
-                    }`}
+              <li key={item.label} className="relative">
+                {item.dropdown ? (
+                  <>
+                    <button
+                      type="button"
+                      className={`${LinkClasses} flex items-center gap-2 group`}
+                      onClick={() =>
+                        setOpenDropdown((prev) =>
+                          prev === item.label ? null : item.label,
+                        )
+                      }
+                      aria-expanded={openDropdown === item.label}
+                      aria-haspopup="true"
+                    >
+                      <span className="group-hover:text-primary-blue cursor-pointer transition-colors duration-300">
+                        {item.icon}
+                      </span>
+                      <p
+                        className={`group-hover:text-primary-blue transition-all duration-300 ${
+                          item.active
+                            ? 'border-b-2 border-black group-hover:border-primary-blue'
+                            : ''
+                        }`}
+                      >
+                        {item.label}
+                      </p>
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform duration-200 ${
+                          openDropdown === item.label ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <div
+                      className={`absolute left-0 mt-3 w-48 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg transition-all duration-200 ease-out origin-top ${
+                        openDropdown === item.label
+                          ? 'opacity-100 scale-100 translate-y-0'
+                          : 'pointer-events-none opacity-0 scale-95 -translate-y-2'
+                      }`}
+                    >
+                      <ul className="py-2">
+                        {item.dropdown.map((option) => (
+                          <li key={option.label}>
+                            <Link
+                              href={option.href}
+                              className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-blue"
+                              onClick={() => setOpenDropdown(null)}
+                            >
+                              {option.icon}
+                              <span>{option.label}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`${LinkClasses} flex items-center gap-2 group`}
                   >
-                    {item.label}
-                  </p>
-                </Link>
+                    <span className="group-hover:text-primary-blue cursor-pointer transition-colors duration-300">
+                      {item.icon}
+                    </span>
+                    <p
+                      className={`group-hover:text-primary-blue transition-all duration-300 ${
+                        item.active
+                          ? 'border-b-2 border-black group-hover:border-primary-blue'
+                          : ''
+                      }`}
+                    >
+                      {item.label}
+                    </p>
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -131,22 +189,76 @@ const Header = () => {
           aria-modal="true"
         >
           <nav className="h-full overflow-y-auto px-6 py-6">
-            <ul className="flex flex-col space-y-10">
+            <ul className="flex flex-col space-y-8">
               {NavLinks.map((item) => (
-                <li
-                  key={item.label}
-                  className="flex items-center gap-2 text-white cursor-pointer hover:text-white"
-                >
-                  {item.icon}
-                  <Link
-                    href={item.href}
-                    className={`${LinkClasses} hover:text-white text-white ${
-                      item.active ? 'border-b-2 border-white' : ''
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
+                <li key={item.label} className="text-white">
+                  {item.dropdown ? (
+                    <>
+                      <button
+                        type="button"
+                        className="flex w-full items-center gap-2 text-left text-white"
+                        onClick={() =>
+                          setOpenDropdown((prev) =>
+                            prev === item.label ? null : item.label,
+                          )
+                        }
+                        aria-expanded={openDropdown === item.label}
+                      >
+                        {item.icon}
+                        <span className="flex-1">{item.label}</span>
+                        <ChevronDown
+                          size={18}
+                          className={`transition-transform duration-200 ${
+                            openDropdown === item.label ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <div
+                        className={`mt-4 overflow-hidden rounded-lg bg-white/10 transition-all duration-200 ease-out origin-top ${
+                          openDropdown === item.label
+                            ? 'max-h-40 opacity-100 scale-100 translate-y-0'
+                            : 'max-h-0 opacity-0 scale-95 -translate-y-2'
+                        }`}
+                      >
+                        <ul className="space-y-4 px-4 py-3">
+                          {item.dropdown.map((option) => (
+                            <li
+                              key={option.label}
+                              className="flex items-center gap-2"
+                            >
+                              {option.icon}
+                              <Link
+                                href={option.href}
+                                className="text-white"
+                                onClick={() => {
+                                  setIsOpen(false);
+                                  setOpenDropdown(null);
+                                }}
+                              >
+                                {option.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-2 text-white cursor-pointer hover:text-white">
+                      {item.icon}
+                      <Link
+                        href={item.href}
+                        className={`${LinkClasses} hover:text-white text-white ${
+                          item.active ? 'border-b-2 border-white' : ''
+                        }`}
+                        onClick={() => {
+                          setIsOpen(false);
+                          setOpenDropdown(null);
+                        }}
+                      >
+                        {item.label}
+                      </Link>
+                    </div>
+                  )}
                 </li>
               ))}
               <li>
