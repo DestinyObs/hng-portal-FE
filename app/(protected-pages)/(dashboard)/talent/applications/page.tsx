@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { TalentApplication } from '@/types/job-card';
 import ApplicationCard from '@/components/applications/application-card';
+import TalentDashboardEmptyState from '@/components/dashboard/talent-dashboard-empty-state';
 
 export default function MyApplicationsPage() {
   const {
@@ -43,15 +44,7 @@ export default function MyApplicationsPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 px-6 border-2 border-dashed rounded-lg">
-          <h3 className="text-lg font-semibold text-gray-800">
-            No Applications Yet
-          </h3>
-          <p className="mt-1 text-sm text-gray-600">
-            You have not applied for any jobs yet. When you do, they will appear
-            here.
-          </p>
-        </div>
+        <TalentDashboardEmptyState />
       )}
     </div>
   );

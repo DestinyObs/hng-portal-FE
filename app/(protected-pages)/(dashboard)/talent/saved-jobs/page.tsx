@@ -1,5 +1,6 @@
 'use client';
 import JobCard from '@/components/jobs/job-card';
+import TalentDashboardEmptyState from '@/components/dashboard/talent-dashboard-empty-state';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { useQuery } from '@tanstack/react-query'; // Import useQuery
 import { getSavedJobs } from '@/api/actions/talent'; // Import getSavedJobs
@@ -33,9 +34,7 @@ export default function SavedJobsPage() {
               <Loader2 className="h-10 w-10 animate-spin text-primary-blue" />
             </div>
           ) : jobs.length === 0 ? (
-            <div className="col-span-full text-center text-gray-500">
-              You have no saved jobs.
-            </div>
+            <TalentDashboardEmptyState />
           ) : (
             jobs.map((job) => <JobCard key={job.id} job={job} />)
           )}

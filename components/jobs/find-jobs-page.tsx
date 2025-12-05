@@ -10,6 +10,7 @@ import { getTalentJobs, getSavedJobs } from '@/api/actions/talent';
 import { TalentJob, TalentJobsQueryParams } from '@/types/job-card';
 import { toast } from 'sonner';
 import { APIResponse } from '@/types/api-response';
+import TalentDashboardEmptyState from '../dashboard/talent-dashboard-empty-state';
 
 export default function FindJobsPage() {
   const [queryParams, setQueryParams] = useState<
@@ -147,9 +148,7 @@ export default function FindJobsPage() {
                       <Loader2 className="h-10 w-10 animate-spin text-primary-blue" />
                     </div>
                   ) : jobs.length === 0 ? (
-                    <div className="col-span-full text-center text-gray-500">
-                      No jobs found.
-                    </div>
+                    <TalentDashboardEmptyState />
                   ) : (
                     jobs.map((job) => <JobCard key={job.id} job={job} />)
                   )}
@@ -163,9 +162,7 @@ export default function FindJobsPage() {
                       <Loader2 className="h-10 w-10 animate-spin text-primary-blue" />
                     </div>
                   ) : savedJobs.length === 0 ? (
-                    <div className="col-span-full text-center text-gray-500">
-                      You have no saved jobs.
-                    </div>
+                    <TalentDashboardEmptyState />
                   ) : (
                     savedJobs.map((job) => <JobCard key={job.id} job={job} />)
                   )}
