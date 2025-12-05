@@ -30,7 +30,6 @@ import {
 } from '@/components/ui/select';
 import Loading from '@/app/loading';
 import { toast } from 'sonner';
-
 import { useAuthStore } from '@/store/auth';
 import { useTracks } from '@/hooks/lookups';
 import {
@@ -42,7 +41,7 @@ import {
 import { UserProfileData, CompanyProfileData } from '@/types/profile';
 
 const talentDefaultData = {
-  track_id: '',
+  current_role: '',
   bio: '',
   experience: '',
   country: '',
@@ -68,7 +67,7 @@ const sharedSchema = {
 const talentSchema = z.object({
   ...sharedSchema,
   role: z.literal('talent'),
-  track_id: z.string().optional(),
+  current_role: z.string().optional(),
   bio: z.string().optional(),
   experience: z.string().optional(),
   country: z.string().optional(),
@@ -167,9 +166,6 @@ export default function ProfilePage() {
       };
       form.reset(resetData);
     } else if (!isCompany && talentProfile) {
-      const trackId = talentProfile.bio?.track_id
-        ? String(talentProfile.bio.track_id)
-        : '';
       const resetData = {
         role: 'talent' as const,
         photo_url:
@@ -178,12 +174,12 @@ export default function ProfilePage() {
           user?.photo_url ||
           '',
         // Talent Data
-        track_id: trackId,
+        current_role: talentProfile.bio?.current_role,
         bio: talentProfile.bio?.bio || '',
         experience: talentProfile.bio?.experience || '',
         country: talentProfile.bio?.country || '',
         state: talentProfile.bio?.state || '',
-        availability: talentProfile.bio?.status || '',
+        availability: talentProfile.bio?.available_status || '',
         jobTypes: talentProfile.bio?.job_type_preference
           ? talentProfile.bio.job_type_preference
               .split(',')
@@ -193,7 +189,9 @@ export default function ProfilePage() {
       form.reset(resetData);
     }
   }, [talentProfile, companyProfile, isCompany, form, user, tracks]);
-
+  useEffect(() => {
+    console.log(talentProfile);
+  }, [talentProfile]);
   const onSubmit = (values: FormValues) => {
     try {
       const formData = new FormData();
@@ -204,7 +202,7 @@ export default function ProfilePage() {
             why_work_here: 'why_talents_should_work_with_us',
           }
         : {
-            availability: 'status',
+            availability: 'available_status',
             jobTypes: 'job_type_preference',
           };
 
@@ -221,7 +219,7 @@ export default function ProfilePage() {
           }
         }
       });
-      console.log('FormData entries:');
+      console.log('FormData entries:', formData);
       for (const pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
       }
@@ -610,30 +608,18 @@ export default function ProfilePage() {
                 <>
                   <FormField
                     control={form.control}
-                    name="track_id"
+                    name="current_role"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel className="text-sm text-[#1A1A1A]">
                           Professional Title
                         </FormLabel>
                         <FormControl>
-                          <Select
-                            key={`track-${field.value}`}
-                            onValueChange={field.onChange}
-                            value={field.value}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]">
-                              <SelectValue placeholder="Choose a track" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {tracks?.map((track) => (
-                                <SelectItem key={track.id} value={track.id}>
-                                  {track.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <Input
+                            placeholder="Current Role e.g. Frontend Developer"
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

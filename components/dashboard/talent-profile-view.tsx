@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ interface TalentProfileViewProps {
   tracks?: { id: string; name: string }[] | undefined;
 }
 
-export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
+export function TalentProfileView({ profile }: TalentProfileViewProps) {
   const countryName =
     (profile?.bio?.country &&
       Country.getCountryByCode(profile.bio.country)?.name) ||
@@ -24,10 +24,8 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
       State.getStateByCodeAndCountry(profile.bio.state, profile.bio.country)
         ?.name) ||
     '';
-  const trackName =
-    tracks?.find((track) => track.id === profile?.bio?.track_id)?.name || '';
   return (
-    <div className="w-full max-w-4xl mx-auto px-1 py-1 md:px-4 md:py-4">
+    <div className="w-full max-w-4xl mx-auto md:px-4 md:py-4">
       {/* Banner */}
       <div className="relative h-32 sm:h-40 md:h-48 w-full max-w-[804px] rounded-t-xl bg-primary-300">
         <div className="absolute -bottom-10 sm:-bottom-12 left-4 sm:left-6 h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
@@ -71,7 +69,9 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
               <h2 className="text-xl md:text-2xl font-semibold text-black">
                 {profile?.bio?.user?.firstname} {profile?.bio?.user?.lastname}
               </h2>
-              <p className="text-sm md:text-base text-black">{trackName}</p>
+              <p className="text-sm md:text-base text-black">
+                {profile?.bio?.current_role}
+              </p>
               <p className="text-sm text-gray-600">
                 {[stateName, countryName].filter(Boolean).join(', ')}
               </p>
@@ -82,17 +82,20 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
                   ? `${profile?.bio?.experience}`
                   : ' - '}
               </p>
-
-              {/* <div className="flex items-center gap-2 mt-2">
+              <div className="flex items-center gap-2 mt-2">
                 <span
                   className={`h-3 w-3 rounded-full ${
-                    profile?.bio?.status === 'active' ? 'bg-green-500' : 'bg-gray-400'
+                    profile?.bio?.available_status === 'active'
+                      ? 'bg-green-500'
+                      : 'bg-gray-100'
                   }`}
                 />
                 <span className="text-sm text-gray-600 capitalize">
-                  {profile?.bio?.status === 'active' ? 'Open to Work' : 'Not Looking'}
+                  {profile?.bio?.available_status === 'active'
+                    ? 'Open to Work'
+                    : 'Not Looking'}
                 </span>
-              </div> */}
+              </div>
             </div>
 
             <div className="text-sm text-gray-700 text-left md:text-right">

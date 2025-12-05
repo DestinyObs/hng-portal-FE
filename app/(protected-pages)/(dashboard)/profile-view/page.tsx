@@ -32,7 +32,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-2 md:p-8">
+    <div className="w-full max-w-4xl mx-auto md:p-8">
       <div className="flex px-1 justify-start mb-6">
         <Link
           href={isCompany ? '/company/dashboard' : '/talent/dashboard'}
