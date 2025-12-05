@@ -141,7 +141,7 @@ const VerifyEmailPage = () => {
   return (
     <div className="flex flex-col items-center gap-7">
       <Image
-        src="/images/hng-logo.png"
+        src="/images/hng-connect-logo.png"
         alt="HNG Connect"
         width={180}
         height={40}

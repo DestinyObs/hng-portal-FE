@@ -246,6 +246,24 @@ const DashboardHeader = () => {
               ))}
               <hr />
               <li>
+                <Link
+                  href="/profile-view"
+                  className="block font-medium text-gray-600 py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  PROFILE
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/settings"
+                  className="block font-medium text-gray-600 py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  SETTINGS
+                </Link>
+              </li>
+              <li>
                 <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
