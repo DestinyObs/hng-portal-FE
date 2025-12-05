@@ -1,16 +1,21 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import TriangleDownIcon from '@/components/icons/triangle-down-icon';
+
 export default function HeroText() {
   return (
     <div className="not-sm:mt-11 mx-auto max-w-[558px] md:text-left text-center flex flex-col justify-center ">
-      <Badge
-        variant={'outline'}
-        className="bg-white not-md:mx-auto border-0 p-2"
-      >
-        {' '}
-        Connecting talent with Opportunity
-      </Badge>
+      <div className="group inline-block">
+        <Badge
+          variant={'outline'}
+          className="bg-white not-md:mx-auto border-0 px-4 py-2 rounded-full flex items-center gap-1 shadow-md"
+        >
+          <span className="font-bold group-hover:underline">HNG</span>
+          <TriangleDownIcon className="text-primary-blue" />
+          <span className="group-hover:underline">HNG Connect</span>
+        </Badge>
+      </div>
       <h1 className="text-[32px] md:text-[52px] text-white mt-4 md:my-6 font-semibold leading-tight">
         Your Career Platform, Reimagined.
       </h1>

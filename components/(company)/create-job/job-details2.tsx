@@ -23,8 +23,6 @@ import {
   JobPostPayload,
 } from '@/validations/create-post.schema';
 import { useJobTypes, useTracks, useWorkModes } from '@/hooks/lookups';
-import { draftPost } from '@/api/actions/create-post';
-import { toast } from 'sonner';
 import Loading from '@/app/loading';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'next/navigation';
@@ -33,6 +31,9 @@ import { useState } from 'react';
 import { useEditPost } from '@/hooks/posts';
 import { Modal } from '@/components/dashboard/modal';
 import { Country, State } from 'country-state-city';
+import { useGetJob } from '@/hooks/jobs';
+import { RawJob } from '@/types/job-card';
+import { useDraftJob } from '@/hooks/jobs';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
@@ -47,18 +48,20 @@ export default function JobDetailsStep2({
   onPrev,
   id,
 }: JobDetailsStep2Props) {
+  const { user } = useAuthStore();
+  const { data: rawJob } = useGetJob(user?.company?.id, id as string);
+  const job = rawJob as RawJob;
   const router = useRouter();
-  const [isDrafting, setIsDrafting] = useState(false);
   const { data: tracks, isLoading: tracksLoading } = useTracks();
   const { data: workModes, isLoading: workModesLoading } = useWorkModes();
   const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
-  const { user } = useAuthStore();
   const { setNewPost } = usePostStore();
   const { editpost } = useEditPost(id!);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditDraftModal, setShowEditDraftModal] = useState(false);
   const [payload, setPayload] = useState<JobPostPayload | null>(null);
   const countries = Country.getAllCountries();
-
+  const { draftJob, isPending: isDrafting } = useDraftJob();
   const isLoading = tracksLoading || workModesLoading || jobTypesLoading;
 
   const {
@@ -91,7 +94,7 @@ export default function JobDetailsStep2({
       acceptance_criteria: initialData.acceptance_criteria || ' ',
       state: data.state || ' ',
       country: data.country || ' ',
-      price: initialData.price || ' ',
+      price: initialData.price || 0,
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
       job_type_id: data.job_type_id || ' ',
@@ -110,8 +113,7 @@ export default function JobDetailsStep2({
     }
   };
 
-  const handleSaveDraft = async () => {
-    setIsDrafting(true);
+  const handleSaveDraft = () => {
     const data = getValues();
     const formData = {
       company_id: user?.company?.id || '',
@@ -120,7 +122,7 @@ export default function JobDetailsStep2({
       acceptance_criteria: initialData.acceptance_criteria || ' ',
       state: data.state || ' ',
       country: data.country || ' ',
-      price: initialData.price || ' ',
+      price: initialData.price,
       track_id: data.track_id || ' ',
       category_id: initialData.category_id || ' ',
       job_level_id: initialData.job_level_id ?? '',
@@ -129,25 +131,42 @@ export default function JobDetailsStep2({
       skills: (initialData.skills as string[]) || [],
     };
 
-    try {
-      const response = await draftPost(formData);
-      // console.log(response);
-
-      if (response && !response?.success) {
-        toast.error(response.message);
-        return;
-      }
-
-      toast.success('Your job has been saved to draft successfully');
+  draftJob(formData, {
+    onSuccess: ()=>{
       reset();
-      router.push('/company/dashboard');
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    } finally {
-      setIsDrafting(false);
+      router.push('/company/jobs/drafts')}
+  });
+  };
+
+  const handleEditDraft = async () => {
+    const data = getValues();
+
+    const formData = {
+      company_id: user?.company?.id || '',
+      title: initialData.title || ' ',
+      description: initialData.description || ' ',
+      acceptance_criteria: initialData.acceptance_criteria || ' ',
+      state: data.state || ' ',
+      country: data.country || ' ',
+      price: initialData.price,
+      track_id: data.track_id || ' ',
+      category_id: initialData.category_id || ' ',
+      job_level_id: initialData.job_level_id ?? '',
+      job_type_id: data.job_type_id || ' ',
+      work_mode_id: data.work_mode_id || ' ',
+      skills: (initialData.skills as string[]) || [],
+    };
+
+    console.log(formData);
+
+    if (formData) {
+      editpost(formData, {
+        onSuccess: () => {
+          router.push('/company/jobs/drafts');
+        },
+      });
     }
+    setShowEditModal(false);
   };
 
   if (isLoading) return <Loading />;
@@ -329,38 +348,74 @@ export default function JobDetailsStep2({
               Prev
             </Button>
           </div>
-          <div className="">
-            <Button
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={isDrafting || isSubmitting}
-              className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
-            >
-              {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-            </Button>
-          </div>
+          {id && job?.status === 'draft' ? (
+            <div className="">
+              <Button
+                variant="outline"
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
+              >
+                Save Draft
+              </Button>
+            </div>
+          ) : (
+            <div className="">
+              <Button
+                variant="outline"
+                onClick={handleSaveDraft}
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
+              >
+                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <div className="">
-            <Button
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={isDrafting || isSubmitting}
-              className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
-            >
-              {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-            </Button>
-          </div>
+          {id && job?.status === 'draft' ? (
+            <div className="">
+              <Button
+                variant="outline"
+                onClick={() => setShowEditDraftModal(true)}
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
+              >
+                Save Draft
+              </Button>
+            </div>
+          ) : (
+            <div className="">
+              <Button
+                variant="outline"
+                onClick={handleSaveDraft}
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
+              >
+                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+              </Button>
+            </div>
+          )}
 
-          <div className="">
-            <Button
-              disabled={isSubmitting}
-              className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
-            >
-              {isSubmitting ? 'loading' : id ? 'Save Edit' : 'Finish'}
-            </Button>
-          </div>
+          {id && job?.status === 'draft' ? (
+            <div className="">
+              <Button
+                disabled={isSubmitting}
+                className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+              >
+                Finish
+              </Button>
+            </div>
+          ) : (
+            <div className="">
+              <Button
+                disabled={isSubmitting}
+                className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+              >
+                {isSubmitting ? 'loading' : id ? 'Save Edit' : 'Finish'}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       {/* Edit Modal */}
@@ -379,10 +434,36 @@ export default function JobDetailsStep2({
           label: 'Save Edit',
           onClick: () => {
             if (payload) {
-              editpost(payload);
+              editpost(payload, {
+                onSuccess: () => {
+                  router.push('/company/dashboard');
+                },
+              });
             }
             setShowEditModal(false);
           },
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: () => setShowEditModal(false),
+        }}
+      />
+
+      {/* Edit Draft Modal */}
+      <Modal
+        isOpen={showEditDraftModal}
+        onClose={() => setShowEditDraftModal(false)}
+        title="Do you want to save the edited post?"
+        message="This job description will be updated."
+        icon={
+          <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#FEF0C7] rounded-full w-16 h-16">
+            {' '}
+            <OctagonAlert size={48} className="text-[#E3822A]" />
+          </div>
+        }
+        primaryButton={{
+          label: 'Save Edit',
+          onClick: handleEditDraft,
         }}
         secondaryButton={{
           label: 'Cancel',
