@@ -29,7 +29,6 @@ interface Props {
 export default function ApplicantsFilters({
   searchQuery,
   setSearchQuery,
-  selectedRole,
   setSelectedRole,
   selectedStatus,
   setSelectedStatus,
@@ -64,9 +63,7 @@ export default function ApplicantsFilters({
             <div className="flex gap-2 lg:gap-5 items-center">
               <button
                 onClick={() =>
-                  setOpenDropdown(
-                    openDropdown === 'status' ? null : 'status'
-                  )
+                  setOpenDropdown(openDropdown === 'status' ? null : 'status')
                 }
                 className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-tertiary-50"
               >
