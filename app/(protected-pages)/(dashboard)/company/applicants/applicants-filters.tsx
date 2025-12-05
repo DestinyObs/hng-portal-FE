@@ -37,13 +37,6 @@ export default function ApplicantsFilters({
   const [showFilters, setShowFilters] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const uniqueRoles = Array.from(
-    new Set(
-      // we'll pass filtered data from parent later if needed
-      // for now we just show the button
-    )
-  );
-
   const clearFilters = () => {
     setSelectedRole('');
     setSelectedStatus('');
@@ -70,7 +63,11 @@ export default function ApplicantsFilters({
           <div className="relative">
             <div className="flex gap-2 lg:gap-5 items-center">
               <button
-                onClick={() => setOpenDropdown(openDropdown === 'status' ? null : 'status')}
+                onClick={() =>
+                  setOpenDropdown(
+                    openDropdown === 'status' ? null : 'status'
+                  )
+                }
                 className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-tertiary-50"
               >
                 <span className="text-tertiary-500 font-medium">
@@ -96,8 +93,12 @@ export default function ApplicantsFilters({
                       setOpenDropdown(null);
                     }}
                   >
-                    <div className={`flex items-center gap-2 py-1 px-2 rounded-2xl text-sm font-medium ${statusTextStyles[status]}`}>
-                      <div className={`w-2 h-2 rounded-full ${statusDotStyles[status]}`} />
+                    <div
+                      className={`flex items-center gap-2 py-1 px-2 rounded-2xl text-sm font-medium ${statusTextStyles[status]}`}
+                    >
+                      <div
+                        className={`w-2 h-2 rounded-full ${statusDotStyles[status]}`}
+                      />
                       {status}
                     </div>
                   </div>

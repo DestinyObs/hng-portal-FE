@@ -1,5 +1,5 @@
 import { DataStatus } from '@/components/shared/ui/table-status';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { DM_Sans } from 'next/font/google';
 import Link from 'next/link';
 
@@ -9,8 +9,8 @@ const dmSans = DM_Sans({
 });
 
 export type Applicant = {
-  job_id: any;
-  job: any;
+  job_id: string | number | null;
+  job: { id?: string | number } | null;
   id: string;
   name: string;
   email: string;
@@ -25,8 +25,9 @@ export type Applicant = {
   applied_date: string;
 };
 
-export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
-  // Applicant Name
+export const createColumns = (
+  companyId: string
+): ColumnDef<Applicant>[] => [
   {
     accessorKey: 'name',
     header: 'Applicant Name',
@@ -43,7 +44,6 @@ export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
     },
   },
 
-  // Email
   {
     accessorKey: 'email',
     header: 'Email *',
@@ -60,7 +60,6 @@ export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
     },
   },
 
-  // Job Applied
   {
     accessorKey: 'applied_role',
     header: 'Job Applied',
@@ -77,16 +76,14 @@ export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
     },
   },
 
-  // Job Status
   {
     accessorKey: 'status',
     header: 'Job Status',
-    cell: ({ row }) => {
-      return <DataStatus status={row.getValue('status')} />;
-    },
+    cell: ({ row }) => (
+      <DataStatus status={row.getValue('status')} />
+    ),
   },
 
-  // Applied Date
   {
     accessorKey: 'applied_date',
     header: 'Date Applied',
@@ -103,13 +100,13 @@ export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
     },
   },
 
-  // Actions (View Details)
   {
     id: 'actions',
     header: '',
     cell: ({ row }) => {
       const applicant = row.original;
-      const jobId = applicant.job?.id || applicant.job_id;
+      const jobId =
+        applicant.job?.id ?? applicant.job_id ?? '';
 
       return (
         <Link

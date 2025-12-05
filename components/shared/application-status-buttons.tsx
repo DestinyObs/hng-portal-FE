@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle, XCircle, RotateCcw } from 'lucide-react';
 import { updateApplicationStatus } from '@/app/api/actions/update-application-status';
 
 interface ApplicationStatusButtonsProps {
@@ -37,21 +36,12 @@ export function ApplicationStatusButtons({
     setMessage(null);
 
     try {
-      console.log('Updating status:', {
-        companyId,
-        jobId,
-        applicationId,
-        newStatus: selectedAction.status,
-      });
-
       const response = await updateApplicationStatus(
         companyId,
         jobId,
         applicationId,
         selectedAction.status,
       );
-
-      console.log('Update response:', response);
 
       if (response.success) {
         setMessage({
@@ -60,15 +50,13 @@ export function ApplicationStatusButtons({
         });
         onStatusUpdate(selectedAction.status);
       } else {
-        console.error('Response not successful:', response);
         setMessage({
           type: 'error',
           text:
             response.message || 'Failed to update status. Please try again.',
         });
       }
-    } catch (error) {
-      console.error('Error updating status:', error);
+    } catch {
       setMessage({
         type: 'error',
         text: 'An error occurred. Please try again.',
@@ -90,7 +78,6 @@ export function ApplicationStatusButtons({
 
   return (
     <div className="mt-6">
-      {/* Success/Error Message */}
       {message && (
         <div
           className={`mb-4 p-3 rounded-lg ${
@@ -103,7 +90,6 @@ export function ApplicationStatusButtons({
         </div>
       )}
 
-      {/* Action Buttons */}
       <div className="flex gap-3 flex-wrap">
         <button
           onClick={() => openConfirmation('approved', 'Shortlist Talent')}
@@ -130,7 +116,6 @@ export function ApplicationStatusButtons({
         </button>
       </div>
 
-      {/* Confirmation Modal */}
       {showModal && selectedAction && (
         <div
           className="fixed inset-0 bg-gray-900/30 backdrop-blur-sm flex items-center justify-center z-50"

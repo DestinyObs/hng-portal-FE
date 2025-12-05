@@ -9,7 +9,7 @@ import ApplicantsTable from './applicants-table';
 
 export default function ApplicantsPageClient() {
   const searchParams = useSearchParams();
-  const { data, isLoading, error, company_id } = useApplicants();
+  const { data, company_id } = useApplicants(); // removed unused isLoading, error
 
   const urlJobId = searchParams.get('jobId');
 
@@ -23,6 +23,7 @@ export default function ApplicantsPageClient() {
     if (urlJobId) {
       setPreSelectedJobId(urlJobId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlJobId]);
 
   const columns = createColumns(company_id!);
