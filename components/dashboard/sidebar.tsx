@@ -8,7 +8,8 @@ import { useAuthStore } from '@/store/auth';
 import PlaceholderProfile from './placeholder-profile';
 import clsx from 'clsx';
 import { useGetProfileData } from '@/hooks/profile-settings';
-
+import { useGetCompanyProfile } from '@/hooks/profile';
+import { CompanyProfileData } from '@/types/profile';
 const DashboardSidebar = ({ className }: { className?: string }) => {
   const { user } = useAuthStore();
   const role = user?.current_role;
@@ -26,22 +27,24 @@ const DashboardSidebar = ({ className }: { className?: string }) => {
     return Math.round((completed / total) * 100);
   };
   const profileCompletion = calculateProfileCompletion();
+  const { data: talent_profile } = useGetProfileData();
+  const { data: company_profile } = useGetCompanyProfile<CompanyProfileData>();
   return (
     <aside className={clsx('flex-col gap-5', className)}>
       {/* profile-card */}
       <div className="border border-tertiary-50 profilecard flex justify-center items-center gap-2 bg-white rounded-md flex-col py-6 px-3">
         {/* user profile image */}
         <div className="relative w-40 h-40 mx-auto">
-          {user?.company?.logo_url && role === 'employer' ? (
+          {company_profile?.logo_url && role === 'employer' ? (
             <Image
-              src={user?.company?.logo_url}
+              src={company_profile?.logo_url}
               alt="profile"
               fill
               className="rounded-full object-cover"
             />
-          ) : data?.photo_url && role === 'talent' ? (
+          ) : talent_profile?.photo_url && role === 'talent' ? (
             <Image
-              src={data?.photo_url}
+              src={talent_profile?.photo_url}
               alt="profile"
               fill
               className="rounded-full object-cover"
