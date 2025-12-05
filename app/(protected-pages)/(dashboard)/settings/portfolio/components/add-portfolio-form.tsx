@@ -92,11 +92,33 @@ export default function AddPortfolioForm({
         await queryClient.invalidateQueries({ queryKey: ['profile'] });
         form.reset();
         setImageFile(null);
+      } else {
+        // Handle error from result
+        let errorMessage = `Failed to ${isEditing ? 'update' : 'add'} portfolio project. Please try again.`;
+        if (result.error) {
+          if (typeof result.error === 'string') {
+            errorMessage = result.error;
+          } else if (
+            typeof result.error === 'object' &&
+            result.error !== null
+          ) {
+            // Handle Record<string, string[]> format
+            const errorString = Object.values(
+              result.error as Record<string, string[]>,
+            )
+              .flat()
+              .join(' ');
+            errorMessage = errorString || errorMessage;
+          }
+        }
+        toast.error(errorMessage);
       }
     } catch (error) {
-      toast.error(
-        `Failed to ${isEditing ? 'update' : 'add'} portfolio project. Please try again.`,
-      );
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : `Failed to ${isEditing ? 'update' : 'add'} portfolio project. Please try again.`;
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
       if (onSuccess) {
