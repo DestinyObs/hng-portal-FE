@@ -13,10 +13,14 @@ import { useAuthStore } from '@/store/auth';
 export default function ProfilePage() {
   const { user } = useAuthStore();
   const isCompany = user?.current_role === 'employer';
-  const { data: talentData, isLoading: talentLoading } = useGetUserProfile<UserProfileData>(!isCompany);
-  const { data: companyData, isLoading: companyLoading } = useGetCompanyProfile<CompanyProfileData>(isCompany);
+  const { data: talentData, isLoading: talentLoading } =
+    useGetUserProfile<UserProfileData>(!isCompany);
+  const { data: companyData, isLoading: companyLoading } =
+    useGetCompanyProfile<CompanyProfileData>(isCompany);
   const { data: tracks, isLoading: tracksLoading } = useTracks(!isCompany);
-  const isLoading = (isCompany ? companyLoading : talentLoading) || (!isCompany && tracksLoading);
+  const isLoading =
+    (isCompany ? companyLoading : talentLoading) ||
+    (!isCompany && tracksLoading);
   if (isLoading) return <Loading />;
 
   if (!isCompany && !talentData) {
@@ -28,10 +32,10 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-8">
+    <div className="w-full max-w-4xl mx-auto p-2 md:p-8">
       <div className="flex px-1 justify-start mb-6">
         <Link
-          href={isCompany ? "/company/dashboard" : "/talent/dashboard"}
+          href={isCompany ? '/company/dashboard' : '/talent/dashboard'}
           className="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-2"
         >
           ← Back to Dashboard
@@ -40,10 +44,7 @@ export default function ProfilePage() {
 
       {/* Conditional Rendering */}
       {isCompany ? (
-        <CompanyProfileDisplay
-          profile={companyData}
-          isOwnProfile={true}
-        />
+        <CompanyProfileDisplay profile={companyData} isOwnProfile={true} />
       ) : (
         <TalentProfileView profile={talentData} tracks={tracks} />
       )}
