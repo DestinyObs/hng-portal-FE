@@ -2,37 +2,32 @@
 // import { Tabs } from '@/components/shared/ui/tabs';
 // import AllApplicants from './all-applicants';
 
-// interface ApplicantsPageProps {
-//   params: {
-//     companyId: string;
-//     jobId: string;
-//   };
-// }
+interface ApplicantsPageProps {
+  params: {
+    companyId: string;
+    jobId: string;
+  };
+}
 
-// export default async function ApplicantsPage({ params }: ApplicantsPageProps) {
-//   const { companyId: company_id, jobId: job_id } = await params;
+export default async function ApplicantsPage({ params }: ApplicantsPageProps) {
+  const { companyId: company_id, jobId: job_id } = await params;
 
-//   const tabsData = [
-//     {
-//       value: 'all',
-//       tabsName: 'All Applicants',
-//       TabView: () => <AllApplicants company_id={company_id} job_id={job_id} />,
-//     },
-//     // {
-//     //   value: 'lists',
-//     //   tabsName: 'Candidates List',
-//     //   TabView: () => <Candidatelists />,
-//     // },
-//   ];
+  const tabsData = [
+    {
+      value: 'all',
+      tabsName: 'All Applicants',
+      TabView: () => <AllApplicants company_id={company_id} job_id={job_id} />,
+    },
+    // {
+    //   value: 'lists',
+    //   tabsName: 'Candidates List',
+    //   TabView: () => <Candidatelists company_id={company_id} job_id={job_id} />,
+    // },
+  ];
 
-//   return (
-//     <div className="w-full min-h-screen py-4">
-//       <Tabs tabs={tabsData} variant="ghost" />
-//     </div>
-//   );
-// }
-'use client';
-
-export default function JobPage() {
-  return <div>Job Page</div>;
+  return (
+    <div className="w-full min-h-screen py-4">
+      <Tabs tabs={tabsData} variant="ghost" />
+    </div>
+  );
 }

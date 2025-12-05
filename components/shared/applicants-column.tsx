@@ -1,7 +1,7 @@
 import { DataStatus } from '@/components/shared/ui/table-status';
 import type { ColumnDef } from '@tanstack/react-table';
 import { DM_Sans } from 'next/font/google';
-import Link from 'next/link';
+import ApplicantActions from './applicant-actions';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -15,12 +15,15 @@ export type Applicant = {
   name: string;
   email: string;
   applied_role?: string;
+  job_id?: string;
+  user_id?: string;
   status:
     | 'Hired'
     | 'Interview'
     | 'In Review'
     | 'Shortlisted'
     | 'Rejected'
+    | 'Applied'
     | string;
   applied_date: string;
 };
@@ -60,6 +63,24 @@ export const createColumns = (
     },
   },
 
+  // Job Applied
+  {
+    accessorKey: 'applied_role',
+    header: 'Job Applied',
+    cell: ({ row }) => {
+      const role = row.getValue('applied_role') as string;
+
+      return (
+        <span
+          className={`${dmSans.className} text-black text-base font-normal`}
+        >
+          {role}
+        </span>
+      );
+    },
+  },
+
+  // Job status
   {
     accessorKey: 'applied_role',
     header: 'Job Applied',
@@ -101,21 +122,12 @@ export const createColumns = (
   },
 
   {
-    id: 'actions',
+    accessorKey: 'job_id',
     header: '',
     cell: ({ row }) => {
-      const applicant = row.original;
-      const jobId =
-        applicant.job?.id ?? applicant.job_id ?? '';
-
-      return (
-        <Link
-          href={`/company/${companyId}/applicants/${applicant.id}?jobId=${jobId}`}
-          className="text-primary-600 hover:underline text-sm font-medium"
-        >
-          View Details
-        </Link>
-      );
+      const job_id = row.original.job_id as string;
+      const id = row.original.id as string;
+      return <ApplicantActions job_id={job_id} applicant_id={id} />;
     },
   },
 ];

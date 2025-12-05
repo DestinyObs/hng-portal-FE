@@ -1,11 +1,11 @@
 // 'use client';
 
-// import React, { useEffect, useMemo, useState } from 'react';
-// import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
-// import { createColumns, Applicant } from '@/components/shared/applicants-column';
-// import { DataTable } from '@/components/shared/ui/data-table';
-// import { JobApplicationItem } from '@/types/view-job-applicants';
-// import { view_applicants_per_job } from '@/api/actions/view-applicants';
+import React, { useEffect, useState } from 'react';
+import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
+import { columns, Applicant } from '@/components/shared/applicants-column';
+import { DataTable } from '@/components/shared/ui/data-table';
+import { Job } from '@/types/view-job-applicants';
+import { view_applicants_per_job } from '@/api/actions/view-applicants';
 
 // interface AllApplicantsProps {
 //   company_id: string;
@@ -22,12 +22,10 @@
 //   const [selectedStatus, setSelectedStatus] = React.useState<string>('');
 //   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
-//   // New states for data fetching
-//   const [applicationsData, setApplicationsData] = useState<
-//     JobApplicationItem[]
-//   >([]);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
+  // New states for data fetching
+  const [applicationsData, setApplicationsData] = useState<Job | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
 //   const statuses = ['Applied', 'Shortlisted', 'Rejected'];
 
@@ -53,69 +51,77 @@
 
 //         const response = await view_applicants_per_job(company_id, job_id);
 
-//         if (response.success && response.data) {
-//           setApplicationsData(response.data.applications);
-//         } else {
-//           setError('Failed to fetch applicants');
-//         }
-//       } catch (err) {
-//         console.error('Caught error:', err);
-//         setError('An error occurred while fetching applicants');
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
+        if (response.success && response.data) {
+          setApplicationsData(response.data);
+        } else {
+          setError('Failed to fetch applicants');
+        }
+      } catch (err) {
+        console.error('Caught error:', err);
+        setError('An error occurred while fetching applicants');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
 //     if (company_id) {
 //       fetchApplicants();
 //     }
 //   }, [company_id, job_id]);
 
-//   // Transform API data to match table format
-//     const transformedData: Applicant[] = useMemo(() => {
-//     return applicationsData.map((application) => ({
-//       id: application.id,
-//       name: `${application.user.firstname} ${application.user.lastname}`,
-//       email: application.user.email,
-//       applied_role: application.job?.title || 'N/A',
-//       status:
-//         application.status === 'pending'
-//           ? 'Applied'
-//           : application.status === 'approved'
-//             ? 'Shortlisted'
-//             : 'Rejected',
-//       applied_date: new Date(application.date_added).toLocaleDateString('en-US', {
-//         year: 'numeric',
-//         month: 'short',
-//         day: 'numeric',
-//       }),
-      
-//       job_id: application.job?.id || null,
-//       job: application.job || null,
-//     }));
-//   }, [applicationsData]);
+  // Transform API data to match table format
+  const transformedData = React.useMemo(() => {
+    return applicationsData?.applications.map((application) => ({
+      id: application.id,
+      job_id: application.job_id,
+      name: `${application.user.firstname} ${application.user.lastname}`,
+      email: application.user.email,
+      applied_role: applicationsData.title,
+      user_id: application.user_id,
+      status:
+        application.status === 'pending'
+          ? 'Applied'
+          : application.status === 'shortlisted'
+            ? 'Shortlisted'
+            : application.status === 'hired'
+              ? 'Hired'
+              : application.status === 'interview'
+                ? 'Interview'
+                : application.status === 'in review'
+                  ? 'In Review'
+                  : 'Rejected',
+      applied_date: new Date(application.date_added).toLocaleDateString(
+        'en-US',
+        {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        },
+      ),
+    }));
+  }, [applicationsData]);
 
 //   const filteredData = React.useMemo(() => {
 //     let filtered = transformedData;
 
-//     if (searchQuery) {
-//       filtered = filtered.filter(
-//         (applicant) =>
-//           applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//           applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//           applicant.applied_role
-//             ?.toLowerCase()
-//             .includes(searchQuery.toLowerCase()),
-//       );
-//     }
+    if (searchQuery) {
+      filtered = filtered?.filter(
+        (applicant) =>
+          applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          applicant.applied_role
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()),
+      );
+    }
 
-//     if (selectedRole) {
-//       filtered = filtered.filter((a) => a.applied_role === selectedRole);
-//     }
+    if (selectedRole) {
+      filtered = filtered?.filter((a) => a.applied_role === selectedRole);
+    }
 
-//     if (selectedStatus) {
-//       filtered = filtered.filter((a) => a.status === selectedStatus);
-//     }
+    if (selectedStatus) {
+      filtered = filtered?.filter((a) => a.status === selectedStatus);
+    }
 
 //     return filtered;
 //   }, [transformedData, searchQuery, selectedRole, selectedStatus]);
@@ -240,16 +246,16 @@
 //           </div>
 //         </div>
 
-//         {filteredData.length === 0 ? (
-//           <div className="text-center py-12 text-tertiary-500">
-//             No applicant found
-//           </div>
-//         ) : (
-//           <section className="w-72 md:w-170 lg:w-full">
-//             <DataTable columns={columns} data={filteredData} />
-//           </section>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
+        {filteredData?.length === 0 ? (
+          <div className="text-center py-12 text-tertiary-500">
+            No applicant found
+          </div>
+        ) : (
+          <section className="w-72 md:w-170 lg:w-full">
+            <DataTable columns={columns} data={filteredData as Applicant[]} />
+          </section>
+        )}
+      </div>
+    </div>
+  );
+}
