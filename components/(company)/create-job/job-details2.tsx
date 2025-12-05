@@ -50,10 +50,7 @@ export default function JobDetailsStep2({
   id,
 }: JobDetailsStep2Props) {
   const { user } = useAuthStore();
-  const { data: rawJob, isPending } = useGetJob(
-    user?.company?.id,
-    id as string,
-  );
+  const { data: rawJob } = useGetJob(user?.company?.id, id as string);
   const job = rawJob as RawJob;
   const router = useRouter();
   const [isDrafting, setIsDrafting] = useState(false);
@@ -397,6 +394,7 @@ export default function JobDetailsStep2({
             <div className="">
               <Button
                 variant="outline"
+                onClick={() => setShowEditDraftModal(true)}
                 disabled={isDrafting || isSubmitting}
                 className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
               >
@@ -471,7 +469,7 @@ export default function JobDetailsStep2({
       {/* Edit Draft Modal */}
       <Modal
         isOpen={showEditDraftModal}
-        onClose={() => setShowEditModal(false)}
+        onClose={() => setShowEditDraftModal(false)}
         title="Do you want to save the edited post?"
         message="This job description will be updated."
         icon={

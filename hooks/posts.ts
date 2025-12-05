@@ -1,10 +1,7 @@
 import { updatePost } from '@/api/actions/create-post';
 import { makeAuthenticatedRequest } from '@/api/config.server';
 import { useAuthStore } from '@/store/auth';
-import {
-  JobDraftPayload,
-  JobPostPayload,
-} from '@/validations/create-post.schema';
+import { JobDraftPayload } from '@/validations/create-post.schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -29,7 +26,6 @@ export const useEditPost = (jobId: string) => {
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const companyId = user?.company?.id;
-  const router = useRouter();
 
   const { mutate: editpost, isPending } = useMutation({
     mutationKey: ['put', jobId],
