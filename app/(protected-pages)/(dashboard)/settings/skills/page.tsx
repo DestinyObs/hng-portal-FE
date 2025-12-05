@@ -61,6 +61,14 @@ export default function SkillsAndExperiencePage() {
   const [skillInput, setSkillInput] = useState('');
 
   const handleSaveChanges = async () => {
+    if (skills.length < 1) {
+      toast.error('Please add at least one skill before saving.');
+      return;
+    }
+    if (skills == userSkills) {
+      toast.error('No changes detected to save.');
+      return;
+    }
     setIsSubmitting(true);
     try {
       const result = await updateUserSkills(skills);
@@ -146,7 +154,9 @@ export default function SkillsAndExperiencePage() {
     return (
       <div className="w-full py-6 justify-center px-4 lg:px-0">
         <div className="w-full mb-4 space-y-1 text-center md:text-left">
-          <h3 className="text-2xl font-bold text-[#232323]">Skills</h3>
+          <h3 className="text-2xl font-bold text-[#232323]">
+            Skills & Experience
+          </h3>
           <p className="font-normal text-base text-black-200">
             Showcase your expertise and work history
           </p>
@@ -247,7 +257,23 @@ export default function SkillsAndExperiencePage() {
               ))}
             </div>
           </div>
-
+          <div className="flex flex-row justify-end gap-4 w-full my-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleReset}
+              className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl transition-all duration-300 ease-in"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleSaveChanges}
+              className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl transition-all duration-300 ease-in"
+            >
+              {isSubmitting ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </div>
           <div className="space-y-6 w-full">
             <div className="flex flex-row justify-between items-center w-full mb-4">
               <label className="text-sm text-[#1A1A1A] font-medium whitespace-nowrap">
@@ -343,24 +369,6 @@ export default function SkillsAndExperiencePage() {
                 );
               })}
             </div>
-          </div>
-
-          <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleReset}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl transition-all duration-300 ease-in"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              onClick={handleSaveChanges}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl transition-all duration-300 ease-in"
-            >
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </Button>
           </div>
         </CardContent>
       </Card>

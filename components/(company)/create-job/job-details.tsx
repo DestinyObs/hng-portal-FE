@@ -30,6 +30,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { draftPost } from '@/api/actions/create-post';
 import { useAuthStore } from '@/store/auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function JobDetails({
   initialData,
@@ -40,6 +41,8 @@ export default function JobDetails({
   const [isDrafting, setIsDrafting] = useState(false);
   const router = useRouter();
   const { user } = useAuthStore();
+  const queryClient = useQueryClient();
+
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
@@ -138,6 +141,8 @@ export default function JobDetails({
       }
 
       toast.success('Your job has been saved to draft successfully');
+      queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
+
       reset();
       router.push('/company/dashboard');
     } catch (error: unknown) {
@@ -224,9 +229,9 @@ export default function JobDetails({
                 </Select>
               )}
             />
-            {errors.category_id && (
+            {errors.job_level_id && (
               <p className="text-xs text-red-500">
-                {errors.category_id.message}
+                {errors.job_level_id.message}
               </p>
             )}
           </div>
@@ -300,8 +305,9 @@ export default function JobDetails({
                 />
               )}
             />
-            {errors.title && (
-              <p className="text-xs text-red-500">{errors.title.message}</p>
+
+            {errors.price && (
+              <p className="text-xs text-red-500">{errors.price.message}</p>
             )}
           </div>
           {/* Skills Section */}
@@ -318,11 +324,20 @@ export default function JobDetails({
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  const input = e.currentTarget;
-                  handleAddSkill(input);
-                  input.value = '';
+                  const value = e.currentTarget.value.trim();
+
+                  if (!value) return;
+
+                  const newSkill = {
+                    id: value.toLowerCase().replace(/\s+/g, '-'),
+                    name: value,
+                  };
+
+                  handleAddSkill(newSkill);
+                  e.currentTarget.value = '';
                 }
               }}
+              disabled
             />
 
             {/* Selected Skills */}
@@ -403,6 +418,7 @@ export default function JobDetails({
                 variant="outline"
                 disabled={isDrafting}
                 className="border-[#E7E7E7] text-[#344054]"
+                onClick={() => router.back()}
               >
                 Cancel
               </Button>

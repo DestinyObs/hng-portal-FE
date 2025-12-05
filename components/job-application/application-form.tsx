@@ -168,6 +168,14 @@ const JobApplicationForm = ({
         <div className="flex flex-col sm:flex-row gap-4 justify-between">
           <div className="flex flex-col sm:flex-row justify-between gap-4">
             <Button
+              type="button"
+              variant="outline"
+              className="border-primary-300 text-gray-500"
+              onClick={() => router.push('/talent/dashboard')}
+            >
+              Cancel
+            </Button>
+            <Button
               type="submit"
               variant="default"
               className={`cursor-pointer ${
@@ -175,15 +183,6 @@ const JobApplicationForm = ({
               }`}
             >
               Preview & Submit
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
-              className="border-primary-300 text-gray-500"
-              onClick={() => router.push('/talent/dashboard')}
-            >
-              Cancel
             </Button>
           </div>
         </div>
