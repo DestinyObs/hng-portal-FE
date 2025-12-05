@@ -61,35 +61,6 @@ export default function SkillsAndExperiencePage() {
 
   const [skillInput, setSkillInput] = useState('');
 
-  const handleSaveChanges = async () => {
-    if (skills.length < 1) {
-      toast.error('Please add at least one skill before saving.');
-      return;
-    }
-    if (skills == userSkills) {
-      toast.error('No changes detected to save.');
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const result = await updateUserSkills(skills);
-
-      if (result.success) {
-        toast.success('Skills updated successfully!');
-
-        await queryClient.invalidateQueries({
-          queryKey: ['profile', user?.id],
-        });
-      } else {
-        toast.error('Something went wrong while updating your skills.');
-      }
-    } catch (error) {
-      toast.error('Unable to update skills. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleOpenModal = () => {
     setEditingExperience(null);
     setOpenDialog((prev) => !prev);
@@ -296,23 +267,6 @@ export default function SkillsAndExperiencePage() {
                 />
               ))}
             </div>
-          </div>
-          <div className="flex flex-row justify-end gap-4 w-full my-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleReset}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl transition-all duration-300 ease-in"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              onClick={handleSaveChanges}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl transition-all duration-300 ease-in"
-            >
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </Button>
           </div>
           <div className="space-y-6 w-full">
             <div className="flex flex-row justify-between items-center w-full mb-4">
