@@ -23,8 +23,6 @@ import {
   JobPostPayload,
 } from '@/validations/create-post.schema';
 import { useJobTypes, useTracks, useWorkModes } from '@/hooks/lookups';
-import { draftPost } from '@/api/actions/create-post';
-import { toast } from 'sonner';
 import Loading from '@/app/loading';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'next/navigation';
@@ -35,6 +33,7 @@ import { Modal } from '@/components/dashboard/modal';
 import { Country, State } from 'country-state-city';
 import { useGetJob } from '@/hooks/jobs';
 import { RawJob } from '@/types/job-card';
+import { useDraftJob } from '@/hooks/jobs';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
@@ -53,7 +52,6 @@ export default function JobDetailsStep2({
   const { data: rawJob } = useGetJob(user?.company?.id, id as string);
   const job = rawJob as RawJob;
   const router = useRouter();
-  const [isDrafting, setIsDrafting] = useState(false);
   const { data: tracks, isLoading: tracksLoading } = useTracks();
   const { data: workModes, isLoading: workModesLoading } = useWorkModes();
   const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
@@ -63,7 +61,7 @@ export default function JobDetailsStep2({
   const [showEditDraftModal, setShowEditDraftModal] = useState(false);
   const [payload, setPayload] = useState<JobPostPayload | null>(null);
   const countries = Country.getAllCountries();
-
+  const { draftJob, isPending: isDrafting } = useDraftJob();
   const isLoading = tracksLoading || workModesLoading || jobTypesLoading;
 
   const {
@@ -115,8 +113,7 @@ export default function JobDetailsStep2({
     }
   };
 
-  const handleSaveDraft = async () => {
-    setIsDrafting(true);
+  const handleSaveDraft = () => {
     const data = getValues();
     const formData = {
       company_id: user?.company?.id || '',
@@ -134,25 +131,11 @@ export default function JobDetailsStep2({
       skills: (initialData.skills as string[]) || [],
     };
 
-    try {
-      const response = await draftPost(formData);
-      // console.log(response);
-
-      if (response && !response?.success) {
-        toast.error(response.message);
-        return;
-      }
-
-      toast.success('Your job has been saved to draft successfully');
+  draftJob(formData, {
+    onSuccess: ()=>{
       reset();
-      router.push('/company/dashboard');
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    } finally {
-      setIsDrafting(false);
-    }
+      router.push('/company/jobs/drafts')}
+  });
   };
 
   const handleEditDraft = async () => {
@@ -365,7 +348,7 @@ export default function JobDetailsStep2({
               Prev
             </Button>
           </div>
-          {job.status === 'draft' ? (
+          {id && job?.status === 'draft' ? (
             <div className="">
               <Button
                 variant="outline"
@@ -390,7 +373,7 @@ export default function JobDetailsStep2({
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          {job.status === 'draft' ? (
+          {id && job?.status === 'draft' ? (
             <div className="">
               <Button
                 variant="outline"
@@ -414,7 +397,7 @@ export default function JobDetailsStep2({
             </div>
           )}
 
-          {job.status === 'draft' ? (
+          {id && job?.status === 'draft' ? (
             <div className="">
               <Button
                 disabled={isSubmitting}

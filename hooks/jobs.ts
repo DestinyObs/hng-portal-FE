@@ -30,6 +30,21 @@ export const useGetAllJobs = <T>(
   });
 };
 
+export const useGetActiveJobs = <T>(
+  companyId: string | undefined,
+): UseQueryResult<T> => {
+  return useQuery<T>({
+    queryKey: ['get-active-jobs', companyId],
+    queryFn: async () => {
+      const res = await makeAuthenticatedRequest(
+        `employer/company/${companyId}/active-jobs`,
+      );
+      return res?.data as T;
+    },
+    enabled: !!companyId,
+  });
+};
+
 export const useGetJob = (
   companyId: string | undefined,
   jobId: string | undefined,
@@ -239,7 +254,7 @@ export const useDraftJob = () => {
       }
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
       toast.success('Your job has been saved to draft successfully');
-      router.push('/company/dashboard');
+      router.push('/company/jobs/drafts');
     },
 
     onError: (err) => {

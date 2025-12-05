@@ -3,7 +3,6 @@ import { makeAuthenticatedRequest } from '@/api/config.server';
 import { useAuthStore } from '@/store/auth';
 import { JobDraftPayload } from '@/validations/create-post.schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export const usePost = (jobId: string) => {
