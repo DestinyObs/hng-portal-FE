@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth';
+import Link from 'next/link';
 
 export default function JobCard({ job }: { job: JobCardProps }) {
   const navigate = useRouter();
@@ -76,6 +77,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
           </Button>
         </div>
         <div className="">
+          <Link href={`/company/applicants?jobId=${job.id}`}>
           <Button
             size="xs"
             variant="default"
@@ -86,6 +88,7 @@ export default function JobCard({ job }: { job: JobCardProps }) {
           >
             View Applicants
           </Button>
+          </Link>
         </div>
       </CardContent>
     </Card>

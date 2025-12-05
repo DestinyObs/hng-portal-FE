@@ -1,34 +1,14 @@
-import React from 'react';
-import { Tabs } from '@/components/shared/ui/tabs';
-import AllApplicants from './all-applicants';
-import Candidatelists from './candidate-lists';
+import ApplicantsPageClient from './applicants-page-client';
+import { Suspense } from 'react';
 
-// interface ApplicantsPageProps {
-//   params: {
-//     companyId: string;
-//   };
-// }
+export const metadata = {
+  title: 'All Applicants',
+};
 
-export default async function ApplicantsPage() {
-  // export default async function ApplicantsPage({ params }: ApplicantsPageProps) {
-  // const { companyId: company_id } = await params;
-
-  const tabsData = [
-    {
-      value: 'all',
-      tabsName: 'All Applicants',
-      TabView: () => <AllApplicants />,
-    },
-    {
-      value: 'lists',
-      tabsName: 'Candidates List',
-      TabView: () => <Candidatelists />,
-    },
-  ];
-
+export default function ApplicantsPage() {
   return (
-    <div className="w-full min-h-screen py-4">
-      <Tabs tabs={tabsData} variant="ghost" />
-    </div>
+    <Suspense>
+      <ApplicantsPageClient />
+    </Suspense>
   );
 }
