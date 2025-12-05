@@ -60,7 +60,6 @@ export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
     },
   },
 
-  // Job Applied  (kept)
   {
     accessorKey: 'applied_role',
     header: 'Job Applied',
@@ -99,13 +98,20 @@ export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
     },
   },
 
-  // {
-  //   accessorKey: 'job_id',
-  //   header: '',
-  //   cell: ({ row }) => {
-  //     const job_id = row.original.job_id as string;
-  //     const id = row.original.id as string;
-  //     return <ApplicantActions job_id={job_id} applicant_id={id} />;
-  //   },
-  // },
+  {
+    accessorKey: 'actions',
+    header: '',
+    cell: ({ row }) => {
+      const job_id = row.original.job_id as string;
+      const applicant_id = row.original.id as string;
+
+      return (
+        <ApplicantActions
+          company_id={companyId}
+          job_id={job_id}
+          applicant_id={applicant_id}
+        />
+      );
+    },
+  },
 ];

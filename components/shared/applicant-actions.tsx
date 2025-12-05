@@ -1,39 +1,28 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Dropdown from './ui/dropdown';
-import { EllipsisVertical } from 'lucide-react';
-import { useAuthStore } from '@/store/auth';
 
 export default function ApplicantActions({
+  company_id,
   job_id,
   applicant_id,
 }: {
+  company_id: string;
   job_id: string;
   applicant_id: string;
 }) {
-  const { user } = useAuthStore();
   const router = useRouter();
 
   return (
-    <Dropdown
-      dropdownMenuContent="end"
-      triggerVariant="data-menu"
-      title={<EllipsisVertical size={15} />}
-      values={[
-        {
-          name: 'View',
-          action: () =>
-            router.push(
-              `/company/${user?.company?.id}/job/${job_id}/applicant/${applicant_id}`,
-            ),
-        },
-        {
-          name: 'Edit Status',
-          //   action: () =>
-          //     router.push(`/dashboard/applicants/${job_id}/edit`),
-        },
-      ]}
-    />
+    <button
+      onClick={() =>
+        router.push(
+          `/company/${company_id}/job/${job_id}/applicant/${applicant_id}`,
+        )
+      }
+      className="text-primary-300 hover:text-primary-400 font-medium text-sm transition-colors"
+    >
+      View Details
+    </button>
   );
 }
