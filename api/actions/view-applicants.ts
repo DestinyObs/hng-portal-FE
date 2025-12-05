@@ -18,9 +18,10 @@ export const view_applicants_per_company = async (company_id: string) => {
 export const view_applicants_per_job = async (
   company_id: string,
   job_id: string,
+  status?: string,
 ) => {
   const res = await makeAuthenticatedRequest<Job>(
-    `employer/company/${company_id}/jobs/${job_id}/applications`,
+    `employer/company/${company_id}/jobs/${job_id}/applications${status ? `?status=${status}` : ''}`,
     {
       method: 'GET',
     },

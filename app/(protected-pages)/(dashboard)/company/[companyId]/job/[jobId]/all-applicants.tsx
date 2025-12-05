@@ -1,101 +1,68 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
-import {
-  createColumns,
-  Applicant,
-} from '@/components/shared/applicants-column';
+import { useQuery } from '@tanstack/react-query';
+import { columns, Applicant } from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
-import { ViewJobApplications } from '@/types/view-job-applicants';
-import { view_applicants_per_company } from '@/api/actions/view-applicants';
+import { view_applicants_per_job } from '@/api/actions/view-applicants';
 
 interface AllApplicantsProps {
   company_id: string;
+  job_id: string;
 }
 
-export default function AllApplicants({ company_id }: AllApplicantsProps) {
+export default function AllApplicants({
+  company_id,
+  job_id,
+}: AllApplicantsProps) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedRole, setSelectedRole] = React.useState<string>('');
   const [selectedStatus, setSelectedStatus] = React.useState<string>('');
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
-  // New states for data fetching
-  const [applicationsData, setApplicationsData] =
-    useState<ViewJobApplications | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const statuses = [
-    'Applied',
-    'Shortlisted',
-    'Rejected',
-    'Hired',
-    'Interview',
-    'In Review',
-  ];
+  const statuses = ['Applied', 'Shortlisted', 'Rejected'];
 
   const statusTextStyles: Record<string, string> = {
-    Applied: 'text-tertiary-200 bg-tertiary-50',
+    Applied: 'text-tertiary-200 bg-tertiary-50 ',
     Shortlisted: 'text-[#3730A3] bg-light-blue',
     Rejected: 'text-[#EF4444] bg-[#FEE2E2]',
-    Hired: 'text-green-700 bg-green-100',
-    Interview: 'text-blue-700 bg-blue-100',
-    'In Review': 'text-yellow-700 bg-yellow-100',
   };
 
   const statusDotStyles: Record<string, string> = {
     Applied: 'bg-tertiary-200',
     Shortlisted: 'bg-[#3730A3]',
     Rejected: 'bg-[#EF4444]',
-    Hired: 'bg-green-700',
-    Interview: 'bg-blue-700',
-    'In Review': 'bg-yellow-700',
   };
 
-  // Fetch applicants data
-  useEffect(() => {
-    const fetchApplicants = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+  const {
+    data: applicationsData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['applicants_per_job', company_id, job_id],
+    queryFn: async () => {
+      const response = await view_applicants_per_job(company_id, job_id);
 
-        const response = await view_applicants_per_company(company_id);
-
-        if (response.success && response.data) {
-          setApplicationsData(response.data);
-        } else {
-          setError('Failed to fetch applicants');
-        }
-      } catch (err) {
-        console.error('Caught error:', err);
-        setError('An error occurred while fetching applicants');
-      } finally {
-        setIsLoading(false);
+      if (response.success && response.data) {
+        return response.data;
       }
-    };
 
-    if (company_id) {
-      fetchApplicants();
-    }
-  }, [company_id]);
+      throw new Error('Failed to fetch applicants');
+    },
+    enabled: !!company_id && !!job_id,
+    staleTime: 1000 * 60 * 5,
+    retry: 2,
+  });
 
-  // Transform API data to match table format
   const transformedData = React.useMemo(() => {
-    if (
-      !applicationsData?.applications ||
-      !Array.isArray(applicationsData.applications)
-    ) {
-      return [];
-    }
-
-    return applicationsData.applications.map((application) => ({
+    return applicationsData?.applications.map((application) => ({
       id: application.id,
       job_id: application.job_id,
       name: `${application.user.firstname} ${application.user.lastname}`,
       email: application.user.email,
-      applied_role: application.job.title,
+      applied_role: applicationsData.title,
       user_id: application.user_id,
       status:
         application.status === 'pending'
@@ -167,7 +134,9 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
       <div className="w-full min-h-screen py-4">
         <div className="bg-white p-6 rounded-2xl">
           <div className="flex flex-col items-center justify-center py-12">
-            <p className="text-red-500 mb-4">{error}</p>
+            <p className="text-red-500 mb-4">
+              {error instanceof Error ? error.message : 'An error occurred'}
+            </p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-primary-300 text-white rounded-lg hover:bg-primary-400"
@@ -271,10 +240,7 @@ export default function AllApplicants({ company_id }: AllApplicantsProps) {
           </div>
         ) : (
           <section className="w-72 md:w-170 lg:w-full">
-            <DataTable
-              columns={createColumns(company_id)}
-              data={filteredData as Applicant[]}
-            />
+            <DataTable columns={columns} data={filteredData as Applicant[]} />
           </section>
         )}
       </div>

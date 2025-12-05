@@ -27,7 +27,7 @@ export type Applicant = {
   applied_date: string;
 };
 
-export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
+export const columns: ColumnDef<Applicant>[] = [
   {
     accessorKey: 'name',
     header: 'Applicant Name',
@@ -105,13 +105,7 @@ export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
       const job_id = row.original.job_id as string;
       const applicant_id = row.original.id as string;
 
-      return (
-        <ApplicantActions
-          company_id={companyId}
-          job_id={job_id}
-          applicant_id={applicant_id}
-        />
-      );
+      return <ApplicantActions job_id={job_id} applicant_id={applicant_id} />;
     },
   },
 ];

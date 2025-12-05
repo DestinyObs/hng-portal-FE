@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useApplicants } from './use-applicants.hook';
-import { createColumns } from '@/components/shared/applicants-column';
 import ApplicantsFilters from './applicants-filters';
 import ApplicantsTable from './applicants-table';
+import { columns } from '@/components/shared/applicants-column';
 
 export default function ApplicantsPageClient() {
   const searchParams = useSearchParams();
-  const { data, company_id } = useApplicants(); // removed unused isLoading, error
+  const { data } = useApplicants(); // removed unused isLoading, error
 
   const urlJobId = searchParams.get('jobId');
 
@@ -29,8 +29,6 @@ export default function ApplicantsPageClient() {
 
     return () => clearTimeout(timeout);
   }, [urlJobId]);
-
-  const columns = createColumns(company_id!);
 
   const filteredData = data.filter((applicant) => {
     // Pre-filter by jobId from URL (if present)

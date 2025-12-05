@@ -18,7 +18,7 @@ import { CompanyProfileData } from '@/types/profile';
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, setData } = useAuthStore();
+  const { user, setData, clearAuth } = useAuthStore();
   const { data: talent_profile } = useGetProfileData();
   const { data: company_profile } = useGetCompanyProfile<CompanyProfileData>();
   const [isOpen, setIsOpen] = useState(false);
@@ -67,7 +67,7 @@ const DashboardHeader = () => {
     mutationFn: logout,
     onSuccess: () => {
       toast.success('Logged out successfully!');
-      localStorage.removeItem('auth-store');
+      clearAuth();
       setData(null);
       router.push('/sign-in');
     },
