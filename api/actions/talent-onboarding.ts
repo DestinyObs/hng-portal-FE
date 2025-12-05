@@ -25,9 +25,9 @@ export const talent_portfolio_api = async (data: FormData) => {
     },
   );
 
-  const user = getEssentialUserData(res.data.user);
-
-  if (res.success) {
+  // Check if request was successful before accessing res.data
+  if (res.success && res.data?.user) {
+    const user = getEssentialUserData(res.data.user);
     (await cookies()).set('user', JSON.stringify(user), {
       httpOnly: false,
       sameSite: 'strict',

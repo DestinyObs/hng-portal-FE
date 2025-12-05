@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react'; // Import Loader2
 import { TALENT_DASHBOARD_CARDS } from '@/constants/dashboard'; // Import TALENT_DASHBOARD_CARDS
 import DashboardCard from '@/components/dashboard/dashboard-card';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SortByDropdown } from '@/components/dashboard/sort-by-dropdown';
 import DashboardSidebar from '@/components/dashboard/sidebar';
 

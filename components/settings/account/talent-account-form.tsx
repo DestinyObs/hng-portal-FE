@@ -78,10 +78,32 @@ export default function TalentAccountForm() {
         }
         toast.success('Profile updated successfully');
       } else {
-        toast.error('Failed to update profile');
+        // Handle error from result
+        let errorMessage = 'Failed to update profile';
+        if (result.error) {
+          if (typeof result.error === 'string') {
+            errorMessage = result.error;
+          } else if (
+            typeof result.error === 'object' &&
+            result.error !== null
+          ) {
+            // Handle Record<string, string[]> format
+            const errorString = Object.values(
+              result.error as Record<string, string[]>,
+            )
+              .flat()
+              .join(' ');
+            errorMessage = errorString || errorMessage;
+          }
+        }
+        toast.error(errorMessage);
       }
     } catch (error) {
-      toast.error('An error occurred while updating your profile');
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while updating your profile';
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

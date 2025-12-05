@@ -10,26 +10,36 @@ export const createPost = async (formData: JobPostPayload) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${formData.company_id}/jobs/store`;
 
   const token = (await cookies()).get('token')?.value;
-  if (!token) return false;
-
-  try {
-    const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res && !res?.success) {
-      throw res.errors;
-    }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw error;
-    }
+  if (!token) {
+    return {
+      success: false,
+      message: 'Authentication token not found',
+      status: 401,
+    };
   }
+
+  const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.success) {
+    return {
+      success: false,
+      message: res.message || 'Failed to create post',
+      status: res.status,
+      errors: res.errors,
+    };
+  }
+
+  return {
+    success: true,
+    data: res.data,
+  };
 };
 
 export const updateStatus = async (
@@ -40,78 +50,101 @@ export const updateStatus = async (
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${company_id}/jobs/${jobId}/${status}`;
 
   const token = (await cookies()).get('token')?.value;
-  if (!token) return false;
-
-  try {
-    const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res && !res?.success) {
-      throw res.errors;
-    }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw error;
-    }
+  if (!token) {
+    return {
+      success: false,
+      message: 'Authentication token not found',
+      status: 401,
+    };
   }
+
+  const res = await makeAuthenticatedRequest<JobPostPayload>(endpoint, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.success) {
+    return {
+      success: false,
+      message: res.message || 'Failed to update status',
+      status: res.status,
+      errors: res.errors,
+    };
+  }
+
+  return {
+    success: true,
+  };
 };
 
 export const deleteJob = async (company_id: string, jobId: string) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${company_id}/jobs/${jobId}`;
 
   const token = (await cookies()).get('token')?.value;
-  if (!token) return false;
-
-  try {
-    const res = await makeAuthenticatedRequest(endpoint, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res && !res?.success) {
-      throw res.errors;
-    }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw error;
-    }
+  if (!token) {
+    return {
+      success: false,
+      message: 'Authentication token not found',
+      status: 401,
+    };
   }
+
+  const res = await makeAuthenticatedRequest(endpoint, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.success) {
+    return {
+      success: false,
+      message: res.message || 'Failed to delete job',
+      status: res.status,
+      errors: res.errors,
+    };
+  }
+
+  return {
+    success: true,
+  };
 };
 
 export const draftPost = async (formData: JobDraftPayload) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${formData.company_id}/jobs/draft`;
 
   const token = (await cookies()).get('token')?.value;
-  if (!token) return;
-
-  try {
-    const res = await makeAuthenticatedRequest<JobDraftPayload>(endpoint, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res && !res?.success) {
-      throw res.errors;
-    }
-
-    return res;
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw error;
-    }
+  if (!token) {
+    return {
+      success: false,
+      message: 'Authentication token not found',
+      status: 401,
+    };
   }
+
+  const res = await makeAuthenticatedRequest<JobDraftPayload>(endpoint, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.success) {
+    return {
+      success: false,
+      message: res.message || 'Failed to save draft',
+      status: res.status,
+      errors: res.errors,
+    };
+  }
+
+  return res;
 };
 
 export const updatePost = async (
@@ -162,6 +195,15 @@ export const updatePost = async (
       Authorization: `Bearer ${token}`,
     },
   });
+
+  if (!res.success) {
+    return {
+      success: false,
+      message: res.message || 'Failed to update post',
+      status: res.status,
+      errors: res.errors,
+    };
+  }
 
   return res;
 };
