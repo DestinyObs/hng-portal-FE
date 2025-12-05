@@ -15,7 +15,6 @@ export type Applicant = {
   name: string;
   email: string;
   applied_role?: string;
-  job_id?: string;
   user_id?: string;
   status:
     | 'Hired'
@@ -28,9 +27,7 @@ export type Applicant = {
   applied_date: string;
 };
 
-export const createColumns = (
-  companyId: string
-): ColumnDef<Applicant>[] => [
+export const createColumns = (companyId: string): ColumnDef<Applicant>[] => [
   {
     accessorKey: 'name',
     header: 'Applicant Name',
@@ -63,24 +60,7 @@ export const createColumns = (
     },
   },
 
-  // Job Applied
-  {
-    accessorKey: 'applied_role',
-    header: 'Job Applied',
-    cell: ({ row }) => {
-      const role = row.getValue('applied_role') as string;
-
-      return (
-        <span
-          className={`${dmSans.className} text-black text-base font-normal`}
-        >
-          {role}
-        </span>
-      );
-    },
-  },
-
-  // Job status
+  // Job Applied  (kept)
   {
     accessorKey: 'applied_role',
     header: 'Job Applied',
@@ -100,9 +80,7 @@ export const createColumns = (
   {
     accessorKey: 'status',
     header: 'Job Status',
-    cell: ({ row }) => (
-      <DataStatus status={row.getValue('status')} />
-    ),
+    cell: ({ row }) => <DataStatus status={row.getValue('status')} />,
   },
 
   {
@@ -121,13 +99,13 @@ export const createColumns = (
     },
   },
 
-  {
-    accessorKey: 'job_id',
-    header: '',
-    cell: ({ row }) => {
-      const job_id = row.original.job_id as string;
-      const id = row.original.id as string;
-      return <ApplicantActions job_id={job_id} applicant_id={id} />;
-    },
-  },
+  // {
+  //   accessorKey: 'job_id',
+  //   header: '',
+  //   cell: ({ row }) => {
+  //     const job_id = row.original.job_id as string;
+  //     const id = row.original.id as string;
+  //     return <ApplicantActions job_id={job_id} applicant_id={id} />;
+  //   },
+  // },
 ];
