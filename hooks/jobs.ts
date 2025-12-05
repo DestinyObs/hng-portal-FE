@@ -278,11 +278,17 @@ export const useApplyForJob = () => {
         data &&
         typeof data === 'object' &&
         'success' in data &&
-        !data.success
+        !(data as { success: boolean }).success
       ) {
-        const errorMessage = data.message || 'Failed to submit application';
-        if (data.errors) {
-          const errorString = Object.values(data.errors).flat().join(' ');
+        const errorData = data as {
+          success: false;
+          message?: string;
+          errors?: Record<string, string[]>;
+        };
+        const errorMessage =
+          errorData.message || 'Failed to submit application';
+        if (errorData.errors) {
+          const errorString = Object.values(errorData.errors).flat().join(' ');
           toast.error(errorString || errorMessage);
         } else {
           toast.error(errorMessage);
