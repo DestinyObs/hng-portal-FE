@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  context: { params: { applicationId: string } }, // <-- fix here
+  context: { params: Promise<{ applicationId: string }> }, // params is now a Promise
 ) {
-  const { applicationId } = context.params; // extract params correctly
+  const { applicationId } = await context.params; // await the promise
 
   const searchParams = request.nextUrl.searchParams;
   const companyId = searchParams.get('companyId');
@@ -19,8 +19,6 @@ export async function GET(
 
   const url = `https://api.staging.connect.hng.tech/api/employer/company/${companyId}/jobs/${jobId}/applications/${applicationId}`;
 
-  console.log('Proxying request to:', url);
-
   try {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
@@ -32,18 +30,12 @@ export async function GET(
     const authorization = request.headers.get('authorization');
     if (authorization) headers['authorization'] = authorization;
 
-    console.log('Request headers:', {
-      cookie: !!cookie,
-      authorization: !!authorization,
-    });
-
     const res = await fetch(url, {
       headers,
       credentials: 'include',
     });
 
     if (!res.ok) {
-      console.error('API returned error:', res.status);
       return NextResponse.json(
         { error: `API returned ${res.status}` },
         { status: res.status },
@@ -53,7 +45,6 @@ export async function GET(
     const data = await res.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Proxy error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch from API' },
       { status: 500 },
