@@ -7,7 +7,7 @@ import {
   CommandInput,
 } from '@/components/ui/command';
 import { useMemo, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -29,6 +29,8 @@ import WorkExperienceForm from './components/add-experience-form';
 
 export default function SkillsAndExperiencePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isOnboardingFlow = searchParams.get('flow') === 'onboarding';
   const [openDialog, setOpenDialog] = useState(false);
   const [editingExperience, setEditingExperience] = useState<Experience | null>(
     null,
@@ -376,7 +378,17 @@ export default function SkillsAndExperiencePage() {
                 queryKey: ['profile'],
               });
             }
-            router.push('/profile-view');
+            if (isOnboardingFlow) {
+              const hasPortfolio =
+                data?.portfolios && data.portfolios.length > 0;
+              if (!hasPortfolio) {
+                router.push('/settings/portfolio?flow=onboarding');
+              } else {
+                router.push('/profile-view');
+              }
+            } else {
+              router.push('/profile-view');
+            }
           }}
         />
       </Modal>

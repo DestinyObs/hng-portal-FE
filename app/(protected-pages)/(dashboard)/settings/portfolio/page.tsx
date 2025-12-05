@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
@@ -16,6 +17,9 @@ import { Modal as ConfirmationModal } from '@/components/dashboard/modal';
 import { toast } from 'sonner';
 
 export default function PortfolioPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isOnboardingFlow = searchParams.get('flow') === 'onboarding';
   const [openDialog, setOpenDialog] = useState(false);
   const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(
     null,
@@ -50,6 +54,9 @@ export default function PortfolioPage() {
     queryClient.invalidateQueries({
       queryKey: ['profile'],
     });
+    if (isOnboardingFlow) {
+      router.push('/profile-view');
+    }
   };
 
   const handleDeleteClick = (portfolio: Portfolio) => {

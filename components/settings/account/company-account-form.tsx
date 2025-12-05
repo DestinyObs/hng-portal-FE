@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -32,11 +32,17 @@ type CompanyFormValues = z.infer<typeof companyFormSchema>;
 
 export default function CompanyAccountForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isOnboardingFlow = searchParams.get('flow') === 'onboarding';
   const { user } = useAuthStore();
   const { data: companyProfile, isLoading } =
     useGetCompanyProfile<CompanyProfileData>(true);
   const handleRedirectToAccount = () => {
-    router.push('/profile-view');
+    if (isOnboardingFlow) {
+      router.push('/settings/profile?flow=onboarding');
+    } else {
+      router.push('/profile-view');
+    }
   };
   const { updateCompanyProfile, isPending } = useUpdateCompanyProfile(
     handleRedirectToAccount,
