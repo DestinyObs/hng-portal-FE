@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { applicationId: string } }
+  context: { params: { applicationId: string } }, // <-- fix here
 ) {
+  const { applicationId } = context.params; // extract params correctly
+
   const searchParams = request.nextUrl.searchParams;
   const companyId = searchParams.get('companyId');
   const jobId = searchParams.get('jobId');
@@ -11,33 +13,29 @@ export async function GET(
   if (!companyId || !jobId) {
     return NextResponse.json(
       { error: 'Missing companyId or jobId' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
-  const url = `https://api.staging.connect.hng.tech/api/employer/company/${companyId}/jobs/${jobId}/applications/${params.applicationId}`;
+  const url = `https://api.staging.connect.hng.tech/api/employer/company/${companyId}/jobs/${jobId}/applications/${applicationId}`;
 
   console.log('Proxying request to:', url);
 
   try {
-    // Forward all relevant headers from the client request
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
 
-    // Forward cookies
     const cookie = request.headers.get('cookie');
-    if (cookie) {
-      headers['cookie'] = cookie;
-    }
+    if (cookie) headers['cookie'] = cookie;
 
-    // Forward authorization header if present
     const authorization = request.headers.get('authorization');
-    if (authorization) {
-      headers['authorization'] = authorization;
-    }
+    if (authorization) headers['authorization'] = authorization;
 
-    console.log('Request headers:', { cookie: !!cookie, authorization: !!authorization });
+    console.log('Request headers:', {
+      cookie: !!cookie,
+      authorization: !!authorization,
+    });
 
     const res = await fetch(url, {
       headers,
@@ -48,7 +46,7 @@ export async function GET(
       console.error('API returned error:', res.status);
       return NextResponse.json(
         { error: `API returned ${res.status}` },
-        { status: res.status }
+        { status: res.status },
       );
     }
 
@@ -58,7 +56,7 @@ export async function GET(
     console.error('Proxy error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch from API' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
