@@ -99,11 +99,8 @@ export default function JobDetailsStep2({
       work_mode_id: data.work_mode_id || ' ',
       skills: (initialData.skills as string[]) || [],
     };
-    // console.log(formData);
 
     if (id) {
-      // console.log(formData)
-
       setPayload(formData);
 
       setShowEditModal(true);
