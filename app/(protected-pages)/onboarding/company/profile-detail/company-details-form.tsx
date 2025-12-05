@@ -64,12 +64,17 @@ export default function CompanyDetailsForm() {
       if (result.success) {
         setOpenDialog(true);
       } else {
-        if (result.details?.errors) {
+        // Check for validation errors in different possible locations
+        const errors =
+          result.details?.errors ||
+          (result as unknown as { errors?: Record<string, string[]> }).errors;
+
+        if (errors) {
           // Show field-specific validation errors
-          Object.entries(result.details.errors).forEach(([field, messages]) => {
+          Object.entries(errors).forEach(([field, messages]) => {
             const errorMessage = Array.isArray(messages)
               ? messages.join(', ')
-              : messages;
+              : String(messages);
 
             toast.error(`${field}`, {
               description: errorMessage,
@@ -77,21 +82,27 @@ export default function CompanyDetailsForm() {
           });
         } else {
           // Show general error message
+          const errorMessage =
+            result.message ||
+            result.error ||
+            'Please check your information and try again.';
           toast.error('Failed to save company details', {
-            description:
-              result.error || 'Please check your information and try again.',
+            description: errorMessage,
           });
         }
       }
     } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Please check your connection and try again.';
       toast.error('An unexpected error occurred', {
-        description: 'Please check your connection and try again.',
+        description: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
 
   return (
     <Form {...form}>
@@ -122,21 +133,21 @@ export default function CompanyDetailsForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="finance">Finance</SelectItem>
-                  <SelectItem value="creative-design">
+                  <SelectItem value="Finance">Finance</SelectItem>
+                  <SelectItem value="Creative-Design">
                     Creative Design
                   </SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
-                  <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                  <SelectItem value="hr-talent">
+                  <SelectItem value="Education">Education</SelectItem>
+                  <SelectItem value="Healthcare">Healthcare</SelectItem>
+                  <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+                  <SelectItem value="Hr-Talent">
                     HR & Talent Management
                   </SelectItem>
-                  <SelectItem value="real-estate">Real Estate</SelectItem>
-                  <SelectItem value="logistics">
+                  <SelectItem value="Real-Estate">Real Estate</SelectItem>
+                  <SelectItem value="Logistics">
                     Logistics & Transportation
                   </SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage className="animate-in slide-in-from-top-1 duration-200" />

@@ -15,13 +15,12 @@ import {
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
+//import { Checkbox } from '@/components/ui/checkbox';
 import {
   addWorkExperience,
   updateWorkExperience,
 } from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '@/store/auth';
 import { Experience } from '@/types/profile-settings';
 import { toast } from 'sonner';
 import { useEffect } from 'react';
@@ -79,7 +78,7 @@ export default function WorkExperienceForm({
 }: WorkExperienceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
-  const { user } = useAuthStore();
+  // const { user } = useAuthStore();
 
   const form = useForm<WorkExperienceFormValues>({
     resolver: zodResolver(workExperienceSchema),
@@ -278,8 +277,7 @@ export default function WorkExperienceForm({
               )}
             />
           </div>
-
-          <FormField
+          {/*          <FormField
             control={form.control}
             name="isCurrentlyWorking"
             render={({ field }) => (
@@ -302,7 +300,7 @@ export default function WorkExperienceForm({
                 </div>
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}

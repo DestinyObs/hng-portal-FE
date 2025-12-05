@@ -21,7 +21,7 @@ export default async function ApplicantsPage({ params }: ApplicantsPageProps) {
     // {
     //   value: 'lists',
     //   tabsName: 'Candidates List',
-    //   TabView: () => <Candidatelists />,
+    //   TabView: () => <Candidatelists company_id={company_id} job_id={job_id} />,
     // },
   ];
 

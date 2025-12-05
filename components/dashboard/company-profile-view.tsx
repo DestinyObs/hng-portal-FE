@@ -14,18 +14,16 @@ interface CompanyProfileViewProps {
   isOwnProfile?: boolean;
 }
 
-export function CompanyProfileDisplay({
-  profile,
-}: CompanyProfileViewProps) {
+export function CompanyProfileDisplay({ profile }: CompanyProfileViewProps) {
   if (!profile) return null;
 
   const countryName =
     (profile?.country && Country.getCountryByCode(profile.country)?.name) || '';
   const stateName =
-    (profile?.state && profile?.country && State.getStateByCodeAndCountry(
-      profile.state,
-      profile.country,
-    )?.name) || '';
+    (profile?.state &&
+      profile?.country &&
+      State.getStateByCodeAndCountry(profile.state, profile.country)?.name) ||
+    '';
 
   const cleanList = (text: string | null | undefined) => {
     if (!text) return null;
@@ -35,13 +33,13 @@ export function CompanyProfileDisplay({
       .join('\n');
   };
 
-  const valueProp = cleanList(profile.value_proposition)
-  const whyWorkHere = cleanList(profile.why_talents_should_work_with_us)
+  const valueProp = cleanList(profile.value_proposition);
+  const whyWorkHere = cleanList(profile.why_talents_should_work_with_us);
   return (
-    <div className="w-full max-w-4xl mx-auto p-8">
+    <div className="w-full max-w-4xl mx-auto px-1 py-1 md:px-4 md:py-4">
       {/* Banner */}
-      <div className="relative h-48 w-full max-w-[804px] rounded-t-xl bg-primary-300">
-        <div className="absolute -bottom-12 left-6 h-40 w-40 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
+      <div className="relative h-32 sm:h-40 md:h-48 w-full max-w-[804px] rounded-t-xl bg-primary-300">
+        <div className="absolute -bottom-10 sm:-bottom-12 left-4 sm:left-6 h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
           <Image
             src={profile.logo_url || '/images/portraitPlaceholder.png'}
             alt="Company Logo"
@@ -54,12 +52,12 @@ export function CompanyProfileDisplay({
 
       {/* Main Card */}
       <Card className="max-w-[804px] rounded-t-none">
-        <CardHeader className="p-10 pb-0 flex justify-between items-start">
+        <CardHeader className="p-4 pb-0 flex justify-end items-start">
           <Link href="/settings/profile" className="inline-block">
             <Button
               variant="outline"
               size="sm"
-              className="h-8 gap-1 text-xs text-[#344054] border-[#D0D5DD] font-semibold hover:bg-gray-50 rounded"
+              className="h-6 gap-1 text-xs text-[#344054] border-[#D0D5DD] font-semibold hover:bg-gray-50 rounded"
             >
               <Image
                 src="/assets/dashboard/icons/edit.png"
@@ -72,13 +70,15 @@ export function CompanyProfileDisplay({
           </Link>
         </CardHeader>
 
-        <CardContent className="p-6 pt-0">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
+        <CardContent className="p-3 md:p-6 pt-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6 md:mb-10">
             <div>
-              <h2 className="text-2xl font-semibold text-black">
+              <h2 className="text-xl md:text-2xl font-semibold text-black">
                 {profile.name}
               </h2>
-              <p className="text-base text-black">{profile.tagline || 'No tagline provided'}</p>
+              <p className="text-sm md:text-base text-black">
+                {profile.tagline || 'No tagline provided'}
+              </p>
               <p>
                 Website:{' '}
                 <a
@@ -91,52 +91,61 @@ export function CompanyProfileDisplay({
                 </a>
               </p>
               <p className="text-sm text-gray-700">
-                {profile.company_size ? `${profile.company_size} Employees` : 'Number of Employees - '}
+                {profile.company_size
+                  ? `${profile.company_size} Employees`
+                  : 'Number of Employees - '}
               </p>
               <p className="text-sm text-gray-600">
-                {[stateName, countryName].filter(Boolean).join(', ') || 'Location: - '}
+                {[stateName, countryName].filter(Boolean).join(', ') ||
+                  'Location: - '}
               </p>
             </div>
           </div>
 
           {/* ABOUT */}
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-4">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
               About Company
             </h3>
-            <p className="text-base text-black whitespace-pre-line">
+            <p className="text-sm md:text-base text-black whitespace-pre-line">
               {profile.description || 'No company description added yet.'}
             </p>
           </div>
 
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-4">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
               Value Proposition
             </h3>
-            <div className="text-base text-black">
-               {valueProp ? (
-                  <ReactMarkdown 
-                    components={{
-                      ul: ({ ...props}) => <ul className="list-disc pl-5 space-y-1" {...props} />,
-                      li: ({ ...props}) => <li className="pl-1" {...props} />,
-                    }}
-                  >
-                    {valueProp}
-                  </ReactMarkdown>
-               ) : 'No information added yet'}
+            <div className="text-sm md:text-base text-black">
+              {valueProp ? (
+                <ReactMarkdown
+                  components={{
+                    ul: ({ ...props }) => (
+                      <ul className="list-disc pl-5 space-y-1" {...props} />
+                    ),
+                    li: ({ ...props }) => <li className="pl-1" {...props} />,
+                  }}
+                >
+                  {valueProp}
+                </ReactMarkdown>
+              ) : (
+                'No information added yet'
+              )}
             </div>
           </div>
 
           {/* WHY TALENTS SHOULD WORK WITH US */}
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-black mb-4">
+          <div className="mb-6 md:mb-10">
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
               Why Talents Should Work With Us
             </h3>
-            <div className="text-base text-black">
+            <div className="text-sm md:text-base text-black">
               {whyWorkHere ? (
                 <ReactMarkdown
                   components={{
-                    ul: ({ ...props }) => <ul className="list-disc pl-5 space-y-1" {...props} />,
+                    ul: ({ ...props }) => (
+                      <ul className="list-disc pl-5 space-y-1" {...props} />
+                    ),
                     li: ({ ...props }) => <li className="pl-1" {...props} />,
                   }}
                 >
@@ -150,7 +159,9 @@ export function CompanyProfileDisplay({
 
           {/* INDUSTRY */}
           <div>
-            <h3 className="text-2xl font-semibold text-black mb-4">Industry</h3>
+            <h3 className="text-lg md:text-2xl font-semibold text-black mb-3 md:mb-4">
+              Industry
+            </h3>
             <div className="flex flex-wrap gap-2">
               {profile.industry ? (
                 <span className="px-3 py-1 bg-white border border-[#EAF0ED] text-sm text-black rounded-2xl">

@@ -7,6 +7,7 @@ import {
   CommandInput,
 } from '@/components/ui/command';
 import { useMemo, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +28,7 @@ import { toast } from 'sonner';
 import WorkExperienceForm from './components/add-experience-form';
 
 export default function SkillsAndExperiencePage() {
+  const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
   const [editingExperience, setEditingExperience] = useState<Experience | null>(
     null,
@@ -46,7 +48,6 @@ export default function SkillsAndExperiencePage() {
     () => data?.experiences || [],
     [data?.experiences],
   );
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [skills, setSkills] = useState<Skill[]>(userSkills);
   const [experiences, setExperiences] = useState<Experience[]>(userExperiences);
 
@@ -59,27 +60,6 @@ export default function SkillsAndExperiencePage() {
   }, [userExperiences]);
 
   const [skillInput, setSkillInput] = useState('');
-
-  const handleSaveChanges = async () => {
-    setIsSubmitting(true);
-    try {
-      const result = await updateUserSkills(skills);
-
-      if (result.success) {
-        toast.success('Skills updated successfully!');
-
-        await queryClient.invalidateQueries({
-          queryKey: ['profile', user?.id],
-        });
-      } else {
-        toast.error('Something went wrong while updating your skills.');
-      }
-    } catch (error) {
-      toast.error('Unable to update skills. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleOpenModal = () => {
     setEditingExperience(null);
@@ -96,12 +76,29 @@ export default function SkillsAndExperiencePage() {
     setEditingExperience(null);
   };
 
-  const handleRemoveSkill = (skillToRemove: Skill) => {
-    setSkills(skills.filter((skill) => skill.id !== skillToRemove.id));
-  };
-
-  const handleReset = () => {
-    setSkills(userSkills);
+  const handleRemoveSkill = async (skillToRemove: Skill) => {
+    const updatedSkills = skills.filter(
+      (skill) => skill.id !== skillToRemove.id,
+    );
+    setSkills(updatedSkills);
+    try {
+      const result = await updateUserSkills(updatedSkills);
+      if (result.success) {
+        toast.success('Skill removed successfully!');
+        await queryClient.invalidateQueries({
+          queryKey: ['profile', user?.id],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ['profile'],
+        });
+      } else {
+        toast.error('Failed to remove skill');
+        setSkills(skills);
+      }
+    } catch {
+      toast.error('Unable to remove skill');
+      setSkills(skills);
+    }
   };
 
   const handleDeleteClick = (experience: Experience) => {
@@ -146,7 +143,9 @@ export default function SkillsAndExperiencePage() {
     return (
       <div className="w-full py-6 justify-center px-4 lg:px-0">
         <div className="w-full mb-4 space-y-1 text-center md:text-left">
-          <h3 className="text-2xl font-bold text-[#232323]">Skills</h3>
+          <h3 className="text-2xl font-bold text-[#232323]">
+            Skills & Experience
+          </h3>
           <p className="font-normal text-base text-black-200">
             Showcase your expertise and work history
           </p>
@@ -200,13 +199,35 @@ export default function SkillsAndExperiencePage() {
                           .map((skill: Skill) => (
                             <CommandItem
                               key={skill.id}
-                              onSelect={() => {
+                              onSelect={async () => {
                                 if (
                                   !skills.some((s: Skill) => s.id === skill.id)
                                 ) {
-                                  setSkills([...skills, skill]);
+                                  const updatedSkills = [...skills, skill];
+                                  setSkills(updatedSkills);
+                                  setSkillInput('');
+                                  try {
+                                    const result =
+                                      await updateUserSkills(updatedSkills);
+                                    if (result.success) {
+                                      toast.success(
+                                        'Skill added successfully!',
+                                      );
+                                      await queryClient.invalidateQueries({
+                                        queryKey: ['profile', user?.id],
+                                      });
+                                      await queryClient.invalidateQueries({
+                                        queryKey: ['profile'],
+                                      });
+                                    } else {
+                                      toast.error('Failed to add skill');
+                                      setSkills(skills);
+                                    }
+                                  } catch {
+                                    toast.error('Unable to add skill');
+                                    setSkills(skills);
+                                  }
                                 }
-                                setSkillInput('');
                               }}
                             >
                               {skill.name}
@@ -247,7 +268,6 @@ export default function SkillsAndExperiencePage() {
               ))}
             </div>
           </div>
-
           <div className="space-y-6 w-full">
             <div className="flex flex-row justify-between items-center w-full mb-4">
               <label className="text-sm text-[#1A1A1A] font-medium whitespace-nowrap">
@@ -344,36 +364,19 @@ export default function SkillsAndExperiencePage() {
               })}
             </div>
           </div>
-
-          <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleReset}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl transition-all duration-300 ease-in"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              onClick={handleSaveChanges}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl transition-all duration-300 ease-in"
-            >
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </Button>
-          </div>
         </CardContent>
       </Card>
       <Modal openDialog={openDialog} setOpenDialog={handleCloseModal}>
         <WorkExperienceForm
           experience={editingExperience}
-          onSuccess={() => {
+          onSuccess={async () => {
             handleCloseModal();
             if (data) {
-              queryClient.invalidateQueries({
+              await queryClient.invalidateQueries({
                 queryKey: ['profile'],
               });
             }
+            router.push('/profile-view');
           }}
         />
       </Modal>

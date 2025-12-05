@@ -73,7 +73,11 @@ export async function google_signin(formData: GoogleAuthRequest) {
     }
 
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || 'Authentication failed');
+    return {
+      success: false,
+      error: errorData.message || 'Authentication failed',
+      status: response.status,
+    };
   } catch (error) {
     return {
       success: false,

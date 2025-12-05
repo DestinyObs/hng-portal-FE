@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-
+import Image from 'next/image';
 export function HNGPortalIcon() {
   return (
     <svg
@@ -332,3 +332,7 @@ export function WhiteInstagramIcon() {
     </>
   );
 }
+
+export const HNGHireIcon = () => (
+  <Image src="/images/hireWhite.svg" alt="HNG Hire" width={24} height={24} />
+);

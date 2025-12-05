@@ -1,6 +1,7 @@
 import { DataStatus } from '@/components/shared/ui/table-status';
 import { ColumnDef } from '@tanstack/react-table';
 import { DM_Sans } from 'next/font/google';
+import ApplicantActions from './applicant-actions';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -12,12 +13,15 @@ export type Applicant = {
   name: string;
   email: string;
   applied_role?: string;
+  job_id?: string;
+  user_id?: string;
   status:
     | 'Hired'
     | 'Interview'
     | 'In Review'
     | 'Shortlisted'
     | 'Rejected'
+    | 'Applied'
     | string;
   applied_date: string;
 };
@@ -86,21 +90,21 @@ export const columns: ColumnDef<Applicant>[] = [
   },
 
   // Job Applied
-  // {
-  //   accessorKey: 'applied_role',
-  //   header: 'Job Applied',
-  //   cell: ({ row }) => {
-  //     const role = row.getValue('applied_role') as string;
+  {
+    accessorKey: 'applied_role',
+    header: 'Job Applied',
+    cell: ({ row }) => {
+      const role = row.getValue('applied_role') as string;
 
-  //     return (
-  //       <span
-  //         className={`${dmSans.className} text-black text-base font-normal`}
-  //       >
-  //         {role}
-  //       </span>
-  //     );
-  //   },
-  // },
+      return (
+        <span
+          className={`${dmSans.className} text-black text-base font-normal`}
+        >
+          {role}
+        </span>
+      );
+    },
+  },
 
   // Job status
   {
@@ -128,18 +132,13 @@ export const columns: ColumnDef<Applicant>[] = [
     },
   },
 
-  // {
-  //   accessorKey: 'action_buttons',
-  //   header: '',
-  //   cell: () => {
-  //     return (
-  //       <Dropdown
-  //         dropdownMenuContent={'end'}
-  //         triggerVariant="data-menu"
-  //         title={<EllipsisVertical size={15} />}
-  //         values={[{ name: 'View' }, { name: 'Edit Status' }]}
-  //       />
-  //     );
-  //   },
-  // },
+  {
+    accessorKey: 'job_id',
+    header: '',
+    cell: ({ row }) => {
+      const job_id = row.original.job_id as string;
+      const id = row.original.id as string;
+      return <ApplicantActions job_id={job_id} applicant_id={id} />;
+    },
+  },
 ];

@@ -10,14 +10,29 @@ import {
 } from './icons';
 
 export const NavLinks = [
-  { label: 'HNG Connect', href: '/', active: true, icon: <HNGPortalIcon /> },
   {
-    label: 'HNG Internship',
-    href: 'https://hng.tech/internship',
+    label: 'HNG Hire',
+    href: 'https://hng.tech/hire',
     icon: <HNGInternshipIcon />,
   },
-  { label: 'Learn', href: 'https://hng.tech/learn', icon: <LearnIcon /> },
+  {
+    label: 'Learn',
+    icon: <LearnIcon />,
+    dropdown: [
+      {
+        label: 'Learn',
+        href: 'https://hng.tech/learn',
+        icon: <LearnIcon />,
+      },
+      {
+        label: 'HNG Internship',
+        href: 'https://hng.tech/internship',
+        icon: <HNGInternshipIcon />,
+      },
+    ],
+  },
   { label: 'Premium', href: 'https://hng.tech/premium', icon: <PremiumIcon /> },
+  { label: 'HNG Connect', href: '/', active: true, icon: <HNGPortalIcon /> },
 ];
 
 export const LinkClasses =
