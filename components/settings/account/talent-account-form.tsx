@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -32,6 +32,8 @@ const formSchema = z.object({
 
 export default function TalentAccountForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isOnboardingFlow = searchParams.get('flow') === 'onboarding';
   const { data, isLoading } = useGetProfileData();
   const queryClient = useQueryClient();
   const { user, setData } = useAuthStore();
@@ -78,7 +80,11 @@ export default function TalentAccountForm() {
         await queryClient.invalidateQueries({
           queryKey: ['profile'],
         });
-        router.push('/profile-view');
+        if (isOnboardingFlow) {
+          router.push('/settings/profile?flow=onboarding');
+        } else {
+          router.push('/profile-view');
+        }
       } else {
         // Handle error from result
         let errorMessage = 'Failed to update profile';

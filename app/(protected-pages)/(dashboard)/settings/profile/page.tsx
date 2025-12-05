@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -101,6 +101,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function ProfilePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isOnboardingFlow = searchParams.get('flow') === 'onboarding';
   const { user } = useAuthStore();
   const isCompany = user?.current_role === 'employer';
   const { data: talentProfile, isLoading: talentLoading } =
@@ -108,7 +110,23 @@ export default function ProfilePage() {
   const { data: companyProfile, isLoading: companyLoading } =
     useGetCompanyProfile<CompanyProfileData>(isCompany);
   const handleRedirectToProfile = () => {
-    router.push('/profile-view');
+    if (isOnboardingFlow) {
+      const hasSkills =
+        talentProfile?.skills && talentProfile.skills.length > 0;
+      if (!hasSkills) {
+        router.push('/settings/skills?flow=onboarding');
+      } else {
+        const hasPortfolio =
+          talentProfile?.portfolios && talentProfile.portfolios.length > 0;
+        if (!hasPortfolio) {
+          router.push('/settings/portfolio?flow=onboarding');
+        } else {
+          router.push('/profile-view');
+        }
+      }
+    } else {
+      router.push('/profile-view');
+    }
   };
   const { updateProfile, isPending } = useUpdateUserProfile(
     handleRedirectToProfile,
@@ -222,6 +240,7 @@ export default function ProfilePage() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedCountry = form.watch('country');
   const handleCancel = () => {
     form.reset();
