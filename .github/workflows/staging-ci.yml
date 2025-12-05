@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   ci:
-    runs-on: [self-hosted, Linux, X64, hngconnect-fe, not4hng-fe, frontend-server]
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout code
@@ -53,13 +53,18 @@ jobs:
       - name: Check for vulnerabilities
         id: audit
         run: |
-          pnpm audit --audit-level=high || echo "Vulnerabilities found but continuing..."
+          pnpm audit --audit-level=high 2>&1 | tee audit.log
+          if [ $? -ne 0 ]; then
+            echo "HIGH or CRITICAL vulnerabilities found!"
+            cat audit.log
+            exit 1
+          fi
 
       - name: Set job status
         if: always()
         id: job_status
         run: |
-          if [ "${{ steps.lint.outcome }}" == "success" ] && [ "${{ steps.build.outcome }}" == "success" ]; then
+          if [ "${{ steps.lint.outcome }}" == "success" ] && [ "${{ steps.build.outcome }}" == "success" ] && [ "${{ steps.audit.outcome }}" == "success" ]; then
             echo "status=success" >> $GITHUB_OUTPUT
             echo "message=All checks passed successfully!" >> $GITHUB_OUTPUT
           else
