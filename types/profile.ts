@@ -62,12 +62,13 @@ export interface UserBio {
   updated_at: string;
   user: BaseUser;
 }
+import { Experience } from './profile-settings';
 
 // Main user data structure returned by API
 export interface UserProfileData extends BaseUser {
   bio: UserBio | null;
   skills: { id: string; name: string }[];
-  experiences: { id: string; name: string }[];
+  experiences: Experience[];
   portfolios: { id: string; name: string }[];
 }
 

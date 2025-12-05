@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
 import { columns, Applicant } from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
-import { JobApplicationItem } from '@/types/view-job-applicants';
+import { Job } from '@/types/view-job-applicants';
 import { view_applicants_per_job } from '@/api/actions/view-applicants';
 
 interface AllApplicantsProps {
@@ -23,9 +23,7 @@ export default function AllApplicants({
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
   // New states for data fetching
-  const [applicationsData, setApplicationsData] = useState<
-    JobApplicationItem[]
-  >([]);
+  const [applicationsData, setApplicationsData] = useState<Job | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,7 +52,7 @@ export default function AllApplicants({
         const response = await view_applicants_per_job(company_id, job_id);
 
         if (response.success && response.data) {
-          setApplicationsData(response.data.applications);
+          setApplicationsData(response.data);
         } else {
           setError('Failed to fetch applicants');
         }
@@ -72,18 +70,26 @@ export default function AllApplicants({
   }, [company_id, job_id]);
 
   // Transform API data to match table format
-  const transformedData: Applicant[] = React.useMemo(() => {
-    return applicationsData.map((application) => ({
+  const transformedData = React.useMemo(() => {
+    return applicationsData?.applications.map((application) => ({
       id: application.id,
+      job_id: application.job_id,
       name: `${application.user.firstname} ${application.user.lastname}`,
       email: application.user.email,
-      // applied_role: 'application.job.title',
+      applied_role: applicationsData.title,
+      user_id: application.user_id,
       status:
         application.status === 'pending'
           ? 'Applied'
-          : application.status === 'approved'
+          : application.status === 'shortlisted'
             ? 'Shortlisted'
-            : 'Rejected',
+            : application.status === 'hired'
+              ? 'Hired'
+              : application.status === 'interview'
+                ? 'Interview'
+                : application.status === 'in review'
+                  ? 'In Review'
+                  : 'Rejected',
       applied_date: new Date(application.date_added).toLocaleDateString(
         'en-US',
         {
@@ -99,7 +105,7 @@ export default function AllApplicants({
     let filtered = transformedData;
 
     if (searchQuery) {
-      filtered = filtered.filter(
+      filtered = filtered?.filter(
         (applicant) =>
           applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -110,11 +116,11 @@ export default function AllApplicants({
     }
 
     if (selectedRole) {
-      filtered = filtered.filter((a) => a.applied_role === selectedRole);
+      filtered = filtered?.filter((a) => a.applied_role === selectedRole);
     }
 
     if (selectedStatus) {
-      filtered = filtered.filter((a) => a.status === selectedStatus);
+      filtered = filtered?.filter((a) => a.status === selectedStatus);
     }
 
     return filtered;
@@ -240,13 +246,13 @@ export default function AllApplicants({
           </div>
         </div>
 
-        {filteredData.length === 0 ? (
+        {filteredData?.length === 0 ? (
           <div className="text-center py-12 text-tertiary-500">
             No applicant found
           </div>
         ) : (
           <section className="w-72 md:w-170 lg:w-full">
-            <DataTable columns={columns} data={filteredData} />
+            <DataTable columns={columns} data={filteredData as Applicant[]} />
           </section>
         )}
       </div>
