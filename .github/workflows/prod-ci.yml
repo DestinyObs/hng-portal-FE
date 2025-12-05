@@ -78,12 +78,29 @@ jobs:
         run: |
           if [ "${{ steps.job_status.outputs.status }}" == "success" ]; then
             COLOR="good"
-            EMOJI=":white_check_mark:"
-            STATUS="All checks passed"
+            SUMMARY="All CI checks passed! Ready to merge to production."
           else
             COLOR="danger"
-            EMOJI=":x:"
-            STATUS="Failed - Review required"
+            SUMMARY="CI pipeline failed. Review required before merging."
+          fi
+          
+          # Build detailed status
+          if [ "${{ steps.lint.outcome }}" == "success" ]; then
+            LINT_STATUS="PASSED: ESLint checks clean"
+          else
+            LINT_STATUS="FAILED: Linting errors/warnings detected"
+          fi
+          
+          if [ "${{ steps.build.outcome }}" == "success" ]; then
+            BUILD_STATUS="PASSED: Build successful"
+          else
+            BUILD_STATUS="FAILED: Build errors detected"
+          fi
+          
+          if [ "${{ steps.audit.outcome }}" == "success" ]; then
+            AUDIT_STATUS="PASSED: No HIGH/CRITICAL vulnerabilities"
+          else
+            AUDIT_STATUS="FAILED: Vulnerabilities detected"
           fi
           
           if [ -n "$SLACK_WEBHOOK_URL" ]; then
@@ -92,20 +109,22 @@ jobs:
             -d '{
               "attachments": [{
                 "color": "'"$COLOR"'",
-                "title": "'"$EMOJI"' [HNG Portal FE] CI Pipeline - Production",
+                "title": "[HNG Portal FE] CI Pipeline Complete - Production",
+                "text": "'"$SUMMARY"'",
                 "fields": [
                   {"title": "Repository", "value": "HNG Portal Frontend", "short": true},
-                  {"title": "Status", "value": "'"$STATUS"'", "short": true},
+                  {"title": "Overall Status", "value": "'"${{ steps.job_status.outputs.status }}"'", "short": true},
+                  {"title": "Lint (ESLint)", "value": "'"$LINT_STATUS"'", "short": false},
+                  {"title": "Build (Next.js)", "value": "'"$BUILD_STATUS"'", "short": false},
+                  {"title": "Security Audit (pnpm)", "value": "'"$AUDIT_STATUS"'", "short": false},
                   {"title": "Branch", "value": "'"${{ github.head_ref }}"'", "short": true},
                   {"title": "Author", "value": "'"${{ github.actor }}"'", "short": true},
-                  {"title": "Lint", "value": "'"${{ steps.lint.outcome }}"'", "short": true},
-                  {"title": "Build", "value": "'"${{ steps.build.outcome }}"'", "short": true},
-                  {"title": "Security Audit", "value": "'"${{ steps.audit.outcome }}"'", "short": true},
+                  {"title": "PR", "value": "<'"${{ github.event.pull_request.html_url }}"'|#'"${{ github.event.pull_request.number }}"'>", "short": true},
                   {"title": "Commit", "value": "'"${GITHUB_SHA:0:7}"'", "short": true},
-                  {"title": "PR", "value": "<'"${{ github.event.pull_request.html_url }}"'|#'"${{ github.event.pull_request.number }}"'>", "short": true}
+                  {"title": "View Details", "value": "<'"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"'|Full Workflow Run>", "short": false}
                 ],
                 "footer": "HNG Portal Frontend - Production CI",
-                "ts": '$(date +%s)'
+                "ts": '"$(date +%s)"'
               }]
             }'
           fi
