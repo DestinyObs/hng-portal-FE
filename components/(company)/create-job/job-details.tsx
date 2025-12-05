@@ -28,8 +28,9 @@ import { useCategories, useJobLevel, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { draftPost } from '@/api/actions/create-post';
+// import { draftPost } from '@/api/actions/create-post';
 import { useAuthStore } from '@/store/auth';
+import { useDraftJob } from '@/hooks/jobs';
 
 export default function JobDetails({
   initialData,
@@ -37,12 +38,12 @@ export default function JobDetails({
   onNext,
   id,
 }: JobDetailsProps) {
-  const [isDrafting, setIsDrafting] = useState(false);
   const router = useRouter();
   const { user } = useAuthStore();
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
+  const { draftJob, isPending: isDrafting } = useDraftJob();
   const [selectedSkills, setSelectedSkills] = useState<
     { id: string; name: string }[]
   >((initialData.skills as { id: string; name: string }[]) ?? []);
@@ -111,8 +112,7 @@ export default function JobDetails({
     onNext?.();
   };
 
-  const handleSaveDraft = async () => {
-    setIsDrafting(true);
+  const handleSaveDraft = () => {
     const data = getValues();
     if (!data.title) {
       toast.error('Title is required');
@@ -130,12 +130,7 @@ export default function JobDetails({
     };
 
     try {
-      const response = await draftPost(formData);
-
-      if (response && !response?.success) {
-        toast.error(response.message);
-        return;
-      }
+      const response = draftJob(formData);
 
       toast.success('Your job has been saved to draft successfully');
       reset();
@@ -144,8 +139,6 @@ export default function JobDetails({
       if (error instanceof Error) {
         toast.error(error.message);
       }
-    } finally {
-      setIsDrafting(false);
     }
   };
 

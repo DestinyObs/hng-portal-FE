@@ -193,7 +193,7 @@ export const useDraftJob = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
       toast.success('Your job has been saved to draft successfully');
-      router.push('/company/dashboard');
+      router.push('/company/jobs/drafts');
     },
 
     onError: (err) => {
