@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
+//import { Checkbox } from '@/components/ui/checkbox';
 import {
   addWorkExperience,
   updateWorkExperience,
@@ -278,8 +278,7 @@ export default function WorkExperienceForm({
               )}
             />
           </div>
-
-          <FormField
+          {/*          <FormField
             control={form.control}
             name="isCurrentlyWorking"
             render={({ field }) => (
@@ -302,7 +301,7 @@ export default function WorkExperienceForm({
                 </div>
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
