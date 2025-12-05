@@ -16,6 +16,7 @@ import DashboardCard from '@/components/dashboard/dashboard-card';
 import { useState } from 'react';
 import { SortByDropdown } from '@/components/dashboard/sort-by-dropdown';
 import DashboardSidebar from '@/components/dashboard/sidebar';
+import TalentDashboardEmptyState from '@/components/dashboard/talent-dashboard-empty-state';
 
 const TalentDashboardPage = () => {
   const { user } = useAuthStore();
@@ -169,8 +170,12 @@ const TalentDashboardPage = () => {
             <div className="col-span-full flex justify-center items-center h-48">
               <Loader2 className="h-10 w-10 animate-spin text-primary-blue" />
             </div>
+          ) : jobs && jobs.length > 0 ? (
+            jobs.map((job) => <TalentJobCard key={job.id} job={job} />)
           ) : (
-            jobs?.map((job) => <TalentJobCard key={job.id} job={job} />)
+            <div className="col-span-full">
+              <TalentDashboardEmptyState />
+            </div>
           )}
         </div>
       </div>

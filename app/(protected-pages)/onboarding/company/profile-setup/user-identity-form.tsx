@@ -20,6 +20,7 @@ import DocumentUploadIcon from '@/public/assets/auth/icons/document-upload';
 import { saveCompanyOnboarding } from '@/api/actions/onboarding';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/auth';
+import UserProfileIcon2 from '@/public/assets/auth/icons/user-profile2';
 
 export default function UserIdentityForm() {
   const { user } = useAuthStore();
@@ -125,13 +126,10 @@ export default function UserIdentityForm() {
                 height={100}
               />
             ) : (
-              <div>
-                <Image
-                  src={'/assets/images/company-onboarding/user-avatar.png'}
-                  alt="user avatar"
-                  width={128}
-                  height={128}
-                />
+              <div className="w-full h-full bg-linear-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
+                <span className="text-white text-4xl font-bold">
+                  <UserProfileIcon2 className="size-12" />
+                </span>
               </div>
             )}
           </div>
