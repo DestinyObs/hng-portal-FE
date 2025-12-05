@@ -13,12 +13,38 @@ jobs:
   build-deploy:
     runs-on: [self-hosted, Linux, X64, hngconnect-fe, not4hng-fe, frontend-server]
     steps:
+      - name: Notify Slack - Deployment Started
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEPLOY_NOTIFY_WEBHOOK_URL }}
+        run: |
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "#ff9900",
+                "title": "[HNG Portal FE] Deployment Started - PRODUCTION",
+                "fields": [
+                  {"title": "Repository", "value": "HNG Portal Frontend", "short": true},
+                  {"title": "Environment", "value": "PRODUCTION", "short": true},
+                  {"title": "Status", "value": "In Progress...", "short": true},
+                  {"title": "Branch", "value": "'"${{ github.ref_name }}"'", "short": true},
+                  {"title": "Triggered By", "value": "'"${{ github.actor }}"'", "short": true},
+                  {"title": "Commit", "value": "'"${GITHUB_SHA:0:7}"'", "short": true}
+                ],
+                "footer": "HNG Portal Frontend - Production Deployment",
+                "ts": '$(date +%s)'
+              }]
+            }'
+          fi
+
       - name: Install sshpass
         run: |
           sudo apt-get update
           sudo apt-get install -y sshpass
 
       - name: Sync code to remote server and deploy
+        id: deploy
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
@@ -36,9 +62,56 @@ jobs:
             pnpm run build
             pm2 restart 1 --update-env
           EOF
-      - name: Notify Deployment Status
-        if: always()
 
-        run: echo "Production deployment finished."
+      - name: Set deployment status
+        if: always()
+        id: deployment_status
+        run: |
+          if [ "${{ steps.deploy.outcome }}" == "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=Production deployment completed successfully!" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=Production deployment failed. Please check the logs." >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notify Slack - Deployment Complete
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEPLOY_NOTIFY_WEBHOOK_URL }}
+        run: |
+          if [ "${{ steps.deployment_status.outputs.status }}" == "success" ]; then
+            COLOR="good"
+            STATUS="Success"
+            MESSAGE="Production deployment completed successfully!"
+          else
+            COLOR="danger"
+            STATUS="Failed"
+            MESSAGE="@channel PRODUCTION DEPLOYMENT FAILED! Immediate attention required!"
+          fi
+          
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "text": "'"$MESSAGE"'",
+              "attachments": [{
+                "color": "'"$COLOR"'",
+                "title": "[HNG Portal FE] Deployment Complete - PRODUCTION",
+                "text": "'"${{ steps.deployment_status.outputs.message }}"'",
+                "fields": [
+                  {"title": "Repository", "value": "HNG Portal Frontend", "short": true},
+                  {"title": "Environment", "value": "PRODUCTION", "short": true},
+                  {"title": "Status", "value": "'"$STATUS"'", "short": true},
+                  {"title": "Branch", "value": "'"${{ github.ref_name }}"'", "short": true},
+                  {"title": "Deployed By", "value": "'"${{ github.actor }}"'", "short": true},
+                  {"title": "Commit", "value": "<'"${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"'|'"${GITHUB_SHA:0:7}"'>", "short": true},
+                  {"title": "Details", "value": "<'"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"'|View Workflow Run>", "short": false}
+                ],
+                "footer": "HNG Portal Frontend - Production Deployment",
+                "ts": '$(date +%s)'
+              }]
+            }'
+          fi
 
 

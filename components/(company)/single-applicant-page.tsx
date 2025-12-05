@@ -149,6 +149,15 @@ const SingleApplicantView = ({ company_id, job_id, applicant_id }: Props) => {
 
               <div className="mb-10">
                 <h3 className="text-xl font-semibold text-black mb-4">
+                  Job Description
+                </h3>
+                <p className="text-base text-black/70 whitespace-pre-line">
+                  {data?.data.job.description}
+                </p>
+              </div>
+
+              <div className="mb-10">
+                <h3 className="text-xl font-semibold text-black mb-4">
                   Acceptance Criteria
                 </h3>
                 <p className="text-base text-black/70 whitespace-pre-line">
@@ -164,53 +173,6 @@ const SingleApplicantView = ({ company_id, job_id, applicant_id }: Props) => {
                   {data?.data.cover_letter}
                 </p>
               </div>
-
-              {/* <div className="mb-10">
-              <h3 className="text-xl font-semibold text-black mb-6">
-                Experience
-              </h3>
-
-              {data?.data.length === 0 ? (
-                <p className="text-gray-500 text-sm">No details added yet.</p>
-              ) : (
-                <div className="space-y-6">
-                  {data.sections.map((section) => (
-                    <div key={section.id}>
-                      <p className="text-base font-semibold text-black">
-                        {section.title}
-                      </p>
-
-                      <ul className="list-disc ml-5 text-gray-600 mt-2 space-y-1">
-                        {section.bullets.map((b, idx) => (
-                          <li key={idx}>{b}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div> */}
-
-              {/* <div>
-              <h3 className="text-xl font-semibold text-black mb-4">Skills</h3>
-
-              <div className="flex flex-wrap gap-2">
-                {data?.data.job.skills.length === 0 ? (
-                  <p className="text-gray-500 text-sm">
-                    No tech stack added yet.
-                  </p>
-                ) : (
-                  data?.data.job.skills.map((tech, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1 bg-white border border-[#EAF0ED] text-sm text-black rounded-2xl"
-                    >
-                      {tech.name}
-                    </span>
-                  ))
-                )}
-              </div>
-            </div> */}
             </CardContent>
           </Card>
         </div>

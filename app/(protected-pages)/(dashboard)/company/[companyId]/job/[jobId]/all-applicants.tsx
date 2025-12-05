@@ -36,7 +36,6 @@ export default function AllApplicants({
     Rejected: 'bg-[#EF4444]',
   };
 
-  // React Query implementation
   const {
     data: applicationsData,
     isLoading,

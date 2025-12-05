@@ -1,8 +1,8 @@
-'use client';
+// 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
-import { columns, Applicant } from '@/components/shared/applicants-column';
+import { Applicant, columns } from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
 import { Job } from '@/types/view-job-applicants';
 import { view_applicants_per_job } from '@/api/actions/view-applicants';
