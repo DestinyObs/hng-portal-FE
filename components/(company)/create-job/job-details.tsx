@@ -20,22 +20,18 @@ import { OctagonAlert, X } from 'lucide-react';
 import type { JobDetailsProps, JobFormData2 } from '@/types/create-new-job';
 import TextEditor from '@/components/shared/ui/text-editor';
 import Input from '@/components/ui/input';
-import {
-  JobDetailsFormData,
-  jobDetailsSchema,
-} from '@/validations/create-post.schema';
+import { jobDetailsSchema } from '@/validations/create-post.schema';
 import { useCategories, useJobLevel, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { draftPost } from '@/api/actions/create-post';
 import { useAuthStore } from '@/store/auth';
-import { useQueryClient } from '@tanstack/react-query';
 import { useGetJob } from '@/hooks/jobs';
 import { RawJob } from '@/types/job-card';
 import { useEditPost } from '@/hooks/posts';
 import { Modal } from '@/components/dashboard/modal';
 import Loading from '@/app/loading';
+import { useDraftJob } from '@/hooks/jobs';
 
 export default function JobDetails({
   initialData,
@@ -51,13 +47,12 @@ export default function JobDetails({
   const job = rawJob as RawJob;
   const { editpost, isPending: isEditing } = useEditPost(id!);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [isDrafting, setIsDrafting] = useState(false);
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
+  const { draftJob, isPending: isDrafting } = useDraftJob();
   const [selectedSkills, setSelectedSkills] = useState<
     { id: string; name: string }[]
   >((initialData.skills as { id: string; name: string }[]) ?? []);
@@ -72,7 +67,7 @@ export default function JobDetails({
     getValues,
     reset,
     formState: { errors },
-  } = useForm<JobDetailsFormData>({
+  } = useForm({
     resolver: zodResolver(jobDetailsSchema),
     defaultValues: {
       category_id: initialData.category_id,
@@ -111,7 +106,7 @@ export default function JobDetails({
     setSelectedSkills(selectedSkills.filter((s) => s.id !== skillToRemove.id));
   };
 
-  const onSubmit = (data: JobDetailsFormData) => {
+  const onSubmit = (data: Partial<JobFormData2>) => {
     const formDataUpdate: Partial<JobFormData2> = {
       category_id: data.category_id,
       title: data.title,
@@ -126,12 +121,10 @@ export default function JobDetails({
     onNext?.();
   };
 
-  const handleSaveDraft = async () => {
-    setIsDrafting(true);
+  const handleSaveDraft = () => {
     const data = getValues();
-    if (!data.title) {
-      toast.error('Title is required');
-      setIsDrafting(false);
+    if (!data.title || !data.description) {
+      toast.error('Title and description is required');
       return;
     }
     const formData = {
@@ -140,31 +133,17 @@ export default function JobDetails({
       title: data.title,
       description: data.description,
       skills: data.skills,
-      price: data.price,
+      price: data.price as number,
       acceptance_criteria: data.acceptance_criteria,
       job_level_id: data.job_level_id,
     };
 
-    try {
-      const response = await draftPost(formData);
-
-      if (response && !response?.success) {
-        toast.error(response.message);
-        return;
-      }
-
-      toast.success('Your job has been saved to draft successfully');
-      queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
-
-      reset();
-      router.push('/company/dashboard');
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    } finally {
-      setIsDrafting(false);
-    }
+    draftJob(formData, {
+      onSuccess: () => {
+        reset();
+        router.push('/company/jobs/drafts');
+      },
+    });
   };
 
   const handleEditDraft = async () => {
@@ -179,7 +158,7 @@ export default function JobDetails({
       title: data.title,
       description: data.description,
       skills: data.skills,
-      price: data.price,
+      price: data.price as number,
       job_level_id: data.job_level_id,
       ...(data.acceptance_criteria &&
         data.acceptance_criteria.length >= 50 && {

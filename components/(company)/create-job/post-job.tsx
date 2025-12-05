@@ -22,7 +22,7 @@ const getInitialFormData = (data: JobFormData | undefined): JobFormData2 => ({
   track_id: data?.track_id ?? '',
   job_type_id: data?.job_type_id ?? '',
   work_mode_id: data?.work_mode_id ?? '',
-  price: data?.price ?? 0,
+  price: data?.price,
   state_id: data?.state_id ?? '',
   country_id: data?.country_id ?? '',
   company_id: data?.company_id ?? '',

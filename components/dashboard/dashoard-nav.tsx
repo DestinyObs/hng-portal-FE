@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 import { DasbhoardNavLinkProps } from '@/types/dashboard';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function DashboardNav({
   tabs,
@@ -12,7 +12,10 @@ export default function DashboardNav({
   tabs: DasbhoardNavLinkProps[];
 }) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<DasbhoardNavLinkProps>(tabs[0]);
+  const pathname = usePathname();
+
+  const activeView = tabs.find((tab) => pathname.includes(tab.value));
+  const [activeTab, setActiveTab] = useState<DasbhoardNavLinkProps>(activeView || tabs[0]);
 
   //on change tab
   const onTabChange = (tab: DasbhoardNavLinkProps) => {
