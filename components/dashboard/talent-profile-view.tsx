@@ -80,7 +80,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
                 <span className="font-semibold">Work Experience: </span>
                 {profile?.bio?.experience
                   ? `${profile?.bio?.experience}`
-                  : ' Years of experience: - '}
+                  : ' - '}
               </p>
 
               {/* <div className="flex items-center gap-2 mt-2">
@@ -96,7 +96,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
             </div>
 
             <div className="text-sm text-gray-700 text-left md:text-right">
-              <p>
+              {/* <p>
                 Resume:{' '}
                 <Link
                   href="/settings/portfolio"
@@ -104,7 +104,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
                 >
                   Link
                 </Link>
-              </p>
+              </p> */}
               {/* <p>
                 Resume:{' '}
                 <a
@@ -172,7 +172,7 @@ export function TalentProfileView({ profile, tracks }: TalentProfileViewProps) {
                   return (
                     <div
                       key={job.id}
-                      className="pb-2 border-b border-gray-200 last:border-b-0 last:pb-0"
+                      className="pb-2 border-b border-gray-75 last:border-b-0 last:pb-0"
                     >
                       <p className="text-sm text-gray-500 mb-1">{dateRange}</p>
                       <p className="text-base font-semibold text-black">

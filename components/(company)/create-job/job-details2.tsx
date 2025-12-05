@@ -83,6 +83,7 @@ export default function JobDetailsStep2({
     mode: 'onChange',
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const states = State.getStatesOfCountry(watch('country') || '');
 
   const onSubmit = async (data: JobDetailsStep2FormData) => {
@@ -131,11 +132,12 @@ export default function JobDetailsStep2({
       skills: (initialData.skills as string[]) || [],
     };
 
-  draftJob(formData, {
-    onSuccess: ()=>{
-      reset();
-      router.push('/company/jobs/drafts')}
-  });
+    draftJob(formData, {
+      onSuccess: () => {
+        reset();
+        router.push('/company/jobs/drafts');
+      },
+    });
   };
 
   const handleEditDraft = async () => {
@@ -242,6 +244,7 @@ export default function JobDetailsStep2({
                 </Select>
               )}
             />
+            {}
             {errors.job_type_id && (
               <p className="text-xs text-red-500">
                 {errors.job_type_id.message}
