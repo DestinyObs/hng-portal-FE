@@ -33,10 +33,17 @@ export default function CompanyDashboardPage() {
   });
 
   //Get all jobs
+  // const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
+  //   id,
+  // );
+  // const jobs = allJobs?.data;
+
   const { data: allJobs, isLoading } = useGetAllJobs<{ data: JobCardProps[] }>(
     id,
   );
-  const jobs = allJobs?.data;
+  const jobs = allJobs?.data.filter(
+    (job) => job.status?.toLowerCase() === 'active',
+  );
 
   return (
     <div className="flex flex-col gap-4 sm:gap-6">

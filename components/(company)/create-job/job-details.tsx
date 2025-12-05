@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { X } from 'lucide-react';
+import { OctagonAlert, X } from 'lucide-react';
 import type { JobDetailsProps, JobFormData2 } from '@/types/create-new-job';
 import TextEditor from '@/components/shared/ui/text-editor';
 import Input from '@/components/ui/input';
@@ -30,6 +30,11 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { draftPost } from '@/api/actions/create-post';
 import { useAuthStore } from '@/store/auth';
+import { useGetJob } from '@/hooks/jobs';
+import { RawJob } from '@/types/job-card';
+import { useEditPost } from '@/hooks/posts';
+import { Modal } from '@/components/dashboard/modal';
+import Loading from '@/app/loading';
 
 export default function JobDetails({
   initialData,
@@ -37,9 +42,16 @@ export default function JobDetails({
   onNext,
   id,
 }: JobDetailsProps) {
+  const { user } = useAuthStore();
+  const { data: rawJob, isPending: isfetching } = useGetJob(
+    user?.company?.id,
+    id as string,
+  );
+  const job = rawJob as RawJob;
+  const { editpost, isPending: isEditing } = useEditPost(id!);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [isDrafting, setIsDrafting] = useState(false);
   const router = useRouter();
-  const { user } = useAuthStore();
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
@@ -116,6 +128,7 @@ export default function JobDetails({
     const data = getValues();
     if (!data.title) {
       toast.error('Title is required');
+      setIsDrafting(false);
       return;
     }
     const formData = {
@@ -148,6 +161,35 @@ export default function JobDetails({
       setIsDrafting(false);
     }
   };
+
+  const handleEditDraft = async () => {
+    const data = getValues();
+    if (!data.title) {
+      toast.error('Title is required');
+      return;
+    }
+    const formData = {
+      company_id: user?.company?.id || '',
+      category_id: data.category_id || '',
+      title: data.title,
+      description: data.description,
+      skills: data.skills,
+      price: data.price,
+      acceptance_criteria: data.acceptance_criteria,
+      job_level_id: data.job_level_id,
+      state: '',
+      country: '',
+      track_id: '',
+      job_type_id: '',
+      work_mode_id: '',
+    };
+
+    if (formData) {
+      editpost(formData);
+    }
+    setShowEditModal(false);
+  };
+  if (isfetching) return <Loading />;
 
   return (
     <div className="space-y-6 ">
@@ -409,17 +451,33 @@ export default function JobDetails({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="">
-                <Button
-                  variant="outlineGray"
-                  onClick={handleSaveDraft}
-                  disabled={isDrafting}
-                  className="border-[#E7E7E7]"
-                  type="button"
-                >
-                  {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-                </Button>
-              </div>
+              {job.status === 'draft' ? (
+                <div className="">
+                  <Button
+                    variant="outlineGray"
+                    disabled={isDrafting || isEditing}
+                    onClick={() => {
+                      setShowEditModal(true);
+                    }}
+                    className="border-[#E7E7E7]"
+                    type="button"
+                  >
+                    {isEditing ? 'Saving...' : 'Save Draft'}
+                  </Button>
+                </div>
+              ) : (
+                <div className="">
+                  <Button
+                    variant="outlineGray"
+                    onClick={handleSaveDraft}
+                    disabled={isDrafting}
+                    className="border-[#E7E7E7]"
+                    type="button"
+                  >
+                    {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+                  </Button>
+                </div>
+              )}
 
               <div className="">
                 <Button
@@ -435,6 +493,28 @@ export default function JobDetails({
           </div>
         </CardContent>
       </Card>
+
+      {/* Edit Modal */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        title="Do you want to save the edited post?"
+        message="This job description will be updated."
+        icon={
+          <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#FEF0C7] rounded-full w-16 h-16">
+            {' '}
+            <OctagonAlert size={48} className="text-[#E3822A]" />
+          </div>
+        }
+        primaryButton={{
+          label: 'Save Edit',
+          onClick: handleEditDraft,
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: () => setShowEditModal(false),
+        }}
+      />
     </div>
   );
 }

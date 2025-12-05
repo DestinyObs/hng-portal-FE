@@ -33,6 +33,8 @@ import { useState } from 'react';
 import { useEditPost } from '@/hooks/posts';
 import { Modal } from '@/components/dashboard/modal';
 import { Country, State } from 'country-state-city';
+import { useGetJob } from '@/hooks/jobs';
+import { RawJob } from '@/types/job-card';
 
 interface JobDetailsStep2Props {
   initialData: Partial<JobPostPayload>;
@@ -47,12 +49,17 @@ export default function JobDetailsStep2({
   onPrev,
   id,
 }: JobDetailsStep2Props) {
+  const { user } = useAuthStore();
+  const { data: rawJob, isPending } = useGetJob(
+    user?.company?.id,
+    id as string,
+  );
+  const job = rawJob as RawJob;
   const router = useRouter();
   const [isDrafting, setIsDrafting] = useState(false);
   const { data: tracks, isLoading: tracksLoading } = useTracks();
   const { data: workModes, isLoading: workModesLoading } = useWorkModes();
   const { data: JOBTYPES, isLoading: jobTypesLoading } = useJobTypes();
-  const { user } = useAuthStore();
   const { setNewPost } = usePostStore();
   const { editpost } = useEditPost(id!);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -332,38 +339,73 @@ export default function JobDetailsStep2({
               Prev
             </Button>
           </div>
-          <div className="">
-            <Button
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={isDrafting || isSubmitting}
-              className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
-            >
-              {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-            </Button>
-          </div>
+          {job.status === 'draft' ? (
+            <div className="">
+              <Button
+                variant="outline"
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
+              >
+                Save Draft
+              </Button>
+            </div>
+          ) : (
+            <div className="">
+              <Button
+                variant="outline"
+                onClick={handleSaveDraft}
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 md:hidden inline-flex"
+              >
+                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <div className="">
-            <Button
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={isDrafting || isSubmitting}
-              className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
-            >
-              {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-            </Button>
-          </div>
+          {job.status === 'draft' ? (
+            <div className="">
+              <Button
+                variant="outline"
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
+              >
+                Save Draft
+              </Button>
+            </div>
+          ) : (
+            <div className="">
+              <Button
+                variant="outline"
+                onClick={handleSaveDraft}
+                disabled={isDrafting || isSubmitting}
+                className="text-tertiary-500 font-semibold border-0 hidden md:inline-flex"
+              >
+                {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+              </Button>
+            </div>
+          )}
 
-          <div className="">
-            <Button
-              disabled={isSubmitting}
-              className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
-            >
-              {isSubmitting ? 'loading' : id ? 'Save Edit' : 'Finish'}
-            </Button>
-          </div>
+          {job.status === 'draft' ? (
+            <div className="">
+              <Button
+                disabled={isSubmitting}
+                className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+              >
+                Finish
+              </Button>
+            </div>
+          ) : (
+            <div className="">
+              <Button
+                disabled={isSubmitting}
+                className="bg-[#00AEFF] hover:bg-[#0088cc] capitalize text-white"
+              >
+                {isSubmitting ? 'loading' : id ? 'Save Edit' : 'Finish'}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       {/* Edit Modal */}
