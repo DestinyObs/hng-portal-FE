@@ -46,7 +46,22 @@ export async function saveCompanyOnboarding(
       headers: {},
     });
 
-    return result as CompanyOnboardingResult;
+    // Map APIResponse structure to CompanyOnboardingResult
+    if (result.success) {
+      return {
+        success: true,
+        data: result.data,
+        message: result.message,
+      } as CompanyOnboardingResult;
+    } else {
+      // Map error response structure
+      return {
+        success: false,
+        message: result.message,
+        error: result.message,
+        details: result.errors ? { errors: result.errors } : undefined,
+      } as CompanyOnboardingResult;
+    }
   } catch (error) {
     return {
       success: false,

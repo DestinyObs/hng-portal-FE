@@ -8,7 +8,6 @@ import { useAuthStore } from '@/store/auth';
 import PlaceholderProfile from './placeholder-profile';
 import clsx from 'clsx';
 import { useGetProfileData } from '@/hooks/profile-settings';
-import { useEffect } from 'react';
 
 const DashboardSidebar = ({ className }: { className?: string }) => {
   const { user } = useAuthStore();
