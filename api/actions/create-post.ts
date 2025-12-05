@@ -150,7 +150,7 @@ export const draftPost = async (formData: JobDraftPayload) => {
 export const updatePost = async (
   companyId: string,
   jobId: string,
-  formData: JobPostPayload,
+  formData: JobDraftPayload,
 ) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/employer/company/${companyId}/jobs/${jobId}`;
 

@@ -16,7 +16,9 @@ export const useGetUserProfile = <T>(
   });
 };
 
-export const useUpdateUserProfile = <T, V = unknown>() => {
+export const useUpdateUserProfile = <T, V = unknown>(
+  onSuccessCallback?: () => void,
+) => {
   const queryClient = useQueryClient();
   const { mutate: updateProfile, isPending } = useMutation<T, Error, V>({
     mutationKey: ['update-user-profile'],
@@ -30,10 +32,14 @@ export const useUpdateUserProfile = <T, V = unknown>() => {
       });
       return res?.data as T;
     },
-    onSuccess: () => {
+    onSuccess: async (data) => {
+      console.log('Update successful, returned data:', data);
       toast.success('Profile updated successfully!');
-      queryClient.invalidateQueries({ queryKey: ['get-user-profile'] });
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      await queryClient.invalidateQueries({ queryKey: ['get-user-profile'] });
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
+      if (onSuccessCallback) {
+        onSuccessCallback();
+      }
     },
 
     onError: (error) => {
@@ -56,7 +62,9 @@ export const useGetCompanyProfile = <T>(
   });
 };
 
-export const useUpdateCompanyProfile = <T, V = unknown>() => {
+export const useUpdateCompanyProfile = <T, V = unknown>(
+  onSuccessCallback?: () => void,
+) => {
   const queryClient = useQueryClient();
 
   const { mutate: updateCompanyProfile, isPending } = useMutation<T, Error, V>({
@@ -72,9 +80,14 @@ export const useUpdateCompanyProfile = <T, V = unknown>() => {
       return res?.data as T;
     },
 
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Company profile updated successfully!');
-      queryClient.invalidateQueries({ queryKey: ['get-company-profile'] });
+      await queryClient.invalidateQueries({
+        queryKey: ['get-company-profile'],
+      });
+      if (onSuccessCallback) {
+        onSuccessCallback();
+      }
     },
 
     onError: (error) => {
