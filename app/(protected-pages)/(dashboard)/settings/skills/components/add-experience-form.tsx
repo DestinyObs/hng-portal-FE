@@ -322,7 +322,7 @@ export default function WorkExperienceForm({
             )}
           />
 
-          <div className="flex flex-row justify-end gap-4 pt-6 w-full">
+          <div className="flex flex-row justify-between gap-4 w-full items-center">
             <Button
               type="button"
               variant="outline"
@@ -333,14 +333,15 @@ export default function WorkExperienceForm({
                 }
               }}
               disabled={isSubmitting}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl"
+              className="flex-1 sm:flex-none px-4 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-lg transition-all duration-300 ease-in"
             >
               Cancel
             </Button>
             <Button
               type="submit"
+              variant={'ghost'}
               disabled={isSubmitting}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 sm:flex-none px-4 py-6 max-w-48 text-base font-medium text-[#00AEFF] hover:bg-blue-100 hover:text-primary-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 ease-in"
             >
               {isSubmitting
                 ? experience

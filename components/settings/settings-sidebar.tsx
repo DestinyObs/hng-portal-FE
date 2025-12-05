@@ -33,9 +33,9 @@ export default function SettingsSidebar() {
   };
 
   return (
-    <div className="w-full lg:w-[288px] pt-6 px-4 lg:px-0">
-      <div className="lg:hidden w-full relative z-40">
-        <div className="flex justify-center w-full">
+    <div className="w-full lg:w-[288px] lg:pt-6 px-4 lg:px-0">
+      <div className="lg:hidden w-full relative z-40 ">
+        <div className="flex  justify-end">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center gap-2 text-[#1A1A1A] text-lg font-bold transition-opacity hover:opacity-80"
@@ -66,24 +66,6 @@ export default function SettingsSidebar() {
           </div>
         )}
       </div>
-      {/*      <div className="lg:hidden w-full relative z-40 border">
-        <div className="flex overflow-x-scroll ">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className={`text-sm transition-colors ${
-                pathname === link.href
-                  ? 'bg-[#E0F2FE] text-[#00AEFF] font-bold'
-                  : 'text-[#5E5E5E] font-medium hover:bg-gray-50'
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
-      </div>*/}
 
       <Card className="hidden lg:block w-full bg-white shadow-sm border-none h-fit">
         <CardContent className="p-2">

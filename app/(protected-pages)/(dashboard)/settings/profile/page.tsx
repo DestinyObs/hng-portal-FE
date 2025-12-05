@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Country, State } from 'country-state-city';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input';
@@ -30,7 +29,6 @@ import {
 } from '@/components/ui/select';
 import Loading from '@/app/loading';
 import { toast } from 'sonner';
-
 import { useAuthStore } from '@/store/auth';
 import { useTracks } from '@/hooks/lookups';
 import {
@@ -40,9 +38,10 @@ import {
   useUpdateCompanyProfile,
 } from '@/hooks/profile';
 import { UserProfileData, CompanyProfileData } from '@/types/profile';
+import CountryStateSelect from '@/components/shared/ui/country-state-select';
 
 const talentDefaultData = {
-  track_id: '',
+  current_role: '',
   bio: '',
   experience: '',
   country: '',
@@ -68,7 +67,7 @@ const sharedSchema = {
 const talentSchema = z.object({
   ...sharedSchema,
   role: z.literal('talent'),
-  track_id: z.string().optional(),
+  current_role: z.string().optional(),
   bio: z.string().optional(),
   experience: z.string().optional(),
   country: z.string().optional(),
@@ -80,16 +79,16 @@ const talentSchema = z.object({
 const companySchema = z.object({
   ...sharedSchema,
   role: z.literal('employer'),
-  industry: z.string().min(1, 'Industry is required'),
+  industry: z.string().optional(),
   tagline: z.string().optional(),
-  bio: z.string().min(1, 'Company description is required'),
-  value_proposition: z.string().min(1, 'Value proposition is required'),
-  why_work_here: z.string().min(1, 'This section is required'),
+  bio: z.string().optional(),
+  value_proposition: z.string().optional(),
+  why_work_here: z.string().optional(),
   company_size: z
     .string()
-    .min(1, 'Company size is required')
-    .regex(
-      /^\d+(-\d+)?$/,
+    .optional()
+    .refine(
+      (val) => !val || val === '' || /^\d+(-\d+)?$/.test(val),
       'Must be a number (e.g., 50) or a range (e.g., 100-500)',
     ),
   country: z.string().optional(),
@@ -167,9 +166,6 @@ export default function ProfilePage() {
       };
       form.reset(resetData);
     } else if (!isCompany && talentProfile) {
-      const trackId = talentProfile.bio?.track_id
-        ? String(talentProfile.bio.track_id)
-        : '';
       const resetData = {
         role: 'talent' as const,
         photo_url:
@@ -178,12 +174,12 @@ export default function ProfilePage() {
           user?.photo_url ||
           '',
         // Talent Data
-        track_id: trackId,
+        current_role: talentProfile.bio?.current_role,
         bio: talentProfile.bio?.bio || '',
         experience: talentProfile.bio?.experience || '',
         country: talentProfile.bio?.country || '',
         state: talentProfile.bio?.state || '',
-        availability: talentProfile.bio?.status || '',
+        availability: talentProfile.bio?.available_status || '',
         jobTypes: talentProfile.bio?.job_type_preference
           ? talentProfile.bio.job_type_preference
               .split(',')
@@ -193,7 +189,6 @@ export default function ProfilePage() {
       form.reset(resetData);
     }
   }, [talentProfile, companyProfile, isCompany, form, user, tracks]);
-
   const onSubmit = (values: FormValues) => {
     try {
       const formData = new FormData();
@@ -204,7 +199,7 @@ export default function ProfilePage() {
             why_work_here: 'why_talents_should_work_with_us',
           }
         : {
-            availability: 'status',
+            availability: 'available_status',
             jobTypes: 'job_type_preference',
           };
 
@@ -221,10 +216,6 @@ export default function ProfilePage() {
           }
         }
       });
-      console.log('FormData entries:');
-      for (const pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-      }
 
       if (imageFile) {
         formData.append(isCompany ? 'logo' : 'profile_image', imageFile);
@@ -240,8 +231,6 @@ export default function ProfilePage() {
     }
   };
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const selectedCountry = form.watch('country');
   const handleCancel = () => {
     form.reset();
   };
@@ -253,7 +242,7 @@ export default function ProfilePage() {
     onChange,
     placeholder,
   }: {
-    value: string;
+    value: string | undefined;
     onChange: (val: string) => void;
     placeholder: string;
   }) => {
@@ -469,7 +458,7 @@ export default function ProfilePage() {
                         </FormLabel>
                         <FormControl>
                           <AutoListEditor
-                            value={field.value}
+                            value={field.value ?? undefined}
                             onChange={field.onChange}
                             placeholder="List your value propositions..."
                           />
@@ -488,7 +477,7 @@ export default function ProfilePage() {
                         </FormLabel>
                         <FormControl>
                           <AutoListEditor
-                            value={field.value}
+                            value={field.value ?? undefined}
                             onChange={field.onChange}
                             placeholder="List reasons to work here..."
                           />
@@ -530,77 +519,11 @@ export default function ProfilePage() {
                     )}
                   />
                   <div className="flex gap-6 w-full">
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">Country</label>
-                      <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`company-country-${field.value}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select country" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {Country.getAllCountries().map((c) => (
-                                    <SelectItem
-                                      key={c.isoCode}
-                                      value={c.isoCode}
-                                    >
-                                      {c.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">State</label>
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`company-state-${field.value}-${selectedCountry}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                disabled={!selectedCountry}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select state" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {State.getStatesOfCountry(
-                                    form.getValues('country') || '',
-                                  ).map((s) => (
-                                    <SelectItem
-                                      key={s.isoCode}
-                                      value={s.isoCode}
-                                    >
-                                      {s.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    <CountryStateSelect
+                      control={form.control}
+                      countryName="country"
+                      stateName="state"
+                    />
                   </div>
                 </>
               )}
@@ -610,30 +533,18 @@ export default function ProfilePage() {
                 <>
                   <FormField
                     control={form.control}
-                    name="track_id"
+                    name="current_role"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel className="text-sm text-[#1A1A1A]">
                           Professional Title
                         </FormLabel>
                         <FormControl>
-                          <Select
-                            key={`track-${field.value}`}
-                            onValueChange={field.onChange}
-                            value={field.value}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]">
-                              <SelectValue placeholder="Choose a track" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {tracks?.map((track) => (
-                                <SelectItem key={track.id} value={track.id}>
-                                  {track.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <Input
+                            placeholder="Current Role e.g. Frontend Developer"
+                            {...field}
+                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -681,77 +592,11 @@ export default function ProfilePage() {
                   />
 
                   <div className="flex gap-6 w-full">
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">Country</label>
-                      <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`talent-country-${field.value}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select country" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {Country.getAllCountries().map((c) => (
-                                    <SelectItem
-                                      key={c.isoCode}
-                                      value={c.isoCode}
-                                    >
-                                      {c.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">State</label>
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`talent-state-${field.value}-${selectedCountry}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                disabled={!selectedCountry}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select state" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {State.getStatesOfCountry(
-                                    selectedCountry || '',
-                                  ).map((s) => (
-                                    <SelectItem
-                                      key={s.isoCode}
-                                      value={s.isoCode}
-                                    >
-                                      {s.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    <CountryStateSelect
+                      control={form.control}
+                      countryName="country"
+                      stateName="state"
+                    />
                   </div>
 
                   <div className="flex flex-col md:flex-row gap-6 w-full pt-2">
@@ -838,14 +683,14 @@ export default function ProfilePage() {
                   variant="outline"
                   onClick={handleCancel}
                   disabled={isPending || isCompanyPending}
-                  className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl"
+                  className="flex-1 sm:flex-none px-4 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-lg transition-all duration-300 ease-in"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={isPending || isCompanyPending}
-                  className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl"
+                  className="flex-1 sm:flex-none px-4 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-lg transition-all duration-300 ease-in"
                 >
                   {isPending || isCompanyPending ? 'Saving...' : 'Save Changes'}
                 </Button>

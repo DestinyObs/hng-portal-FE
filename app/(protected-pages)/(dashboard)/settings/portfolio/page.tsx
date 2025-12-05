@@ -132,7 +132,7 @@ export default function PortfolioPage() {
             <h4 className="text-base font-medium text-[#1A1A1A]">Projects</h4>
             <Button
               variant="outline"
-              className="w-auto text-[#181818] border-[#E8E8E8] gap-1"
+              className="w-auto text-[#181818] border-[#E8E8E8] gap-1 px-4 py-6 transition-all duration-300 ease-in"
               onClick={handleOpenModal}
             >
               <Plus className="w-3 h-3" /> Add Project
