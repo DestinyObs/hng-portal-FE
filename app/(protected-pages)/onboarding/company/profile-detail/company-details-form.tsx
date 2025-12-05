@@ -92,7 +92,6 @@ export default function CompanyDetailsForm() {
     }
   };
 
-
   return (
     <Form {...form}>
       <form
@@ -122,21 +121,21 @@ export default function CompanyDetailsForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="finance">Finance</SelectItem>
-                  <SelectItem value="creative-design">
+                  <SelectItem value="Finance">Finance</SelectItem>
+                  <SelectItem value="Creative-Design">
                     Creative Design
                   </SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
-                  <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                  <SelectItem value="hr-talent">
+                  <SelectItem value="Education">Education</SelectItem>
+                  <SelectItem value="Healthcare">Healthcare</SelectItem>
+                  <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+                  <SelectItem value="Hr-Talent">
                     HR & Talent Management
                   </SelectItem>
-                  <SelectItem value="real-estate">Real Estate</SelectItem>
-                  <SelectItem value="logistics">
+                  <SelectItem value="Real-Estate">Real Estate</SelectItem>
+                  <SelectItem value="Logistics">
                     Logistics & Transportation
                   </SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage className="animate-in slide-in-from-top-1 duration-200" />

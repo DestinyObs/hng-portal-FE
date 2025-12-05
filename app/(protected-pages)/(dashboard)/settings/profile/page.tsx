@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
 import TextEditor from '@/components/shared/ui/text-editor';
 import {
   Form,
@@ -100,26 +100,33 @@ const formSchema = z.discriminatedUnion('role', [talentSchema, companySchema]);
 type FormValues = z.infer<typeof formSchema>;
 
 export default function ProfilePage() {
+  const router = useRouter();
   const { user } = useAuthStore();
   const isCompany = user?.current_role === 'employer';
   const { data: talentProfile, isLoading: talentLoading } =
     useGetUserProfile<UserProfileData>(!isCompany);
   const { data: companyProfile, isLoading: companyLoading } =
     useGetCompanyProfile<CompanyProfileData>(isCompany);
-  const { updateProfile, isPending } = useUpdateUserProfile();
+  const handleRedirectToProfile = () => {
+    router.push('/profile-view');
+  };
+  const { updateProfile, isPending } = useUpdateUserProfile(
+    handleRedirectToProfile,
+  );
   const { updateCompanyProfile, isPending: isCompanyPending } =
-    useUpdateCompanyProfile();
+    useUpdateCompanyProfile(handleRedirectToProfile);
   const { data: tracks, isLoading: tracksLoading } = useTracks(!isCompany);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const isLoading =
     (isCompany ? companyLoading : talentLoading) ||
     (!isCompany && tracksLoading);
-  // const profile = isCompany ? companyProfile : talentProfile;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      industry: '',
+      company_size: '',
       role: (user?.current_role as 'talent' | 'employer') || 'talent',
       photo_url: '',
       ...(isCompany ? companyDefaultData : talentDefaultData),
@@ -128,7 +135,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (isCompany && companyProfile) {
-      form.reset({
+      const resetData = {
         role: 'employer' as const,
         photo_url: companyProfile.logo_url || user?.photo_url || '',
         industry: companyProfile.industry || '',
@@ -139,9 +146,13 @@ export default function ProfilePage() {
         company_size: companyProfile.company_size || '',
         country: companyProfile.country || '',
         state: companyProfile.state || '',
-      });
+      };
+      form.reset(resetData);
     } else if (!isCompany && talentProfile) {
-      form.reset({
+      const trackId = talentProfile.bio?.track_id
+        ? String(talentProfile.bio.track_id)
+        : '';
+      const resetData = {
         role: 'talent' as const,
         photo_url:
           talentProfile.photo_url ||
@@ -149,18 +160,21 @@ export default function ProfilePage() {
           user?.photo_url ||
           '',
         // Talent Data
-        track_id: talentProfile.bio?.track_id || '',
+        track_id: trackId,
         bio: talentProfile.bio?.bio || '',
         experience: talentProfile.bio?.experience || '',
         country: talentProfile.bio?.country || '',
         state: talentProfile.bio?.state || '',
         availability: talentProfile.bio?.status || '',
         jobTypes: talentProfile.bio?.job_type_preference
-          ? talentProfile.bio.job_type_preference.split(',')
+          ? talentProfile.bio.job_type_preference
+              .split(',')
+              .map((t) => t.trim())
           : [],
-      });
+      };
+      form.reset(resetData);
     }
-  }, [talentProfile, companyProfile, isCompany, form, user]);
+  }, [talentProfile, companyProfile, isCompany, form, user, tracks]);
 
   const onSubmit = (values: FormValues) => {
     try {
@@ -171,19 +185,28 @@ export default function ProfilePage() {
             bio: 'description',
             why_work_here: 'why_talents_should_work_with_us',
           }
-        : {};
+        : {
+            availability: 'status',
+            jobTypes: 'job_type_preference',
+          };
 
       Object.entries(values).forEach(([key, value]) => {
-        if (key !== 'photo_url' && key !== 'role' && value) {
+        if (key !== 'photo_url' && key !== 'role') {
           const fieldName = fieldMapping[key] || key;
 
           if (Array.isArray(value)) {
-            formData.append(fieldName, value.join(','));
-          } else {
+            if (value.length > 0) {
+              formData.append(fieldName, value.join(','));
+            }
+          } else if (value !== null && value !== undefined && value !== '') {
             formData.append(fieldName, String(value));
           }
         }
       });
+      console.log('FormData entries:');
+      for (const pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
 
       if (imageFile) {
         formData.append(isCompany ? 'logo' : 'profile_image', imageFile);
@@ -194,7 +217,7 @@ export default function ProfilePage() {
       } else {
         updateProfile(formData);
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to submit form. Please try again.');
     }
   };
@@ -338,11 +361,41 @@ export default function ProfilePage() {
                           Industry
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="e.g. Fintech, Healthcare"
-                            {...field}
-                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
-                          />
+                          <Select
+                            key={`industry-${field.value}`}
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]">
+                              <SelectValue placeholder="Select industry" />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[200px]">
+                              <SelectItem value="Finance">Finance</SelectItem>
+                              <SelectItem value="Creative-Design">
+                                Creative Design
+                              </SelectItem>
+                              <SelectItem value="Education">
+                                Education
+                              </SelectItem>
+                              <SelectItem value="Healthcare">
+                                Healthcare
+                              </SelectItem>
+                              <SelectItem value="Manufacturing">
+                                Manufacturing
+                              </SelectItem>
+                              <SelectItem value="Hr-Talent">
+                                HR & Talent Management
+                              </SelectItem>
+                              <SelectItem value="Real-Estate">
+                                Real Estate
+                              </SelectItem>
+                              <SelectItem value="Logistics">
+                                Logistics & Transportation
+                              </SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -434,11 +487,24 @@ export default function ProfilePage() {
                           Company size
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="11-50"
-                            {...field}
-                            className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]"
-                          />
+                          <Select
+                            key={`company-size-${field.value}`}
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]">
+                              <SelectValue placeholder="Select company size" />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[200px]">
+                              <SelectItem value="1-10">1-10</SelectItem>
+                              <SelectItem value="11-20">11-20</SelectItem>
+                              <SelectItem value="21-49">21-49</SelectItem>
+                              <SelectItem value="50-100">50-100</SelectItem>
+                              <SelectItem value="101-500">101-500</SelectItem>
+                              <SelectItem value="501-1000">501-1000</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -454,8 +520,10 @@ export default function ProfilePage() {
                           <FormItem>
                             <FormControl>
                               <Select
+                                key={`company-country-${field.value}`}
                                 value={field.value}
                                 onValueChange={field.onChange}
+                                defaultValue={field.value}
                               >
                                 <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
                                   <SelectValue placeholder="Select country" />
@@ -486,8 +554,10 @@ export default function ProfilePage() {
                           <FormItem>
                             <FormControl>
                               <Select
+                                key={`company-state-${field.value}-${selectedCountry}`}
                                 value={field.value}
                                 onValueChange={field.onChange}
+                                defaultValue={field.value}
                                 disabled={!selectedCountry}
                               >
                                 <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
@@ -529,7 +599,9 @@ export default function ProfilePage() {
                         </FormLabel>
                         <FormControl>
                           <Select
+                            key={`track-${field.value}`}
                             onValueChange={field.onChange}
+                            value={field.value}
                             defaultValue={field.value}
                           >
                             <SelectTrigger className="mt-2 w-full p-3 rounded-lg border border-[#E7E8E9]">
@@ -599,8 +671,10 @@ export default function ProfilePage() {
                           <FormItem>
                             <FormControl>
                               <Select
+                                key={`talent-country-${field.value}`}
                                 value={field.value}
                                 onValueChange={field.onChange}
+                                defaultValue={field.value}
                               >
                                 <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
                                   <SelectValue placeholder="Select country" />
@@ -631,8 +705,10 @@ export default function ProfilePage() {
                           <FormItem>
                             <FormControl>
                               <Select
+                                key={`talent-state-${field.value}-${selectedCountry}`}
                                 value={field.value}
                                 onValueChange={field.onChange}
+                                defaultValue={field.value}
                                 disabled={!selectedCountry}
                               >
                                 <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
@@ -670,7 +746,9 @@ export default function ProfilePage() {
                           </FormLabel>
                           <FormControl>
                             <RadioGroup
+                              key={`availability-${field.value}`}
                               onValueChange={field.onChange}
+                              value={field.value}
                               defaultValue={field.value}
                               className="space-y-3 mt-4"
                             >
@@ -705,35 +783,27 @@ export default function ProfilePage() {
                             Job Type Preference
                           </FormLabel>
                           <FormControl>
-                            <div className="space-y-3 mt-4">
+                            <RadioGroup
+                              key={`jobtype-${field.value?.[0]}`}
+                              onValueChange={(value) => field.onChange([value])}
+                              value={field.value?.[0] || ''}
+                              defaultValue={field.value?.[0] || ''}
+                              className="space-y-3 mt-4"
+                            >
                               {['remote', 'hybrid', 'onsite'].map((item) => (
                                 <FormItem
                                   key={item}
                                   className="flex items-center gap-3 space-y-0"
                                 >
                                   <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                              ...(field.value || []),
-                                              item,
-                                            ])
-                                          : field.onChange(
-                                              (field.value || []).filter(
-                                                (value) => value !== item,
-                                              ),
-                                            );
-                                      }}
-                                    />
+                                    <RadioGroupItem value={item} />
                                   </FormControl>
                                   <FormLabel className="text-black text-sm font-medium cursor-pointer capitalize">
                                     {item}
                                   </FormLabel>
                                 </FormItem>
                               ))}
-                            </div>
+                            </RadioGroup>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
