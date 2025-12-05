@@ -1,8 +1,11 @@
-'use client';
+// 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
-import { columns, Applicant } from '@/components/shared/applicants-column';
+import {
+  createColumns,
+  Applicant,
+} from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
 import { Job } from '@/types/view-job-applicants';
 import { view_applicants_per_job } from '@/api/actions/view-applicants';
@@ -241,7 +244,10 @@ export default function CandidateList({
           </div>
         ) : (
           <section className="w-72 md:w-170 lg:w-full">
-            <DataTable columns={columns} data={filteredData as Applicant[]} />
+            <DataTable
+              columns={createColumns(company_id)}
+              data={filteredData as Applicant[]}
+            />
           </section>
         )}
       </div>

@@ -2,20 +2,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
-import { columns, Applicant } from '@/components/shared/applicants-column';
+import {
+  createColumns,
+  Applicant,
+} from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
-import { Job } from '@/types/view-job-applicants';
-import { view_applicants_per_job } from '@/api/actions/view-applicants';
+import { ViewJobApplications } from '@/types/view-job-applicants';
+import { view_applicants_per_company } from '@/api/actions/view-applicants';
 
 interface AllApplicantsProps {
   company_id: string;
-  job_id: string;
 }
 
-export default function AllApplicants({
-  company_id,
-  job_id,
-}: AllApplicantsProps) {
+export default function AllApplicants({ company_id }: AllApplicantsProps) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedRole, setSelectedRole] = React.useState<string>('');
@@ -23,25 +22,38 @@ export default function AllApplicants({
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
   // New states for data fetching
-  const [applicationsData, setApplicationsData] = useState<Job | null>(null);
+  const [applicationsData, setApplicationsData] =
+    useState<ViewJobApplications | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const statuses = ['Applied', 'Shortlisted', 'Rejected'];
+  const statuses = [
+    'Applied',
+    'Shortlisted',
+    'Rejected',
+    'Hired',
+    'Interview',
+    'In Review',
+  ];
 
   const statusTextStyles: Record<string, string> = {
-    Applied: 'text-tertiary-200 bg-tertiary-50 ',
+    Applied: 'text-tertiary-200 bg-tertiary-50',
     Shortlisted: 'text-[#3730A3] bg-light-blue',
     Rejected: 'text-[#EF4444] bg-[#FEE2E2]',
+    Hired: 'text-green-700 bg-green-100',
+    Interview: 'text-blue-700 bg-blue-100',
+    'In Review': 'text-yellow-700 bg-yellow-100',
   };
 
   const statusDotStyles: Record<string, string> = {
     Applied: 'bg-tertiary-200',
     Shortlisted: 'bg-[#3730A3]',
     Rejected: 'bg-[#EF4444]',
+    Hired: 'bg-green-700',
+    Interview: 'bg-blue-700',
+    'In Review': 'bg-yellow-700',
   };
 
-  // Fetch applicants data
   // Fetch applicants data
   useEffect(() => {
     const fetchApplicants = async () => {
@@ -49,7 +61,7 @@ export default function AllApplicants({
         setIsLoading(true);
         setError(null);
 
-        const response = await view_applicants_per_job(company_id, job_id);
+        const response = await view_applicants_per_company(company_id);
 
         if (response.success && response.data) {
           setApplicationsData(response.data);
@@ -67,16 +79,23 @@ export default function AllApplicants({
     if (company_id) {
       fetchApplicants();
     }
-  }, [company_id, job_id]);
+  }, [company_id]);
 
   // Transform API data to match table format
   const transformedData = React.useMemo(() => {
-    return applicationsData?.applications.map((application) => ({
+    if (
+      !applicationsData?.applications ||
+      !Array.isArray(applicationsData.applications)
+    ) {
+      return [];
+    }
+
+    return applicationsData.applications.map((application) => ({
       id: application.id,
       job_id: application.job_id,
       name: `${application.user.firstname} ${application.user.lastname}`,
       email: application.user.email,
-      applied_role: applicationsData.title,
+      applied_role: application.job.title,
       user_id: application.user_id,
       status:
         application.status === 'pending'
@@ -252,7 +271,10 @@ export default function AllApplicants({
           </div>
         ) : (
           <section className="w-72 md:w-170 lg:w-full">
-            <DataTable columns={columns} data={filteredData as Applicant[]} />
+            <DataTable
+              columns={createColumns(company_id)}
+              data={filteredData as Applicant[]}
+            />
           </section>
         )}
       </div>
