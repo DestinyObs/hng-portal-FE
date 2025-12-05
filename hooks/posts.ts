@@ -47,6 +47,10 @@ export const useEditPost = (jobId: string) => {
       }
       toast.success('Job updated successfully!');
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
+      queryClient.invalidateQueries({
+        queryKey: ['get-job', companyId, jobId],
+      });
+
       router.push('/company/dashboard');
     },
     onError: (error: Error) => {
