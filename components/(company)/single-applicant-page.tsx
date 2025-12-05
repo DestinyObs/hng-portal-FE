@@ -1,17 +1,11 @@
 'use client';
 
-import {
-  change_applicant_status,
-  view_applicant_details,
-} from '@/api/actions/view-applicants';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
-import { Card, CardContent } from '../ui/card';
-import Loading from '@/app/loading';
-import { Button } from '../ui/button';
-import { toast } from 'sonner';
-import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { view_applicant_details } from '@/api/actions/view-applicants';
+import ApplicantHeader from './applicant-details/applicant-header';
+import ApplicantContent from './applicant-details/applicant-content';
+import ApplicantStatusPanel from './applicant-details/applicant-status-panel';
 
 type Props = {
   company_id: string;
@@ -22,216 +16,56 @@ type Props = {
 const SingleApplicantView = ({ company_id, job_id, applicant_id }: Props) => {
   const router = useRouter();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['single_applicant_view'],
-    queryFn: async () =>
-      await view_applicant_details(company_id, job_id, applicant_id),
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['single_applicant_view', applicant_id],
+    queryFn: () => view_applicant_details(company_id, job_id, applicant_id),
   });
 
-  const { mutate: shortListCandidate, isPending: addingToShortlist } =
-    useMutation({
-      mutationKey: ['change_applicant_status'],
-      mutationFn: change_applicant_status,
-      onSuccess: (data) => {
-        if (data.success) {
-          toast.success(
-            'This application has been added to your candidate list',
-          );
-        }
-      },
-      onError: () => {
-        toast.error('Failed to add applicant to list, please try again');
-      },
-    });
-  const { mutate: rejectCandidate, isPending: rejectingCandidate } =
-    useMutation({
-      mutationKey: ['change_applicant_status'],
-      mutationFn: change_applicant_status,
-      onSuccess: (data) => {
-        if (data.success) {
-          toast.success('This application has been rejected');
-        }
-      },
-      onError: () => {
-        toast.error('An error occured, please try again');
-      },
-    });
+  const applicant = data?.data ?? null;
 
-  const add_to_candidate_list = () => {
-    shortListCandidate({
-      company_id,
-      job_id,
-      applicant_id,
-      status: 'shortlisted',
-    });
-  };
+  const renderStateScreen = (message: string, color: string) => (
+    <div className="w-full min-h-screen flex items-center justify-center text-center px-4">
+      <div>
+        <p className={`mb-4 ${color}`}>{message}</p>
+        <button
+          onClick={() => router.back()}
+          className="px-4 py-2 bg-primary-300 text-white rounded-lg hover:bg-primary-400"
+        >
+          Go Back
+        </button>
+      </div>
+    </div>
+  );
 
-  const reject_application = () => {
-    rejectCandidate({ company_id, job_id, applicant_id, status: 'rejected' });
-  };
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading)
+    return renderStateScreen('Loading applicant details...', 'text-gray-600');
+  if (error)
+    return renderStateScreen('Error loading applicant', 'text-red-500');
+  if (!applicant)
+    return renderStateScreen('No applicant data found', 'text-gray-600');
 
   return (
-    <>
-      <div
-        className="flex items-center gap-2 cursor-pointer px-4 md:px-18 xl:px-44"
-        onClick={() => router.back()}
-      >
-        <aside className="border border-black/50 shadow-md rounded-md size-5 flex items-center justify-center">
-          <ChevronLeft size={14} />
-        </aside>
-        <p className="text-sm font-medium">Back</p>
-      </div>
-      <div className="w-full flex flex-col gap-9 p-4 px-4 md:px-18 xl:px-44 md:p-8 lg:flex-row">
-        <div className="w-full max-w-4xl mx-auto">
-          {/* Banner */}
-          <div className="relative h-44 w-full rounded-t-xl bg-primary-300">
-            <div className="absolute -bottom-10 left-6 h-32 w-32 rounded-full shadow-md overflow-hidden">
-              <Image
-                src={data?.data.user.photo_url || ''}
-                alt="Applicant Image"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
+    <div className="w-full min-h-screen bg-gray-50">
+      <ApplicantHeader applicant={applicant} onBack={() => router.back()} />
 
-          {/* Main Card */}
-          <Card className="rounded-t-none">
-            <CardContent className="p-6 pt-8">
-              {/* HEADER */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
-                <div>
-                  <h2 className="text-2xl font-semibold text-black">
-                    {`${data?.data.user.firstname} ${data?.data.user.othername || ''} ${data?.data.user.lastname}`}
-                  </h2>
-                  <p className="text-base text-black">{data?.data.job.title}</p>
-
-                  <div className="flex flex-col gap-1 mt-1">
-                    <p className="text-sm text-gray-600">
-                      {data?.data.user.address_id}
-                    </p>
-                  </div>
-                </div>
-
-                {/* RIGHT SIDE */}
-                <div className="text-sm text-gray-700 text-right">
-                  <p className="font-semibold text-black">Attachments</p>
-                  <p className="font-medium">
-                    Resume:{' '}
-                    <a
-                      href={`https://${data?.data.resume}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary-300 hover:underline"
-                    >
-                      Link
-                    </a>
-                  </p>
-                  {data?.data.portfolio_link && (
-                    <p>
-                      Portfolio Link:{' '}
-                      <a
-                        href={`https://${data?.data.portfolio_link}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary-300 hover:underline"
-                      >
-                        Link
-                      </a>
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-10">
-                <h3 className="text-xl font-semibold text-black mb-4">
-                  Acceptance Criteria
-                </h3>
-                <p className="text-base text-black/70 whitespace-pre-line">
-                  {data?.data.job.acceptance_criteria}
-                </p>
-              </div>
-
-              <div className="mb-10">
-                <h3 className="text-xl font-semibold text-black mb-4">
-                  Applicant Cover Letter
-                </h3>
-                <p className="text-base text-black/70 whitespace-pre-line">
-                  {data?.data.cover_letter}
-                </p>
-              </div>
-
-              {/* <div className="mb-10">
-              <h3 className="text-xl font-semibold text-black mb-6">
-                Experience
-              </h3>
-
-              {data?.data.length === 0 ? (
-                <p className="text-gray-500 text-sm">No details added yet.</p>
-              ) : (
-                <div className="space-y-6">
-                  {data.sections.map((section) => (
-                    <div key={section.id}>
-                      <p className="text-base font-semibold text-black">
-                        {section.title}
-                      </p>
-
-                      <ul className="list-disc ml-5 text-gray-600 mt-2 space-y-1">
-                        {section.bullets.map((b, idx) => (
-                          <li key={idx}>{b}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div> */}
-
-              {/* <div>
-              <h3 className="text-xl font-semibold text-black mb-4">Skills</h3>
-
-              <div className="flex flex-wrap gap-2">
-                {data?.data.job.skills.length === 0 ? (
-                  <p className="text-gray-500 text-sm">
-                    No tech stack added yet.
-                  </p>
-                ) : (
-                  data?.data.job.skills.map((tech, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1 bg-white border border-[#EAF0ED] text-sm text-black rounded-2xl"
-                    >
-                      {tech.name}
-                    </span>
-                  ))
-                )}
-              </div>
-            </div> */}
-            </CardContent>
-          </Card>
+      <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content */}
+        <div className="lg:col-span-2">
+          <ApplicantContent applicant={applicant} />
         </div>
-        <div className="rounded-lg shadow bg-white w-full p-4 h-fit flex flex-col gap-3.5 lg:w-96">
-          <Button
-            size={'sm'}
-            disabled={addingToShortlist}
-            onClick={add_to_candidate_list}
-          >
-            {addingToShortlist ? 'Adding...' : 'Add to Candidate List'}
-          </Button>
-          <Button
-            variant={'destructiveOutline'}
-            disabled={rejectingCandidate}
-            onClick={reject_application}
-          >
-            {rejectingCandidate ? 'Rejecting...' : 'Reject'}
-          </Button>
+
+        {/* Status Panel */}
+        <div className="lg:col-span-1">
+          <ApplicantStatusPanel
+            company_id={company_id}
+            job_id={job_id}
+            applicant_id={applicant_id}
+            currentStatus={applicant.status}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 };
+
 export default SingleApplicantView;

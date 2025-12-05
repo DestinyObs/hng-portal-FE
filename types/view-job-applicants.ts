@@ -275,3 +275,47 @@ export type Media = {
   original_url: string;
   preview_url: string;
 };
+
+export interface ViewJobApplications {
+  data: JobApplicationItem[];
+  links: {
+    first: string;
+    last: string;
+    prev: string | null;
+    next: string | null;
+  };
+  meta: {
+    current_page: number;
+    from: number;
+    last_page: number;
+    links: Array<{
+      url: string | null;
+      label: string;
+      active: boolean;
+    }>;
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+  };
+}
+
+export interface ViewJobApplicationsLegacy {
+  id: string;
+  user_id: string;
+  name: string;
+  company_size: string | null;
+  country: string | null;
+  description: string | null;
+  logo_url: string | null;
+  official_email: string;
+  onboarding_status: 'pending';
+  is_verified: number;
+  slug: string;
+  state: string | null;
+  status: 'active';
+  website_url: string | null;
+  total_applications: number;
+  applications: JobApplicationItem[];
+  created_at: string;
+}
