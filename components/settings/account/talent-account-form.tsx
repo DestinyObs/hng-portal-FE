@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -30,6 +31,7 @@ const formSchema = z.object({
 });
 
 export default function TalentAccountForm() {
+  const router = useRouter();
   const { data, isLoading } = useGetProfileData();
   const queryClient = useQueryClient();
   const { user, setData } = useAuthStore();
@@ -65,10 +67,6 @@ export default function TalentAccountForm() {
       const result = await updateUserProfile(payload);
 
       if (result.success) {
-        await queryClient.invalidateQueries({
-          queryKey: ['profile'],
-        });
-
         if (user) {
           setData({
             ...user,
@@ -77,6 +75,10 @@ export default function TalentAccountForm() {
           });
         }
         toast.success('Profile updated successfully');
+        await queryClient.invalidateQueries({
+          queryKey: ['profile'],
+        });
+        router.push('/profile-view');
       } else {
         // Handle error from result
         let errorMessage = 'Failed to update profile';
@@ -98,12 +100,8 @@ export default function TalentAccountForm() {
         }
         toast.error(errorMessage);
       }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'An error occurred while updating your profile';
-      toast.error(errorMessage);
+    } catch {
+      toast.error('An error occurred while updating your profile');
     } finally {
       setIsSubmitting(false);
     }
