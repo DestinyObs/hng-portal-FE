@@ -34,13 +34,27 @@ export const useEditPost = (jobId: string) => {
       if (!companyId) throw new Error('Company ID is required');
       return updatePost(companyId, jobId, formData);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (response && !response.success) {
+        const errorMessage = response.message || 'Failed to update job';
+        if (response.errors) {
+          const errorString = Object.values(response.errors).flat().join(' ');
+          toast.error(errorString || errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
       toast.success('Job updated successfully!');
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
+      queryClient.invalidateQueries({
+        queryKey: ['get-job', companyId, jobId],
+      });
+
       router.push('/company/dashboard');
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to update job');
+      toast.error(error.message || 'An unexpected error occurred');
     },
   });
 

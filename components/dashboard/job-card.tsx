@@ -26,11 +26,12 @@ export default function JobCard({ job }: { job: JobCardProps }) {
       className={`col-span-1 gap-4 h-fit px-4 sm:px-6 py-4 rounded-xl bg-white-50 border-[0.5px] border-[#E8E8E8]`}
     >
       <CardHeader className="flex flex-col gap-4 px-0 w-full">
-        <CardTitle className="flex items-center">
-          <span className="font-ag text-lg sm:text-xl font-bold leading-5 sm:leading-6 text-tertiary-500">
+        <CardTitle className="w-full">
+          <span className="block font-ag text-lg sm:text-xl font-bold leading-5 sm:leading-6 text-tertiary-500 wrap-break-word">
             {job?.title}
           </span>
         </CardTitle>
+
         <CardDescription className="flex flex-col justify-start gap-4 font-dm_sans">
           <div className="flex self-stretch items-center gap-2">
             <span
@@ -78,16 +79,16 @@ export default function JobCard({ job }: { job: JobCardProps }) {
         </div>
         <div className="">
           <Link href={`/company/applicants?jobId=${job.id}`}>
-          <Button
-            size="xs"
-            variant="default"
-            className="px-2.5 py-2 text-sm sm:text-xs"
-            onClick={() =>
-              navigate.push(`/company/${user?.company?.id}/job/${job.id}`)
-            }
-          >
-            View Applicants
-          </Button>
+            <Button
+              size="xs"
+              variant="default"
+              className="px-2.5 py-2 text-sm sm:text-xs"
+              onClick={() =>
+                navigate.push(`/company/${user?.company?.id}/job/${job.id}`)
+              }
+            >
+              View Applicants
+            </Button>
           </Link>
         </div>
       </CardContent>
