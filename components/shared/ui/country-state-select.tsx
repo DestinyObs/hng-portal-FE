@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useId } from 'react';
 import { Country, State } from 'country-state-city';
 import { ChevronDownIcon, CheckIcon } from 'lucide-react';
 import {
@@ -44,6 +44,8 @@ export default function CountryStateSelect<T extends FieldValues>({
   const [countryOpen, setCountryOpen] = useState(false);
   const [stateOpen, setStateOpen] = useState(false);
   const { setValue, clearErrors, watch } = useFormContext<T>();
+  const countryComboboxId = useId();
+  const stateComboboxId = useId();
 
   const countryValue = watch(countryName);
   const stateValue = watch(stateName);
@@ -112,6 +114,7 @@ export default function CountryStateSelect<T extends FieldValues>({
                     type="button"
                     role="combobox"
                     aria-expanded={countryOpen}
+                    aria-controls={countryComboboxId}
                     className="flex w-full items-center justify-between"
                   >
                     <span
@@ -128,6 +131,7 @@ export default function CountryStateSelect<T extends FieldValues>({
               </FormControl>
 
               <PopoverContent
+                id={countryComboboxId}
                 className="w-[var(--radix-popover-trigger-width)] p-0"
                 align="start"
               >
@@ -212,6 +216,7 @@ export default function CountryStateSelect<T extends FieldValues>({
                     type="button"
                     role="combobox"
                     aria-expanded={stateOpen}
+                    aria-controls={stateComboboxId}
                     className="flex w-full items-center justify-between"
                   >
                     <span
@@ -231,6 +236,7 @@ export default function CountryStateSelect<T extends FieldValues>({
               </FormControl>
 
               <PopoverContent
+                id={stateComboboxId}
                 className="w-[var(--radix-popover-trigger-width)] p-0"
                 align="start"
               >

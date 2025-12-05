@@ -86,7 +86,7 @@ export default function SkillsAndExperiencePage() {
       } else {
         toast.error('Something went wrong while updating your skills.');
       }
-    } catch (error) {
+    } catch {
       toast.error('Unable to update skills. Please try again.');
     } finally {
       setIsSubmitting(false);

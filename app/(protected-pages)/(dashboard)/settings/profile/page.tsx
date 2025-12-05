@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Country, State } from 'country-state-city';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Input from '@/components/ui/input';
@@ -232,8 +231,6 @@ export default function ProfilePage() {
     }
   };
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const selectedCountry = form.watch('country');
   const handleCancel = () => {
     form.reset();
   };
