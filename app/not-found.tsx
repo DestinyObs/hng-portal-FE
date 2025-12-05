@@ -3,8 +3,15 @@ import { getServerCookies } from '@/lib/cookies-helper';
 import Link from 'next/link';
 
 export default async function NotFound() {
-  const { user } = await getServerCookies();
-  const userRole = user?.current_role;
+  let userRole: string | undefined;
+  try {
+    const { user } = await getServerCookies();
+    userRole = user?.current_role;
+  } catch (error) {
+    // If getServerCookies fails, default to no role (homepage)
+    console.error('Error getting server cookies:', error);
+    userRole = undefined;
+  }
 
   const getHomeLink = () => {
     switch (userRole) {

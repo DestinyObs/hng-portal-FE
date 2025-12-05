@@ -35,7 +35,7 @@ export const updateUserSkills = async (skills: Skill[]) => {
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to update skills',
+        error: response.message || response.errors || 'Failed to update skills',
       };
     }
 
@@ -64,7 +64,8 @@ export const updateUserProfile = async (data: UpdateProfileRequest) => {
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to update profile',
+        error:
+          response.message || response.errors || 'Failed to update profile',
       };
     }
     return {
@@ -92,7 +93,10 @@ export const addWorkExperience = async (data: AddWorkExperienceRequest) => {
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to add work experience',
+        error:
+          response.message ||
+          response.errors ||
+          'Failed to add work experience',
       };
     }
 
@@ -125,7 +129,10 @@ export const updateWorkExperience = async (
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to update work experience',
+        error:
+          response.message ||
+          response.errors ||
+          'Failed to update work experience',
       };
     }
 
@@ -154,7 +161,10 @@ export const deleteWorkExperience = async (id: string) => {
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to delete work experience',
+        error:
+          response.message ||
+          response.errors ||
+          'Failed to delete work experience',
       };
     }
 
@@ -178,7 +188,7 @@ export const addPortfolio = async (data: FormData) => {
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to add portfolio',
+        error: response.message || response.errors || 'Failed to add portfolio',
       };
     }
 
@@ -202,7 +212,8 @@ export const updatePortfolio = async (id: string, data: FormData) => {
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to update portfolio',
+        error:
+          response.message || response.errors || 'Failed to update portfolio',
       };
     }
 
@@ -225,7 +236,8 @@ export const deletePortfolio = async (id: string) => {
     if (!response.success) {
       return {
         success: false,
-        error: response.errors || 'Failed to delete portfolio',
+        error:
+          response.message || response.errors || 'Failed to delete portfolio',
       };
     }
 

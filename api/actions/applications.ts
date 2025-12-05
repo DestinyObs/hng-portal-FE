@@ -12,5 +12,14 @@ export const applyForJob = async (payload: JobApplicationPayload) => {
     body: formData,
   });
 
-  return res?.data;
+  if (!res.success) {
+    return {
+      success: false,
+      message: res.message || 'Failed to submit application',
+      status: res.status,
+      errors: res.errors,
+    };
+  }
+
+  return res.data;
 };
