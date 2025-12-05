@@ -20,8 +20,6 @@ export const useJobLevel = () => {
     queryFn: async () => {
       const res = await publicFetch('lookups/job-levels');
       if (!res.success) throw new Error(res.message);
-      console.log(res);
-
       return res.data || [];
     },
   });
@@ -48,7 +46,18 @@ export const useSkills = () => {
   });
 };
 
-export const useTracks = () => {
+export const useStates = () => {
+  return useQuery({
+    queryKey: ['states'],
+    queryFn: async () => {
+      const res = await publicFetch('lookups/states');
+      if (!res.success) throw new Error(res.message);
+      return res.data || [];
+    },
+  });
+};
+
+export const useTracks = (enabled: boolean = true) => {
   return useQuery<Tracks[], Error, MergedTracksData[]>({
     queryKey: ['tracks'],
     queryFn: async () => {
@@ -64,6 +73,7 @@ export const useTracks = () => {
         description: TRACKS[index % TRACKS.length].description,
       }));
     },
+    enabled,
   });
 };
 

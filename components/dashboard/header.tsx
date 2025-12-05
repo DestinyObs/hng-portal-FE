@@ -11,11 +11,13 @@ import { logout } from '@/api/actions/auth';
 import Logo from '@/public/assets/images/landing-page/shared/logo.png';
 import { useAuthStore } from '@/store/auth';
 import PlaceholderProfile from './placeholder-profile';
+import { useGetProfileData } from '@/hooks/profile-settings';
 
 const DashboardHeader = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { user, setData } = useAuthStore();
+  const { data } = useGetProfileData();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isCompany = user?.current_role === 'employer';
@@ -155,10 +157,10 @@ const DashboardHeader = () => {
                         className="object-cover w-full h-full"
                       />
                     </Link>
-                  ) : user?.photo_url && !isCompany ? (
+                  ) : data?.photo_url && !isCompany ? (
                     <Link href={'/profile-view'}>
                       <Image
-                        src={user.photo_url}
+                        src={data?.photo_url}
                         alt="Profile"
                         width={40}
                         height={40}
@@ -243,6 +245,24 @@ const DashboardHeader = () => {
                 </li>
               ))}
               <hr />
+              <li>
+                <Link
+                  href="/profile-view"
+                  className="block font-medium text-gray-600 py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  PROFILE
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/settings"
+                  className="block font-medium text-gray-600 py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  SETTINGS
+                </Link>
+              </li>
               <li>
                 <button
                   onClick={handleLogout}

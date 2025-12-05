@@ -7,11 +7,12 @@ import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 import PlaceholderProfile from './placeholder-profile';
 import clsx from 'clsx';
+import { useGetProfileData } from '@/hooks/profile-settings';
 
 const DashboardSidebar = ({ className }: { className?: string }) => {
   const { user } = useAuthStore();
   const role = user?.current_role;
-
+  const { data } = useGetProfileData();
   return (
     <aside className={clsx('flex-col gap-5', className)}>
       {/* profile-card */}
@@ -25,9 +26,9 @@ const DashboardSidebar = ({ className }: { className?: string }) => {
               fill
               className="rounded-full object-cover"
             />
-          ) : user?.photo_url && role === 'talent' ? (
+          ) : data?.photo_url && role === 'talent' ? (
             <Image
-              src={user.photo_url}
+              src={data?.photo_url}
               alt="profile"
               fill
               className="rounded-full object-cover"

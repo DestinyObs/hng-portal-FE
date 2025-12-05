@@ -18,7 +18,7 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
           {/* Backdrop */}
           <motion.div
             className="absolute inset-0"
@@ -31,43 +31,45 @@ export const Modal: React.FC<ModalProps> = ({
 
           {/* Modal */}
           <motion.div
-            className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6"
+            className="relative bg-white rounded-lg sm:rounded-xl shadow-xl max-w-md w-full p-5 sm:p-6 md:p-8"
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             {icon && (
-              <div className="mb-4 rounded-full flex items-center justify-center">
+              <div className="mb-3 sm:mb-4 rounded-full flex items-center justify-center">
                 {icon}
               </div>
             )}
 
-            <h2 className="text-lg font-bold text-tertiary-500 mb-3 text-center">
+            <h2 className="text-base sm:text-lg md:text-xl font-bold text-tertiary-500 mb-2 sm:mb-3 text-center px-2">
               {title}
             </h2>
 
-            <p className="text-sm text-gray-200 text-center mb-6">{message}</p>
+            <p className="text-xs sm:text-sm text-gray-200 text-center mb-5 sm:mb-6 px-2">
+              {message}
+            </p>
 
-            <div className="flex gap-3 justify-end">
+            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
               {secondaryButton && (
-                <div>
-                  <Button
-                    onClick={secondaryButton.onClick}
-                    variant="outlineGray"
-                    className="border-black-50"
-                  >
-                    {secondaryButton.label}
-                  </Button>
-                </div>
+                <Button
+                  onClick={secondaryButton.onClick}
+                  variant="outlineGray"
+                  className="border-black-50 w-full sm:w-auto"
+                >
+                  {secondaryButton.label}
+                </Button>
               )}
 
               {primaryButton && (
-                <div>
-                  <Button onClick={primaryButton.onClick} variant="default">
-                    {primaryButton.label}
-                  </Button>
-                </div>
+                <Button
+                  onClick={primaryButton.onClick}
+                  variant="default"
+                  className="w-full sm:w-auto"
+                >
+                  {primaryButton.label}
+                </Button>
               )}
             </div>
           </motion.div>

@@ -16,6 +16,7 @@ import { Modal } from '@/components/dashboard/modal';
 import { useCreateJob, useDraftJob } from '@/hooks/jobs';
 import { Mail } from 'lucide-react';
 import { Country, State } from 'country-state-city';
+import Loading from '@/app/loading';
 
 const PostJobPreview = () => {
   const { newPost } = usePostStore();
@@ -29,13 +30,22 @@ const PostJobPreview = () => {
   const states = State.getStatesOfCountry(newPost?.company_id);
   const { data: JOBTYPES } = useJobTypes();
   const { data: skillsRef } = useSkills();
-  const { data: jobLevel } = useJobLevel();
+  const { data: job_level, isPending } = useJobLevel();
+
+  console.log(newPost);
+  
 
   const workMode =
     work_modes &&
     work_modes.find(
       (item: { id: string; name: string }) => item.id === newPost?.work_mode_id,
     );
+  const jobLevel =
+    job_level &&
+    job_level.find(
+      (item: { id: string; name: string }) => item.id === newPost?.job_level_id,
+    );
+    
   const state =
     states && states.find((item) => item.isoCode === newPost?.state);
   const country =
@@ -50,10 +60,7 @@ const PostJobPreview = () => {
   const job_type =
     JOBTYPES &&
     JOBTYPES.find((item: { id: string }) => item.id === newPost?.job_type_id);
-  const job_level =
-    jobLevel &&
-    jobLevel.find((item: { id: string }) => item.id === newPost?.job_type_id);
-
+    
   const job = {
     ...newPost,
     state: state?.name ?? '',
@@ -67,10 +74,8 @@ const PostJobPreview = () => {
     title: newPost?.title ?? '',
     description: newPost?.description ?? '',
     acceptance_criteria: newPost?.acceptance_criteria ?? '',
-    level: job_level?.name ?? '',
+    level: jobLevel?.name ?? '',
   };
-
-  // console.log(job);
 
   // fixed
   const handlePublish = async () => {
@@ -83,7 +88,9 @@ const PostJobPreview = () => {
     if (!newPost) return;
     draftJob(newPost);
   };
-
+  if (isPending) {
+    <Loading />
+  }
   return (
     <div className=" p-6 bg-white shadow rounded-lg space-y-6">
       <PreviewJob postDetails={job} />

@@ -16,20 +16,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { X } from 'lucide-react';
+import { OctagonAlert, X } from 'lucide-react';
 import type { JobDetailsProps, JobFormData2 } from '@/types/create-new-job';
 import TextEditor from '@/components/shared/ui/text-editor';
 import Input from '@/components/ui/input';
 import {
-  JobDetailsFormData,
   jobDetailsSchema,
 } from '@/validations/create-post.schema';
 import { useCategories, useJobLevel, useSkills } from '@/hooks/lookups';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-// import { draftPost } from '@/api/actions/create-post';
 import { useAuthStore } from '@/store/auth';
+import { useGetJob } from '@/hooks/jobs';
+import { RawJob } from '@/types/job-card';
+import { useEditPost } from '@/hooks/posts';
+import { Modal } from '@/components/dashboard/modal';
+import Loading from '@/app/loading';
 import { useDraftJob } from '@/hooks/jobs';
 
 export default function JobDetails({
@@ -38,8 +41,16 @@ export default function JobDetails({
   onNext,
   id,
 }: JobDetailsProps) {
-  const router = useRouter();
   const { user } = useAuthStore();
+  const { data: rawJob, isPending: isfetching } = useGetJob(
+    user?.company?.id,
+    id as string,
+  );
+  const job = rawJob as RawJob;
+  const { editpost, isPending: isEditing } = useEditPost(id!);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const router = useRouter();
+
   const { data: categories } = useCategories();
   const { data: job_level } = useJobLevel();
   const { data: skillsRes } = useSkills();
@@ -58,7 +69,7 @@ export default function JobDetails({
     getValues,
     reset,
     formState: { errors },
-  } = useForm<JobDetailsFormData>({
+  } = useForm({
     resolver: zodResolver(jobDetailsSchema),
     defaultValues: {
       category_id: initialData.category_id,
@@ -67,7 +78,7 @@ export default function JobDetails({
       description: initialData.description || '',
       skills: initialSkills,
       price: initialData.price,
-      acceptance_criteria: initialData.acceptance_criteria || '',
+      acceptance_criteria: initialData.acceptance_criteria,
     },
     mode: 'onChange',
   });
@@ -97,7 +108,7 @@ export default function JobDetails({
     setSelectedSkills(selectedSkills.filter((s) => s.id !== skillToRemove.id));
   };
 
-  const onSubmit = (data: JobDetailsFormData) => {
+  const onSubmit = (data: any) => {
     const formDataUpdate: Partial<JobFormData2> = {
       category_id: data.category_id,
       title: data.title,
@@ -114,6 +125,31 @@ export default function JobDetails({
 
   const handleSaveDraft = () => {
     const data = getValues();
+    if (!data.title || !data.description) {
+      toast.error('Title and description is required');
+      return;
+    }
+    const formData = {
+      company_id: user?.company?.id || '',
+      category_id: data.category_id,
+      title: data.title,
+      description: data.description,
+      skills: data.skills,
+      price: data.price as number,
+      acceptance_criteria: data.acceptance_criteria,
+      job_level_id: data.job_level_id,
+    };
+
+      const response = draftJob(formData, {
+        onSuccess: ()=> {
+            reset();
+      router.push('/company/jobs/drafts');
+        }
+      });
+  };
+
+  const handleEditDraft = async () => {
+    const data = getValues();
     if (!data.title) {
       toast.error('Title is required');
       return;
@@ -124,23 +160,27 @@ export default function JobDetails({
       title: data.title,
       description: data.description,
       skills: data.skills,
-      price: data.price,
-      acceptance_criteria: data.acceptance_criteria,
+      price: data.price as number,
       job_level_id: data.job_level_id,
+      ...(data.acceptance_criteria &&
+        data.acceptance_criteria.length >= 50 && {
+          acceptance_criteria: data.acceptance_criteria,
+        }),
     };
 
-    try {
-      const response = draftJob(formData);
+    console.log(formData);
 
-      toast.success('Your job has been saved to draft successfully');
-      reset();
-      router.push('/company/dashboard');
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+    if (formData) {
+      editpost(formData, {
+        onSuccess: () => {
+          router.push('/company/jobs/drafts');
+        },
+      });
     }
+    setShowEditModal(false);
   };
+
+  if (isfetching && id) return <Loading />;
 
   return (
     <div className="space-y-6 ">
@@ -217,9 +257,9 @@ export default function JobDetails({
                 </Select>
               )}
             />
-            {errors.category_id && (
+            {errors.job_level_id && (
               <p className="text-xs text-red-500">
-                {errors.category_id.message}
+                {errors.job_level_id.message}
               </p>
             )}
           </div>
@@ -287,14 +327,15 @@ export default function JobDetails({
               render={({ field }) => (
                 <Input
                   id="price"
-                  type="text"
+                  type="number"
                   placeholder="What is the salary?"
                   {...field}
                 />
               )}
             />
-            {errors.title && (
-              <p className="text-xs text-red-500">{errors.title.message}</p>
+
+            {errors.price && (
+              <p className="text-xs text-red-500">{errors.price.message}</p>
             )}
           </div>
           {/* Skills Section */}
@@ -311,11 +352,20 @@ export default function JobDetails({
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  const input = e.currentTarget;
-                  handleAddSkill(input);
-                  input.value = '';
+                  const value = e.currentTarget.value.trim();
+
+                  if (!value) return;
+
+                  const newSkill = {
+                    id: value.toLowerCase().replace(/\s+/g, '-'),
+                    name: value,
+                  };
+
+                  handleAddSkill(newSkill);
+                  e.currentTarget.value = '';
                 }
               }}
+              disabled
             />
 
             {/* Selected Skills */}
@@ -396,23 +446,40 @@ export default function JobDetails({
                 variant="outline"
                 disabled={isDrafting}
                 className="border-[#E7E7E7] text-[#344054]"
+                onClick={() => router.back()}
               >
                 Cancel
               </Button>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="">
-                <Button
-                  variant="outlineGray"
-                  onClick={handleSaveDraft}
-                  disabled={isDrafting}
-                  className="border-[#E7E7E7]"
-                  type="button"
-                >
-                  {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
-                </Button>
-              </div>
+              {id && job.status === 'draft' ? (
+                <div className="">
+                  <Button
+                    variant="outlineGray"
+                    disabled={isDrafting || isEditing}
+                    onClick={() => {
+                      setShowEditModal(true);
+                    }}
+                    className="border-[#E7E7E7]"
+                    type="button"
+                  >
+                    {isEditing ? 'Saving...' : 'Save Draft'}
+                  </Button>
+                </div>
+              ) : (
+                <div className="">
+                  <Button
+                    variant="outlineGray"
+                    onClick={handleSaveDraft}
+                    disabled={isDrafting}
+                    className="border-[#E7E7E7]"
+                    type="button"
+                  >
+                    {isDrafting ? 'Saving as Draft' : ' Save As Draft'}
+                  </Button>
+                </div>
+              )}
 
               <div className="">
                 <Button
@@ -428,6 +495,28 @@ export default function JobDetails({
           </div>
         </CardContent>
       </Card>
+
+      {/* Edit Modal */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        title="Do you want to save the edited post?"
+        message="This job description will be updated."
+        icon={
+          <div className="text-primary-300 flex items-center justify-center text-4xl bg-[#FEF0C7] rounded-full w-16 h-16">
+            {' '}
+            <OctagonAlert size={48} className="text-[#E3822A]" />
+          </div>
+        }
+        primaryButton={{
+          label: 'Save Edit',
+          onClick: handleEditDraft,
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: () => setShowEditModal(false),
+        }}
+      />
     </div>
   );
 }

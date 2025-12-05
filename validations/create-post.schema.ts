@@ -1,10 +1,12 @@
+
 import * as z from 'zod';
 
 export const jobDetailsSchema = z.object({
   category_id: z.string().optional(),
   title: z.string().min(1, 'Job title is required'),
   description: z.string().min(50, 'Description must be at least 50 characters'),
-  price: z.string(),
+  price:  z.coerce
+        .number<number>({ error: 'Salary is required',}),
   skills: z
     .array(z.string())
     .min(1, 'At least one skill is required')
@@ -15,10 +17,9 @@ export const jobDetailsSchema = z.object({
     .string()
     .min(50, 'Acceptance criteria must be at least 50 characters')
     .min(50, 'Acceptance criteria must be at least 50 characters'),
-  job_level_id: z.string().min(1, 'Candidate Location is required'),
+  job_level_id: z.string().min(1, 'Job level is required'),
 });
 
-export type JobDetailsFormData = z.infer<typeof jobDetailsSchema>;
 
 export const jobDetailsStep2Schema = z.object({
   track_id: z.string().min(1, 'HNG Track is required'),
@@ -37,7 +38,7 @@ export type JobPostPayload = {
   acceptance_criteria: string;
   state: string;
   country: string;
-  price: string;
+  price: number;
   track_id: string;
   category_id: string;
   job_type_id: string;
@@ -53,7 +54,7 @@ export type JobPostPayload2 = {
   acceptance_criteria: string;
   state: string;
   country: string;
-  price: string;
+  price: number;
   track_id: string;
   category_id: string;
   job_type_id: string;
@@ -67,10 +68,11 @@ export type JobDraftPayload = {
   acceptance_criteria?: string;
   state?: string;
   country?: string;
-  price?: string;
+  price?: number;
   track_id?: string;
   category_id?: string;
   job_type_id?: string;
+  job_level_id?: string;
   work_mode_id?: string;
-  skills?: string[];
+  skills?: { id: string; name: string }[] | string[];
 };

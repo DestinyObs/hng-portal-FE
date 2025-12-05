@@ -3,17 +3,22 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeAuthenticatedRequest } from '@/api/config.server';
 import { toast } from 'sonner';
 
-export const useGetUserProfile = <T>(): UseQueryResult<T> => {
+export const useGetUserProfile = <T>(
+  enabled: boolean = true,
+): UseQueryResult<T> => {
   return useQuery<T>({
     queryKey: ['get-user-profile'],
     queryFn: async () => {
       const res = await makeAuthenticatedRequest(`/talent/settings/profile`);
       return res?.data as T;
     },
+    enabled,
   });
 };
 
-export const useUpdateUserProfile = <T, V = unknown>() => {
+export const useUpdateUserProfile = <T, V = unknown>(
+  onSuccessCallback?: () => void,
+) => {
   const queryClient = useQueryClient();
   const { mutate: updateProfile, isPending } = useMutation<T, Error, V>({
     mutationKey: ['update-user-profile'],
@@ -27,9 +32,14 @@ export const useUpdateUserProfile = <T, V = unknown>() => {
       });
       return res?.data as T;
     },
-    onSuccess: () => {
+    onSuccess: async (data) => {
+      console.log('Update successful, returned data:', data);
       toast.success('Profile updated successfully!');
-      queryClient.invalidateQueries({ queryKey: ['get-user-profile'] });
+      await queryClient.invalidateQueries({ queryKey: ['get-user-profile'] });
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
+      if (onSuccessCallback) {
+        onSuccessCallback();
+      }
     },
 
     onError: (error) => {
@@ -37,4 +47,53 @@ export const useUpdateUserProfile = <T, V = unknown>() => {
     },
   });
   return { updateProfile, isPending };
+};
+
+export const useGetCompanyProfile = <T>(
+  enabled: boolean = true,
+): UseQueryResult<T> => {
+  return useQuery<T>({
+    queryKey: ['get-company-profile'],
+    queryFn: async () => {
+      const res = await makeAuthenticatedRequest(`/employer/settings/profile`);
+      return res?.data as T;
+    },
+    enabled,
+  });
+};
+
+export const useUpdateCompanyProfile = <T, V = unknown>(
+  onSuccessCallback?: () => void,
+) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: updateCompanyProfile, isPending } = useMutation<T, Error, V>({
+    mutationKey: ['update-company-profile'],
+    mutationFn: async (payload: V) => {
+      const res = await makeAuthenticatedRequest(`/employer/settings/profile`, {
+        method: 'POST',
+        body: payload,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return res?.data as T;
+    },
+
+    onSuccess: async () => {
+      toast.success('Company profile updated successfully!');
+      await queryClient.invalidateQueries({
+        queryKey: ['get-company-profile'],
+      });
+      if (onSuccessCallback) {
+        onSuccessCallback();
+      }
+    },
+
+    onError: (error) => {
+      toast.error(error.message || 'Failed to update company profile.');
+    },
+  });
+
+  return { updateCompanyProfile, isPending };
 };

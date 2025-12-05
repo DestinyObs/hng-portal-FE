@@ -7,26 +7,39 @@ import {
   CommandInput,
 } from '@/components/ui/command';
 import { useMemo, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus } from 'lucide-react';
+import { Plus, AlertTriangle, Loader2 } from 'lucide-react';
 import SkillsBadge from '@/components/settings/skills/skills-badge';
 import { useGetProfileData } from '@/hooks/profile-settings';
 import { useSkills } from '@/hooks/lookups';
 import { Skill, Experience } from '@/types/profile-settings';
-import { updateUserSkills } from '@/api/actions/user-profile-settings';
+import {
+  updateUserSkills,
+  deleteWorkExperience,
+} from '@/api/actions/user-profile-settings';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth';
 import Modal from '@/components/shared/ui/modal';
+import { Modal as ConfirmationModal } from '@/components/dashboard/modal';
 import { toast } from 'sonner';
 import WorkExperienceForm from './components/add-experience-form';
 
 export default function SkillsAndExperiencePage() {
+  const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<Experience | null>(
+    null,
+  );
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [experienceToDelete, setExperienceToDelete] =
+    useState<Experience | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
-  const { data } = useGetProfileData();
+  const { data, isLoading } = useGetProfileData();
 
   const { data: skillsRes } = useSkills();
 
@@ -35,7 +48,6 @@ export default function SkillsAndExperiencePage() {
     () => data?.experiences || [],
     [data?.experiences],
   );
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [skills, setSkills] = useState<Skill[]>(userSkills);
   const [experiences, setExperiences] = useState<Experience[]>(userExperiences);
 
@@ -49,42 +61,105 @@ export default function SkillsAndExperiencePage() {
 
   const [skillInput, setSkillInput] = useState('');
 
-  const handleSaveChanges = async () => {
-    setIsSubmitting(true);
-    try {
-      const result = await updateUserSkills(skills);
-
-      if (result.success) {
-        toast.success('Skills updated successfully!');
-
-        await queryClient.invalidateQueries({
-          queryKey: ['profile', user?.id],
-        });
-      } else {
-        toast.error('Something went wrong while updating your skills.');
-      }
-    } catch (error) {
-      toast.error('Unable to update skills. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleOpenModal = () => {
+    setEditingExperience(null);
     setOpenDialog((prev) => !prev);
   };
 
-  const handleRemoveSkill = (skillToRemove: Skill) => {
-    setSkills(skills.filter((skill) => skill.id !== skillToRemove.id));
+  const handleEditExperience = (experience: Experience) => {
+    setEditingExperience(experience);
+    setOpenDialog(true);
   };
 
-  const handleReset = () => {
-    setSkills(userSkills);
+  const handleCloseModal = () => {
+    setOpenDialog(false);
+    setEditingExperience(null);
   };
 
-  const handleRemoveExperience = (id: string) => {
-    setExperiences(experiences.filter((exp) => exp.id !== id));
+  const handleRemoveSkill = async (skillToRemove: Skill) => {
+    const updatedSkills = skills.filter(
+      (skill) => skill.id !== skillToRemove.id,
+    );
+    setSkills(updatedSkills);
+    try {
+      const result = await updateUserSkills(updatedSkills);
+      if (result.success) {
+        toast.success('Skill removed successfully!');
+        await queryClient.invalidateQueries({
+          queryKey: ['profile', user?.id],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ['profile'],
+        });
+      } else {
+        toast.error('Failed to remove skill');
+        setSkills(skills);
+      }
+    } catch {
+      toast.error('Unable to remove skill');
+      setSkills(skills);
+    }
   };
+
+  const handleDeleteClick = (experience: Experience) => {
+    setExperienceToDelete(experience);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!experienceToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await deleteWorkExperience(experienceToDelete.id);
+      if (result.success) {
+        toast.success('Work experience deleted successfully');
+        queryClient.invalidateQueries({
+          queryKey: ['profile'],
+        });
+        setDeleteConfirmationOpen(false);
+        setExperienceToDelete(null);
+      } else {
+        const errorMessage =
+          typeof result.error === 'string'
+            ? result.error
+            : 'Failed to delete work experience';
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting the work experience');
+      console.error('Error deleting work experience:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteConfirmationOpen(false);
+    setExperienceToDelete(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full py-6 justify-center px-4 lg:px-0">
+        <div className="w-full mb-4 space-y-1 text-center md:text-left">
+          <h3 className="text-2xl font-bold text-[#232323]">
+            Skills & Experience
+          </h3>
+          <p className="font-normal text-base text-black-200">
+            Showcase your expertise and work history
+          </p>
+        </div>
+        <Card className="flex-1 w-full bg-white border-[#E8E8E8] shadow-sm">
+          <CardContent className="p-6 max-w-[1056px]">
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary-300" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full py-6 justify-center px-4 lg:px-0">
@@ -98,7 +173,9 @@ export default function SkillsAndExperiencePage() {
       <Card className="flex-1 w-full bg-white border-[#E8E8E8] shadow-sm">
         <CardContent className="p-6 max-w-[1056px]">
           <div className="space-y-4 w-full mb-8">
-            <label className="text-sm text-[#1A1A1A] font-medium">Skills</label>
+            <label className="text-sm text-[#1A1A1A] font-medium">
+              Skills and Experience
+            </label>
 
             <div className="relative">
               {skillInput.length > 0 ? (
@@ -122,13 +199,35 @@ export default function SkillsAndExperiencePage() {
                           .map((skill: Skill) => (
                             <CommandItem
                               key={skill.id}
-                              onSelect={() => {
+                              onSelect={async () => {
                                 if (
                                   !skills.some((s: Skill) => s.id === skill.id)
                                 ) {
-                                  setSkills([...skills, skill]);
+                                  const updatedSkills = [...skills, skill];
+                                  setSkills(updatedSkills);
+                                  setSkillInput('');
+                                  try {
+                                    const result =
+                                      await updateUserSkills(updatedSkills);
+                                    if (result.success) {
+                                      toast.success(
+                                        'Skill added successfully!',
+                                      );
+                                      await queryClient.invalidateQueries({
+                                        queryKey: ['profile', user?.id],
+                                      });
+                                      await queryClient.invalidateQueries({
+                                        queryKey: ['profile'],
+                                      });
+                                    } else {
+                                      toast.error('Failed to add skill');
+                                      setSkills(skills);
+                                    }
+                                  } catch {
+                                    toast.error('Unable to add skill');
+                                    setSkills(skills);
+                                  }
                                 }
-                                setSkillInput('');
                               }}
                             >
                               {skill.name}
@@ -169,8 +268,7 @@ export default function SkillsAndExperiencePage() {
               ))}
             </div>
           </div>
-
-          {/*          <div className="space-y-6 w-full">
+          <div className="space-y-6 w-full">
             <div className="flex flex-row justify-between items-center w-full mb-4">
               <label className="text-sm text-[#1A1A1A] font-medium whitespace-nowrap">
                 Work Experience <span className="text-[#FF3B30]">*</span>
@@ -189,7 +287,20 @@ export default function SkillsAndExperiencePage() {
 
             <div className="space-y-4">
               {experiences.map((exp) => {
-                const startDate = new Date(exp.start_date).toLocaleDateString(
+                // Parse date from YYYY/MM/DD or YYYY-MM-DD format
+                const parseDate = (dateStr: string) => {
+                  if (dateStr.includes('/')) {
+                    const [year, month, day] = dateStr.split('/');
+                    return new Date(
+                      parseInt(year),
+                      parseInt(month) - 1,
+                      parseInt(day),
+                    );
+                  }
+                  return new Date(dateStr);
+                };
+
+                const startDate = parseDate(exp.start_date).toLocaleDateString(
                   'en-US',
                   {
                     month: 'short',
@@ -197,7 +308,7 @@ export default function SkillsAndExperiencePage() {
                   },
                 );
                 const endDate = exp.end_date
-                  ? new Date(exp.end_date).toLocaleDateString('en-US', {
+                  ? parseDate(exp.end_date).toLocaleDateString('en-US', {
                       month: 'short',
                       year: 'numeric',
                     })
@@ -217,21 +328,29 @@ export default function SkillsAndExperiencePage() {
                       <span className="text-[#6A7282] text-sm font-medium">
                         {dateRange}
                       </span>
-                      <button
-                        onClick={() => handleRemoveExperience(exp.id)}
-                        className="text-[#FF3B30] font-medium text-sm hover:text-red-700 focus:outline-none"
-                      >
-                        Remove
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => handleEditExperience(exp)}
+                          className="text-[#00AEFF] font-medium text-sm hover:text-primary-300 focus:outline-none"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(exp)}
+                          className="text-[#FF3B30] font-medium text-sm hover:text-red-700 focus:outline-none"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
 
                     <h4 className="text-base font-bold text-[#111827] leading-tight">
-                      {exp.position}
+                      {exp.job_title}
                     </h4>
 
                     <div>
                       <Badge className="bg-[#DBEAFE] hover:bg-[#DBEAFE] text-[#1D4ED8] font-semibold rounded-md border-none px-2.5 py-0.5 text-xs">
-                        {exp.company}
+                        {exp.company_name}
                       </Badge>
                     </div>
 
@@ -244,39 +363,39 @@ export default function SkillsAndExperiencePage() {
                 );
               })}
             </div>
-          </div> */}
-
-          <div className="flex flex-row justify-end gap-4 pt-6 w-full mt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleReset}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl transition-all duration-300 ease-in"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              onClick={handleSaveChanges}
-              className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl transition-all duration-300 ease-in"
-            >
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </Button>
           </div>
         </CardContent>
       </Card>
-      <Modal openDialog={openDialog} setOpenDialog={handleOpenModal}>
+      <Modal openDialog={openDialog} setOpenDialog={handleCloseModal}>
         <WorkExperienceForm
-          onSuccess={() => {
-            handleOpenModal();
+          experience={editingExperience}
+          onSuccess={async () => {
+            handleCloseModal();
             if (data) {
-              queryClient.invalidateQueries({
+              await queryClient.invalidateQueries({
                 queryKey: ['profile'],
               });
             }
+            router.push('/profile-view');
           }}
         />
       </Modal>
+
+      <ConfirmationModal
+        isOpen={deleteConfirmationOpen}
+        onClose={handleCancelDelete}
+        title="Delete Work Experience"
+        message={`Are you sure you want to delete your experience at "${experienceToDelete?.company_name}"? This action cannot be undone.`}
+        icon={<AlertTriangle className="w-12 h-12 text-red-500" />}
+        primaryButton={{
+          label: isDeleting ? 'Deleting...' : 'Delete',
+          onClick: handleConfirmDelete,
+        }}
+        secondaryButton={{
+          label: 'Cancel',
+          onClick: handleCancelDelete,
+        }}
+      />
     </div>
   );
 }

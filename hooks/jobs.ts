@@ -30,6 +30,21 @@ export const useGetAllJobs = <T>(
   });
 };
 
+export const useGetActiveJobs = <T>(
+  companyId: string | undefined,
+): UseQueryResult<T> => {
+  return useQuery<T>({
+    queryKey: ['get-active-jobs', companyId],
+    queryFn: async () => {
+      const res = await makeAuthenticatedRequest(
+        `employer/company/${companyId}/active-jobs`,
+      );
+      return res?.data as T;
+    },
+    enabled: !!companyId,
+  });
+};
+
 export const useGetJob = (
   companyId: string | undefined,
   jobId: string | undefined,
@@ -74,7 +89,17 @@ export const useCreateJob = () => {
   } = useMutation({
     mutationFn: (post: newPost) => createPost(post),
 
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (response && !response.success) {
+        const errorMessage = response.message || 'Failed to create job';
+        if (response.errors) {
+          const errorString = Object.values(response.errors).flat().join(' ');
+          toast.error(errorString || errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
       toast.success('Your job has been posted successfully');
       router.push('/company/dashboard');
@@ -82,7 +107,9 @@ export const useCreateJob = () => {
 
     onError: (err) => {
       console.error('Failed to create job:', err);
-      toast.error(err.message);
+      toast.error(
+        err instanceof Error ? err.message : 'An unexpected error occurred',
+      );
     },
   });
 
@@ -116,15 +143,27 @@ export const useUpdateStatus = () => {
       status: string;
     }) => updateStatus(company_id, job_id, status),
 
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (response && !response.success) {
+        const errorMessage = response.message || 'Failed to update job status';
+        if (response.errors) {
+          const errorString = Object.values(response.errors).flat().join(' ');
+          toast.error(errorString || errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
       toast.success('Your job has been updated successfully');
       router.push('/company/dashboard');
     },
 
     onError: (err) => {
-      console.error('Failed to create job:', err);
-      toast.error(err.message);
+      console.error('Failed to update job status:', err);
+      toast.error(
+        err instanceof Error ? err.message : 'An unexpected error occurred',
+      );
     },
   });
 
@@ -156,7 +195,17 @@ export const useDelete = () => {
       job_id: string;
     }) => deleteJob(company_id, job_id),
 
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (response && !response.success) {
+        const errorMessage = response.message || 'Failed to delete job';
+        if (response.errors) {
+          const errorString = Object.values(response.errors).flat().join(' ');
+          toast.error(errorString || errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
       toast.success('Your job has been removed successfully');
       router.push('/company/dashboard');
@@ -164,7 +213,9 @@ export const useDelete = () => {
 
     onError: (err) => {
       console.error('Failed to remove job:', err);
-      toast.error(err.message);
+      toast.error(
+        err instanceof Error ? err.message : 'An unexpected error occurred',
+      );
     },
   });
 
@@ -190,15 +241,27 @@ export const useDraftJob = () => {
   } = useMutation({
     mutationFn: (post: JobDraftPayload) => draftPost(post),
 
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (response && !response.success) {
+        const errorMessage = response.message || 'Failed to save draft';
+        if (response.errors) {
+          const errorString = Object.values(response.errors).flat().join(' ');
+          toast.error(errorString || errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: ['get-all-jobs'] });
       toast.success('Your job has been saved to draft successfully');
       router.push('/company/jobs/drafts');
     },
 
     onError: (err) => {
-      console.error('Failed to create job:', err);
-      toast.error(err.message);
+      console.error('Failed to save draft:', err);
+      toast.error(
+        err instanceof Error ? err.message : 'An unexpected error occurred',
+      );
     },
   });
 
@@ -225,6 +288,28 @@ export const useApplyForJob = () => {
       applyForJob(application),
 
     onSuccess: (data) => {
+      // applyForJob returns data directly on success, or { success: false, message, errors } on error
+      if (
+        data &&
+        typeof data === 'object' &&
+        'success' in data &&
+        !(data as { success: boolean }).success
+      ) {
+        const errorData = data as {
+          success: false;
+          message?: string;
+          errors?: Record<string, string[]>;
+        };
+        const errorMessage =
+          errorData.message || 'Failed to submit application';
+        if (errorData.errors) {
+          const errorString = Object.values(errorData.errors).flat().join(' ');
+          toast.error(errorString || errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: ['job-applications'] });
       toast.success('Your application has been submitted successfully');
       console.log(data);
@@ -232,7 +317,9 @@ export const useApplyForJob = () => {
 
     onError: (err) => {
       console.error('Failed to submit application:', err);
-      toast.error(err.message || 'Failed to submit application');
+      toast.error(
+        err instanceof Error ? err.message : 'An unexpected error occurred',
+      );
     },
   });
 
