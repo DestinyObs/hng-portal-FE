@@ -95,7 +95,7 @@ export default function SkillsAndExperiencePage() {
         toast.error('Failed to remove skill');
         setSkills(skills);
       }
-    } catch (error) {
+    } catch {
       toast.error('Unable to remove skill');
       setSkills(skills);
     }
@@ -221,7 +221,7 @@ export default function SkillsAndExperiencePage() {
                                       toast.error('Failed to add skill');
                                       setSkills(skills);
                                     }
-                                  } catch (error) {
+                                  } catch {
                                     toast.error('Unable to add skill');
                                     setSkills(skills);
                                   }

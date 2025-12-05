@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import Input from '@/components/ui/input';
-import { changePassword } from '@/api/actions/auth';
 import { makeAuthenticatedRequest } from '@/api/config.server';
 import { useAuthStore } from '@/store/auth';
 import {

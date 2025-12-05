@@ -82,7 +82,7 @@ export default function TalentAccountForm() {
       } else {
         toast.error('Failed to update profile');
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred while updating your profile');
     } finally {
       setIsSubmitting(false);
