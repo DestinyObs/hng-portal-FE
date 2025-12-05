@@ -21,9 +21,10 @@ import { saveCompanyOnboarding } from '@/api/actions/onboarding';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/auth';
 import UserProfileIcon2 from '@/public/assets/auth/icons/user-profile2';
-
+import { useSkipToDashboard } from '@/hooks/use-skip-to-dashboard';
 export default function UserIdentityForm() {
   const { user } = useAuthStore();
+  const { skipToDashboard } = useSkipToDashboard();
   const route = useRouter();
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,11 +51,6 @@ export default function UserIdentityForm() {
       form.setValue('logo', file);
     }
   };
-
-  const handleCompleteLater = () => {
-    route.push('/dashboard');
-  };
-
   const onSubmit = async (data: UserIdentitySchema) => {
     setIsSubmitting(true);
 
@@ -206,7 +202,7 @@ export default function UserIdentityForm() {
             <Button
               type="button"
               variant="ghost"
-              onClick={handleCompleteLater}
+              onClick={() => skipToDashboard('/talent/dashboard')}
               className="text-primary-300 transition-all duration-300 ease-in"
             >
               Complete Later

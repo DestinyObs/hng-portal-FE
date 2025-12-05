@@ -10,12 +10,20 @@ export default function SettingsLayout({
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
       <div className="flex flex-col lg:flex-row lg:gap-8 w-full max-w-[1440px] justify-center items-start">
         {/* Sidebar */}
-        <aside className="w-full lg:w-auto shrink-0">
+        <aside className="w-full lg:w-auto shrink-0 flex items-center justify-between">
+          <div>
+            <Link
+              href="/profile-view"
+              className="text-sm font-medium text-primary-300 hover:text-gray-900 flex items-center gap-2 lg:hidden"
+            >
+              Back
+            </Link>
+          </div>
           <SettingsSidebar />
         </aside>
         {/* Main content */}
         <div className="flex-1 w-full max-w-[1056px]">
-          <div className="flex px-4 justify-start">
+          <div className="flex px-4 justify-start not-lg:hidden">
             <Link
               href="/profile-view"
               className="text-sm font-medium text-primary-300 hover:text-gray-900 flex items-center gap-2"

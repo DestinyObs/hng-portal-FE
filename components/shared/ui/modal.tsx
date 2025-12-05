@@ -8,12 +8,12 @@ interface ModalProps {
 export default function Modal({
   openDialog,
   setOpenDialog,
-  children
-}:ModalProps) {
+  children,
+}: ModalProps) {
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogContent
-        className="rounded-xl w-[90%]  max-w-[590px] border-none"
+        className="rounded-xl w-[90%]  max-w-[590px] border-none overflow-y-scroll [&::-webkit-scrollbar]:hidden max-h-[90vh] p-6 sm:p-10"
         showCloseButton={false}
       >
         <div>{children}</div>
