@@ -266,14 +266,14 @@ export default function SkillsAndExperiencePage() {
               type="button"
               variant="outline"
               onClick={handleReset}
-              className="flex-1 sm:flex-none px-4 py-4 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-lg transition-all duration-300 ease-in"
+              className="flex-1 sm:flex-none px-4 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-lg transition-all duration-300 ease-in"
             >
               Cancel
             </Button>
             <Button
               type="button"
               onClick={handleSaveChanges}
-              className="flex-1 sm:flex-none px-4 py-4 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-lg transition-all duration-300 ease-in"
+              className="flex-1 sm:flex-none px-4 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-lg transition-all duration-300 ease-in"
             >
               {isSubmitting ? 'Saving...' : 'Save Changes'}
             </Button>
@@ -287,7 +287,7 @@ export default function SkillsAndExperiencePage() {
               <Button
                 type="button"
                 variant="outline"
-                className="px-4 py-4 text-xs max-w-30 font-medium text-[#181818] border-[#E8E8E8] bg-white hover:bg-gray-50 gap-1.5 rounded-lg whitespace-nowrap transition-all duration-300 ease-in"
+                className="w-auto text-[#181818] border-[#E8E8E8] gap-1 px-4 py-6 transition-all duration-300 ease-in"
                 onClick={handleOpenModal}
               >
                 <Plus className="w-3.5 h-3.5" />

@@ -333,7 +333,7 @@ export default function WorkExperienceForm({
                 }
               }}
               disabled={isSubmitting}
-              className="flex-1 sm:flex-none px-4 py-4 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-lg transition-all duration-300 ease-in"
+              className="flex-1 sm:flex-none px-4 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-lg transition-all duration-300 ease-in"
             >
               Cancel
             </Button>
@@ -341,7 +341,7 @@ export default function WorkExperienceForm({
               type="submit"
               variant={'ghost'}
               disabled={isSubmitting}
-              className="flex-1 sm:flex-none px-4 py-4 max-w-48 text-base font-medium text-[#00AEFF] hover:bg-blue-100 hover:text-primary-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 ease-in"
+              className="flex-1 sm:flex-none px-4 py-6 max-w-48 text-base font-medium text-[#00AEFF] hover:bg-blue-100 hover:text-primary-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 ease-in"
             >
               {isSubmitting
                 ? experience

@@ -39,6 +39,7 @@ import {
   useUpdateCompanyProfile,
 } from '@/hooks/profile';
 import { UserProfileData, CompanyProfileData } from '@/types/profile';
+import CountryStateSelect from '@/components/shared/ui/country-state-select';
 
 const talentDefaultData = {
   current_role: '',
@@ -528,77 +529,11 @@ export default function ProfilePage() {
                     )}
                   />
                   <div className="flex gap-6 w-full">
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">Country</label>
-                      <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`company-country-${field.value}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select country" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {Country.getAllCountries().map((c) => (
-                                    <SelectItem
-                                      key={c.isoCode}
-                                      value={c.isoCode}
-                                    >
-                                      {c.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">State</label>
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`company-state-${field.value}-${selectedCountry}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                disabled={!selectedCountry}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select state" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {State.getStatesOfCountry(
-                                    form.getValues('country') || '',
-                                  ).map((s) => (
-                                    <SelectItem
-                                      key={s.isoCode}
-                                      value={s.isoCode}
-                                    >
-                                      {s.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    <CountryStateSelect
+                      control={form.control}
+                      countryName="country"
+                      stateName="state"
+                    />
                   </div>
                 </>
               )}
@@ -667,77 +602,11 @@ export default function ProfilePage() {
                   />
 
                   <div className="flex gap-6 w-full">
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">Country</label>
-                      <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`talent-country-${field.value}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select country" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {Country.getAllCountries().map((c) => (
-                                    <SelectItem
-                                      key={c.isoCode}
-                                      value={c.isoCode}
-                                    >
-                                      {c.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <label className="text-sm text-[#1A1A1A]">State</label>
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Select
-                                key={`talent-state-${field.value}-${selectedCountry}`}
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                disabled={!selectedCountry}
-                              >
-                                <SelectTrigger className="w-full h-10 rounded-lg border border-[#E7E8E9]">
-                                  <SelectValue placeholder="Select state" />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                  {State.getStatesOfCountry(
-                                    selectedCountry || '',
-                                  ).map((s) => (
-                                    <SelectItem
-                                      key={s.isoCode}
-                                      value={s.isoCode}
-                                    >
-                                      {s.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    <CountryStateSelect
+                      control={form.control}
+                      countryName="country"
+                      stateName="state"
+                    />
                   </div>
 
                   <div className="flex flex-col md:flex-row gap-6 w-full pt-2">
@@ -824,14 +693,14 @@ export default function ProfilePage() {
                   variant="outline"
                   onClick={handleCancel}
                   disabled={isPending || isCompanyPending}
-                  className="flex-1 sm:flex-none px-6 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-2xl"
+                  className="flex-1 sm:flex-none px-4 py-6 max-w-20 text-sm text-[#181818] border-[#E8E8E8] hover:bg-gray-50 rounded-lg transition-all duration-300 ease-in"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={isPending || isCompanyPending}
-                  className="flex-1 sm:flex-none px-6 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-2xl"
+                  className="flex-1 sm:flex-none px-4 py-6 max-w-30 text-base font-medium text-[#00AEFF] bg-white hover:bg-blue-100 rounded-lg transition-all duration-300 ease-in"
                 >
                   {isPending || isCompanyPending ? 'Saving...' : 'Save Changes'}
                 </Button>
