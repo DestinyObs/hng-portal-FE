@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Search, ListFilter, ChevronDown, Trash, Loader2 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { columns, Applicant } from '@/components/shared/applicants-column';
 import { DataTable } from '@/components/shared/ui/data-table';
-import { Job } from '@/types/view-job-applicants';
 import { view_applicants_per_job } from '@/api/actions/view-applicants';
 
 interface AllApplicantsProps {
@@ -22,11 +22,6 @@ export default function AllApplicants({
   const [selectedStatus, setSelectedStatus] = React.useState<string>('');
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
 
-  // New states for data fetching
-  const [applicationsData, setApplicationsData] = useState<Job | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   const statuses = ['Applied', 'Shortlisted', 'Rejected'];
 
   const statusTextStyles: Record<string, string> = {
@@ -41,35 +36,27 @@ export default function AllApplicants({
     Rejected: 'bg-[#EF4444]',
   };
 
-  // Fetch applicants data
-  // Fetch applicants data
-  useEffect(() => {
-    const fetchApplicants = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+  // React Query implementation
+  const {
+    data: applicationsData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['applicants_per_job', company_id, job_id],
+    queryFn: async () => {
+      const response = await view_applicants_per_job(company_id, job_id);
 
-        const response = await view_applicants_per_job(company_id, job_id);
-
-        if (response.success && response.data) {
-          setApplicationsData(response.data);
-        } else {
-          setError('Failed to fetch applicants');
-        }
-      } catch (err) {
-        console.error('Caught error:', err);
-        setError('An error occurred while fetching applicants');
-      } finally {
-        setIsLoading(false);
+      if (response.success && response.data) {
+        return response.data;
       }
-    };
 
-    if (company_id) {
-      fetchApplicants();
-    }
-  }, [company_id, job_id]);
+      throw new Error('Failed to fetch applicants');
+    },
+    enabled: !!company_id && !!job_id,
+    staleTime: 1000 * 60 * 5,
+    retry: 2,
+  });
 
-  // Transform API data to match table format
   const transformedData = React.useMemo(() => {
     return applicationsData?.applications.map((application) => ({
       id: application.id,
@@ -148,7 +135,9 @@ export default function AllApplicants({
       <div className="w-full min-h-screen py-4">
         <div className="bg-white p-6 rounded-2xl">
           <div className="flex flex-col items-center justify-center py-12">
-            <p className="text-red-500 mb-4">{error}</p>
+            <p className="text-red-500 mb-4">
+              {error instanceof Error ? error.message : 'An error occurred'}
+            </p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-primary-300 text-white rounded-lg hover:bg-primary-400"
