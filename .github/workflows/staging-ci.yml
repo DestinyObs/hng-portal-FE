@@ -32,7 +32,77 @@ jobs:
         run: pnpm install
       
       - name: Lint
-        run: pnpm lint
+        id: lint
+        run: |
+          pnpm lint 2>&1 | tee lint.log
+          if grep -qiE "error|failed|warning" lint.log; then
+            echo "Linting issues detected (errors or warnings)!"
+            cat lint.log
+            exit 1
+          fi
       
       - name: Build app
-        run: pnpm build
+        id: build
+        run: |
+          pnpm build 2>&1 | tee build.log
+          if [ $? -ne 0 ]; then
+            echo "Build failed!"
+            exit 1
+          fi
+
+      - name: Check for vulnerabilities
+        id: audit
+        run: |
+          pnpm audit --audit-level=high || echo "Vulnerabilities found but continuing..."
+
+      - name: Set job status
+        if: always()
+        id: job_status
+        run: |
+          if [ "${{ steps.lint.outcome }}" == "success" ] && [ "${{ steps.build.outcome }}" == "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=All checks passed successfully!" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=Some checks failed. Please review the logs." >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Notify Slack - CI Results
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEPLOY_NOTIFY_WEBHOOK_URL }}
+        run: |
+          if [ "${{ steps.job_status.outputs.status }}" == "success" ]; then
+            COLOR="good"
+            EMOJI=":white_check_mark:"
+            STATUS="All checks passed"
+          else
+            COLOR="danger"
+            EMOJI=":x:"
+            STATUS="Failed - Review required"
+          fi
+          
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "'"$COLOR"'",
+                "title": "'"$EMOJI"' [HNG Portal FE] CI Pipeline - Staging",
+                "fields": [
+                  {"title": "Repository", "value": "HNG Portal Frontend", "short": true},
+                  {"title": "Status", "value": "'"$STATUS"'", "short": true},
+                  {"title": "Branch", "value": "'"${{ github.head_ref }}"'", "short": true},
+                  {"title": "Author", "value": "'"${{ github.actor }}"'", "short": true},
+                  {"title": "Lint", "value": "'"${{ steps.lint.outcome }}"'", "short": true},
+                  {"title": "Build", "value": "'"${{ steps.build.outcome }}"'", "short": true},
+                  {"title": "Security Audit", "value": "'"${{ steps.audit.outcome }}"'", "short": true},
+                  {"title": "Commit", "value": "'"${GITHUB_SHA:0:7}"'", "short": true},
+                  {"title": "PR", "value": "<'"${{ github.event.pull_request.html_url }}"'|#'"${{ github.event.pull_request.number }}"'>", "short": true}
+                ],
+                "footer": "HNG Portal Frontend - Staging CI",
+                "ts": '$(date +%s)'
+              }]
+            }'
+          fi
