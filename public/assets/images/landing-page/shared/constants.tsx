@@ -1,4 +1,3 @@
-import { Icon } from 'lucide-react';
 import {
   FacebookIcon,
   HNGInternshipIcon,
@@ -23,7 +22,7 @@ export const NavLinks = [
       {
         label: 'Learn',
         href: 'https://hng.tech/learn',
-        icon: <HNGInternshipIcon />,
+        icon: <LearnIcon />,
       },
       {
         label: 'HNG Internship',
